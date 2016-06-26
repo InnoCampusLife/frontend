@@ -1,0 +1,243 @@
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+/* entypo icons*/
+[class*="entypo-"]:before { font-family: 'entypo', sans-serif; }
+
+body
+{
+	margin: 0;
+	padding: 0; 
+	display: table;
+	height: 100%;
+    width: 100%;
+	font-family: 'Ruda', sans-serif;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	-moz-user-select: none; 
+	-khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
+
+	background: #b4d2c2;
+
+	background: -moz-linear-gradient(-45deg,  #b4d2c2 0%, #86b1b8 100%);
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#b4d2c2), color-stop(100%,#86b1b8));
+	background: -webkit-linear-gradient(-45deg,  #b4d2c2 0%,#86b1b8 100%);
+	background: -o-linear-gradient(-45deg,  #b4d2c2 0%,#86b1b8 100%);
+	background: -ms-linear-gradient(-45deg,  #b4d2c2 0%,#86b1b8 100%);
+	background: linear-gradient(135deg,  #b4d2c2 0%,#86b1b8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4d2c2', endColorstr='#86b1b8',GradientType=1 );
+}
+
+.wrapper
+{
+	display: table-cell; 
+	text-align: center;
+	vertical-align: middle;
+}
+
+.wrapper form 
+{
+	display: inline-block;
+	text-align: left;
+	width: 260px;
+}
+
+.wrapper form .content 
+{
+	padding: 20px;
+	background-color: #fff;
+	outline: 0;
+}
+
+.rounded
+{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+
+.rounded.shadow
+{
+	-webkit-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+	-o-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+	-ms-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+	box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+}
+
+form .buttons { overflow: hidden; }
+
+form .buttons .btn
+{
+	box-sizing: border-box;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #377FAF;
+	display: block;
+	width: 46%;
+	height: 100%;
+	padding: 10px;
+	cursor: pointer;
+	margin-bottom: 5px;
+	text-shadow: 0px 1px 3px #242424;
+	box-shadow: 1px 1px 1px #AAAAAA;
+}
+
+form .buttons .btn.blue
+{
+	background-color: #38A7F9;
+	color: #fff;
+	
+	background: #6cc7fe;
+	background: -moz-linear-gradient(top,  #6cc7fe 0%, #38a7f9 7%, #38a7f9 90%, #049bed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6cc7fe), color-stop(7%,#38a7f9), color-stop(90%,#38a7f9), color-stop(100%,#049bed));
+	background: -webkit-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#38a7f9 90%,#049bed 100%);
+	background: -o-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#38a7f9 90%,#049bed 100%);
+	background: -ms-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#38a7f9 90%,#049bed 100%);
+	background: linear-gradient(to bottom,  #6cc7fe 0%,#38a7f9 7%,#38a7f9 90%,#049bed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cc7fe', endColorstr='#049bed',GradientType=0 );
+}
+
+form .buttons .btn.blue:active
+{
+	box-shadow: inset 0px 2px 3px #242424;
+}
+
+:focus { outline:none; }
+
+.form-control
+{
+	border-color: #349ff4;
+	color: #505050;
+	display: block;
+	width: 100%;
+	height: 38px;
+	padding-top: 8px;
+	padding-left: 16px;
+	padding-right: 35px;
+	padding-bottom: 6px;
+	font-size: 16px;
+	line-height: 1.42857143;
+	background-color: rgba(229, 233, 242, 0.65);
+	border: 0px;
+	-webkit-box-shadow: inset 1px 1px 6px rgba(0, 0, 0, .2);
+	      box-shadow: inset 1px 1px 6px rgba(0, 0, 0, .2);
+	-webkit-transition: all ease-in-out .3s, -webkit-all ease-in-out .3s;
+	   -o-transition: all ease-in-out .3s;
+	   -moz-transition: all ease-in-out .3s;
+	      transition: all ease-in-out .3s;
+}
+
+.form-control.area
+{
+	max-width: 100%;
+	height: 220px;
+}
+
+.form-control:focus 
+{
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 1px rgba(102, 175, 233, .6);
+	-moz-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 1px rgba(102, 175, 233, .6);
+	-o-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 1px rgba(102, 175, 233, .6);
+	      box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 1px rgba(102, 175, 233, .6);
+	/*background-color: #E5E9F2;*/
+}
+
+.form-control::-moz-placeholder 
+{
+	color: #777;
+	opacity: 1;
+}
+
+.form-control:-ms-input-placeholder 
+{
+	color: #777;
+}
+
+.form-control::-webkit-input-placeholder 
+{
+	color: #777;
+}
+
+.has-error .form-control:focus 
+{
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
+.has-error .form-control 
+{
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.has-success .form-control:focus
+{
+    border-color: #2b542c;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;
+}
+
+.has-success .form-control
+{
+    border-color: #3c763d;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.has-warning .form-control:focus
+{
+	border-color: #66512c;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;
+}
+
+.has-warning .form-control
+{
+	border-color: #8a6d3b;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.form-group 
+{
+  margin-bottom: 15px;
+}
+
+input
+{
+	color: #349ff4;
+	position: relative;
+	text-shadow: 0px 0px 0px #f26f33;
+	-webkit-text-fill-color: transparent;
+	-moz-text-fill-color: transparent;
+	-o-text-fill-color: transparent;
+}
+
+#password:focus
+{
+	text-shadow: 0px 0px 0px #646464;
+}
+
+#username:focus
+{
+	text-shadow: 0px 0px 0px #646464;
+}
+
+.icon
+{
+	display: inline-block;
+	position: relative;
+	bottom: 29px;
+	left: 190px;
+	font-size: 16px;
+	color: #505050
+	pointer-events: none;
+}
