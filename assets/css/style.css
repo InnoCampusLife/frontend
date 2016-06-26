@@ -42,7 +42,6 @@ body
 {
 	display: inline-block;
 	text-align: left;
-	width: 260px;
 }
 
 .wrapper form .content 
@@ -50,6 +49,7 @@ body
 	padding: 20px;
 	background-color: #fff;
 	outline: 0;
+	width: 220px;
 }
 
 .rounded
