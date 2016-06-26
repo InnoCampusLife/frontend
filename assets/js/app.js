@@ -160,6 +160,14 @@ LoginFormView = Marionette.ItemView.extend({
 			e.stopImmediatePropagation();
 			// Например, при нажатии на кнопку логин
 			authorize($('#username').val(), $('#password').val());
+		},
+
+		'click #reg_button': function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			e.stopImmediatePropagation();
+			// Например, при нажатии на кнопку регистрации
+			createAccount($('#username').val(), $('#password').val());
 		}
 	}
 });
