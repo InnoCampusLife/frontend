@@ -7,117 +7,46 @@ app.addRegions({
 	mainRegion: "#formView" // Указываем куда будет рендериться приложение
 });
 
+// Helper functions
 
-function createAccount(_username, _password) {
-	var request = $.ajax(
+function makeRequest(type, url, data, onSuccess, onFail) {
+	return $.ajax(
 		{
-			type: "POST",
-			url: "/api/v1/accounts/",
-			data: JSON.stringify({ username: _username, password: _password }),
+			type: type,
+			url: url,
+			data: JSON.stringify(data),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
+			success: onSuccess,
+			error: onFail
 		}
 	);
 }
 
-
-function authorize(_username, _password) {
-	var request = $.ajax(
-		{
-			type: "POST",
-			url: "/api/v1/accounts/auth",
-			data: JSON.stringify({ username: _username, password: _password }),
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
-		}
-	);
+function createAccount(_username, _password, onSuccess, onFail) {
+	return makeRequest("POST", "/api/v1/accounts/", { username: _username, password: _password }, onSuccess, onFail);
 }
 
-function getAccount (token) {
-	var request = $.ajax(
-		{
-			type: "GET",
-			url: "/api/v1/accounts/" + token,
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
-		}
-	);
+function authorize(_username, _password, onSuccess, onFail) {
+	return makeRequest("POST", "/api/v1/accounts/auth", { username: _username, password: _password }, onSuccess, onFail);
 }
 
-function listAccounts (moder_token) {
-	var request = $.ajax(
-		{
-			type: "GET",
-			url: "/api/v1/accounts/" + moder_token + "/listAccounts",
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
-		}
-	);
+function getAccount(token, onSuccess, onFail) {
+	return makeRequest("GET", "/api/v1/accounts/" + token, null, onSuccess, onFail);
 }
 
-function updateRole (moder_token, account_id, new_role) {
-	var request = $.ajax(
-		{
-			type: "PUT",
-			url: "/api/v1/accounts/" + moder_token + "/updateRole",
-			data: JSON.stringify({ accountId: account_id, newRole: new_role }),
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
-		}
-	);
+function listAccounts(moder_token) {
+	return makeRequest("GET", "/api/v1/accounts/" + moder_token + "/listAccounts", null, onSuccess, onFail);
 }
 
-function accountExists (token) {
-	var request = $.ajax(
-		{
-			type: "GET",
-			url: "/api/v1/accounts/" + token + "/exists",
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			response: "json",
-			success: function (message) {
-				console.log(message);
-			},
-			error: function (message) {
-				console.log(message);
-			}
-		}
-	);
+function updateRole(moder_token, account_id, new_role, onSuccess, onFail) {
+	return makeRequest("PUT", "/api/v1/accounts/" + moder_token + "/updateRole",
+		{ accountId: account_id, newRole: new_role }, onSuccess, onFail);
+}
+
+function accountExists(token, onSuccess, onFail) {
+	return makeRequest("GET", "/api/v1/accounts/" + token + "/exists", null, onSuccess, onFail);
 }
 
 // ----------------------------------------
@@ -159,7 +88,9 @@ LoginFormView = Marionette.ItemView.extend({
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 			// Например, при нажатии на кнопку логин
-			authorize($('#username').val(), $('#password').val());
+			authorize($('#username').val(), $('#password').val(),
+				function() {console.log(arguments)},
+				function() {console.log(arguments)});
 		}
 	}
 });
