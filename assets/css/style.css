@@ -3,6 +3,8 @@
 /* entypo icons*/
 [class*="entypo-"]:before { font-family: 'entypo', sans-serif; }
 
+:focus { outline:none; }
+
 body
 {
 	margin: 0;
@@ -40,16 +42,20 @@ body
 
 .wrapper form 
 {
-	display: inline-block;
 	text-align: left;
 }
 
-.wrapper form .content 
+#login_form
+{
+	width: 216px;
+}
+
+.wrapper .content
 {
 	padding: 20px;
 	background-color: #fff;
 	outline: 0;
-	width: 220px;
+	display: inline-block;
 }
 
 .rounded
@@ -68,24 +74,28 @@ body
 	box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
 }
 
-form .buttons { overflow: hidden; }
-
-form .buttons .btn
+.btn
 {
 	box-sizing: border-box;
 	border-style: outset;
 	border-width: 1px;
 	border-color: #377FAF;
 	display: block;
-	width: 46%;
-	height: 100%;
+	/*width: 100px;*/
+	height: 36px;
 	padding: 10px;
 	cursor: pointer;
+	overflow: hidden;
 	text-shadow: 0px 1px 3px #242424;
 	box-shadow: 1px 1px 1px #AAAAAA;
 }
 
-form .buttons .btn.blue
+#login_form .btn
+{
+	width: 46%;
+}
+
+.btn.blue
 {
 	background-color: #38A7F9;
 	color: #fff;
@@ -100,27 +110,62 @@ form .buttons .btn.blue
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cc7fe', endColorstr='#049bed',GradientType=0 );
 }
 
-form .buttons .btn.blue:active
+.btn.blue:active
 {
 	box-shadow: inset 0px 2px 3px #242424;
 }
 
-:focus { outline:none; }
+.btn.blue:focus
+{
+	background: #4cb3ff;
+	background: -moz-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6cc7fe), color-stop(7%,#38a7f9), color-stop(90%,#4cb3ff), color-stop(100%,#4cbdff));
+	background: -webkit-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -o-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -ms-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: linear-gradient(to bottom,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cc7fe', endColorstr='#049bed',GradientType=0 );
+}
+
+.btn.blue:hover
+{
+	background: #4cb3ff;
+	background: -moz-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6cc7fe), color-stop(7%,#38a7f9), color-stop(90%,#4cb3ff), color-stop(100%,#4cbdff));
+	background: -webkit-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -o-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: -ms-linear-gradient(top,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	background: linear-gradient(to bottom,  #6cc7fe 0%,#38a7f9 7%,#4cb3ff 90%,#4cbdff 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cc7fe', endColorstr='#049bed',GradientType=0 );
+}
+
+
+.form-edit
+{
+	margin-top: 1px;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.form-edit :focus
+{
+	text-shadow: 0px 0px 0px #646464;
+}
 
 .form-control
 {
 	border-color: #349ff4;
-	color: #505050;
+	color: #38A7F9;
 	display: block;
 	width: 100%;
 	height: 38px;
 	padding-top: 8px;
 	padding-left: 16px;
-	padding-right: 35px;
+	padding-right: 48px;
 	padding-bottom: 6px;
 	font-size: 16px;
 	line-height: 1.42857143;
-	background-color: rgba(229, 233, 242, 0.65);
+	background-color: rgba(229, 233, 242, 0.5);
 	border: 0px;
 	-webkit-box-shadow: inset 1px 1px 6px rgba(0, 0, 0, .2);
 	      box-shadow: inset 1px 1px 6px rgba(0, 0, 0, .2);
@@ -165,44 +210,46 @@ form .buttons .btn.blue:active
 
 .has-error .form-control:focus 
 {
-    border-color: #843534;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px red;
+    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px red;
+    text-shadow: 0 0 0 red;
 }
 
 .has-error .form-control 
 {
-    border-color: #a94442;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	color: red;
+    box-shadow: inset 0 0 7px red;
+    -webkit-box-shadow: inset 0 0 7px red;
+    text-shadow: 0 0 0 red;
 }
 
 .has-success .form-control:focus
 {
-    border-color: #2b542c;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;
+	box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px #078e07;
+    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px #078e07;
 }
 
 .has-success .form-control
 {
-    border-color: #3c763d;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    color: #078e07;
+    box-shadow: inset 0 0 7px #078E07;
+    -webkit-box-shadow: inset 0 0 7px #078E07;
+    text-shadow: 0px 0px 0px #646464;
 }
 
 .has-warning .form-control:focus
 {
-	border-color: #66512c;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;
+	box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px orange;
+    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px orange;
+    text-shadow: 0 0 0 orange;
 }
 
 .has-warning .form-control
 {
-	border-color: #8a6d3b;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	color: orange;
+    box-shadow: inset 0 0 7px orange;
+    -webkit-box-shadow: inset 0 0 7px orange;
+    text-shadow: 0 0 0 orange;
 }
 
 .form-group 
@@ -220,23 +267,45 @@ input
 	-o-text-fill-color: transparent;
 }
 
-#password:focus
-{
-	text-shadow: 0px 0px 0px #646464;
-}
-
-#username:focus
-{
-	text-shadow: 0px 0px 0px #646464;
-}
 
 .icon
 {
 	display: inline-block;
-	position: relative;
-	bottom: 29px;
-	left: 190px;
-	font-size: 16px;
-	color: #505050
-	pointer-events: none;
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    pointer-events: none;
+    padding: 10px 16px;
+}
+
+.tooltip {
+    display: inline;
+    position: relative;
+    top: -81px;
+    left: 20px;
+}
+
+.tooltip.show:after {
+	background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 216px;
+    box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+}
+
+.tooltip.show:before {
+    border: solid;
+    border-color: rgb(31, 39, 38) transparent;
+    border-width: 6px 6px 0px 6px;
+    bottom: 21px;
+    content: "";
+    margin-left: 100px;
+    position: absolute;
+    z-index: 99;
 }

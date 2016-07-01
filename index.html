@@ -2,6 +2,8 @@
 	<head>
 		<title>Hello! | Log in, please</title>
 
+		<link rel="stylesheet" href="assets/css/reset.css">
+		<link rel="stylesheet" href="assets/css/cursor-reset.css">
 		<link rel="stylesheet" href="assets/css/style.css">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,38 +20,53 @@
 
 	<body>
         <!-- Сюда при рендеринге приложения будут вставляться вьюхи приложения. -->
-		<div id="formView" class="wrapper">
+		<div class="wrapper" id="wrapper">
+			<span title="" class="tooltip"></span>
+			<div class="content rounded shadow" id="content">
+			</div>
 		</div>
 
 
 		<script type="text/template" id="login_form_template">
-			<form class="rounded shadow" id="login_form">
-				<div class="content rounded">
-					<div class="form-edit">
-						<input class="rounded form-control" type="text" placeholder="Username" name="username" id="username"/>
-						<span class="icon entypo-user"></span>
-					</div>
-					<div class="form-edit">
-						<input class="rounded form-control" type="password" placeholder="Password" name="password" id="password"/>
-						<span class="icon entypo-key"></span>
-					</div>
+			<form id="login_form">
+				<div class="form-edit">
+					<span class="icon entypo-user"></span>
+					<input class="rounded form-control" type="text" placeholder="Username" name="username" id="username"/>
+				</div>
+				<div class="form-edit">
+					<span class="icon entypo-key"></span>
+					<input class="rounded form-control" type="password" placeholder="Password" name="password" id="password"/>
+				</div>
 
-					<!-- А вот и кнопочки пошли... -->
-					<div class="buttons rounded">
-						<button id="login_button"  class="rounded btn blue" style="float: left; ">Log in</button>
-						<button id="reg_button"    class="rounded btn blue" style="float: right;">Register</button>
-					</div>
+				<!-- А вот и кнопочки пошли... -->
+				<div class="buttons rounded">
+					<button id="login_button"  class="rounded btn blue" style="float: left; ">Log in</button>
+					<button id="reg_button"    class="rounded btn blue" style="float: right;">Register</button>
 				</div>
 			</form>
 		</script>
 
+		<script type="text/template" id="login_success">
+			<button id="logout_button"  class="rounded btn blue" style="float: left; ">Hello! Log out here.</button>
+		</script>
+
+		<script type="text/template" id="sidebar_template">
+			
+		</script>
+
+		<script type="text/template" id="personal_page_template">
+			
+		</script>
+
 		<script src="assets/js/jquery.js"></script>
 		<script src="assets/js/json2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 		<script src="assets/js/underscore.js"></script>
 		<script src="assets/js/backbone.js"></script>
 		<script src="assets/js/backbone.marionette.js"></script>
 
 		<!-- App code -->
 		<script src="assets/js/app.js"></script>
+		<script src="assets/js/user-api.js"></script>
 	</body>
 </html>
