@@ -55,7 +55,6 @@ LoginFormView = Marionette.ItemView.extend({
 					location.reload();
 				},
 				function error (error) {
-					console.log(error);
 					$('#wrapper').find('.tooltip').attr('title', !error ? "Unknown error" : error);
 					$('#wrapper').find('.tooltip').addClass('show');
 				}
@@ -70,17 +69,15 @@ LoginFormView = Marionette.ItemView.extend({
 			createAccount(
 				$('#username').val(),
 				$('#password').val(),
-				function success (message) {
-					console.log(message);
+				function success (result) {
 					$('#wrapper').find('.tooltip').removeClass('show');
 					$('.form-edit:has("#username")').removeClass("has-error");
 
-					$.cookie('usertoken', message.result.token);
+					$.cookie('usertoken', result.token);
 					location.reload();
 				},
-				function error (message) {
-					console.log(message.responseJSON.error);
-					$('#wrapper').find('.tooltip').attr('title', !message.responseJSON.error ? "Unknown error" : message.responseJSON.error);
+				function error (error) {
+					$('#wrapper').find('.tooltip').attr('title', !error ? "Unknown error" : error);
 					$('#wrapper').find('.tooltip').addClass('show');
 					$('.form-edit:has("#username")').addClass("has-error");
 				}
