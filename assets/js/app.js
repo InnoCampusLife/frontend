@@ -95,6 +95,22 @@ LogoutFormView = Marionette.ItemView.extend({
 		// Это конструктор вьюшки
 		// Принимаем инстанс модели, к которой будет привязана вьюшка
 		this.model = model;
+
+		var token = $.cookie('usertoken'); 
+		getAccount(token,
+			function success (result) {
+				if (result.role == 'moderator')
+				{
+					listAccounts(token,
+						function (result) {
+							result.forEach( function(element, index) {
+								$('#login_success').append('<p>User #' + index + ': ' + element.username + ' . His role is ' + element.role + ';</p>');
+							});
+						}
+					);
+				}
+			}
+		);
 	},
 	// Имя html-шаблона, с которым связывается вьюшка
 	template: '#login_success',
@@ -129,7 +145,7 @@ app.addInitializer(function(options) {
 
 	if (!$.cookie('usertoken'))
 		app.mainRegion.show(loginFormView);
-	else
+	else 
 		/*TODO Redirect to personal page by user's token.*/
 		app.mainRegion.show(logoutFormView);
 });
