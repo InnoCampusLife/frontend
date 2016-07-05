@@ -1,4 +1,4 @@
-@import url(http://weloveiconfonts.com/api/?family=entypo);
+
 
 /* entypo icons*/
 [class*="entypo-"]:before { font-family: 'entypo', sans-serif; }
@@ -38,6 +38,7 @@ body
 	display: table-cell; 
 	text-align: center;
 	vertical-align: middle;
+	transition: all ease .3s;
 }
 
 .wrapper form 
@@ -47,15 +48,22 @@ body
 
 #login_form
 {
-	width: 216px;
+	max-width: 216px;
 }
 
 .wrapper .content
-{
+{    
+	margin: 8px;
 	padding: 20px;
 	background-color: #fff;
 	outline: 0;
 	display: inline-block;
+	transition: all ease .3s;
+}
+
+.wrapper .content:first-child
+{
+	transition: all ease .3s;
 }
 
 .rounded
@@ -254,7 +262,7 @@ body
 
 .form-group 
 {
-  margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 input
@@ -272,7 +280,7 @@ input
 {
 	display: inline-block;
     position: absolute;
-    font-size: 16px;
+    font-size: 18px;
     right: 0;
     pointer-events: none;
     padding: 10px 16px;
@@ -283,6 +291,17 @@ input
     position: relative;
     top: -81px;
     left: 20px;
+}
+
+.tooltip.show:before {
+    border: solid;
+    border-color: rgb(31, 39, 38) transparent;
+    border-width: 6px 6px 0px 6px;
+    bottom: 21px;
+    content: "";
+    margin-left: 100px;
+    position: absolute;
+    z-index: 99;
 }
 
 .tooltip.show:after {
@@ -297,15 +316,4 @@ input
     z-index: 98;
     width: 216px;
     box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
-}
-
-.tooltip.show:before {
-    border: solid;
-    border-color: rgb(31, 39, 38) transparent;
-    border-width: 6px 6px 0px 6px;
-    bottom: 21px;
-    content: "";
-    margin-left: 100px;
-    position: absolute;
-    z-index: 99;
 }
