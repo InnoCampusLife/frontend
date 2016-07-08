@@ -68,7 +68,7 @@ function callback (user_info) {
 	if (user_info.role == 'moderator')
 		listAccounts(token,
 			function (result) {
-				var table_header = '<div class="tbl-header"><table cellpadding="0" cellspacing="0" border="0"><thead><tr><th>#</th><th>Username</th><th>Name</th><th>Role</th></tr></thead></table></div>';
+				var table_header = '<div class="tbl-header"><table cellpadding="0" cellspacing="0" border="0"><thead><tr><th>#</th><th>Username</th><th>Name</th><th>Surname</th><th>Role</th></tr></thead></table></div>';
 
 				var table_start = '<div class="tbl-content"><table cellpadding="0" cellspacing="0" border="0"><thead>';
 				var table_end   = '</thead></table></div>';
@@ -77,14 +77,20 @@ function callback (user_info) {
 
 				result.forEach( 
 					function(element, index) {
-						table = table + '<tr><td>' + index + '</td><td>' + element.username + '</td><td>' + element.firstName + '</td><td><select data="'+element.id+'"><option ' + (element.role == 'ghost' ? 'selected' : '') + ' value="0">ghost</option><option ' + (element.role == 'student' ? 'selected' : '') + ' value="1">student</option></select></td></tr>';
+						var id = '<td>' + index + '</td>';
+						var username = '<td>' + (element.username ? element.username : '-') + '</td>';
+						var name = '<td>' + (element.firstName ? element.firstName : '-') + '</td>';
+						var surname = '<td>' + (element.lastName ? element.lastName : '-') + '</td>';
+						var to_select = { ghost: (element.role == 'ghost' ? 'selected' : ''), student: (element.role == 'student' ? 'selected' : '') };
+						var role = '<td><select data="'+element.id+'"><option ' + to_select['ghost'] + ' value="0">ghost</option><option ' + to_select['student'] + ' value="1">student</option></select></td>';
+						table = table + '<tr>' + id + username + name + surname + role + '</tr>';
 					}
 				);
 
 				var table = table + table_end;
 
 				$('#content').append(table);
-				
+
 				$('select[data]').change(function () {
 					var id = this.getAttribute("data");
 					console.log(this.value);

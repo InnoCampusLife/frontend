@@ -70,7 +70,8 @@
 .header-two-bars .header-second-bar {
     background-color: #ffffff;
     padding: 20px 40px;
-    z-index: 0;
+    position: relative;
+    z-index: 1;
     transition: all ease .3s .2s;
     border-radius: 0 0 8px 9px;
     margin-top: -60px;
