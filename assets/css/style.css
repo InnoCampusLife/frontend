@@ -9,6 +9,7 @@ html {overflow:hidden;}
 
 body
 {
+	min-width: 400px;
 	margin: 0;
 	padding: 0; 
 	height: 100%;
@@ -119,7 +120,19 @@ body.logged-in
 }
 
 .content.dashboard::-webkit-scrollbar {
-    width: 0;
+    /* width: 0; */
+}
+
+
+::-webkit-scrollbar {
+    width: 0px;
+  border-radius:8px;
+} 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+} 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
 }
 
 .btn
@@ -354,6 +367,14 @@ body.logged-in
 	.content.dashboard
 	{
 		margin: 15vh 20px;
+	}
+}
+
+@media all and (max-width: 768px)
+{
+	.content.dashboard
+	{
+	    min-width: 400px;
 	}
 }
 
