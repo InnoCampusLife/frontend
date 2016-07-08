@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="assets/css/cursor-reset.css">
 		<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
 		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="assets/header-second-bar.css">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="UIS login page.">
@@ -20,30 +21,59 @@
 	</head>
 
 	<body>
+
+		<header class="header-two-bars" id="main_header">
+			
+		</header>
+
         <!-- Сюда при рендеринге приложения будут вставляться вьюхи приложения. -->
 		<div class="wrapper" id="wrapper">
 		</div>
 
 
+		<script type="text/template" id="header_template">
+			<div class="header-first-bar">
+				<div class="header-limiter">
+					<h1><a href="/"><span id="role"></span>'s dashboard</a></h1>
+					<button class="logout-button entypo-cancel" id="logout_button"></button>
+				</div>
+			</div>
+			<div class="header-second-bar">
+				<div class="header-limiter">
+					<h2><a href="/" id="name"></a> <span id="nickname">@</span></h2>
+					<nav>
+						<a href="/"><i class="fa fa-comments-o"></i> Questions</a>
+						<a href="#"><i class="fa fa-file-text"></i> Results</a>
+						<a href="#"><i class="fa fa-group"></i> Participants</a>
+						<a href="#"><i class="fa fa-cogs"></i> Settings</a>
+					</nav>
+				</div>
+			</div>
+		</script>
+
 		<script type="text/template" id="login_form_template">
-			<span title="" class="tooltip"></span>
-			<div class="content rounded shadow" id="content">
-				<form id="login_form">
-					<div class="form-edit">
-						<span class="icon entypo-user"></span>
-						<input class="rounded form-control" type="text" placeholder="Username" name="username" id="username"/>
+			<div class="table">
+				<div class="centered cell login">
+					<span title="" class="tooltip"></span>
+					<div class="content rounded login" id="content">
+						<form id="login_form">
+							<div class="form-edit login">
+								<span class="icon entypo-user"></span>
+								<input class="rounded form-control" type="text" placeholder="Username" name="username" id="username" autocomplete="off"/>
+							</div>
+							<div class="form-edit login">
+								<span class="icon entypo-key"></span>
+								<input class="rounded form-control" type="password" placeholder="Password" name="password" id="password" autocomplete="off"/>
+							</div>
+						
+							<!-- А вот и кнопочки пошли... -->
+							<div class="buttons rounded">
+								<button id="login_button"  class="rounded btn blue" style="float: left; ">Log in</button>
+								<button id="reg_button"    class="rounded btn blue" style="float: right;">Register</button>
+							</div>
+						</form>
 					</div>
-					<div class="form-edit">
-						<span class="icon entypo-key"></span>
-						<input class="rounded form-control" type="password" placeholder="Password" name="password" id="password"/>
-					</div>
-				
-					<!-- А вот и кнопочки пошли... -->
-					<div class="buttons rounded">
-						<button id="login_button"  class="rounded btn blue" style="float: left; ">Log in</button>
-						<button id="reg_button"    class="rounded btn blue" style="float: right;">Register</button>
-					</div>
-				</form>
+				</div>
 			</div>
 		</script>
 
@@ -51,21 +81,13 @@
 			
 		</script>
 
-		<script type="text/template" id="personal_page_template">
-			<div class="content rounded shadow" id="content">
-				<header id="header" style="height: 36px;">
-					<h1 id="username-field" style="float: left;"></h1>
-					<button id="logout_button"  class="rounded btn blue" style="float: right; ">Log out</button>	
-					<br/>
-					<h3 style="display: block; color: #646464; float: left;" id="name"></h3>
-					<br/>
-					<h5 style="display: block; color: #888; float: left;" id="tgId"></h5>
-				</header><!-- /header -->
-				<br/>
-				<p>You are <span id="role"></span></p>
-				<br/>
-				<br/>
-
+		<script type="text/template" id="dashboard_template">
+			<div class="table">
+				<div class="centered cell">
+					<div class="content rounded dashboard hidden" id="content">
+						
+					</div>
+				</div>
 			</div>
 		</script>
 
