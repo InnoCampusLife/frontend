@@ -80,17 +80,18 @@ function callback (user_info) {
 						table = table + '<tr><td>' + index + '</td><td>' + element.username + '</td><td>' + element.firstName + '</td><td><select data="'+element.id+'"><option ' + (element.role == 'ghost' ? 'selected' : '') + ' value="0">ghost</option><option ' + (element.role == 'student' ? 'selected' : '') + ' value="1">student</option></select></td></tr>';
 					}
 				);
-				$('select').change(function () {
+
+				var table = table + table_end;
+
+				$('#content').append(table);
+				
+				$('select[data]').change(function () {
 					var id = this.getAttribute("data");
 					console.log(this.value);
 					var role = this.value == '0' ? 'ghost' : 'student';
 					updateRole(token, id, role);
 					listAccounts(token);
 				});
-
-				var table = table + table_end;
-
-				$('#content').append(table);
 			}
 		);
 
@@ -209,7 +210,9 @@ DashboardView = Marionette.ItemView.extend({
 	template: '#dashboard_template',
 	// События, на которые будет реагировать вьюшка
 	events: {
-		
+		'change select': function () {
+			 /* body... */ 
+		}
 	}
 });
 
