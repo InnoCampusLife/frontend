@@ -31,6 +31,24 @@
 		</div>
 
 
+		<script type="text/template" id="header_template_ghost">
+			<div class="header-first-bar">
+				<div class="header-limiter">
+					<h1><a href="/"><span id="role"></span>'s dashboard</a></h1>
+					<button class="logout-button entypo-cancel" id="logout_button"></button>
+				</div>
+			</div>
+			<div class="header-second-bar">
+				<div class="header-limiter">
+					<h2><a href="/" id="name"></a> <span id="nickname">@</span></h2>
+					<nav id="menu">
+						<button class="btn rounded">statistics</button>
+						<button class="btn rounded"> settings </button>
+					</nav>
+				</div>
+			</div>
+		</script>
+
 		<script type="text/template" id="header_template">
 			<div class="header-first-bar">
 				<div class="header-limiter">
@@ -41,7 +59,7 @@
 			<div class="header-second-bar">
 				<div class="header-limiter">
 					<h2><a href="/" id="name"></a> <span id="nickname">@</span></h2>
-					<nav>
+					<nav id="menu">
 						<button class="btn rounded">innopoints</button>
 						<button class="btn rounded">statistics</button>
 						<button class="btn rounded"> settings </button>

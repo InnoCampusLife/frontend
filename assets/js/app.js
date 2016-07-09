@@ -62,8 +62,8 @@ function callback (user_info) {
 
 	$('#role').append(user_info.role);
 
-	//if (user_info.role == 'student')
-		//$('#content').append('<button class="rounded blue btn">Rule your INNOPOINTS</button>');
+	if (user_info.role == 'ghost')
+		$('#content').append('<h1>Your request is being processed.</h1><br/><h2>Please, wait.</h2>');
 
 	if (user_info.role == 'moderator')
 		listAccounts(token,
@@ -144,13 +144,58 @@ LoginFormView = Marionette.ItemView.extend({
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 			// Например, при нажатии на кнопку регистрации
+
+			var un = document.querySelector('#username');
+			var ps = document.querySelector('#password');
+
+			if (un.value.length < 3 || un.value.length > 32)
+			{
+				$('.form-edit:has("#username")').addClass('has-error');
+				$('#wrapper').find('.tooltip').attr('title', "The username's lentgh must be between 3 and 32 characters!");
+				$('#wrapper').find('.tooltip').addClass('show');
+				return;
+			}
+
+			if (ps.value.length < 8 || ps.value.length > 64)
+			{
+				$('.form-edit:has("#password")').addClass('has-error');
+				$('#wrapper').find('.tooltip').attr('title', "The password's lentgh must be between 8 and 64 characters!");
+				$('#wrapper').find('.tooltip').addClass('show');
+				return;
+			}
+
 			createAccount($('#username').val(),	$('#password').val(), 
 				formSuccess, 
 				function (error) {
-					formError(error);
 					$('.form-edit:has("#username")').addClass('has-error');
+					formError(error);
 				}
 			);
+		},
+
+		'input #username': function (e) {
+			if (!/^([0-9]|[a-z]|[A-Z|_])*$/.test(e.target.value))
+			{
+				console.log(e.target.value.match("/^([0-9]|[a-z]|[A-Z|_])+$/"));
+				$('.form-edit:has("#username")').addClass('has-error');
+				$('#wrapper').find('.tooltip').attr('title', "The username should contain only alphanumeric characters!");
+				$('#wrapper').find('.tooltip').addClass('show');
+			}
+			else if ($('.form-edit:has("#username")').hasClass('has-error'))
+				if (document.querySelector('#username').value.length >= 3 && document.querySelector('#username').value.length <= 32)
+				{
+					$('.form-edit:has("#username")').removeClass('has-error');
+					$('#wrapper').find('.tooltip').removeClass('show');
+				}
+		},
+
+		'input #password': function (e) {
+			if ($('.form-edit:has("#password")').hasClass('has-error'))
+				if (e.target.value.length >= 8 && e.target.value.length <= 64)
+				{
+					$('.form-edit:has("#password")').removeClass('has-error');
+					$('#wrapper').find('.tooltip').removeClass('show');
+				}
 		}
 	}
 });
@@ -164,7 +209,9 @@ HeaderView = Marionette.ItemView.extend({
 		this.model = model;
 	},
 
-	template: '#header_template',
+	getTemplate: function () {
+		return '#header_template';
+	},
 
 	events: {
 		'click #logout_button': function () {
@@ -280,8 +327,20 @@ function ajax (type, url, data, successCallback, errorCallback) {
 				console.log(message.responseJSON.error);
 
 				if (errorCallback)
-				 errorCallback(message.responseJSON.error);
+					errorCallback(message.responseJSON.error);
 			}
 		}
 	);
 }
+
+$.parseJSON = (function(oldParseJSON) {
+
+  return function(str) {
+    try {
+      return oldParseJSON(str);
+    } catch(e) {
+      return null; // or false, or whatever!
+    }
+  };
+
+})($.parseJSON);

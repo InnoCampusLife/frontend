@@ -9,7 +9,7 @@ function createAccount(_username, _password, successCallback, errorCallback) {
 		password: _password
 	},
 	error = function (message) {
-		errorCallback(message.responseJSON.error);
+		errorCallback(message);
 	};
 
 	ajax(type, url, data, successCallback, error);

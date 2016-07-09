@@ -248,47 +248,24 @@ body.logged-in
 	color: #777;
 }
 
-.has-error .form-control:focus 
-{
-    box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px red;
-    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px red;
-    text-shadow: 0 0 0 red;
-}
-
 .has-error .form-control 
 {
 	color: red;
-    box-shadow: inset 0 0 7px red;
-    -webkit-box-shadow: inset 0 0 7px red;
-    text-shadow: 0 0 0 red;
-}
-
-.has-success .form-control:focus
-{
-	box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px #078e07;
-    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px #078e07;
+    border: solid 1px red;
+    text-shadow: 0px 0px 0px red;
 }
 
 .has-success .form-control
 {
     color: #078e07;
-    box-shadow: inset 0 0 7px #078E07;
-    -webkit-box-shadow: inset 0 0 7px #078E07;
+    border: solid 1px #078E07;
     text-shadow: 0px 0px 0px #646464;
-}
-
-.has-warning .form-control:focus
-{
-	box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px orange;
-    -webkit-box-shadow: inset 0 0px 1px rgba(0,0,0,.075), 0 0 7px orange;
-    text-shadow: 0 0 0 orange;
 }
 
 .has-warning .form-control
 {
 	color: orange;
-    box-shadow: inset 0 0 7px orange;
-    -webkit-box-shadow: inset 0 0 7px orange;
+    border: solid 1px orange;
     text-shadow: 0 0 0 orange;
 }
 
@@ -311,10 +288,10 @@ body.logged-in
     display: inline;
     position: relative;
     top: -81px;
-    left: 20px;
+    left: 40px;
 }
 
-.tooltip.show::before {
+.tooltip::before {
     border: solid;
     border-color: rgb(31, 39, 38) transparent;
     border-width: 6px 6px 0px 6px;
@@ -323,9 +300,12 @@ body.logged-in
     margin-left: 100px;
     position: absolute;
     z-index: 99;
+    visibility: hidden;
+    opacity: 0;
+    transition: all ease .2s;
 }
 
-.tooltip.show::after {
+.tooltip::after {
 	background: rgba(0,0,0,.8);
     border-radius: 5px;
     bottom: 26px;
@@ -336,7 +316,16 @@ body.logged-in
     position: absolute;
     z-index: 98;
     width: 216px;
-    box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.8);
+    visibility: hidden;
+    opacity: 0;
+    transition: all ease .2s;
+}
+
+.tooltip.show::before,
+.tooltip.show::after
+{
+    opacity: 1;
+    visibility: visible;
 }
 
 
@@ -437,4 +426,20 @@ header nav .btn:focus
 {
 	background-color: #38A7F9;
 	color: #fff;
+}
+
+.content h1
+{
+	font-weight: 800;
+	text-align:center;
+	font-size: large;
+}
+
+.content h2
+{
+	color: #505050;
+	text-align: center;
+	font-size: larger;
+	vertical-align: middle;
+	padding: 20%;
 }
