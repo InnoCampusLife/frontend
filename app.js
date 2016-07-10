@@ -146,13 +146,13 @@
 			removeUsernameError();
 	});
 
-	app.$watch('user.password', function() {
+	password.oninput = function() {
 		if (passwordTooLong()) 
 			setPasswordError(inputErrors.passwordLengthError);
 
 		else 
 			removePasswordError();
-	});
+	};
 	//
 	///
 
@@ -171,15 +171,19 @@
 	}
 
 	function removeUsernameError() {
-		app.loginData.usernameError = false;
-		app.loginData.showTooltip = false;
-		login_button.disabled = false;
-		reg_button.disabled = false;
+		if (app.loginData.usernameError) {
+			app.loginData.usernameError = false;
+			app.loginData.showTooltip = false;
+			if (!app.loginData.passwordError) {
+				login_button.disabled = false;
+				reg_button.disabled = false;
+			}
+		}
 	}
 
-	function passwordTooShort() { return password.length < 8; }
+	function passwordTooShort() { return password.value.length < 8; }
 
-	function passwordTooLong() { return password.length > 64; }
+	function passwordTooLong() { return password.value.length > 64; }
 
 	function setPasswordError(error) {
 		app.loginData.passwordError = true;
@@ -190,10 +194,14 @@
 	}
 
 	function removePasswordError() {
-		app.loginData.passwordError = false;
-		app.loginData.showTooltip = false;
-		login_button.disabled = false;
-		reg_button.disabled = false;
+		if (app.loginData.passwordError) {
+			app.loginData.passwordError = false;
+			app.loginData.showTooltip = false;
+			if (!app.loginData.usernameError) {
+				login_button.disabled = false;
+				reg_button.disabled = false;
+			}
+		}
 	}
 	//
 	///

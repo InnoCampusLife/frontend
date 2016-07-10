@@ -135,6 +135,11 @@
 		font-size:14px;
 	}
 
+.header-two-bars .header-second-bar h2{
+		display:none;
+		margin: 0 0 12px;
+	}
+
 }
 
 @media all and (max-width: 600px) {
@@ -155,16 +160,14 @@
 	}
 
 .header-two-bars .header-second-bar{
-		padding: 20px 0;
-	}
-
-.header-two-bars .header-second-bar h2{
-		display:none;
-		margin: 0 0 12px;
+		padding: 10px;
 	}
 
 .header-two-bars .header-second-bar nav{
 		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
 	}
 
 .header-two-bars .header-second-bar nav a{
@@ -173,5 +176,10 @@
 
 .header-two-bars .header-second-bar nav i.fa{
 		margin-left:0;
+	}
+
+	header nav .btn {
+		margin: 8px;
+		flex-basis: 45%;
 	}
 }

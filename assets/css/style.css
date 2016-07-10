@@ -441,12 +441,13 @@ header nav .btn
 {
 	text-transform: uppercase;
 	font-size: small;
-	margin: 0 10px;
+	margin: 0 8px;
 	padding: 2px 10px;
 	height: initial;
 	display: initial;
 	background: transparent;
 	transition: all ease .3s;
+	flex-basis: 20%;
 }
 
 header nav .btn:hover,
