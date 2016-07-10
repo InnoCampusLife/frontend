@@ -99,7 +99,7 @@ body.logged-in
 	transition: all ease .5s;
 }
 
-.content.dashboard
+.dashboard.wrapper .content
 {
 	max-width: 90vw;
 	min-width: 20vw;
@@ -114,21 +114,21 @@ body.logged-in
     margin: 20px;
 }
 
-.dashboard.hidden,
+.dashboard .hidden,
 .flow-enter .content.dashboard,
 .flow-leave .content.dashboard
 {
 	transform: translateX(-100vw);
 }
 
-.login.hidden,
+.login .hidden,
 .flow-enter .content.login,
 .flow-leave .content.login
 {
 	transform: translateX(100vw);
 }
 
-.content.dashboard::-webkit-scrollbar {
+.dashboard.wrapper .content::-webkit-scrollbar {
     /* width: 0; */
 }
 
@@ -366,12 +366,12 @@ body.logged-in
 
 @media all and (max-height: 768px)
 {
-	.cell.centered:not(.login)
+	.wrapper:not(.login) .cell.centered
 	{
 		vertical-align: bottom;
 	}
 
-	.content.dashboard
+	.dashboard.wrapper .content
 	{
 		margin: 15vh 20px;
 	}
@@ -379,7 +379,7 @@ body.logged-in
 
 @media all and (max-width: 800px)
 {
-	.content.dashboard
+	.dashboard.wrapper .content
 	{
 	    min-width: 400px;
 	}

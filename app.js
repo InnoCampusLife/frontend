@@ -80,6 +80,9 @@ var loginModel = {
 	registerError: false,
 }
 
+
+///TODO split into 2 apps: login and dashboard
+
 var app =
 	new Vue({
 		/*compiled : function() {
@@ -113,6 +116,7 @@ var app =
 			}
 		}
 	});
+///
 
 function formSuccessCallback(result) {
 	app.loginData.showTooltip = false;

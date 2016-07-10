@@ -41,10 +41,10 @@
 			</div>
 		</header>
 
-		<div v-if="!user.loggedIn" class="wrapper" id="wrapper">
+		<div v-if="!user.loggedIn" class="login wrapper" id="wrapper">
 			<div class="table">
 				<div class="centered cell">
-					<div class="content rounded login" id="content">
+					<div class="content rounded" id="content">
 						<span :title="loginData.tooltipTitle" :class="{ 'tooltip' : true, 'show' : loginData.showTooltip }"></span>
 						<form id="login_form">
 							<div class="form-edit login" :class="{ 'has-error' : loginData.registerError }">
@@ -79,10 +79,10 @@
 				</div>
 			</div>
 		</div>
-		<div v-else class="wrapper" id="wrapper" >
+		<div v-else class="dashboard wrapper" id="wrapper">
 			<div class="table">
 				<div class="centered cell">
-					<div class="content rounded dashboard" id="content">
+					<div class="content rounded" id="content">
 					</div>
 				</div>
 			</div>
