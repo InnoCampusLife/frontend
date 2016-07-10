@@ -104,13 +104,23 @@
 		methods : {
 			login: function () {
 				if (usernameTooShort())
-					setUsernameError(inputErrors.usernameLengthError);
+					setError(inputErrors.usernameLengthError, 'username');
 				else
 					authorize(app.user.username, password.value, formSuccessCallback, formErrorCallback);
 			},
 			register: function () {
-				if (passwordTooShort())
-					setPasswordError(inputErrors.passwordLengthError);
+				var errorSource = 
+					usernameTooShort() ? 
+						(
+							passwordTooShort() ?
+								'both' : 'username'
+						) : (
+							passwordTooShort() ?
+								'password' : false
+						);
+
+				if (errorSource)
+					setError(inputErrors.passwordLengthError, errorSource);
 				else
 					createAccount(app.user.username, password.value, formSuccessCallback, function(result) {
 						app.loginData.usernameError = true;
@@ -137,21 +147,20 @@
 	//
 	app.$watch('user.username', function() {
 		if (usernameTooLong()) 
-			setUsernameError(inputErrors.usernameLengthError);
+			setError(inputErrors.usernameLengthError, 'username');
 
 		else if (!/^([0-9]|[a-z]|[A-Z|_])*$/.test(app.user.username)) 
-			setUsernameError(inputErrors.usernameFormatError);
+			setError(inputErrors.usernameFormatError, 'username');
 
 		else 
-			removeUsernameError();
+			removeError();
 	});
 
 	password.oninput = function() {
 		if (passwordTooLong()) 
-			setPasswordError(inputErrors.passwordLengthError);
-
+			setError(inputErrors.passwordLengthError, 'username');
 		else 
-			removePasswordError();
+			removeError();
 	};
 	//
 	///
@@ -162,15 +171,27 @@
 
 	function usernameTooLong() { return app.user.username.length > 32; }
 
-	function setUsernameError(error) {
-		app.loginData.usernameError = true;
+	function passwordTooShort() { return password.value.length < 8; }
+
+	function passwordTooLong() { return password.value.length > 64; }
+
+	function setError(error, toWhat = 'both') {
+		if (toWhat == 'username')
+			app.loginData.usernameError = true;
+		else if (toWhat == 'both') {
+			app.loginData.usernameError = true;
+			app.loginData.passwordError = true;
+		}
+		else
+			app.loginData.passwordError = true;
+
 		app.loginData.tooltipTitle = error;
 		app.loginData.showTooltip = true;
 		login_button.disabled = true;
 		reg_button.disabled = true;
 	}
 
-	function removeUsernameError() {
+	function removeError() {
 		if (app.loginData.usernameError) {
 			app.loginData.usernameError = false;
 			app.loginData.showTooltip = false;
@@ -179,21 +200,6 @@
 				reg_button.disabled = false;
 			}
 		}
-	}
-
-	function passwordTooShort() { return password.value.length < 8; }
-
-	function passwordTooLong() { return password.value.length > 64; }
-
-	function setPasswordError(error) {
-		app.loginData.passwordError = true;
-		app.loginData.tooltipTitle = error;
-		app.loginData.showTooltip = true;
-		login_button.disabled = true;
-		reg_button.disabled = true;
-	}
-
-	function removePasswordError() {
 		if (app.loginData.passwordError) {
 			app.loginData.passwordError = false;
 			app.loginData.showTooltip = false;
@@ -202,6 +208,15 @@
 				reg_button.disabled = false;
 			}
 		}
+
+	}
+
+	function setPasswordError(error) {
+		app.loginData.passwordError = true;
+		app.loginData.tooltipTitle = error;
+		app.loginData.showTooltip = true;
+		login_button.disabled = true;
+		reg_button.disabled = true;
 	}
 	//
 	///

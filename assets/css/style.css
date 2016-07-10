@@ -1,7 +1,7 @@
 
 
 /* entypo icons*/
-[class*="entypo-"]:before { font-family: 'entypo', sans-serif; }
+[class*="entypo-"]::before { font-family: 'entypo', sans-serif; }
 
 :focus { outline:none; }
 
