@@ -1,12 +1,18 @@
 <html lang="en">
 	<head>
-		<title>Hello! | Log in, please</title>
+		<title>{{title | capitalize}}</title>
+
+
+		<!-- Styles and resets -->
 
 		<link rel="stylesheet" href="assets/css/reset.css">
 		<link rel="stylesheet" href="assets/css/cursor-reset.css">
 		<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
 		<link rel="stylesheet" href="assets/css/style.css">
 		<link rel="stylesheet" href="assets/header-second-bar.css">
+
+
+		<!-- Meta-tags -->
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="UIS login page.">
@@ -22,38 +28,88 @@
 
 	<body :class="{ 'trans' : bgtransitionEnabled, 'logged-in' : user.loggedIn }">
 
+
 		<header v-if="user.loggedIn" class="header-two-bars" id="main_header" transition="show">
+
 			<div class="header-first-bar">
+
 				<div class="header-limiter">
+
 					<h1><a href="/"><span id="role">{{ user.role }}</span>'s dashboard</a></h1>
-					<button class="logout-button entypo-cancel" id="logout_button" @click="logout"></button>
+					<button
+						id="logout_button"
+						class="logout-button entypo-cancel"
+						@click="logout"
+						@keyup.enter="logout"
+					></button>
+
 				</div>
+
 			</div>
+
 			<div class="header-second-bar">
+
 				<div class="header-limiter">
-					<h2><a href="/" id="name">{{ user.fullName() }}</a> <span id="nickname">{{ user.username }}</span></h2>
+
+					<h2>
+						<a href="/" id="name">{{ user.fullName() }}</a> <span id="nickname">{{ user.username }}</span>
+					</h2>
+
 					<nav id="menu">
+
 						<button class="btn rounded" v-for="element in user.menuElements.get()">
 							{{ element.name }}
 						</button>
+
 					</nav>
+
 				</div>
+
 			</div>
+
 		</header>
 
+
+
 		<div v-if="!user.loggedIn" class="login wrapper" id="wrapper">
+
 			<div class="table">
+
 				<div class="centered cell">
+
 					<div class="content rounded" id="content">
-						<span :title="loginData.tooltipTitle" :class="{ 'tooltip' : true, 'show' : loginData.showTooltip }"></span>
+
+						<span :title="loginData.tooltipTitle" :class="{ 'tooltip' : true, 'show' : loginData.showTooltip }">
+						</span>
+
 						<form id="login_form">
+
 							<div class="form-edit login" :class="{ 'has-error' : loginData.registerError }">
+
 								<span class="icon entypo-user"></span>
-								<input v-model="user.username" class="rounded form-control" type="text" placeholder="Username" id="username" autocomplete="off" @keyup.enter="login"/>
+								<input 
+									type="text"
+									id="username"
+									class="rounded form-control"
+									placeholder="Username"
+									autocomplete="off"
+									v-model="user.username"
+									@keyup.enter="login"
+								/>
+							
 							</div>
 							<div class="form-edit login">
+							
 								<span class="icon entypo-key"></span>
-								<input class="rounded form-control" type="password" placeholder="Password" id="password" autocomplete="off" @keyup.enter="login"/>
+								<input
+									type="password"
+									id="password"
+									class="rounded form-control"
+									placeholder="Password"
+									autocomplete="off"
+									@keyup.enter="login"
+								/>
+							
 							</div>
 							<!-- TODO - full-stack registration form! -->
 							<!-- <div v-show="loginData.expandForm" class="form-edit login" transition="show">
@@ -71,21 +127,50 @@
 						
 							<!-- А вот и кнопочки пошли... -->
 							<div class="buttons rounded">
-								<button type="button" id="login_button"  @click="login" @keyup.enter="login" class="rounded btn blue" style="float: left; ">Log in</button>
-								<button type="button" id="reg_button" @click="register" @keyup.enter="register" class="rounded btn blue" style="float: right;">Register</button>
+
+								<button
+									type="button"
+									id="login_button" 
+									class="rounded btn blue"
+									style="float: left;"
+									@click="login"
+									@keyup.enter="login"
+								>Log in</button>
+								<button
+									type="button"
+									id="reg_button"
+									class="rounded btn blue"
+									style="float: right;"
+									@click="register"
+									@keyup.enter="register"
+								>Register</button>
+
 							</div>
+
 						</form>
+
 					</div>
+
 				</div>
+
 			</div>
+
 		</div>
+
 		<div v-else class="dashboard wrapper" id="wrapper">
+
 			<div class="table">
+
 				<div class="centered cell">
+
 					<div class="content rounded" id="content">
+
 					</div>
+
 				</div>
+
 			</div>
+
 		</div>
 
 		<script src="assets/js/vue.js"></script>
@@ -95,5 +180,7 @@
 		<!-- App code -->
 		<script src="app.js"></script>
 		<script src="assets/js/user-api.js"></script>
+
+
 	</body>
 </html>

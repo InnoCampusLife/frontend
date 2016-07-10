@@ -1,6 +1,10 @@
 (function(exports) {
 
+
+///TODO - optimize rendering
 var mainElement = 'html';
+///
+
 
 var userModel = {
 	id : '',
@@ -40,16 +44,18 @@ var userModel = {
 		    }
 		    return '';
 		},
-		set : function(sName, value, expDate) {
+		///TODO - set expiration time for cookies
+		set : function(sName, value, expTime) {
 			var cookie = sName + '=' + value;
 			document.cookie = cookie;
 			return cookie;
 		},
-		add : function(sName, value, expDate) {
+		add : function(sName, value, expTime) {
 			var cookie = sName + '=' + value;
 			document.cookie = document.cookie + cookie;
 			return cookie;
 		},
+		///
 		clear : function() {
 			document.cookie = '';
 		}
@@ -91,6 +97,7 @@ var app =
 		},*/
 		el : mainElement,
 		data : {
+			title: 'Hello! | Login, please',
 			user: userModel,
 			loginData: loginModel,
 			bgtransitionEnabled: false,
@@ -107,6 +114,8 @@ var app =
 			},
 			logout: function() {
 				app.user.cookie.clear();
+
+				app.title = "hello! | Login, please"
 
 				app.user.loggedIn = false;
 
@@ -131,6 +140,8 @@ function formSuccessCallback(result) {
 	user.firstName = result.firstName;
 	user.lastName = result.lastName;
 	user.role = result.role;
+
+	app.title = result.role + "'s dashboard"
 
 	app.user.loggedIn = true;
 }

@@ -61,6 +61,7 @@
     line-height: 38px;
     box-sizing: border-box;
     display: initial;
+    transition: color ease .2s, background ease .2s;
 }
 
 .header-two-bars .header-first-bar button.logout-button:hover,
