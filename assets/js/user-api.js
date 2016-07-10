@@ -1,5 +1,3 @@
-//import "app.js"
-
 function createAccount(_username, _password, successCallback, errorCallback) {
 	var 
 	type = "POST",
@@ -9,7 +7,8 @@ function createAccount(_username, _password, successCallback, errorCallback) {
 		password: _password
 	},
 	error = function (message) {
-		errorCallback(message);
+		if (errorCallback)
+			errorCallback(message);
 	};
 
 	ajax(type, url, data, successCallback, error);
@@ -59,4 +58,30 @@ function accountExists (token, successCallback, errorCallback) {
 	url  = "/api/v1/accounts/" + token + "/exists";
 
 	ajax(type, url, '', successCallback, errorCallback);
+}
+
+function ajax (type, url, data, successCallback, errorCallback) {
+
+	var r = new XMLHttpRequest();
+	r.open(type, url, true);
+	r.onload = function() {
+	  	if (r.status == 200) {
+			console.log(r.response.status);
+
+			if (successCallback)
+				successCallback(r.response.result);
+	  	}
+	  	else {
+			console.log(r.response.error);
+
+	  		if (errorCallback)
+	  			errorCallback(r.response.error);
+		}
+	};
+	r.dataType = "json";
+	r.contentType = 'json';
+	r.responseType = 'json';
+	r.setRequestHeader('Content-Type', 'application/json');
+
+	r.send(JSON.stringify(data));
 }

@@ -20,103 +20,79 @@
 	    <![endif]-->
 	</head>
 
-	<body>
+	<body :class="{ 'trans' : bgtransitionEnabled, 'logged-in' : user.loggedIn }">
 
-		<header class="header-two-bars" id="main_header">
-			
+		<header v-if="user.loggedIn" class="header-two-bars" id="main_header" transition="show">
+			<div class="header-first-bar">
+				<div class="header-limiter">
+					<h1><a href="/"><span id="role">{{ user.role }}</span>'s dashboard</a></h1>
+					<button class="logout-button entypo-cancel" id="logout_button" @click="logout"></button>
+				</div>
+			</div>
+			<div class="header-second-bar">
+				<div class="header-limiter">
+					<h2><a href="/" id="name">{{ user.fullName() }}</a> <span id="nickname">{{ user.username }}</span></h2>
+					<nav id="menu">
+						<button class="btn rounded" v-for="element in user.menuElements.get()">
+							{{ element.name }}
+						</button>
+					</nav>
+				</div>
+			</div>
 		</header>
 
-        <!-- Сюда при рендеринге приложения будут вставляться вьюхи приложения. -->
-		<div class="wrapper" id="wrapper">
-		</div>
-
-
-		<script type="text/template" id="header_template_ghost">
-			<div class="header-first-bar">
-				<div class="header-limiter">
-					<h1><a href="/"><span id="role"></span>'s dashboard</a></h1>
-					<button class="logout-button entypo-cancel" id="logout_button"></button>
-				</div>
-			</div>
-			<div class="header-second-bar">
-				<div class="header-limiter">
-					<h2><a href="/" id="name"></a> <span id="nickname">@</span></h2>
-					<nav id="menu">
-						<button class="btn rounded">statistics</button>
-						<button class="btn rounded"> settings </button>
-					</nav>
-				</div>
-			</div>
-		</script>
-
-		<script type="text/template" id="header_template">
-			<div class="header-first-bar">
-				<div class="header-limiter">
-					<h1><a href="/"><span id="role"></span>'s dashboard</a></h1>
-					<button class="logout-button entypo-cancel" id="logout_button"></button>
-				</div>
-			</div>
-			<div class="header-second-bar">
-				<div class="header-limiter">
-					<h2><a href="/" id="name"></a> <span id="nickname">@</span></h2>
-					<nav id="menu">
-						<button class="btn rounded">innopoints</button>
-						<button class="btn rounded">statistics</button>
-						<button class="btn rounded"> settings </button>
-					</nav>
-				</div>
-			</div>
-		</script>
-
-		<script type="text/template" id="login_form_template">
+		<div v-if="!user.loggedIn" class="wrapper" id="wrapper">
 			<div class="table">
-				<div class="centered cell login">
-					<span title="" class="tooltip"></span>
+				<div class="centered cell">
 					<div class="content rounded login" id="content">
+						<span :title="loginData.tooltipTitle" :class="{ 'tooltip' : true, 'show' : loginData.showTooltip }"></span>
 						<form id="login_form">
-							<div class="form-edit login">
+							<div class="form-edit login" :class="{ 'has-error' : loginData.registerError }">
 								<span class="icon entypo-user"></span>
-								<input class="rounded form-control" type="text" placeholder="Username" name="username" id="username" autocomplete="off"/>
+								<input v-model="user.username" class="rounded form-control" type="text" placeholder="Username" id="username" autocomplete="off" @keyup.enter="login"/>
 							</div>
 							<div class="form-edit login">
 								<span class="icon entypo-key"></span>
-								<input class="rounded form-control" type="password" placeholder="Password" name="password" id="password" autocomplete="off"/>
+								<input class="rounded form-control" type="password" placeholder="Password" id="password" autocomplete="off" @keyup.enter="login"/>
 							</div>
+							<!-- <div v-show="loginData.expandForm" class="form-edit login" transition="show">
+								<span class="icon entypo-dot"></span>
+								<input v-model="user.firstName" class="rounded form-control" type="text" placeholder="First Name" id="userfn" autocomplete="off"/>
+							</div>
+							<div v-show="loginData.expandForm" class="form-edit login" transition="show">
+								<span class="icon entypo-dot-2"></span>
+								<input v-model="user.lastName"  class="rounded form-control" type="text" placeholder="Last Name"  id="userln" autocomplete="off"/>
+							</div>
+							<div v-show="loginData.expandForm" class="form-edit login" transition="show">
+								<span class="icon entypo-paper-plane"></span>
+								<input v-model="user.tgId"  class="rounded form-control" type="text" placeholder="Telegram Alias" id="usertg" autocomplete="off"/>
+							</div> -->
 						
 							<!-- А вот и кнопочки пошли... -->
 							<div class="buttons rounded">
-								<button id="login_button"  class="rounded btn blue" style="float: left; ">Log in</button>
-								<button id="reg_button"    class="rounded btn blue" style="float: right;">Register</button>
+								<button type="button" id="login_button"  @click="login" @keyup.enter="login" class="rounded btn blue" style="float: left; ">Log in</button>
+								<button type="button" id="reg_button" @click="register" @keyup.enter="register" class="rounded btn blue" style="float: right;">Register</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
-		</script>
-
-		<script type="text/template" id="sidebar_template">
-			
-		</script>
-
-		<script type="text/template" id="dashboard_template">
+		</div>
+		<div v-else class="wrapper" id="wrapper" >
 			<div class="table">
 				<div class="centered cell">
-					<div class="content rounded dashboard hidden" id="content">
-						
+					<div class="content rounded dashboard" id="content">
 					</div>
 				</div>
 			</div>
-		</script>
+		</div>
 
-		<script src="assets/js/jquery.js"></script>
-		<script src="assets/js/json2.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-		<script src="assets/js/underscore.js"></script>
-		<script src="assets/js/backbone.js"></script>
-		<script src="assets/js/backbone.marionette.js"></script>
+		<script src="assets/js/vue.js"></script>
+		<!-- Replace with this on production! -->
+		<!-- <script src="assets/js/vue-min.js"></script> -->
 
 		<!-- App code -->
-		<script src="assets/js/app.js"></script>
+		<script src="app.js"></script>
 		<script src="assets/js/user-api.js"></script>
 	</body>
 </html>

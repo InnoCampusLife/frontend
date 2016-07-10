@@ -92,15 +92,14 @@ body.logged-in
     outline: 0;
     display: inline-block;
     text-align: initial;
-    transition: all ease .3s;
 }
 
 .wrapper .content:first-child
 {
-	transition: all ease .3s;
+	transition: all ease .5s;
 }
 
-.content.dashboard 
+.content.dashboard
 {
 	max-width: 90vw;
 	min-width: 20vw;
@@ -109,14 +108,24 @@ body.logged-in
 	overflow: auto;
 }
 
-.content.dashboard.hidden
+.flow-transition .content
 {
-	margin-left: -150vw;
+    transition: all ease .5s;
+    margin: 20px;
 }
 
-.content.login.hidden
+.dashboard.hidden,
+.flow-enter .content.dashboard,
+.flow-leave .content.dashboard
 {
-	margin-right: -150vw;
+	transform: translateX(-100vw);
+}
+
+.login.hidden,
+.flow-enter .content.login,
+.flow-leave .content.login
+{
+	transform: translateX(100vw);
 }
 
 .content.dashboard::-webkit-scrollbar {
@@ -151,6 +160,11 @@ body.logged-in
 #login_form .btn
 {
 	width: 46%;
+}
+
+#login_form .btn:only-child
+{
+	width: 100%;
 }
 
 .btn.blue
@@ -287,8 +301,7 @@ body.logged-in
 .tooltip {
     display: inline;
     position: relative;
-    top: -81px;
-    left: 40px;
+    text-align: center;
 }
 
 .tooltip::before {
@@ -344,6 +357,11 @@ body.logged-in
 #nickname
 {
 	color: #d0d0d0;
+}
+
+#nickname::before
+{
+	content: '@';
 }
 
 @media all and (max-height: 768px)

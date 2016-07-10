@@ -4,12 +4,17 @@
     margin-top: -100px;
     padding: 1vw 1vw 0 1vw;
     border-radius: 8px;
-    transition: all ease .3s;
     box-sizing: border-box;
 }
 
-.header-two-bars.show {
+.show-transition {
     margin-top: 0;
+    transition: all ease .3s;
+}
+
+.show-enter,
+.show-leave {
+    margin-top: -100px;
 }
 
 .header-two-bars .header-limiter{
@@ -74,11 +79,16 @@
     z-index: 1;
     transition: all ease .3s .2s;
     border-radius: 0 0 8px 9px;
-    margin-top: -60px;
 }
 
-.header-two-bars.show .header-second-bar {
+.header-two-bars.show-transition .header-second-bar {
     margin-top: 0;
+}
+
+
+.header-two-bars.show-enter .header-second-bar,
+.header-two-bars.show-leave .header-second-bar {
+    margin-top: -60px;
 }
 
 .header-two-bars .header-second-bar h2 {
