@@ -65,7 +65,7 @@ function ajax (type, url, data, successCallback, errorCallback) {
 	var r = new XMLHttpRequest();
 	r.open(type, url, true);
 	r.onload = function() {
-	  	if (r.status == 200) {
+	  	if (r.status >= 200 && r.status <= 202) {
 			console.log(r.response.status);
 
 			if (successCallback)

@@ -161,6 +161,11 @@ body.logged-in
 	width: 46%;
 }
 
+#login_form .btn[disabled]
+{
+	background-color: #BDE3FF;
+}
+
 #login_form .btn:only-child
 {
 	width: 100%;
@@ -207,6 +212,12 @@ body.logged-in
 	   -o-transition: all ease-in-out .3s;
 	   -moz-transition: all ease-in-out .3s;
 	      transition: all ease-in-out .3s;
+}
+
+.form-edit.login input[disabled]
+{
+	background-color: #F0F0F0;
+	color: #FFF;
 }
 
 .form-edit.login input:focus

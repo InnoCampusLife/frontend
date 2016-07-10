@@ -56,11 +56,11 @@
 					</h2>
 
 					<nav id="menu">
-
-						<button class="btn rounded" v-for="element in user.menuElements.get()">
-							{{ element.name }}
-						</button>
-
+						<template v-for="element in user.menuElements()">
+							<button class="btn rounded" @click="element.event">
+								{{ element.name }}
+							</button>
+						</template>
 					</nav>
 
 				</div>
@@ -84,7 +84,7 @@
 
 						<form id="login_form">
 
-							<div class="form-edit login" :class="{ 'has-error' : loginData.registerError }">
+							<div class="form-edit login" :class="{ 'has-error' : loginData.usernameError }">
 
 								<span class="icon entypo-user"></span>
 								<input 
@@ -98,7 +98,7 @@
 								/>
 							
 							</div>
-							<div class="form-edit login">
+							<div class="form-edit login" :class="{ 'has-error' : loginData.passwordError }">
 							
 								<span class="icon entypo-key"></span>
 								<input
@@ -174,7 +174,7 @@
 		</div>
 
 		<script src="assets/js/vue.js"></script>
-		<!-- Replace with this on production! -->
+		<!-- TODO Replace with this on production! -->
 		<!-- <script src="assets/js/vue-min.js"></script> -->
 
 		<!-- App code -->
