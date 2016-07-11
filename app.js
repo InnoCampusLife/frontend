@@ -5,63 +5,68 @@
 	///
 
 	var userModel = {
-		id : '',
-		username : '',
-		role : '',
-		firstName : '',
-		lastName : '',
+		id : 		 '',
+		username : 	 '',
+		role : 		 '',
+		firstName :  '',
+		lastName : 	 '',
 		patronymic : '',
 		studyGroup : '',
-		tgId : '',
+		tgId : 		 '',
 		loggedIn: false,
 		fullName : function() {
-			var ln = (userModel.lastName 	!= null ? 		userModel.lastName + ' ' : '');
-			var fn = (userModel.firstName 	!= null ? 		userModel.firstName 	 : '');
-			var pn = (userModel.patronymic 	!= null ? ' ' + userModel.patronymic 	 : '');
+			let ln = (userModel.lastName 	!= null ? 		userModel.lastName + ' ' : '');
+			let fn = (userModel.firstName 	!= null ? 		userModel.firstName 	 : '');
+			let pn = (userModel.patronymic 	!= null ? ' ' + userModel.patronymic 	 : '');
 			return ln + fn + pn;
 		},
 		token : { 
 			get : function() {
-				return userModel.cookie.get('usertoken');
+				return userModel.storage.get('usertoken');
 			},
 			set : function(newValue) {
-				return userModel.cookie.set('usertoken', newValue);
+				return userModel.storage.set('usertoken', newValue);
 			}
 		},
-		cookie : {
-			get : function(sName) {
-				var oCrumbles = document.cookie.split(';');
-			    for(var i=0; i<oCrumbles.length;i++)
-			    {
-			        var oPair= oCrumbles[i].split('=');
-			        var sKey = decodeURIComponent(oPair[0].trim());
-			        var sValue = oPair.length>1 ? oPair[1] : '';
-			        if(sKey == sName) {
-			            return decodeURIComponent(sValue);
-			        }
-			    }
-			    return '';
+		storage: {
+			get : function(key) {
+				if (typeof(Storage) != undefined) {
+					return sessionStorage.getItem(key);
+				}
+				else {
+					var oCrumbles = document.cookie.split(';');
+				    for(var i=0; i<oCrumbles.length;i++)
+				    {
+				        var oPair= oCrumbles[i].split('=');
+				        var sKey = decodeURIComponent(oPair[0].trim());
+				        var sValue = oPair.length>1 ? oPair[1] : '';
+				        if(sKey == sName) {
+				            return decodeURIComponent(sValue);
+				        }
+				    }
+				    return '';
+				}
 			},
-			///TODO - set expiration time for cookies
-			//
-			set : function(sName, value, expTime) {
-				var cookie = sName + '=' + value;
-				document.cookie = cookie;
-				return cookie;
+			set : function(key, value) {
+				if (typeof(Storage) != undefined) {
+					sessionStorage.setItem(key, value);
+					return sessionStorage.getItem(key);
+				}
+				else {
+					let cookie = sName + '=' + value;
+					document.cookie = cookie;
+					return cookie;
+				}
 			},
-			add : function(sName, value, expTime) {
-				var cookie = sName + '=' + value;
-				document.cookie = document.cookie + cookie;
-				return cookie;
-			},
-			//
-			///
-			clear : function() {
-				document.cookie = '';
+			clear : function () {
+				if (typeof(Storage) != undefined)
+					sessionStorage.clear();
+				else
+					document.cookie = '';
 			}
 		},
 		menuElements : function() {
-			var elements = [ 
+			let elements = [ 
 				{
 					name : 'statistics',
 					event: ''
@@ -86,30 +91,57 @@
 
 	var inputErrors = {
 		usernameLengthError : 'Username\'s length should be between 3 and 32 characters!',
-		usernameFormatError : 'Username should consist only of alphanumeric characters!',
+		usernameFormatError : 'Username should consist only of alpha-numeric characters!',
 		passwordLengthError : 'Password\'s length should be between 8 and 64 characters!'
 	};
 
 
 	///TODO split into 2 apps: login and dashboard
 	//
+
 	var app = new Vue({
+		created : function () {
+			console.log('created fired');
+			let token = sessionStorage.getItem('usertoken');
+			if (token) {
+				getAccount(token, function (result) {
+					console.log('created fired');
+					app.user.token.set(token);
+
+					app.bgtransitionEnabled = true;
+
+					let user = app.user;
+
+					user.id = result.id;
+					user.username = result.username;
+					user.firstName = result.firstName;
+					user.lastName = result.lastName;
+					user.role = result.role;
+
+					app.title = result.role + "'s dashboard"
+
+					app.user.loggedIn = true;
+				});
+			}
+		},
 		el : mainElement,
 		data : {
 			title: 'Hello! | Login, please',
 			user: userModel,
 			loginData: loginModel,
-			bgtransitionEnabled: false,
+			bgtransitionEnabled: false
 		},
 		methods : {
 			login: function () {
+				console.log('login fired');
 				if (usernameTooShort())
 					setError(inputErrors.usernameLengthError, 'username');
 				else
 					authorize(app.user.username, password.value, formSuccessCallback, formErrorCallback);
 			},
 			register: function () {
-				var errorSource = 
+				console.log('register fired');
+				let errorSource = 
 					usernameTooShort() ? 
 						(
 							passwordTooShort() ?
@@ -128,10 +160,19 @@
 					});
 			},
 			logout: function() {
-				app.user.cookie.clear();
+				console.log('logout fired');
+				app.bgtransitionEnabled = true;
 
 				app.title = "hello! | Login, please"
 
+				app.user.storage.clear();
+				app.user.id = '';
+				app.user.tgId = '';
+				app.user.role = '';
+				app.user.firstName = '';
+				app.user.lastName = '';
+				app.user.patronymic = '';
+				app.user.studyGroup = '';
 				app.user.loggedIn = false;
 
 				setTimeout(function() { 
@@ -143,30 +184,29 @@
 	//
 	///
 
-	/// Form input watchers - 'onchange' events
+	/// Form input watchers - 'oninput' events
 	//
-	app.$watch('user.username', function() {
-		if (usernameTooLong()) 
-			setError(inputErrors.usernameLengthError, 'username');
-
-		else if (!/^([0-9]|[a-z]|[A-Z|_])*$/.test(app.user.username)) 
-			setError(inputErrors.usernameFormatError, 'username');
-
-		else 
-			removeError();
-	});
-
-	password.oninput = function() {
-		if (passwordTooLong()) 
-			setError(inputErrors.passwordLengthError, 'username');
-		else 
-			removeError();
-	};
+	password.oninput = checkLoginInput;
+	username.oninput = checkLoginInput;
 	//
 	///
 
 	///Reusable LoginData checkers
 	//
+	function checkLoginInput() {
+		console.log('checkLoginInput fired');
+		let utl = usernameTooLong(),
+			ptl = passwordTooLong(),
+			ufe = !/^([0-9]|[a-z]|[A-Z|_])*$/.test(app.user.username);
+		if (utl || ptl || ufe) { 
+			utl && setError(inputErrors.usernameLengthError, 'username');
+			ptl && setError(inputErrors.passwordLengthError, 'password');
+			ufe && setError(inputErrors.usernameFormatError, 'username');
+		}
+		else 
+			removeError();
+	}
+
 	function usernameTooShort() { return app.user.username.length < 3; }
 
 	function usernameTooLong() { return app.user.username.length > 32; }
@@ -175,15 +215,10 @@
 
 	function passwordTooLong() { return password.value.length > 64; }
 
-	function setError(error, toWhat = 'both') {
-		if (toWhat == 'username')
-			app.loginData.usernameError = true;
-		else if (toWhat == 'both') {
-			app.loginData.usernameError = true;
-			app.loginData.passwordError = true;
-		}
-		else
-			app.loginData.passwordError = true;
+	function setError(error, toWhat) {
+		console.log('setError fired');
+		app.loginData.usernameError = (toWhat != 'password');
+		app.loginData.passwordError = (toWhat != 'username');
 
 		app.loginData.tooltipTitle = error;
 		app.loginData.showTooltip = true;
@@ -210,14 +245,6 @@
 		}
 
 	}
-
-	function setPasswordError(error) {
-		app.loginData.passwordError = true;
-		app.loginData.tooltipTitle = error;
-		app.loginData.showTooltip = true;
-		login_button.disabled = true;
-		reg_button.disabled = true;
-	}
 	//
 	///
 
@@ -225,11 +252,11 @@
 	//
 	function formSuccessCallback(result) {
 		app.loginData.showTooltip = false;
-		app.user.token = result.token;
 
 		app.bgtransitionEnabled = true;
 
-		var user = app.user;
+		let user = app.user;
+		user.token.set(result.token);
 
 		user.id = result.id;
 		user.username = result.username;
@@ -240,6 +267,10 @@
 		app.title = result.role + "'s dashboard"
 
 		app.user.loggedIn = true;
+
+		setTimeout(function() { 
+			app.bgtransitionEnabled = false;
+		}, 1000);
 	}
 
 	function formErrorCallback(result) {
