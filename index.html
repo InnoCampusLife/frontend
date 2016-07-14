@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
 		<link rel="stylesheet" href="assets/css/style.css">
 		<link rel="stylesheet" href="assets/header-second-bar.css">
+		<!-- <link rel="import" href="http://example.com/elements.html"> -->
 
 
 		<!-- Meta-tags -->
@@ -26,8 +27,9 @@
 	    <![endif]-->
 	</head>
 
-	<body :class="{ 'trans' : bgtransitionEnabled, 'logged-in' : user.loggedIn }">
+	<body class="cool background" :class="{ 'transition' : bgtransitionEnabled, 'logged-in' : user.loggedIn }">
 
+		<div class="loading overlay with cool background" :class="{ 'transparent' : loaded }"></div>
 
 		<header v-if="user.loggedIn" class="header-two-bars" id="main_header" transition="show">
 
@@ -110,6 +112,7 @@
 									autocomplete="off"
 									maxlength="64"
 									@keyup.enter="login"
+									oninput="checkLoginInput()"
 								/>
 							
 							</div>
@@ -175,9 +178,9 @@
 
 		</div>
 
-		<script src="assets/js/vue.js"></script>
+		<script src="assets/js/vue.min.js"></script>
 		<!-- TODO Replace with this on production! -->
-		<!-- <script src="assets/js/vue-min.js"></script> -->
+		<!-- <script src="assets/js/vue.min.js"></script> -->
 
 		<!-- App code -->
 		<script src="assets/js/user-api.js"></script>
