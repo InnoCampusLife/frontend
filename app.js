@@ -116,12 +116,12 @@
 		methods : {
 			login: function () {
 				console.log('login fired');
-				if (checkUsernameInput(true))
+				if (checkUsernameInput('strict'))
 					authorize(app.user.username, password.value, formSuccessCallback, formErrorCallback);
 			},
 			register: function () {
 				console.log('register fired');
-				if (checkUsernameInput(true) && checkPasswordInput())
+				if (checkUsernameInput('strict') && checkPasswordInput('strict'))
 					createAccount(app.user.username, password.value, formSuccessCallback, function(result) {
 						app.loginData.usernameError = true;
 						formErrorCallback(result);
@@ -135,8 +135,6 @@
 
 				app.user.storage.clear();
 				app.user.loggedIn = false;
-				password.oninput = checkLoginInput;
-				username.oninput = checkLoginInput;
 
 				setTimeout(function() { 
 					app.bgtransitionEnabled = false;
@@ -147,6 +145,8 @@
 					app.user.lastName = '';
 					app.user.patronymic = '';
 					app.user.studyGroup = '';
+				password.oninput = passwordInputEvent;
+				username.oninput = usernameInputEvent;
 				}, 1000);
 			}
 		},
@@ -157,6 +157,7 @@
 	/// Form input watcher - 'oninput' event
 	//
 	username.oninput = usernameInputEvent;
+	password.oninput = passwordInputEvent;
 	//
 	///
 
@@ -166,9 +167,8 @@
 
 	function checkUsernameInput(strict = false) {
 		console.log('checkLoginInput fired');
-		let ufe = strict ? 
-			!/^([0-9]|[a-z]|[A-Z|_]){3,32}$/.test(app.user.username) 
-			: !/^([0-9]|[a-z]|[A-Z|_])*$/.test(app.user.username);
+		let regex = strict ? /^([0-9]|[a-z]|[A-Z|_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z|_])*$/;
+		let ufe = !regex.test(app.user.username);
 
 		if (ufe)
 			setError(inputErrors.usernameFormatError, 'username');
@@ -178,9 +178,12 @@
 		return !ufe;
 	}
 
-	function checkPasswordInput() {
+	function passwordInputEvent(e) { checkPasswordInput(); }
+
+	function checkPasswordInput(strict = false) {
 		console.log('checkLoginInput fired');
-		let pfe = !/^.{5,64}$/.test(password.value);
+		let regex = strict ? /^.{5,64}$/ : /^.*$/;
+		let pfe = !regex.test(password.value);
 
 		if (pfe)
 			setError(inputErrors.passwordFormatError, 'password');
