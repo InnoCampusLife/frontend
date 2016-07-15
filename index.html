@@ -96,6 +96,7 @@
 									placeholder="Username"
 									autocomplete="off"
 									maxlength="32"
+									autofocus 
 									v-model="user.username"
 									@keyup.enter="login"
 								/>
@@ -169,7 +170,59 @@
 				<div class="centered cell">
 
 					<div class="content rounded" id="content">
-
+						<form id="ip_request">
+							<h2 style="padding: 0">Request innopoints</h2>
+							<hr/>
+							<div  style="width: 100%;">
+								<div  style="float: left;width: 46%">
+									<label class="rounded form-control" for="self">
+										<input type="radio" name="request type" id="self" value="self" checked/>
+										Personal
+									</label>
+								</div>
+								<div  style="float: right;width: 46%">
+									<label class="rounded form-control" for="group">
+										<input type="radio" name="request type" id="group" value="group"/>
+										Group
+									</label>
+								</div>
+							</div>
+							<br/>
+							<br/>
+							<div  style="width: 100%;">
+								Activivty type
+								<select class="rounded form-control" name="activity-type" style="width: 100%;">
+									<option value="One">One</option>
+									<option value="Two">Two</option>
+								</select>
+							</div>
+							<br/>
+							<div  style="width: 100%;">
+								Activity
+								<select class="rounded form-control" name="activity" style="width: 100%;">
+									<option value="One">One</option>
+									<option value="Two">Two</option>
+								</select>
+							</div>
+							<br/>
+							<div  style="width: 100%;">
+								<label>
+									Time spent/quantity: 
+									<input class="rounded form-control" class="rounded form-control" type="number" name="quantity" min="0" max="365" value="0">
+								</label>
+							</div>
+							<br/>
+							<div  style="width: 100%;">
+								<label>
+									Attached files: 
+									<input class="rounded btn form-control" type="file" name="upload">
+								</label>
+							</div>
+							<br/>
+							<div  style="width: 100%;">
+								<textarea class="rounded form-control" name="comment"></textarea>
+							</div>
+						</form>
 					</div>
 
 				</div>

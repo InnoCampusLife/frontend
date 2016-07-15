@@ -116,7 +116,7 @@
 		methods : {
 			login: function () {
 				console.log('login fired');
-				if (checkUsernameInput('strict'))
+				//if (checkUsernameInput('strict'))
 					authorize(app.user.username, password.value, formSuccessCallback, formErrorCallback);
 			},
 			register: function () {
@@ -257,6 +257,7 @@
 	//
 	///
 	
+	/// Smoothly fade-out interface on load, instead of showing junk.
 	document.addEventListener('DOMContentLoaded', function() {
 		app.loaded = true;
 	}, false);
