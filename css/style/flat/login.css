@@ -1,0 +1,14 @@
+form input { 
+	padding: 16px;
+	border: 0;
+	background-color: transparent;
+}
+form input[border] {border: 1px solid;}
+
+[dark] input 			{ color: rgba(255,255,255,.6); background-color: rgba(0,0,0,.2); }
+[dark] input[border] 	{ border-color: #fff; color: #fff; }
+[dark] input:focus 		{ color: #fff; }
+
+[light] input, 			input 			{ color: #646464; }
+[light] input[border], 	input[border] 	{ border-color: #646464; }
+[light] input:focus, 	input:focus 	{ color: #000; background-color: rgba(0,0,0,.2); }

@@ -1,0 +1,63 @@
+/*Helpers*/
+
+[left] {float: left;}
+[right] {float: right;}
+
+[fill][screen] {position: absolute;	top: 0;	left: 0; width: 100vw; height: 100vh;}
+[fill][parent] {margin: 0; width: 100%; height: 100%;}
+
+[list] {display: list-item;}
+
+[table] {display: table;}
+
+[table] [cell], [table][cell] {display: table-cell;}
+[table] [cell][align-top], [table][cell][align-top] {vertical-align: top;}
+[table] [cell][align-center], [table][cell][align-center] {vertical-align: center;}
+[table] [cell][align-bottom], [table][cell][align-bottom] {vertical-align: bottom;}
+
+[table] [column], [table][column] {display: table-column;}
+[table] [column][group], [table][column][group] {display: table-column-group;}
+
+[block] {display: block;}
+[inline] {display: inline;}
+[inline][block] {display: inline-block;}
+[inline][table] {display: inline-table;}
+[inline][flex] {display: inline-flex;}
+
+[flex] {display: flex;}
+[flex][center][children] {align-items: center; justify-content: center;}
+
+[rounded],
+[rounded="4"]	{border-radius:  4px;}
+[rounded="8"]	{border-radius:  8px;}
+[rounded="16"]	{border-radius: 16px;}
+[rounded="100"]	{border-radius: 100%;}
+
+[transition~=".1"] {transition: all .1s ease;}
+[transition],
+[transition~=".3"] {transition: all .3s ease;}
+[transition~=".5"] {transition: all .5s ease;}
+[transition~="1"]  {transition: all  1s ease;}
+
+[border];
+
+[non-opaque] {opacity: 0;}
+[transparent] {background-color: transparent;}
+
+[pinned], 			[fixed] {position: fixed;}
+[pinned][left],  	[fixed][left] {left:0;}
+[pinned][right],	[fixed][right] {right:0;}
+[pinned][top],		[fixed][top] {top:0;}
+[pinned][bottom],	[fixed][bottom] {bottom:0;}
+
+[show] {opacity: 1; visibility: visible;}
+[hidden] {visibility: hidden;}
+
+[default] {
+	display: initial;
+	position: initial;
+	padding: initial;
+	margin: initial;
+	color: initial;
+	background: initial;
+}

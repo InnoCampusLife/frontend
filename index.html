@@ -1,22 +1,32 @@
-<html lang="en">
+<!DOCTYPE html>
+<html>
 	<head>
-		<title>{{title | capitalize}}</title>
+		<title>UIS Dashboard</title>
 
 
 		<!-- Styles and resets -->
-
-		<link rel="stylesheet" href="assets/css/reset.css">
-		<link rel="stylesheet" href="assets/css/cursor-reset.css">
 		<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
-		<link rel="stylesheet" href="assets/css/style.css">
-		<link rel="stylesheet" href="assets/header-second-bar.css">
-		<!-- <link rel="import" href="http://example.com/elements.html"> -->
+		<link rel="stylesheet" href="css/markup/base.css">
+		<link rel="stylesheet" href="css/markup/grids-responsive.css">
+		<link rel="stylesheet" href="css/markup/buttons.css">
+		<link rel="stylesheet" href="css/markup/menus.css">
+		<link rel="stylesheet" href="css/markup/tables.css">
+		<link rel="stylesheet" href="css/markup/forms.css">
+		<link rel="stylesheet" href="css/markup/helpers.css">
 
+		<link rel="stylesheet" href="css/style/flat/base.css">
+		<link rel="stylesheet" href="css/style/flat/forms.css">
+
+
+		<!-- JS -->
+	  	<script src="build/main.js" defer></script>
+		
 
 		<!-- Meta-tags -->
-
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="UIS login page.">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="author" content="You"> <!-- имя автора, -->
 	    <meta name="keyword" content="You, you, you, you and... you"> <!-- и ключевые слова, по которым страницу ищет гугел. -->
 
@@ -26,219 +36,7 @@
 	      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	    <![endif]-->
 	</head>
-
-	<body class="cool background" :class="{ 'transition' : bgtransitionEnabled, 'logged-in' : user.loggedIn }">
-
-		<div class="loading overlay with cool background" :class="{ 'transparent' : loaded }"></div>
-
-		<header v-if="user.loggedIn" class="header-two-bars" id="main_header" transition="show">
-
-			<div class="header-first-bar">
-
-				<div class="header-limiter">
-
-					<h1><a href="/"><span id="role">{{ user.role }}</span>'s dashboard</a></h1>
-					<button
-						id="logout_button"
-						class="logout-button entypo-cancel"
-						@click="logout"
-						@keyup.enter="logout"
-					></button>
-
-				</div>
-
-			</div>
-
-			<div class="header-second-bar">
-
-				<div class="header-limiter">
-
-					<h2>
-						<a href="/" id="name">{{ user.fullName() }}</a> <span id="nickname">{{ user.username }}</span>
-					</h2>
-
-					<nav id="menu">
-						<template v-for="element in user.menuElements()">
-							<button class="btn rounded" @click="element.event">
-								{{ element.name }}
-							</button>
-						</template>
-					</nav>
-
-				</div>
-
-			</div>
-
-		</header>
-
-
-
-		<div v-if="!user.loggedIn" class="login wrapper" id="wrapper">
-
-			<div class="table">
-
-				<div class="centered cell">
-
-					<div class="content rounded" id="content">
-
-						<span :title="loginData.tooltipTitle" :class="{ 'tooltip' : true, 'show' : loginData.showTooltip }">
-						</span>
-
-						<form id="login_form">
-
-							<div class="form-edit login" :class="{ 'has-error' : loginData.usernameError }">
-
-								<span class="icon entypo-user"></span>
-								<input 
-									type="text"
-									id="username"
-									class="rounded form-control"
-									placeholder="Username"
-									autocomplete="off"
-									maxlength="32"
-									autofocus 
-									v-model="user.username"
-									@keyup.enter="login"
-								/>
-							
-							</div>
-							<div class="form-edit login" :class="{ 'has-error' : loginData.passwordError }">
-							
-								<span class="icon entypo-key"></span>
-								<input
-									type="password"
-									id="password"
-									class="rounded form-control"
-									placeholder="Password"
-									autocomplete="off"
-									maxlength="64"
-									@keyup.enter="login"
-									oninput="checkLoginInput()"
-								/>
-							
-							</div>
-							<!-- TODO - full-stack registration form! -->
-							<!-- <div v-show="loginData.expandForm" class="form-edit login" transition="show">
-								<span class="icon entypo-dot"></span>
-								<input v-model="user.firstName" class="rounded form-control" type="text" placeholder="First Name" id="userfn" autocomplete="off"/>
-							</div>
-							<div v-show="loginData.expandForm" class="form-edit login" transition="show">
-								<span class="icon entypo-dot-2"></span>
-								<input v-model="user.lastName"  class="rounded form-control" type="text" placeholder="Last Name"  id="userln" autocomplete="off"/>
-							</div>
-							<div v-show="loginData.expandForm" class="form-edit login" transition="show">
-								<span class="icon entypo-paper-plane"></span>
-								<input v-model="user.tgId"  class="rounded form-control" type="text" placeholder="Telegram Alias" id="usertg" autocomplete="off"/>
-							</div> -->
-						
-							<!-- А вот и кнопочки пошли... -->
-							<div class="buttons rounded">
-
-								<button
-									type="button"
-									id="login_button" 
-									class="rounded btn blue"
-									style="float: left;"
-									@click="login"
-									@keyup.enter="login"
-								>Log in</button>
-								<button
-									type="button"
-									id="reg_button"
-									class="rounded btn blue"
-									style="float: right;"
-									@click="register"
-									@keyup.enter="register"
-								>Register</button>
-
-							</div>
-
-						</form>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</div>
-
-		<div v-else class="dashboard wrapper" id="wrapper">
-
-			<div class="table">
-
-				<div class="centered cell">
-
-					<div class="content rounded" id="content">
-						<form id="ip_request">
-							<h2 style="padding: 0">Request innopoints</h2>
-							<hr/>
-							<div  style="width: 100%;">
-								<div  style="float: left;width: 46%">
-									<label class="rounded form-control" for="self">
-										<input type="radio" name="request type" id="self" value="self" checked/>
-										Personal
-									</label>
-								</div>
-								<div  style="float: right;width: 46%">
-									<label class="rounded form-control" for="group">
-										<input type="radio" name="request type" id="group" value="group"/>
-										Group
-									</label>
-								</div>
-							</div>
-							<br/>
-							<br/>
-							<div  style="width: 100%;">
-								Activivty type
-								<select class="rounded form-control" name="activity-type" style="width: 100%;">
-									<option value="One">One</option>
-									<option value="Two">Two</option>
-								</select>
-							</div>
-							<br/>
-							<div  style="width: 100%;">
-								Activity
-								<select class="rounded form-control" name="activity" style="width: 100%;">
-									<option value="One">One</option>
-									<option value="Two">Two</option>
-								</select>
-							</div>
-							<br/>
-							<div  style="width: 100%;">
-								<label>
-									Time spent/quantity: 
-									<input class="rounded form-control" class="rounded form-control" type="number" name="quantity" min="0" max="365" value="0">
-								</label>
-							</div>
-							<br/>
-							<div  style="width: 100%;">
-								<label>
-									Attached files: 
-									<input class="rounded btn form-control" type="file" name="upload">
-								</label>
-							</div>
-							<br/>
-							<div  style="width: 100%;">
-								<textarea class="rounded form-control" name="comment"></textarea>
-							</div>
-						</form>
-					</div>
-
-				</div>
-
-			</div>
-
-		</div>
-
-		<script src="assets/js/vue.min.js"></script>
-		<!-- TODO Replace with this on production! -->
-		<!-- <script src="assets/js/vue.min.js"></script> -->
-
-		<!-- App code -->
-		<script src="assets/js/user-api.js"></script>
-		<script src="app.js"></script>
-
+	<body>
 
 	</body>
 </html>
