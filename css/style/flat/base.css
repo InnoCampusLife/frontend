@@ -1,0 +1,25 @@
+/* Force transitions to all elements */
+/* Style purposes */
+* {
+    transition: all .3s ease;
+    outline: none;
+}
+
+
+/* Force all children to be rounded too, until other is specified */
+
+[rounded] *,
+[rounded="4"] *	  {border-radius:  4px;}
+[rounded="8"] *	  {border-radius:  8px;}
+[rounded="16"] *  {border-radius: 16px;}
+[rounded="100"]	* {border-radius: 100%;}
+
+
+/* Tried to remove clearing cross from inputs in chrome and IE. Doesn't work yet. */
+
+input::-ms-clear {  display: none; width : 0; height: 0; }
+input::-ms-reveal {  display: none; width : 0; height: 0; }
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration { display: none; }
