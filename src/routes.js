@@ -24,7 +24,7 @@ export default {
 					'/:username' : {
 						component: test
 					},
-				} 
+				}
 			},
 			'/innopoints' : {
 				component: test,
@@ -35,6 +35,8 @@ export default {
 				}
 			}
 		},
+		//TODO 
+		//   Remove the "!" sign
 		authorizedZone : !true
 	}
 }

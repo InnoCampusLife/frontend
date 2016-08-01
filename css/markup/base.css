@@ -463,7 +463,7 @@ th {
 }
 
 /**
- * Add this class to an image to make it fit within it's fluid parent wrapper while maintaining
+ * Add this attribute to an image to make it fit within it's fluid parent wrapper while maintaining
  * aspect ratio.
  */
 [img] {

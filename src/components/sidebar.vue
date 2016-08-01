@@ -1,16 +1,15 @@
 <template>
-	<button v-link="'/'"		title="">main</button>
-	<button v-link="'/test'"	title="">test</button>
-	<button @click="logout" 	title="">logout</button>
+	<button v-link="'/'"			title="">main</button>
+	<button v-link="'/test'"		title="">test</button>
+	<button v-link="'/innopoints'"	title="">innopoints</button>
+	<button @click="logout" 		title="">logout</button>
 </template>
 
 <script>
-	import userModel from './scripts/userModel.js'
-
 	export default {
 		data () {
 			return {
-				user : userModel
+				user : require('./scripts/userModel.js')
 			}
 		},
 		methods : {

@@ -1,7 +1,7 @@
 <template>
-	<form>
+	<form stacked>
 		<!-- TODO : rework oninput events -->
-		<input block
+		<input
 			type="text"
 			name="username"
 			id="username"
@@ -9,11 +9,11 @@
 			autocomplete="off"
 			maxlength="32"
 			autofocus 
-			oninput="event.target.__v_model.vm.checkUsernameInput();"
+			v-on:oninput="console.log($event)"
 			v-model="user.username"
 			@keyup.enter="login"
 		>
-		<input block
+		<input
 			type="password"
 			name="password"
 			id="password"
@@ -23,40 +23,47 @@
 			oninput="passwordInputEvent"
 			@keyup.enter="login"
 		>
+		<div>
+			<button
+				type="button"
+				@click="login"
+				@keyup.enter="login"
+			>login</button>
 
-		<button block
-			@click="login"
-			@keyup.enter="login"
-		>LOGIN</button>
+			<button
+				type="button"
+				@click="register"
+				@keyup.enter="register"
+			>register</button>
+		</div>
 	</form>
 </template>
 
 <script>
-	import userModel from './scripts/userModel.js'
-	import accountsApi from './scripts/accountsApi.js'
+	import {authorize} from './scripts/api.js'
+	import {createAccount} from './scripts/api.js'
 
 	export default {
 		data () {
 			return {
-				user : userModel
+				user : require('./scripts/userModel.js')
 			}
 		},
 		methods : {
 			login (e) {
 				e.preventDefault();
 				//if (this.checkUsernameInput('strict'))
-					accountsApi.authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			register (e) {
 				e.preventDefault();
 				if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-					accountsApi.createAccount(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					createAccount(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			/// Form Callbacks
 			//
 			formSuccessCallback (result) {
-				this.user.token.set(result.token);
-
+				this.user.token = result.token;
 				this.user.id = result.id;
 				this.user.username = result.username;
 				this.user.role = result.role;
@@ -77,7 +84,7 @@
 
 			checkUsernameInput (strict = false) {
 				console.log('checkLoginInput fired');
-				let regex = strict ? /^([0-9]|[a-z]|[A-Z|_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z|_])*$/;
+				let regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
 				let ufe = !regex.test(this.user.username);
 
 				if (ufe)
@@ -103,10 +110,12 @@
 				return !pfe;
 			},
 
+			//TODO
 			setError (error ,toWhat) {
 				console.log(error + ": " + toWhat);
 			},
 
+			//TODO
 			removeError (fromWhat) {
 				console.log(fromWhat);
 			}

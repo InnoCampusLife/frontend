@@ -10,12 +10,11 @@
 <script>
 	import sidebar from './sidebar.vue'
 	import content from './content.vue'
-	import userModel from './scripts/userModel.js'
 
 	export default {
 		data () {
 			return {
-				user : userModel
+				user : require('./scripts/userModel.js')
 			}
 		},
 		components : {
