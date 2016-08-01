@@ -12,9 +12,9 @@ var router = new VueRouter({
 
 router.beforeEach(function (transition) {
 	let user = require('./components/scripts/userModel.js');
-	if (!user.loggedIn() && transition.to.authorizedZone)
+	if (!user.loggedIn && transition.to.authorizedZone)
 		transition.redirect('/login');
-	else if (user.loggedIn() && transition.to.loginPage)
+	else if (user.loggedIn && transition.to.loginPage)
 		transition.redirect('/');
 	else
 		transition.next();

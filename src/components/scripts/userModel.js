@@ -1,33 +1,32 @@
-var userModel = {
+module.exports = {
 	id : 		 '',
 	username : 	 '',
 	role : 		 '',
+	set Role(value) { this.role = value; this.storage.set('role', this.role); return this.role; },
 	firstName :  '',
 	lastName : 	 '',
 	patronymic : '',
 	studyGroup : '',
 	tgId : 		 '',
-	loggedIn () {
+	get loggedIn () {
 		return this.storage.get('usertoken') ? true : false;
 	},
-	fullName () {
+	get fullName () {
 		let ln = (this.lastName 	!= null ? 		this.lastName + ' ' : '');
 		let fn = (this.firstName 	!= null ? 		this.firstName 	 	: '');
 		let pn = (this.patronymic 	!= null ? ' ' + this.patronymic 	: '');
 		return ln + fn + pn;
 	},
-	token : { 
-		get () {
-			return this.storage.get('usertoken');
-		},
-		set (newValue) {
-			return this.storage.set('usertoken', newValue);
-		}
+	get token () {
+		return this.storage.get('usertoken');
+	},
+	set token (value) {
+		return this.storage.set('usertoken', value);
 	},
 	storage: {
 		get (key) {
 			if (typeof(Storage) != undefined) {
-				return sessionStorage.getItem(key);
+				return localStorage.getItem(key);
 			}
 			else {
 				let oCrumbles = document.cookie.split(';');
@@ -45,8 +44,8 @@ var userModel = {
 		},
 		set (key, value) {
 			if (typeof(Storage) != undefined) {
-				sessionStorage.setItem(key, value);
-				return sessionStorage.getItem(key);
+				localStorage.setItem(key, value);
+				return localStorage.getItem(key);
 			}
 			else {
 				let cookie = sName + '=' + value;
@@ -56,26 +55,9 @@ var userModel = {
 		},
 		clear () {
 			if (typeof(Storage) != undefined)
-				sessionStorage.clear();
+				localStorage.clear();
 			else
 				document.cookie = '';
 		}
-	},
-	menuElements () {
-		let elements = [
-			{
-				name : 'statistics',
-				event: ''
-			}, {
-				name : 'settings',
-				event: ''
-			}
-		];
-		if (this.role == 'moderator' || this.role == 'student')
-			elements.push({ name:'innopoints', event:''});
-
-		return elements;
 	}
 };
-
-module.exports = userModel;
