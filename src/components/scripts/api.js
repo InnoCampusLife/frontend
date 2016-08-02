@@ -7,10 +7,10 @@ var api = {
 		name : "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-		createAccount (_username, _password, successCallback, errorCallback) {
+		create (_username, _password, successCallback, errorCallback) {
 			let 
 			type = "POST",
-			url  = accounts.url,
+			url  = this.url,
 			data = {
 				username: _username,
 				password: _password
@@ -22,7 +22,7 @@ var api = {
 		authorize (_username, _password, successCallback, errorCallback) {
 			let 
 			type = "POST",
-			url  = accounts.url + "auth",
+			url  = this.url + "auth",
 			data = {
 				username: _username,
 				password: _password
@@ -31,10 +31,10 @@ var api = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		getAccount (token, successCallback, errorCallback) {
+		get (token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = accounts.url + token,
+			url  = this.url + token,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -45,7 +45,7 @@ var api = {
 		listAccounts (moder_token, successCallback, errorCallback) {
 			let
 			type = "GET",
-			url = accounts.url + moder_token + "/listAccounts",
+			url = this.url + moder_token + "/listAccounts",
 			data = '';
 			
 			ajax(type, url, data, successCallback, errorCallback);
@@ -54,7 +54,7 @@ var api = {
 		updateRole (moder_token, account_id, new_role, successCallback, errorCallback) {
 			let
 			type = "PUT",
-			url = accounts.url + moder_token + "/updateRole",
+			url = this.url + moder_token + "/updateRole",
 			data = { accountId: account_id, newRole: new_role };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -62,10 +62,10 @@ var api = {
 		//
 		///
 
-		accountExists (token, successCallback, errorCallback) {
+		exists (token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = accounts.url + token + "/exists",
+			url  = this.url + token + "/exists",
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -81,7 +81,7 @@ var api = {
 		getActivities (skip_count, limit_count, successCallback, errorCallback) {
 			let
 			type = "GET",
-			url = points.url + "activities",
+			url = this.url + "activities",
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -90,7 +90,7 @@ var api = {
 		getActivitiesInCategory (cat_id, skip_count, limit_count, successCallback, errorCallback) {
 			let
 			type = "GET",
-			url = points.url + "activities/" + cat_id,
+			url = this.url + "activities/" + cat_id,
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -99,7 +99,7 @@ var api = {
 		getCategories (skip_count, limit_count, successCallback, errorCallback) {
 			let
 			type = "GET",
-			url = points.url + "categories",
+			url = this.url + "categories",
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -108,7 +108,7 @@ var api = {
 		getAccount (token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "accounts/" + token,
+			url  = this.url + "accounts/" + token,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -117,7 +117,7 @@ var api = {
 		createAccount (token, successCallback, errorCallback) {
 			let 
 			type = "POST",
-			url  = points.url + "accounts/" + token,
+			url  = this.url + "accounts/" + token,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -126,7 +126,7 @@ var api = {
 		getFile (appl_id, file_id, token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "accounts/" + token + "/applications/" + appl_id + "/files/" + file_id,
+			url  = this.url + "accounts/" + token + "/applications/" + appl_id + "/files/" + file_id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -135,7 +135,7 @@ var api = {
 		createApplication (token, application, successCallback, errorCallback) {
 			let 
 			type = "POST",
-			url  = points.url + "accounts/" + token + "/applications",
+			url  = this.url + "accounts/" + token + "/applications",
 			data = { applicaiton : application };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -144,7 +144,7 @@ var api = {
 		updateApplication (appl_id, new_params, token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "accounts/" + token + "/applications/" + appl_id,
+			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
 			data = new_params;
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -153,7 +153,7 @@ var api = {
 		sendApplication (appl_id, token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "accounts/" + token + "/applications/" + appl_id,
+			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -162,7 +162,7 @@ var api = {
 		getApplication (appl_id, token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "accounts/" + token + "/applications/" + appl_id,
+			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -171,7 +171,7 @@ var api = {
 		deleteApplication (appl_id, token, successCallback, errorCallback) {
 			let 
 			type = "DELETE",
-			url  = points.url + "accounts/" + token + "/applications/" + appl_id,
+			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -180,7 +180,7 @@ var api = {
 		getApplications (token, skip_count, limit_count, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "accounts/" + token + "/applications",
+			url  = this.url + "accounts/" + token + "/applications",
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -189,7 +189,7 @@ var api = {
 		getApplicationsWithStatus (status, token, skip_count, limit_count, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "accounts/" + token + "/applications/" + status,
+			url  = this.url + "accounts/" + token + "/applications/" + status,
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -202,7 +202,7 @@ var api = {
 		getUserAccounts (admin_token, skip_count, limit_count, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "admin/" + admin_token,
+			url  = this.url + "admin/" + admin_token,
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -211,7 +211,7 @@ var api = {
 		getUserAccount (id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "admin/" + admin_token + "/accounts/" + id,
+			url  = this.url + "admin/" + admin_token + "/accounts/" + id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -220,7 +220,7 @@ var api = {
 		updateUserAccount (id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "admin/" + admin_token + "/accounts/" + id,
+			url  = this.url + "admin/" + admin_token + "/accounts/" + id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -229,7 +229,7 @@ var api = {
 		getAllApplicationsWithStatus (status, admin_token, skip_count, limit_count, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "admin/" + admin_token + "/applications/" + status,
+			url  = this.url + "admin/" + admin_token + "/applications/" + status,
 			data = { skip: skip_count, limit: limit_count };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -238,7 +238,7 @@ var api = {
 		createApplication (admin_token, application, successCallback, errorCallback) {
 			let 
 			type = "POST",
-			url  = points.url + "admin/" + admin_token + "/applications",
+			url  = this.url + "admin/" + admin_token + "/applications",
 			data = { applicaiton : application };
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -247,7 +247,7 @@ var api = {
 		updateApplication (appl_id, new_params, admin_token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "admin/" + admin_token + "/applications/" + appl_id,
+			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id,
 			data = new_params;
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -256,7 +256,7 @@ var api = {
 		getApplication (appl_id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "GET",
-			url  = points.url + "admin/" + admin_token + "/applications/" + appl_id,
+			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id,
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -265,7 +265,7 @@ var api = {
 		approveApplication (appl_id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "admin/" + admin_token + "/applications/" + appl_id + "/approve",
+			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/approve",
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -274,7 +274,7 @@ var api = {
 		rejectApplication (appl_id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "admin/" + admin_token + "/applications/" + appl_id + "/reject",
+			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/reject",
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -283,7 +283,7 @@ var api = {
 		dismissApplication (appl_id, admin_token, successCallback, errorCallback) {
 			let 
 			type = "PUT",
-			url  = points.url + "admin/" + admin_token + "/applications/" + appl_id + "/to_rework",
+			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/to_rework",
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -322,5 +322,3 @@ function ajax (type, url, data, successCallback, errorCallback) {
 export default api;
 export var accounts = api.accounts;
 export var innopoints = api.innopoints;
-export var authorize = api.accounts.authorize;
-export var createAccount = api.accounts.createAccount;

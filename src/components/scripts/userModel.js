@@ -1,19 +1,19 @@
 module.exports = {
-	id : 		 '',
-	username : 	 '',
-	role : 		 '',
-	firstName :  '',
-	lastName : 	 '',
-	patronymic : '',
-	studyGroup : '',
-	tgId : 		 '',
+	id : 		 undefined,
+	username : 	 undefined,
+	role : 		 undefined,
+	firstName :  undefined,
+	lastName : 	 undefined,
+	patronymic : undefined,
+	studyGroup : undefined,
+	tgId : 		 undefined,
 	get loggedIn () {
 		return this.storage.get('usertoken') ? true : false;
 	},
 	get fullName () {
-		let ln = (this.lastName 	!= "" ? 		this.lastName + ' ' : '');
-		let fn = (this.firstName 	!= "" ? 		this.firstName 	 	: '');
-		let pn = (this.patronymic 	!= "" ? ' ' + this.patronymic 	: '');
+		let ln = (this.lastName 	!= undefined ? 		this.lastName + ' ' : '');
+		let fn = (this.firstName 	!= undefined ? 		this.firstName 	 	: '');
+		let pn = (this.patronymic 	!= undefined ? ' ' + this.patronymic 	: '');
 		return ln + fn + pn;
 	},
 	get token () {
@@ -58,5 +58,49 @@ module.exports = {
 			else
 				document.cookie = '';
 		}
+	},
+
+	///Helpers
+	//
+	get isAdmin () { return this.role == 'moderator' || this.role == 'admin'; },
+	get isStudent () { return this.role == 'student'; },
+	get isGhost () { return this.role == 'ghost'; },
+
+	clear () {
+		this.id = undefined;
+		this.firstName = undefined;
+		this.lastName = undefined;
+		this.patronymic = undefined;
+		this.role = undefined;
+		this.studyGroup = undefined;
+		this.tgId = undefined;
+		this.token = undefined;
+		this.storage.clear();
+	},
+
+	set (user) {
+		this.id = user.id;
+		this.username = user.username;
+		this.firstName = user.firstName;
+		this.lastName = user.lastName;
+		this.patronymic = user.patronymic;
+		this.role = user.role;
+		this.studyGroup = user.studyGroup;
+		this.tgId = user.tgId;
+		this.token = user.token == undefined ? this.token : user.token;
+	},
+	//
+	///
+
+	///Innopoints account
+	//
+	innopoints : {
+		id :	undefined,
+		amount : 0,
+		transactions : {},
+		applications : {},
+		orders : {}
 	}
+	//
+	///
 };

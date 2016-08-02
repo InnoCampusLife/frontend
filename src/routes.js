@@ -1,4 +1,3 @@
-import notfound		from './components/404.vue'
 import test 		from './components/test.vue'
 import main 		from './components/main.vue'
 import login 		from './components/login.vue'
@@ -13,6 +12,10 @@ export default {
 		subRoutes: {
 			'/test' : {
 				component: test
+			},
+			'/admin_side' : {
+				component: test,
+				adminZone: true
 			},
 			'/user' : {
 				component: test,
@@ -33,6 +36,6 @@ export default {
 		},
 		//TODO 
 		//   Remove the "!" sign
-		authorizedZone : !true
+		authorizedZone : true
 	}
 }
