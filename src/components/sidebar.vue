@@ -9,7 +9,7 @@
 	export default {
 		data () {
 			return {
-				user : require('./scripts/userModel.js')
+				user : user
 			}
 		},
 		methods : {

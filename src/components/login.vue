@@ -9,7 +9,7 @@
 			autocomplete="off"
 			maxlength="32"
 			autofocus 
-			v-on:oninput="console.log($event)"
+			v-on:input="usernameInputEvent"
 			v-model="user.username"
 			@keyup.enter="login"
 		>
@@ -20,7 +20,7 @@
 			placeholder="Password"
 			autocomplete="off"
 			maxlength="64"
-			oninput="passwordInputEvent"
+			v-on:input="passwordInputEvent"
 			@keyup.enter="login"
 		>
 		<div>
@@ -46,7 +46,7 @@
 	export default {
 		data () {
 			return {
-				user : require('./scripts/userModel.js')
+				user : user
 			}
 		},
 		methods : {
@@ -71,6 +71,8 @@
 				this.user.lastName = result.lastName;
 				this.user.studyGroup = result.studyGroup;
 				this.user.tgId = result.tgId;
+
+				this.$router.go("/");
 			},
 			formErrorCallback (result) {
 				// TODO set error tooltip info
@@ -80,7 +82,7 @@
 
 			///Reusable LoginData checkers
 			//
-			usernameInputEvent (e) { checkUsernameInput(); },
+			usernameInputEvent (e) { this.checkUsernameInput(); },
 
 			checkUsernameInput (strict = false) {
 				console.log('checkLoginInput fired');
@@ -88,14 +90,14 @@
 				let ufe = !regex.test(this.user.username);
 
 				if (ufe)
-					setError(inputErrors.usernameFormatError, 'username');
+					this.setError(inputErrors.usernameFormatError, 'username');
 				else
-					removeError('username');
+					this.removeError('username');
 
 				return !ufe;
 			},
 
-			passwordInputEvent (e) { checkPasswordInput(); },
+			passwordInputEvent (e) { this.checkPasswordInput(); },
 
 			checkPasswordInput (strict = false) {
 				console.log('checkLoginInput fired');
@@ -103,9 +105,9 @@
 				let pfe = !regex.test(password.value);
 
 				if (pfe)
-					setError(inputErrors.passwordFormatError, 'password');
+					this.setError(inputErrors.passwordFormatError, 'password');
 				else
-					removeError('password');
+					this.removeError('password');
 
 				return !pfe;
 			},
