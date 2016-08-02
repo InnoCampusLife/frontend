@@ -16,8 +16,13 @@ router.beforeEach(function (transition) {
 		transition.redirect('/login');
 	else if (user.loggedIn && transition.to.loginPage)
 		transition.redirect('/');
-	else
+	else //if (user.loggedIn) {
+		//if (transition.to.userpage){
+		//	//TODO check user's existance
+		//}
+		//else
 		transition.next();
-});
+	//}
+}).redirect({'*':'/'});
 
 router.start(App, 'app');

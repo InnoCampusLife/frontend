@@ -2,7 +2,6 @@ module.exports = {
 	id : 		 '',
 	username : 	 '',
 	role : 		 '',
-	set Role(value) { this.role = value; this.storage.set('role', this.role); return this.role; },
 	firstName :  '',
 	lastName : 	 '',
 	patronymic : '',
@@ -12,9 +11,9 @@ module.exports = {
 		return this.storage.get('usertoken') ? true : false;
 	},
 	get fullName () {
-		let ln = (this.lastName 	!= null ? 		this.lastName + ' ' : '');
-		let fn = (this.firstName 	!= null ? 		this.firstName 	 	: '');
-		let pn = (this.patronymic 	!= null ? ' ' + this.patronymic 	: '');
+		let ln = (this.lastName 	!= "" ? 		this.lastName + ' ' : '');
+		let fn = (this.firstName 	!= "" ? 		this.firstName 	 	: '');
+		let pn = (this.patronymic 	!= "" ? ' ' + this.patronymic 	: '');
 		return ln + fn + pn;
 	},
 	get token () {

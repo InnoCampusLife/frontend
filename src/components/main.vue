@@ -12,11 +12,6 @@
 	import content from './content.vue'
 
 	export default {
-		data () {
-			return {
-				user : require('./scripts/userModel.js')
-			}
-		},
 		components : {
 			sidebar,
 			content
