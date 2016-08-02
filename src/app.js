@@ -1,8 +1,14 @@
 import Vue 			from 'vue'
 import VueRouter 	from 'vue-router'
-import App 			from './components/app.vue'
+import app 			from './components/app.vue'
 import routes 		from './routes.js'
-	
+import {account}	from './components/scripts/api.js'
+import user 		from './components/scripts/userModel.js'
+
+
+//Make 'user' a global object for sharing between templates
+window.user = user;
+
 Vue.use(VueRouter);
 
 var router = new VueRouter({
@@ -11,18 +17,29 @@ var router = new VueRouter({
 }).map(routes);
 
 router.beforeEach(function (transition) {
-	let user = require('./components/scripts/userModel.js');
-	if (!user.loggedIn && transition.to.authorizedZone)
-		transition.redirect('/login');
-	else if (user.loggedIn && transition.to.loginPage)
-		transition.redirect('/');
-	else //if (user.loggedIn) {
-		//if (transition.to.userpage){
-		//	//TODO check user's existance
-		//}
-		//else
-		transition.next();
-	//}
+	if (!user.loggedIn) {
+		if (transition.to.authorizedZone) {
+			alert('You don\'t have enough permissions to access this zone!');
+			transition.redirect('/login');
+		}
+		else
+			transition.next();
+	}
+	else {
+		if (transition.to.loginPage)
+			transition.redirect('/');
+		else {
+			if (transition.to.adminZone) {
+				if (user.isAdmin)
+					transition.next();
+				else { 
+					alert('You don\'t have enough permissions to access this zone!');
+					transition.abort();
+				}
+			}
+			else transition.next();
+		}
+	}
 }).redirect({'*':'/'});
 
-router.start(App, 'app');
+router.start(app, 'app');

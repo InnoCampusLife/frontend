@@ -40,8 +40,7 @@
 </template>
 
 <script>
-	import {authorize} from './scripts/api.js'
-	import {createAccount} from './scripts/api.js'
+	import {accounts} from './scripts/api.js'
 
 	export default {
 		data () {
@@ -53,25 +52,17 @@
 			login (e) {
 				e.preventDefault();
 				//if (this.checkUsernameInput('strict'))
-					authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					accounts.authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			register (e) {
 				e.preventDefault();
 				if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-					createAccount(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					accounts.create(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			/// Form Callbacks
 			//
 			formSuccessCallback (result) {
-				this.user.token = result.token;
-				this.user.id = result.id;
-				this.user.username = result.username;
-				this.user.role = result.role;
-				this.user.firstName = result.firstName;
-				this.user.lastName = result.lastName;
-				this.user.studyGroup = result.studyGroup;
-				this.user.tgId = result.tgId;
-
+				this.user.set(result);
 				this.$router.go("/");
 			},
 			formErrorCallback (result) {
