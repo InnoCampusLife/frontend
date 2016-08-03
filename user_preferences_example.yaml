@@ -6,6 +6,5 @@ PREFERENCES_LIST : {
         "dark_theme",               # true/false
         "rounded_corners",          # true/false
         "opacity_&_blur_enabled"    # true/false
-        "..."
 	}
 }

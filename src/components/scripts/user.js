@@ -103,6 +103,40 @@ var user = {
 		transactions : {},
 		applications : {},
 		orders : {}
+	},
+	//
+	///
+
+	///User preferences
+	//
+	preferences : {
+		color : {
+			//Primary Color in hex
+			get primary () { return user.storage.get('preferences.color.primary'); },
+			set primary (value) { return user.storage.set('preferences.color.primary', value); },
+
+			//Secondary Color in hex
+			get secondary () { return user.storage.get('preferences.color.secondary'); },
+			set secondary (value) { return user.storage.set('preferences.color.secondary', value); }
+		},
+
+		//theme - boolean (dark/light)
+		get theme () { return user.storage.get('preferences.theme'); },
+		set theme (value) { return user.storage.set('preferences.theme', value); },
+
+		//Rounded corners - boolean
+		corners : {
+			get rounded () { return user.storage.get('preferences.corners.rounded'); },
+			set rounded (value) { return user.storage.set('preferences.corners.rounded', value); }
+		},
+
+		//opacity - boolean
+		get opacity () { return user.storage.get('preferences.opacity'); },
+		set opacity (value) { return user.storage.set('preferences.opacity', value); },
+
+		//blurEnabled - boolean
+		get blurEnabled () { return user.storage.get('preferences.blurEnabled'); },
+		set blurEnabled (value) { return user.storage.set('preferences.blurEnabled', value); },
 	}
 	//
 	///
