@@ -25,6 +25,9 @@ export default {
 					},
 				}
 			},
+			'/profile' : {
+				component: test
+			},
 			'/innopoints' : {
 				component: test,
 				subRoutes: {

@@ -15,7 +15,6 @@
 		},
 		route: {
 			data (transition) {
-				var temp_user = this.user;
 				accounts.exists(
 					user.token,
 					function(result) {
