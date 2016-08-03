@@ -33,12 +33,12 @@
 		},
 		methods: {
 			sendRoles(e) {
-				for (user of this.users) {
-					let newRole = document.querySelector('#a' + user.id).value;
-					if (newRole != user.role) accounts.updateRole(this.moderToken, user.id, newRole);
+				for (let user of this.users) {
+					let newRole = document.getElementById('a' + user.id).value;
+					if (newRole != user.role) accounts.updateRole(this.moderToken, user.id, user.role = newRole);
 				}
 
-				location.reload();
+				e.target.textContent = "accepted ✓";
 			},
 			selectChanged(e) {
 				this.roleChanged = true;
@@ -47,20 +47,17 @@
 		route: {
 			data (transition) {
 				accounts.exists(
-					user.token,
+					token,
 					function () {
 						console.log("Called exists in admin_side");
 						accounts.list(
-							user.token,
+							token,
 							function (result) {
 								transition.next({
 									users : result
 								});
 							},
-							function(error) {
-						 		user.clear();
-						 		transition.redirect('/login');
-							}
+						 	transition.abort //Don't let non-moder enter this 'page'.
 						);
 					},
 					function(error) {
