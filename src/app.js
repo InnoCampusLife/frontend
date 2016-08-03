@@ -1,13 +1,13 @@
 import Vue 			from 'vue'
 import VueRouter 	from 'vue-router'
-import app 			from './components/app.vue'
 import routes 		from './routes.js'
+import app 			from './components/app.vue'
+import user 		from './components/scripts/user.js'
 import {account}	from './components/scripts/api.js'
-import user 		from './components/scripts/userModel.js'
 
 
-//Make 'user' a global object for sharing between templates
-window.user = user;
+// window.user = user;
+// UNCOMMENT FOR DEBUG PURPOSES ONLY!!!
 
 Vue.use(VueRouter);
 
@@ -18,10 +18,8 @@ var router = new VueRouter({
 
 router.beforeEach(function (transition) {
 	if (!user.loggedIn) {
-		if (transition.to.authorizedZone) {
-			alert('You don\'t have enough permissions to access this zone!');
+		if (transition.to.authorizedZone) 
 			transition.redirect('/login');
-		}
 		else
 			transition.next();
 	}

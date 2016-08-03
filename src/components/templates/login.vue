@@ -40,7 +40,8 @@
 </template>
 
 <script>
-	import {accounts} from './scripts/api.js'
+	import {accounts} from './../scripts/api.js'
+	import user from './../scripts/user.js'
 
 	export default {
 		data () {
@@ -76,7 +77,6 @@
 			usernameInputEvent (e) { this.checkUsernameInput(); },
 
 			checkUsernameInput (strict = false) {
-				console.log('checkLoginInput fired');
 				let regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
 				let ufe = !regex.test(this.user.username);
 
@@ -91,7 +91,6 @@
 			passwordInputEvent (e) { this.checkPasswordInput(); },
 
 			checkPasswordInput (strict = false) {
-				console.log('checkLoginInput fired');
 				let regex = strict ? /^.{5,64}$/ : /^.*$/;
 				let pfe = !regex.test(password.value);
 
@@ -110,7 +109,7 @@
 
 			//TODO
 			removeError (fromWhat) {
-				console.log(fromWhat);
+				// console.log(fromWhat);
 			}
 			//
 			///

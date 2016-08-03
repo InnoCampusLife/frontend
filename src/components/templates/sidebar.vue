@@ -13,6 +13,8 @@
 </template>
 
 <script>
+	import user from './../scripts/user.js'
+
 	export default {
 		data () {
 			return {
@@ -23,6 +25,24 @@
 			logout () {
 				this.user.clear();
 				this.$router.go("/login");
+			}
+		},
+		route: {
+			data (transition) {
+				accounts.get(
+					user.token,
+					function (result) {
+						console.log("Called get in sidebar");
+						user.set(result);
+						transition.next({
+							user : user
+						});
+					},
+					function(error) {
+				 		user.clear();
+				 		transition.redirect('/login');
+					}
+				);
 			}
 		}
 	}

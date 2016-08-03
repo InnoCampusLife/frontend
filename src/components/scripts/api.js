@@ -42,7 +42,7 @@ var api = {
 
 		///MODER METHODS
 		//
-		listAccounts (moder_token, successCallback, errorCallback) {
+		list (moder_token, successCallback, errorCallback) {
 			let
 			type = "GET",
 			url = this.url + moder_token + "/listAccounts",
