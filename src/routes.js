@@ -1,6 +1,10 @@
-import test 		from './components/test.vue'
-import main 		from './components/main.vue'
-import login 		from './components/login.vue'
+import test 		from './components/templates/test.vue'
+import profile 		from './components/templates/profile.vue'
+import admin 		from './components/templates/admin.vue'
+import main 		from './components/templates/main.vue'
+import login 		from './components/templates/login.vue'
+
+var adminZone = true, authorizedZone = true;
 
 export default {
 	'/login' : {
@@ -14,8 +18,12 @@ export default {
 				component: test
 			},
 			'/admin_side' : {
+				component: admin,
+				adminZone
+			},
+			'/points_admin_side' : {
 				component: test,
-				adminZone: true
+				adminZone
 			},
 			'/user' : {
 				component: test,
@@ -26,7 +34,7 @@ export default {
 				}
 			},
 			'/profile' : {
-				component: test
+				component: profile
 			},
 			'/innopoints' : {
 				component: test,
@@ -37,8 +45,6 @@ export default {
 				}
 			}
 		},
-		//TODO 
-		//   Remove the "!" sign
-		authorizedZone : true
+		authorizedZone
 	}
 }
