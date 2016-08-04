@@ -1,12 +1,17 @@
-import test 		from './components/templates/test.vue'
-import profile 		from './components/templates/profile.vue'
-import admin 		from './components/templates/admin.vue'
-import main 		from './components/templates/main.vue'
-import login 		from './components/templates/login.vue'
+let t_path = './components/templates/';
+
+var	test 		 = require(t_path + 'test.vue'),
+	profile		 = require(t_path + 'user/profile.vue'),
+	main 		 = require(t_path + 'main.vue'),
+	login 		 = require(t_path + 'login.vue'),
+	uis = {}, points = {};
+
+	uis.admin 	 = require(t_path + 'uis/admin.vue'),
+	points.admin = require(t_path + 'innopoints/admin.vue');
 
 var adminZone = true, authorizedZone = true;
 
-export default {
+module.exports = {
 	'/login' : {
 		component: login,
 		loginPage: true
@@ -17,34 +22,34 @@ export default {
 			'/test' : {
 				component: test
 			},
-			'/admin_side' : {
-				component: admin,
-				adminZone
-			},
-			'/points_admin_side' : {
-				component: test,
-				adminZone
-			},
 			'/user' : {
-				component: test,
+				component: { template: '<router-view></router-view>' },
 				subRoutes: {
 					'/:username' : {
 						component: test
 					},
+					'/administration' : {
+						component: uis.admin,
+						adminZone
+					},
+					'/profile' : {
+						component: profile
+					},
 				}
 			},
-			'/profile' : {
-				component: profile
-			},
 			'/innopoints' : {
-				component: test,
+				component: { template: '<router-view></router-view>' },
 				subRoutes: {
 					'/get' : {
 						component: test
-					}
+					},
+					'/administration' : {
+						component: points.admin,
+						adminZone
+					},
 				}
 			}
 		},
 		authorizedZone
 	}
-}
+};

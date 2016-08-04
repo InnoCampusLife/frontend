@@ -1,8 +1,8 @@
 <template>
-	<aside sidebar>
+	<aside sidebar pinned top left style="background-color: #ececec; height: 100vh; width: 200px">
 		<sidebar></sidebar>
 	</aside>
-	<main content>
+	<main content style="margin-left: 200px; padding: 16px;">
 		<content></content>
 	</main>
 </template>
@@ -11,7 +11,6 @@
 	import sidebar from './sidebar.vue'
 	import content from './content.vue'
 	import user from './../scripts/user.js'
-	import {accounts} from './../scripts/api.js'
 
 	export default {
 		components : {

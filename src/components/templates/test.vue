@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import {accounts} from './../scripts/api.js'
+	import api from './../scripts/api.js'
 	import user from './../scripts/user.js'
 
 	export default {
@@ -16,7 +16,9 @@
 		},
 		route: {
 			data (transition) {
-				accounts.get(
+				api
+				.accounts
+				.get(
 					user.token,
 					function (result) {
 						console.log("Called get in test");

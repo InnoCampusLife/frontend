@@ -3,8 +3,6 @@ import VueRouter 	from 'vue-router'
 import routes 		from './routes.js'
 import app 			from './components/app.vue'
 import user 		from './components/scripts/user.js'
-import {account}	from './components/scripts/api.js'
-
 
 // window.user = user;
 // UNCOMMENT FOR DEBUG PURPOSES ONLY!!!

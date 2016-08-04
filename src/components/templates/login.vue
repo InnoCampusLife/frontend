@@ -40,7 +40,7 @@
 </template>
 
 <script>
-	import {accounts} from './../scripts/api.js'
+	import api from './../scripts/api.js'
 	import user from './../scripts/user.js'
 
 	export default {
@@ -53,12 +53,12 @@
 			login (e) {
 				e.preventDefault();
 				//if (this.checkUsernameInput('strict'))
-					accounts.authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					api.accounts.authorize(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			register (e) {
 				e.preventDefault();
 				if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-					accounts.create(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
+					api.accounts.create(this.user.username, password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			/// Form Callbacks
 			//
