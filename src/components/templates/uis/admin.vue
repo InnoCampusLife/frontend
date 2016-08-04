@@ -15,13 +15,18 @@
 			</li>
 		</ul>
 
-		<button v-show="roleChanged" @click="sendRoles" @keyup.enter="sendRoles">accept changes</button>
+		<button padding style="border-width: 0px;width: 100%;height: 30px;"
+			id="acceptRoles"
+			v-show="roleChanged"
+			@click="sendRoles"
+			@keyup.enter="sendRoles"
+		>accept changes</button>
 	</div>
 </template>
 
 <script>
-	import {accounts} from './../scripts/api.js'
-	import {token} from './../scripts/user.js'
+	import api from './../../scripts/api.js'
+	import {token} from './../../scripts/user.js'
 
 	export default {
 		data () {
@@ -35,22 +40,23 @@
 			sendRoles(e) {
 				for (let user of this.users) {
 					let newRole = document.getElementById('a' + user.id).value;
-					if (newRole != user.role) accounts.updateRole(this.moderToken, user.id, user.role = newRole);
+					if (newRole != user.role) api.accounts.updateRole(this.moderToken, user.id, user.role = newRole);
 				}
 
 				e.target.textContent = "accepted ✓";
 			},
 			selectChanged(e) {
 				this.roleChanged = true;
+				document.getElementById('acceptRoles').textContent = "accept changes";
 			}
 		},
 		route: {
 			data (transition) {
-				accounts.exists(
+				api.accounts.exists(
 					token,
 					function () {
 						console.log("Called exists in admin_side");
-						accounts.list(
+						api.accounts.list(
 							token,
 							function (result) {
 								transition.next({

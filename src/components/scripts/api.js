@@ -1,4 +1,4 @@
-var api_url = "api/";
+var api_url = require('./../../config.js').server.api_url;
 
 var api = {
 	url : api_url,
@@ -319,6 +319,4 @@ function ajax (type, url, data, successCallback, errorCallback) {
 	r.send(JSON.stringify(data));
 }
 
-export default api;
-export var accounts = api.accounts;
-export var innopoints = api.innopoints;
+module.exports = api;

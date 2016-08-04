@@ -1,14 +1,20 @@
 <template>
-	<div block>
-		<span>{{ user.role | capitalize }}'s dashboard</span>
+	<div block center children>
+		<h3>{{ user.role | capitalize }}'s dashboard</h3>
 	</div>
-	<div block>
-		<button v-link="'/'"			title="">main</button>
-		<button v-link="'/test'"		title="">test</button>
-		<button v-link="'/innopoints'"	title="">innopoints</button>
-		<button v-link="'/profile'"		title="">my profile</button>
-		<button v-link="'/admin_side'"	v-if="user.isAdmin"	title="">admin_side</button>
-		<button @click="logout" 		title="">logout</button>
+	<div flex column center children>
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/'"
+		>main</button>
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/test'"
+		>test</button>
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/get'"
+		>innopoints</button>
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/user/profile'"
+		>my profile</button>
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/user/administration'"	v-if="user.isAdmin"
+		>admin_side</button>
+		<button padding="16" pinned bottom left style="width: 100%; border-width: 0; position: absolute;" block @click="logout"
+		>logout</button>
 	</div>
 </template>
 
