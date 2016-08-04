@@ -136,7 +136,7 @@ var user = {
 
 		//blurEnabled - boolean
 		get blurEnabled () { return user.storage.get('preferences.blurEnabled'); },
-		set blurEnabled (value) { return user.storage.set('preferences.blurEnabled', value); },
+		set blurEnabled (value) { return user.storage.set('preferences.blurEnabled', value); }
 	}
 	//
 	///
