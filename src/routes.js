@@ -1,17 +1,18 @@
 let t_path = './components/templates/';
 
-var	test 		 = require(t_path + 'test.vue'),
-	profile		 = require(t_path + 'user/profile.vue'),
-	main 		 = require(t_path + 'main.vue'),
-	login 		 = require(t_path + 'login.vue'),
+var	test 		 	= require(t_path + 'test.vue'),
+	main 		 	= require(t_path + 'main.vue'),
+	login 		 	= require(t_path + 'login.vue'),
+	account 	 	= require(t_path + 'account.vue'),
 	uis = {
-		admin : require(t_path + 'uis/admin.vue')
-	},
-	points = {
-		admin : require(t_path + 'innopoints/admin.vue'),
-		get : require(t_path + 'innopoints/get.vue'),
-		create_account : require(t_path + 'innopoints/create_account.vue'),
-	};
+		admin 		 	: require(t_path + 'uis/admin.vue'),
+		account 		 	: require(t_path + 'uis/account.vue'),
+		points : {
+			admin 			: require(t_path + 'innopoints/admin.vue'),
+			get 		 	: require(t_path + 'innopoints/get.vue'),
+			create_account 	: require(t_path + 'innopoints/create_account.vue'),
+		}
+	}
 
 var adminZone = true, authorizedZone = true;
 
@@ -28,48 +29,67 @@ module.exports = {
 			'/' : {
 				component: test
 			},
-			'/uis' : {
+			'/account' : {
 				component: router_view,
 				subRoutes: {
-					'/account' : {
+					'/' : {
+						component: account
+					},
+					'/uis' : {
 						component: router_view,
 						subRoutes: {
 							'/' : {
-								component: profile
+								component: uis.account
 							},
-							'/:username' : {
-								component: test
+							'/feed' : {
+								component: test	//to be reaplced with uis.news.feed
 							},
-							'/administration' : {
-								component: uis.admin,
-								adminZone
-							},
+							'/innopoints' : {
+								component: router_view,
+								subRoutes: {
+									'/' : {
+										component: test //to be replaced with uis.points.profile
+									},
+									'/get' : {
+										component: uis.points.get
+									},
+									'/create' : {
+										component: uis.points.create_account
+									}
+								}
+							}
 						}
-					},
+					}
 				}
 			},
-			'/innopoints' : {
+			'/administration' : {
 				component: router_view,
 				subRoutes: {
-					'/get' : {
-						component: points.get
+					'/' : {
+						component: test 	//to be replaced with global administrating
 					},
-					'/account' : {
+					'/uis' : {
 						component: router_view,
 						subRoutes: {
 							'/' : {
 								component: test
 							},
-							'/create' : {
-								component: points.create_account
+							'/accounts' : {
+								component: uis.admin
 							},
-							'/administration' : {
-								component: points.admin,
-								adminZone
-							},
+							'/innopoints' : {
+								component: router_view,
+								subRoutes: {
+									'/' : {
+										component: uis.points.admin
+									},
+									//TODO
+								}
+							}
 						}
-					},
-				}
+					}
+				},
+				adminZone
 			}
 		},
 		authorizedZone

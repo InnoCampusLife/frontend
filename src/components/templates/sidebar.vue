@@ -5,12 +5,22 @@
 	<div flex column center children>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/'"
 		>main</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/get'"	v-if="user.isStudent"
-		>innopoints</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/uis/account'"
-		>my profile</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/uis/account/administration'"	v-if="user.isAdmin"
-		>admin_side</button>
+		<!-- Sudent buttons here -->
+		<template v-if="user.isStudent">
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account'"
+			>my profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis'"
+			>uis profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis/innopoints'"
+			>innopoints profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis/innopoints/get'"
+			>innopoints</button>
+		</template>
+		<!-- Admin buttons here -->
+		<template v-if="user.isAdmin">
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/uis/accounts'"
+			>admin_side</button>
+		</template>
 		<button padding="16" pinned bottom left style="width: 100%; border-width: 0; position: absolute;" block @click="logout"
 		>logout</button>
 	</div>
