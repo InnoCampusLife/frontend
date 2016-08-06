@@ -5,9 +5,7 @@
 	<div flex column center children>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/'"
 		>main</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/test'"
-		>test</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/account'"	v-if="user.isStudent"
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/get'"	v-if="user.isStudent"
 		>innopoints</button>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/uis/account'"
 		>my profile</button>
