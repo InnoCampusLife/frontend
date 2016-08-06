@@ -9,9 +9,9 @@ var item = {
 };
 
 var activity = {
-    id: '',
-    title: '',
-    type: '',
+    id: 0,
+    title: null,
+    type: null,
     category: {
     	id : 0,
     	title : null
@@ -36,7 +36,6 @@ var work = {
 	    amount: null, // null for permanent
 	    total_price: 0
 	},
-
 	personal : {
 	    activity: activity,
 	    amount: null, // null for permanent activity
@@ -45,10 +44,11 @@ var work = {
 };
 
 var file = {
-    id: 0,
+    head: null,
     filename: null,
-    type: 'image/jpeg'
-}
+    type: null,
+    tempfile: null
+};
 
 var application = {
     id: null,

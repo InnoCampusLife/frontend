@@ -4,10 +4,14 @@ var	test 		 = require(t_path + 'test.vue'),
 	profile		 = require(t_path + 'user/profile.vue'),
 	main 		 = require(t_path + 'main.vue'),
 	login 		 = require(t_path + 'login.vue'),
-	uis = {}, points = {};
-
-	uis.admin 	 = require(t_path + 'uis/admin.vue'),
-	points.admin = require(t_path + 'innopoints/admin.vue');
+	uis = {
+		admin : require(t_path + 'uis/admin.vue')
+	},
+	points = {
+		admin : require(t_path + 'innopoints/admin.vue'),
+		get : require(t_path + 'innopoints/get.vue'),
+		create_account : require(t_path + 'innopoints/create_account.vue'),
+	};
 
 var adminZone = true, authorizedZone = true;
 
@@ -22,17 +26,17 @@ module.exports = {
 			'/test' : {
 				component: test
 			},
-			'/user' : {
+			'/uis' : {
 				component: { template: '<router-view></router-view>' },
 				subRoutes: {
 					'/:username' : {
 						component: test
 					},
-					'/administration' : {
+					'/account/administration' : {
 						component: uis.admin,
 						adminZone
 					},
-					'/profile' : {
+					'/account' : {
 						component: profile
 					},
 				}
@@ -41,9 +45,15 @@ module.exports = {
 				component: { template: '<router-view></router-view>' },
 				subRoutes: {
 					'/get' : {
+						component: points.get
+					},
+					'/account' : {
 						component: test
 					},
-					'/administration' : {
+					'/account/create' : {
+						component: points.create_account
+					},
+					'/account/administration' : {
 						component: points.admin,
 						adminZone
 					},

@@ -295,28 +295,28 @@ var api = {
 };
 
 function ajax (type, url, data, successCallback, errorCallback) {
-	let r = new XMLHttpRequest();
-	r.open(type, url, true);
-	r.onload = function() {
-	  	if (r.status >= 200 && r.status <= 202) {
-			console.log(r.response.status);
+	let xhr = new XMLHttpRequest();
+	xhr.open(type, url, true);
+	xhr.onload = function() {
+	  	if (xhr.status >= 200 && xhr.status <= 202) {
+			console.log(xhr.response.status);
 
 			if (successCallback)
-				successCallback(r.response.result);
+				successCallback(xhr.response.result);
 	  	}
 	  	else {
-			console.log(r.response.error);
+			console.log(xhr.response.error);
 
 	  		if (errorCallback)
-	  			errorCallback(r.response.error);
+	  			errorCallback(xhr.response.error);
 		}
 	};
-	r.dataType = "json";
-	r.contentType = 'json';
-	r.responseType = 'json';
-	r.setRequestHeader('Content-Type', 'application/json');
+	xhr.dataType = "json";
+	xhr.contentType = 'json';
+	xhr.responseType = 'json';
+	xhr.setRequestHeader('Content-Type', 'application/json');
 
-	r.send(JSON.stringify(data));
+	xhr.send(JSON.stringify(data));
 }
 
 module.exports = api;

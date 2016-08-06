@@ -91,7 +91,7 @@ var user = {
 
 	///Innopoints account
 	//
-	innopoints : {
+	points : {
 		//id
 		get id 		()		{ return user.storage.get('innopoints.id');				},
 		set id 		(value) { return user.storage.set('innopoints.id', value);		},
@@ -100,9 +100,14 @@ var user = {
 		get amount 	()		{ return user.storage.get('innopoints.amount');			},
 		set amount 	(value) { return user.storage.set('innopoints.amount', value);	},
 
-		transactions : {},
-		applications : {},
-		orders : {}
+		transactions : [],
+		applications : [],
+		orders : [],
+
+		set (points) {
+			this.owner = points._id;
+			this.amount = points.points_amount;
+		}
 	},
 	//
 	///

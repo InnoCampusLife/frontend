@@ -7,11 +7,11 @@
 		>main</button>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/test'"
 		>test</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/get'"
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/innopoints/account'"	v-if="user.isStudent"
 		>innopoints</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/user/profile'"
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/uis/account'"
 		>my profile</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/user/administration'"	v-if="user.isAdmin"
+		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/uis/account/administration'"	v-if="user.isAdmin"
 		>admin_side</button>
 		<button padding="16" pinned bottom left style="width: 100%; border-width: 0; position: absolute;" block @click="logout"
 		>logout</button>
