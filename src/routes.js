@@ -15,6 +15,8 @@ var	test 		 = require(t_path + 'test.vue'),
 
 var adminZone = true, authorizedZone = true;
 
+var router_view = { template: '<router-view></router-view>' };
+
 module.exports = {
 	'/login' : {
 		component: login,
@@ -23,39 +25,49 @@ module.exports = {
 	'/' : {
 		component: main,
 		subRoutes: {
-			'/test' : {
+			'/' : {
 				component: test
 			},
 			'/uis' : {
-				component: { template: '<router-view></router-view>' },
+				component: router_view,
 				subRoutes: {
-					'/:username' : {
-						component: test
-					},
-					'/account/administration' : {
-						component: uis.admin,
-						adminZone
-					},
 					'/account' : {
-						component: profile
+						component: router_view,
+						subRoutes: {
+							'/' : {
+								component: profile
+							},
+							'/:username' : {
+								component: test
+							},
+							'/administration' : {
+								component: uis.admin,
+								adminZone
+							},
+						}
 					},
 				}
 			},
 			'/innopoints' : {
-				component: { template: '<router-view></router-view>' },
+				component: router_view,
 				subRoutes: {
 					'/get' : {
 						component: points.get
 					},
 					'/account' : {
-						component: test
-					},
-					'/account/create' : {
-						component: points.create_account
-					},
-					'/account/administration' : {
-						component: points.admin,
-						adminZone
+						component: router_view,
+						subRoutes: {
+							'/' : {
+								component: test
+							},
+							'/create' : {
+								component: points.create_account
+							},
+							'/administration' : {
+								component: points.admin,
+								adminZone
+							},
+						}
 					},
 				}
 			}

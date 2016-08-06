@@ -1,5 +1,4 @@
 <template>
-	<pre v-show="$loadingRouteData">Loading...</pre>
 	<form id="ip_request">
 		<h2 style="padding: 0">Request innopoints</h2>
 
@@ -24,6 +23,7 @@
 		<br>
 		<br>
 
+		<pre v-show="$loadingRouteData">Loading...</pre>
 		<div v-show="!$loadingRouteData" style="width: 100%;">
 
 			Activivty's category
@@ -237,7 +237,7 @@
 		route : {
 			data (transition) {
 				api.innopoints.getAccount(
-					user.token
+					user.token,
 					function (result) {
 						api.innopoints.getCategories(0,100,
 							function (result) {

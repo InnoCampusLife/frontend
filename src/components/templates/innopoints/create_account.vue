@@ -3,8 +3,8 @@
 </template>
 
 <script>
-	import api from './../../../scripts/api.js'
-	import user from './../../../scripts/user.js'
+	import api from './../../scripts/api.js'
+	import user from './../../scripts/user.js'
 
 	export default {
 		methods : {
