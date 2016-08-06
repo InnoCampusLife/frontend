@@ -39,8 +39,8 @@
 
 		<div>
 			<div v-show="!current.isPersonal">
-				<button type="button" @click="current.users_count++">+</button>
-				<button type="button" @click="current.users_count--" v-show="current.users_count > 1">-</button>
+				<button type="button" @click="current_users_count_inc">+</button>
+				<button type="button" @click="current_users_count_dec" v-show="current.users_count > 1">-</button>
 				<br>
 				<br>
 			</div>
@@ -54,7 +54,7 @@
 
 					<div style="width: 100%;">
 						Activity
-						<select class="activity" style="width: 100%;" v-model="current.users['user_' + i].activity_id">
+						<select class="activity" style="width: 100%;" v-model="current.users['user_' + i].activity_id" @change="activityChanged">
 							<option value="0" selected>Choose Activity...</option>
 							<option v-for="activity in activities" value="{{activity._id}}">{{ activity.title }}</option>
 						</select>
@@ -82,10 +82,11 @@
 		<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
 		<br>
 
-		<button v-if="categorySelected" block type="button" @click="accept" v-el:accept>accept</button>
-		<pre v-else>Select Category!</pre>
+		<button v-if="activitySelected" block type="button" @click="accept" v-el:accept>accept</button>
+		<pre v-if="!categorySelected">Select Category!</pre>
+		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
 		<br>
-		<button v-if="ableToSend && categorySelected" block type="button" @click="send" v-el:send>send</button>
+		<button v-if="ableToSend && activitySelected" block type="button" @click="send" v-el:send>send</button>
 	</form>
 </template>
 
@@ -99,6 +100,7 @@
 				user : user,
 				categories : [],
 				activities : [],
+				activitySelected : false,
 				categorySelected : false,
 				ableToSend : false,
 				current : {
@@ -119,8 +121,20 @@
 			}
 		},
 		methods : {
+			current_users_count_inc() {
+				if (!this.current.users['user_' + this.current.users_count])
+					this.current.users['user_' + this.current.users_count] = {
+						username : '',
+						activity_id : 0,
+						amount : 0
+					};
+				this.current.users_count++;
+			},
+			current_users_count_dec() {
+				this.current.users_count--;
+			},
 			categoryChanged (e) {
-				this.categorySelected = false;
+				this.activitySelected = false;
 
 				if (e.target.value != 'blank') {
 					if (e.target.value)
@@ -132,6 +146,14 @@
 						.innopoints
 						.getActivities(0, 100, this.setActivities);
 				}
+			},
+			activityChanged (e) {
+				let counter = 0;
+
+				for (let _user in this.current.users)
+					counter += _user.activity_id ? 1 : 0;
+
+				this.activitySelected = counter == this.current.users_count;
 			},
 			setActivities (result) {
 				this.activities = result;
@@ -199,7 +221,7 @@
 			send (e) {
 				this.$els.send.textContent = "sending...";
 				api.innopoints.sendApplication(
-					this.application._id,
+					this.current.application._id,
 					this.user.token,
 					this.sendSuccess,
 					this.sendError
@@ -219,11 +241,12 @@
 						amount : 0
 					}
 				};
-				this.$els.upload.files = [];
+				this.$els.upload.value = '';
 			},
 			sendError (error) {
 				alert('Unsuccessful!');
 				this.$els.send.textContent = "send";
+				this.$els.accept.textContent = "accept";
 			},
 
 			showAmount (id) {
