@@ -134,7 +134,7 @@
 				this.current.users_count--;
 			},
 			categoryChanged (e) {
-				this.activitySelected = false;
+				this.categorySelected = this.activitySelected = false;
 
 				if (e.target.value != 'blank') {
 					if (e.target.value)
