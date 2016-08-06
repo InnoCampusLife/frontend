@@ -86,6 +86,34 @@ var user = {
 		this.tgId = user.tgId;
 		this.token = user.token;
 	},
+
+	update () {
+		var api = require('./api.js'),
+			updated = false,
+			errors = [],
+			err = function(error) {
+				errors.push(error);
+				updated = false;
+			};
+
+		api.accounts.get(this.token, 
+			function (result) {
+				this.set(result);
+				updated = true;
+			},
+			err
+		);
+
+		api.innopoints.getAccount(this.token,
+			function (result) {
+				this.points.set(result);
+				updated = true;
+			},
+			err
+		);
+
+		//TODO
+	},
 	//
 	///
 

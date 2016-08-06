@@ -81,7 +81,7 @@
 				let ufe = !regex.test(this.user.username);
 
 				if (ufe)
-					this.setError(inputErrors.usernameFormatError, 'username');
+					this.setError("Username must contain at least 3 alphanumeric characters!", 'username');
 				else
 					this.removeError('username');
 
@@ -95,7 +95,7 @@
 				let pfe = !regex.test(password.value);
 
 				if (pfe)
-					this.setError(inputErrors.passwordFormatError, 'password');
+					this.setError("Password must be more than 8 symbols long!", 'password');
 				else
 					this.removeError('password');
 
@@ -104,7 +104,7 @@
 
 			//TODO
 			setError (error ,toWhat) {
-				console.log(error + ": " + toWhat);
+				console.log(error);
 			},
 
 			//TODO
