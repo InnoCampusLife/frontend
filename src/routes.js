@@ -5,8 +5,9 @@ var	test 		 	= require(t_path + 'test.vue'),
 	login 		 	= require(t_path + 'login.vue'),
 	account 	 	= require(t_path + 'account.vue'),
 	uis = {
-		admin 		 		: require(t_path + 'uis/admin.vue'),
-		innopoints : {
+		admin 		 	: require(t_path + 'uis/admin.vue'),
+		account 		 	: require(t_path + 'uis/account.vue'),
+		points : {
 			admin 			: require(t_path + 'innopoints/admin.vue'),
 			get 		 	: require(t_path + 'innopoints/get.vue'),
 			create_account 	: require(t_path + 'innopoints/create_account.vue'),
@@ -25,9 +26,8 @@ module.exports = {
 	'/' : {
 		component: main,
 		subRoutes: {
-			// '/' - should redirect to 'feed'
-			'/feed' : {
-				component: test	//to be reaplced with uis.news.feed
+			'/' : {
+				component: test
 			},
 			'/account' : {
 				component: router_view,
@@ -35,17 +35,28 @@ module.exports = {
 					'/' : {
 						component: account
 					},
-					'/innopoints' : {
+					'/uis' : {
 						component: router_view,
 						subRoutes: {
 							'/' : {
-								component: test //to be replaced with innopoints dashboard
+								component: uis.account
 							},
-							'/get' : {
-								component: uis.innopoints.get
+							'/feed' : {
+								component: test	//to be reaplced with uis.news.feed
 							},
-							'/create' : {
-								component: uis.innopoints.create_account
+							'/innopoints' : {
+								component: router_view,
+								subRoutes: {
+									'/' : {
+										component: test //to be replaced with uis.points.profile
+									},
+									'/get' : {
+										component: uis.points.get
+									},
+									'/create' : {
+										component: uis.points.create_account
+									}
+								}
 							}
 						}
 					}
@@ -58,18 +69,23 @@ module.exports = {
 						component: test 	//to be replaced with global administrating
 					},
 					'/uis' : {
-						component: test 	//to be replaced with uis global administrating
-					},
-					'/accounts' : {
-						component: uis.admin
-					},
-					'/innopoints' : {
 						component: router_view,
 						subRoutes: {
 							'/' : {
-								component: uis.innopoints.admin
+								component: test
 							},
-							//TODO
+							'/accounts' : {
+								component: uis.admin
+							},
+							'/innopoints' : {
+								component: router_view,
+								subRoutes: {
+									'/' : {
+										component: uis.points.admin
+									},
+									//TODO
+								}
+							}
 						}
 					}
 				},

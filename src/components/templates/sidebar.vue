@@ -1,23 +1,24 @@
 <template>
 	<div block center children>
 		<h3>{{ user.role | capitalize }}'s dashboard</h3>
-		<h5>{{ user.innopoints.amount }} innopoints</h5>
 	</div>
 	<div flex column center children>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/'"
 		>main</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/feed'"
-		>news</button>
-		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account'"
-		>my profile</button>
 		<!-- Sudent buttons here -->
 		<template v-if="user.isStudent">
-			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/innopoints'"
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account'"
+			>my profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis'"
+			>uis profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis/innopoints'"
+			>innopoints profile</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/uis/innopoints/get'"
 			>innopoints</button>
 		</template>
 		<!-- Admin buttons here -->
 		<template v-if="user.isAdmin">
-			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/accounts'"
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/uis/accounts'"
 			>admin_side</button>
 		</template>
 		<button padding="16" pinned bottom left style="width: 100%; border-width: 0; position: absolute;" block @click="logout"
@@ -40,9 +41,22 @@
 				this.$router.go("/login");
 			}
 		},
-		route : {
+		route: {
 			data (transition) {
-				user.innopoints.update();
+				accounts.get(
+					user.token,
+					function (result) {
+						console.log("Called get in sidebar");
+						user.set(result);
+						transition.next({
+							user : user
+						});
+					},
+					function(error) {
+				 		user.clear();
+				 		transition.redirect('/login');
+					}
+				);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <template>
-	<button @click="createAccount">Create Innopoints Account!</button>
+	<button @click="createAccount">Create Account!</button>
 </template>
 
 <script>
@@ -11,12 +11,8 @@
 			createAccount (e) {
 				api.innopoints.createAccount(
 					user.token,
-					function (result) {
-						user.points.set(result);
-						location.reload();
-					},
+					user.points.set,
 					function (error) {
-						//TODO - error handling
 						alert("Unable to create account : " + error);
 					}
 				);
@@ -27,10 +23,11 @@
 				api.innopoints.getAccount(
 					user.token,
 					function (result) {
-						user.points.set(result);
 						transition.abort();
 					},
-					transition.next
+					function (error) {
+						transition.next();
+					}
 				);
 			}
 		}
