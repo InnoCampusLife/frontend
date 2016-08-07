@@ -1,5 +1,6 @@
 <template>
 	<div block>
+		uis:
 		<h1>{{ user.username }}</h1>
 		<pre>{{ user.id }}</pre>
 		<pre>{{ user.role }}</pre>
@@ -7,12 +8,14 @@
 		<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
 		<pre v-show="user.fullName != ''">{{ user.fullName }}</pre>
 		<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+
+		Yes, a different template.
 	</div>
 </template>
 
 <script>
-	import api from './../scripts/api.js'
-	import user from './../scripts/user.js'
+	import api from './../../scripts/api.js'
+	import user from './../../scripts/user.js'
 
 	export default {
 		data () {

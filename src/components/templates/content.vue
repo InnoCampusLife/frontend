@@ -4,6 +4,6 @@
 
 <script>
 	export default {
-		//This might come in handy...
+		
 	}
 </script>
