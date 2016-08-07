@@ -5,7 +5,6 @@
 </template>
 
 <script>
-	import api from './../scripts/api.js'
 	import user from './../scripts/user.js'
 
 	export default {
@@ -15,24 +14,7 @@
 			}
 		},
 		route: {
-			data (transition) {
-				api
-				.accounts
-				.get(
-					user.token,
-					function (result) {
-						console.log("Called get in test");
-						user.set(result);
-						transition.next({
-							user : user
-						});
-					},
-					function(error) {
-				 		user.clear();
-				 		transition.redirect('/login');
-					}
-				);
-			}
+			data (transition) { user.update(transition); }
 		}
 	}
 </script>

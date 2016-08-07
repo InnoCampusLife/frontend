@@ -1,3 +1,5 @@
+var api = require('./api.js');
+
 var user = {
 	//id
 	get id 			()		{ return this.storage.get('id');				},
@@ -58,9 +60,7 @@ var user = {
 			if (value) localStorage.setItem(key, value);
 			return localStorage.getItem(key);
 		},
-		clear () {
-			localStorage.clear();
-		}
+		clear () { localStorage.clear(); }
 	},
 
 	///Helpers
@@ -85,56 +85,98 @@ var user = {
 		this.studyGroup = user.studyGroup;
 		this.tgId = user.tgId;
 		this.token = user.token;
+
+		return this;
 	},
 
-	update () {
-		var api = require('./api.js'),
-			updated = false,
+	update (transition, only_user = false, callback) {
+		var updated = false,
 			errors = [],
-			err = function(error) {
-				errors.push(error);
-				updated = false;
-			};
+			cur_user = this;
 
-		api.accounts.get(this.token, 
+		api.accounts.get(cur_user.token,
 			function (result) {
-				this.set(result);
-				updated = true;
-			},
-			err
-		);
+				cur_user.set(result);
 
-		api.innopoints.getAccount(this.token,
-			function (result) {
-				this.points.set(result);
-				updated = true;
+				if (transition)	transition.next({
+					user : cur_user
+				});
+
+				// To remove, or not to remove?
+				// if (!only_user)
+				// 	api.innopoints.getAccount(cur_user.token, 
+				// 		function (result) {
+				// 			cur_user.innopoints.set(result);
+				// 		},
+				// 		errors.push
+				// 	);
 			},
-			err
-		);
+			function (error) {
+		 		cur_user.clear();
+		 		if (transition)	transition.redirect('/login');
+	 		}
+ 		);
 
 		//TODO
+		
+		if (callback)
+			callback (updated, cur_user, errors);
+	},
+	//
+	///
+
+	///API shorthand
+	//
+	authorize (password, successCallback, errorCallback) {
+		api.accounts.authorize(this.username, password, successCallback, errorCallback);
+	},
+	register (password, successCallback, errorCallback) {
+		api.accounts.createAccount(this.username, password, successCallback, errorCallback);
 	},
 	//
 	///
 
 	///Innopoints account
 	//
-	points : {
+	innopoints : {
 		//id
 		get id 		()		{ return user.storage.get('innopoints.id');				},
 		set id 		(value) { return user.storage.set('innopoints.id', value);		},
 
 		//amount
-		get amount 	()		{ return user.storage.get('innopoints.amount');			},
+		get amount 	()		{
+			let amount = user.storage.get('innopoints.amount');
+			return amount ? amount : 0;
+		},
 		set amount 	(value) { return user.storage.set('innopoints.amount', value);	},
 
-		transactions : [],
-		applications : [],
-		orders : [],
-
 		set (points) {
-			this.owner = points._id;
+			this.id = points.owner;
 			this.amount = points.points_amount;
+		},
+
+		update (transition, callback) {
+			var updated = false,
+				errors = [],
+				cur_user = user;
+
+			api.innopoints.getAccount(cur_user.token, 
+				function (result) {
+					cur_user.innopoints.set(result);
+					updated = true;
+
+					if (transition)
+						transition.next({
+							user : cur_user
+						});
+				},
+				errors.push
+			);
+
+			//TODO
+
+			if (callback)
+				callback (updated, cur_user, errors);
 		}
 	},
 	//
