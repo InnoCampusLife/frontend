@@ -298,13 +298,12 @@ function ajax (type, url, data, successCallback, errorCallback) {
 	let xhr = new XMLHttpRequest();
 	xhr.open(type, url, true);
 	xhr.onload = function() {
-	  	if (xhr.status >= 200 && xhr.status < 300) {
+	  	if (xhr.response.result) {
 			console.log(xhr.response.status);
 
 			if (successCallback)
 				successCallback(xhr.response.result);
-	  	}
-	  	else {
+	  	} else if (xhr.response.error) {
 			console.log(xhr.response.error);
 
 	  		if (errorCallback)

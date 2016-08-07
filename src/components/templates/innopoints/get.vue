@@ -47,23 +47,23 @@
 
 			<div v-for="i in (current.isPersonal ? 1 : current.users_count)" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
 				<legend v-show="!current.isPersonal">
-					<input type="text" placeholder="username" v-model="current.users['user_' + i].username" required readonly="{{ i == 0 }}">
+					<input type="text" placeholder="username" v-model="current.users[i].username" required readonly="{{ i == 0 }}">
 				</legend>
 				<br>
 				<div v-show="categorySelected">
 
 					<div style="width: 100%;">
 						Activity
-						<select class="activity" style="width: 100%;" v-model="current.users['user_' + i].activity_id" @change="activityChanged">
+						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activityChanged">
 							<option value="0" selected>Choose Activity...</option>
 							<option v-for="activity in activities" value="{{activity._id}}">{{ activity.title }}</option>
 						</select>
 					</div>
 					<br>
-					<div v-show="showAmount(current.users['user_' + i].activity_id)" style="width: 100%;">
+					<div v-show="showAmount(current.users[i].activity_id)" style="width: 100%;">
 						<label>
 							Time spent/quantity: 
-							<input block type="number" class="amount" min="0" max="365" value="0" v-model="current.users['user_' + i].amount">
+							<input block type="number" class="amount" min="0" max="365" value="0" v-model="current.users[i].amount">
 						</label>
 					</div>
 
@@ -82,11 +82,11 @@
 		<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
 		<br>
 
-		<button v-if="activitySelected" block type="button" @click="accept" v-el:accept>accept</button>
 		<pre v-if="!categorySelected">Select Category!</pre>
 		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
+		<button v-if="activitySelected" block type="button" @click="accept" v-el:accept>accept</button>
 		<br>
-		<button v-if="ableToSend && activitySelected" block type="button" @click="send" v-el:send>send</button>
+		<button v-if="ableToSend" block type="button" @click="send" v-el:send>send</button>
 	</form>
 </template>
 
@@ -109,21 +109,21 @@
 					get isPersonal () { return this.type == "personal"; },
 					category_id : 0,
 					users_count : 1,
-					users : {
-						user_0 : {
+					users : [
+						{
 							username : user.username,
 							activity_id : 0,
 							amount : 0
 						}
-					},
+					],
 					comment : null
 				},
 			}
 		},
 		methods : {
 			current_users_count_inc() {
-				if (!this.current.users['user_' + this.current.users_count])
-					this.current.users['user_' + this.current.users_count] = {
+				if (!this.current.users[this.current.users_count])
+					this.current.users[this.current.users_count] = {
 						username : '',
 						activity_id : 0,
 						amount : 0
@@ -150,7 +150,7 @@
 			activityChanged (e) {
 				let counter = 0;
 
-				for (let _user in this.current.users)
+				for (let _user of this.current.users)
 					counter += _user.activity_id ? 1 : 0;
 
 				this.activitySelected = counter == this.current.users_count;
@@ -169,8 +169,8 @@
 				//TODO - catch bugs and exceptions
 
 				if (this.current.isPersonal) {
-					let	activity = this.findById(this.activities, this.current.users.user_0.activity_id),
-						amount = parseInt(this.current.users.user_0.amount),
+					let	activity = this.findById(this.activities, this.current.users[0].activity_id),
+						amount = parseInt(this.current.users[0].amount),
 						total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
 
 					this.current.application.personal = {
@@ -185,11 +185,12 @@
 						work : []
 					};
 
-					let activity = this.findById(this.activities, cur_user.activity_id),
-						amount = parseInt(cur_user.amount),
-						total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
 
-					for (let cur_user in this.current.users) {
+					for (let cur_user of this.current.users) {
+						let activity = this.findById(this.activities, cur_user.activity_id),
+							amount = parseInt(cur_user.amount),
+							total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
+
 						this.current.application.group.work.push({
 							activity,
 							amount,
@@ -210,11 +211,11 @@
 			},
 			acceptSuccess(result) {
 				this.$els.accept.textContent = "accepted ✓";
-				this.user.points.applications.push(result);
 				this.ableToSend = true;
 			},
 			acceptError(error) {
 				alert('Unsuccessful!');
+				this.$els.send.textContent = "send";
 				this.$els.accept.textContent = "accept";
 			},
 
@@ -270,7 +271,7 @@
 							}
 						);
 					}, function (error) {
-						transition.redirect('/innopoints/account/create');
+						transition.redirect('/account/innopoints/create');
 					}
 				);
 			}
