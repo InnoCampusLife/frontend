@@ -1,7 +1,6 @@
 <template>
 	<h1>{{ user.username }}'s profile</h1>
 	<div block>
-		<h2>UIS</h2>
 		<pre>{{ user.id }}</pre>
 		<pre>{{ user.role }}</pre>
 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
@@ -13,7 +12,6 @@
 
 <script>
 	import user from './../scripts/user.js'
-	import pointsCreate from './innopoints/create_account.vue'
 
 	export default {
 		data () {
@@ -21,13 +19,20 @@
 				user : user
 			}
 		},
-		components: {
-			pointsCreate
-		},
 		route: {
 			data (transition) {
 				console.log("Called get in user");
-				user.update(transition);
+				user.update(
+					function (result) {
+						transition.next({
+							user : result
+						});
+					},
+					function (error) {
+						user.clear();
+						transition.redirect('/login');
+					}
+				);
 			}
 		}
 	}

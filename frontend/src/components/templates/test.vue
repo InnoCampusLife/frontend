@@ -14,7 +14,19 @@
 			}
 		},
 		route: {
-			data (transition) { user.update(transition); }
+			data (transition) {
+				user.update(
+					function (result) {
+						transition.next({
+							user : result
+						});
+					},
+					function (error) {
+						user.clear();
+						transition.redirect('/login');
+					}
+				);
+			}
 		}
 	}
 </script>

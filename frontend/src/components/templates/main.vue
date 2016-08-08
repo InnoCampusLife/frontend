@@ -16,6 +16,11 @@
 		components : {
 			sidebar,
 			content
+		},
+		route : {
+			data (transition) {
+				user.innopoints.update();
+			}
 		}
 	}
 </script>

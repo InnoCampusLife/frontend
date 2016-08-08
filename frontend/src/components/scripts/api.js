@@ -159,7 +159,7 @@ var api = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 		
-		getApplication (appl_id, token, successCallback, errorCallback) {
+		getParticularApplication (appl_id, token, successCallback, errorCallback) {
 			let 
 			type = "GET",
 			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
