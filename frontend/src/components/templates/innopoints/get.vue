@@ -235,13 +235,13 @@
 				this.current.application = {};
 				this.current.category_id = 0;
 				this.current.users_count = 1;
-				this.current.users = {
-					user_0 : {
+				this.current.users = [
+					{
 						username : user.username,
 						activity_id : 0,
 						amount : 0
 					}
-				};
+				];
 				this.$els.upload.value = '';
 			},
 			sendError (error) {
@@ -260,18 +260,28 @@
 		},
 		route : {
 			data (transition) {
-				api.innopoints.getAccount(
-					user.token,
-					function (result) {
-						api.innopoints.getCategories(0,100,
+				user.innopoints.update(
+					function () {
+						api.innopoints.getCategories(0,10000, //TODO - fix categories amount
 							function (result) {
 								transition.next({
 									categories : result
 								});
 							}
 						);
-					}, function (error) {
-						transition.redirect('/account/innopoints/create');
+					},
+					function () {
+						user.innopoints.createAccount(
+							function () {
+								api.innopoints.getCategories(0,10000, //TODO - fix categories amount
+									function (result) {
+										transition.next({
+											categories : result
+										});
+									}
+								);
+							}
+						);
 					}
 				);
 			}

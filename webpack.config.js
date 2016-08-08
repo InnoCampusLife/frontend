@@ -1,8 +1,8 @@
 module.exports = {
-    entry: './src/app.js',
+    entry: './frontend/src/app.js',
     output: {
-        path: './build/',
-        publicPath: 'build/',
+        path: './frontend/',
+        publicPath: 'frontend/',
         filename: 'main.js'
     },
     module: {

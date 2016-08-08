@@ -9,7 +9,6 @@ var	test 		 	= require(t_path + 'test.vue'),
 		innopoints : {
 			admin 			: require(t_path + 'innopoints/admin.vue'),
 			get 		 	: require(t_path + 'innopoints/get.vue'),
-			create_account 	: require(t_path + 'innopoints/create_account.vue'),
 		}
 	}
 
@@ -43,9 +42,6 @@ module.exports = {
 							},
 							'/get' : {
 								component: uis.innopoints.get
-							},
-							'/create' : {
-								component: uis.innopoints.create_account
 							}
 						}
 					}
