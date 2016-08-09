@@ -76,8 +76,6 @@ var api = {
 		name : "points",
 		get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-		///USER METHODS
-		//
 		getActivities (skip_count, limit_count, successCallback, errorCallback) {
 			let
 			type = "GET",
@@ -105,189 +103,198 @@ var api = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		getAccount (token, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "accounts/" + token,
-			data = '';
+		///USER METHODS
+		//
+		user : {
+			get url() { return api.innopoints.url + "accounts/" },
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+			getAccount (token, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + token,
+				data = '';
 
-		createAccount (token, successCallback, errorCallback) {
-			let 
-			type = "POST",
-			url  = this.url + "accounts/" + token,
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		getFile (appl_id, file_id, token, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "accounts/" + token + "/applications/" + appl_id + "/files/" + file_id,
-			data = '';
+			createAccount (token, successCallback, errorCallback) {
+				let 
+				type = "POST",
+				url  = this.url + token,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			getFile (appl_id, file_id, token, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + token + "/applications/" + appl_id + "/files/" + file_id,
+				data = '';
 
-		createApplication (token, application, successCallback, errorCallback) {
-			let 
-			type = "POST",
-			url  = this.url + "accounts/" + token + "/applications",
-			data = { applicaiton : application };
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		updateApplication (appl_id, new_params, token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
-			data = new_params;
+			createApplication (token, application, successCallback, errorCallback) {
+				let 
+				type = "POST",
+				url  = this.url + token + "/applications",
+				data = { applicaiton : application };
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		sendApplication (appl_id, token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			updateApplication (appl_id, new_params, token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + token + "/applications/" + appl_id,
+				data = new_params;
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		getParticularApplication (appl_id, token, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			sendApplication (appl_id, token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + token + "/applications/" + appl_id,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		deleteApplication (appl_id, token, successCallback, errorCallback) {
-			let 
-			type = "DELETE",
-			url  = this.url + "accounts/" + token + "/applications/" + appl_id,
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			getApplication (appl_id, token, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + token + "/applications/" + appl_id,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		getApplications (token, skip_count, limit_count, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "accounts/" + token + "/applications",
-			data = { skip: skip_count, limit: limit_count };
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			deleteApplication (appl_id, token, successCallback, errorCallback) {
+				let 
+				type = "DELETE",
+				url  = this.url + token + "/applications/" + appl_id,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			getApplications (token, skip_count, limit_count, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + token + "/applications",
+				data = { skip: skip_count, limit: limit_count };
 
-		getApplicationsWithStatus (status, token, skip_count, limit_count, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "accounts/" + token + "/applications/" + status,
-			data = { skip: skip_count, limit: limit_count };
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-			ajax(type, url, data, successCallback, errorCallback);
+			getApplicationsWithStatus (status, token, skip_count, limit_count, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + token + "/applications/" + status,
+				data = { skip: skip_count, limit: limit_count };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 		},
 		//
 		///
 
 		///ADMIN METHODS
 		//
-		getUserAccounts (admin_token, skip_count, limit_count, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "admin/" + admin_token,
-			data = { skip: skip_count, limit: limit_count };
+		admin : {
+			get url() { return api.url + "admin/"; },
+			getUserAccounts (admin_token, skip_count, limit_count, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + admin_token,
+				data = { skip: skip_count, limit: limit_count };
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-		getUserAccount (id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "admin/" + admin_token + "/accounts/" + id,
-			data = '';
+			getUserAccount (id, admin_token, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + admin_token + "/accounts/" + id,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-		updateUserAccount (id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "admin/" + admin_token + "/accounts/" + id,
-			data = '';
+			updateUserAccount (id, points, admin_token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + admin_token + "/accounts/" + id,
+				data = { points_amount : points };
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-		getAllApplicationsWithStatus (status, admin_token, skip_count, limit_count, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "admin/" + admin_token + "/applications/" + status,
-			data = { skip: skip_count, limit: limit_count };
+			getAllApplicationsWithStatus (status, admin_token, skip_count, limit_count, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + admin_token + "/applications/" + status,
+				data = { skip: skip_count, limit: limit_count };
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			},
 
-		createApplication (admin_token, application, successCallback, errorCallback) {
-			let 
-			type = "POST",
-			url  = this.url + "admin/" + admin_token + "/applications",
-			data = { applicaiton : application };
+			createApplication (admin_token, application, successCallback, errorCallback) {
+				let 
+				type = "POST",
+				url  = this.url + admin_token + "/applications",
+				data = { applicaiton : application };
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		updateApplication (appl_id, new_params, admin_token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id,
-			data = new_params;
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			updateApplication (appl_id, new_params, admin_token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + admin_token + "/applications/" + appl_id,
+				data = new_params;
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		getApplication (appl_id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "GET",
-			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id,
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			getApplication (appl_id, admin_token, successCallback, errorCallback) {
+				let 
+				type = "GET",
+				url  = this.url + admin_token + "/applications/" + appl_id,
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		approveApplication (appl_id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/approve",
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			approveApplication (appl_id, admin_token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + admin_token + "/applications/" + appl_id + "/approve",
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		rejectApplication (appl_id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/reject",
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			rejectApplication (appl_id, admin_token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + admin_token + "/applications/" + appl_id + "/reject",
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
-		
-		dismissApplication (appl_id, admin_token, successCallback, errorCallback) {
-			let 
-			type = "PUT",
-			url  = this.url + "admin/" + admin_token + "/applications/" + appl_id + "/to_rework",
-			data = '';
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			
+			dismissApplication (appl_id, admin_token, successCallback, errorCallback) {
+				let 
+				type = "PUT",
+				url  = this.url + admin_token + "/applications/" + appl_id + "/to_rework",
+				data = '';
 
-			ajax(type, url, data, successCallback, errorCallback);
-		},
+				ajax(type, url, data, successCallback, errorCallback);
+			}
+		}
 		//
 		///
 	},

@@ -1,7 +1,7 @@
 <template>
 	<div block center children>
 		<h3>{{ user.role | capitalize }}'s dashboard</h3>
-		<h5 v-show="user.innopoints.id">{{ user.innopoints.amount }} innopoints</h5>
+		<h5 v-show="user.innopoints.id && user.isStudent">{{ user.innopoints.amount }} innopoints</h5>
 	</div>
 	<div flex column center children>
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/'"
@@ -11,18 +11,27 @@
 		<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account'"
 		>my profile</button>
 		<!-- Sudent buttons here -->
-		<template v-if="user.isStudent && user.innopoints.id">
-			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/innopoints'"
+		<template v-if="user.isStudent">
+			<button padding margin style="width: 100%; border-width: 0;" block @click="createAccount" v-show="!user.innopoints.id"
+			>Create Innopoints account</button>
+
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/account/innopoints'" v-show="user.innopoints.id"
 			>innopoints</button>
 		</template>
 		<!-- Admin buttons here -->
 		<template v-if="user.isAdmin">
+			<br>
 			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/accounts'"
-			>admin_side</button>
+			>accounts</button>
+			<br>
+			innopoints:
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/innopoints/apply'"
+			>apply</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/innopoints/applications'"
+			>applications</button>
+			<button padding margin style="width: 100%; border-width: 0;" block v-link="'/administration/innopoints/students'"
+			>students</button>
 		</template>
-
-		<button padding margin style="width: 100%; border-width: 0;" block @click="createAccount" v-show="!user.innopoints.id"
-		>Create Innopoints account</button>
 
 		<button padding="16" absolute bottom left style="width: 100%; border-width: 0;" block @click="logout"
 		>logout</button>

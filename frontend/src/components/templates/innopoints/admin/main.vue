@@ -5,8 +5,8 @@
 </template>
 
 <script>
-	import api from './../../scripts/api.js'
-	import {token} from './../../scripts/user.js'
+	import api from './../../../scripts/api.js'
+	import {token} from './../../../scripts/user.js'
 
 	export default {
 		data () {
