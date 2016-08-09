@@ -1,6 +1,7 @@
 var api = require('./api.js');
 
 var user = {
+	///For the sake of reactivity - C# style properties.
 	_id 		: null,
 	_username	: null,
 	_role		: null,
@@ -136,6 +137,7 @@ var user = {
 	///Innopoints account
 	//
 	innopoints : {
+		///For the sake of reactivity - C# style properties.
 		_id : null,
 		_amount : null,
 
@@ -165,7 +167,7 @@ var user = {
 		update (successCallback, errorCallback) {
 			let cur_user = user;
 
-			api.innopoints.getAccount(cur_user.token, 
+			api.innopoints.user.getAccount(cur_user.token, 
 				function (result) {
 					cur_user.innopoints.set(result);
 					if (successCallback) successCallback(result);
@@ -179,7 +181,7 @@ var user = {
 		createAccount (successCallback, errorCallback) {
 			let cur_user = user;
 
-			api.innopoints.createAccount(cur_user.token,
+			api.innopoints.user.createAccount(cur_user.token,
 				function (result) {
 					cur_user.innopoints.set(result);
 					if(successCallback) successCallback(result);
@@ -188,6 +190,143 @@ var user = {
 					if (errorCallback) errorCallback(error);
 				}
 			);
+		},
+
+		application : {
+			create (application, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.createApplication(user.token, application, successCallback, errorCallback);
+				} else if (user.isStudent) {
+					api.innopoints.user.createApplication(user.token, application, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			send (appl_id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.sendApplication(appl_id, user.token, successCallback, errorCallback);
+				} else if (user.isStudent) {
+					api.innopoints.user.sendApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			update (appl_id, new_params, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.updateApplication(appl_id, new_params, user.token, successCallback, errorCallback);
+				} else if (user.isStudent) {
+					api.innopoints.user.updateApplication(appl_id, new_params, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			get (appl_id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.getApplication(appl_id, user.token, successCallback, errorCallback);
+				} else if (user.isStudent) {
+					api.innopoints.user.getApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			delete (appl_id, successCallback, errorCallback) {
+				if (user.isStudent) {
+					api.innopoints.user.deleteApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			approve (appl_id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.approveApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			reject (appl_id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.rejectApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			dismiss (appl_id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.dismissApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			getFile(appl_id, file_id, successCallback, errorCallback) {
+				if (user.isStudent) {
+					api.innopoints.user.getFile(appl_id, file_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
+		},
+
+		applications : {
+			get (successCallback, errorCallback) {
+				if (status) {
+					if (user.isAdmin) {										///TODO - fix this numbers - pagination???
+						api.innopoints.admin.getAllApplicationsWithStatus(status, user.token, 100, 100, successCallback, errorCallback);
+					} if (user.isStudent) {
+						api.innopoints.user.getApplicationsWithStatus(status, user.token, 100, 100, successCallback, errorCallback);
+					} else {
+						if (errorCallback) errorCallback("Not enough rights");
+					}
+				} else {
+					if (user.isStudent) {
+						api.innopoints.user.getApplications(user.token, 100, 100, successCallback, errorCallback);
+					} else {
+						if (errorCallback) errorCallback("Not enough rights");
+					}
+				}
+			}
+		},
+
+		account : {
+			get (id, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.getUserAccount(id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			update (id, points_amount, successCallback, errorCallback) {
+				if (user.isAdmin) {
+					api.innopoints.admin.updateUserAccount(id, points_amount, user.token,
+						function (result) {
+							if (successCallback) successCallback(result);
+						},
+						function (error) {
+							if (errorCallback) errorCallback(error);
+						}
+					);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
+		},
+
+		accounts : {
+			get (successCallback, errorCallback) {
+				if (user.isAdmin) {			///TODO - fix this numbers - pagination???
+					api.innopoints.admin.getUserAccount(100, 100, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
 		}
 		//
 		///
@@ -195,7 +334,7 @@ var user = {
 	//
 	///
 
-	///User preferences
+	///User preferences - TODO
 	//
 	preferences : {
 		color : {

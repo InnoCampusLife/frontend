@@ -7,8 +7,11 @@ var	test 		 	= require(t_path + 'test.vue'),
 	uis = {
 		admin 		 		: require(t_path + 'uis/admin.vue'),
 		innopoints : {
-			admin 			: require(t_path + 'innopoints/admin.vue'),
-			get 		 	: require(t_path + 'innopoints/get.vue'),
+			apply 		 	: require(t_path + 'innopoints/apply.vue'),
+			admin : {
+				main 		: require(t_path + 'innopoints/admin/main.vue'),
+				apply		: require(t_path + 'innopoints/admin/apply.vue'),
+			}
 		}
 	}
 
@@ -40,8 +43,8 @@ module.exports = {
 							'/' : {
 								component: test //to be replaced with innopoints dashboard
 							},
-							'/get' : {
-								component: uis.innopoints.get
+							'/apply' : {
+								component: uis.innopoints.apply
 							}
 						}
 					}
@@ -63,8 +66,17 @@ module.exports = {
 						component: router_view,
 						subRoutes: {
 							'/' : {
-								component: uis.innopoints.admin
+								component: uis.innopoints.admin.main	//To remove or not to remove?
 							},
+							'/apply' : {
+								component: uis.innopoints.admin.apply
+							},
+							'/applications' : {
+								component: test
+							},
+							'/students' : {
+								component: test
+							}
 							//TODO
 						}
 					}
