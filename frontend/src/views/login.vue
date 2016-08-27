@@ -40,9 +40,9 @@
 </template>
 
 <script>
-	import user from './../scripts/user.js'
+	var user = require( './../scripts/user.js');
 
-	export default {
+	module.exports =  {
 		data () {
 			return {
 				user : user
@@ -51,12 +51,12 @@
 		methods : {
 			login (e) {
 				e.preventDefault();
-				this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+				// this.user.authorize(password.value, function(status, result) {if (status) this.formSuccessCallback(result) else this.formErrorCallback});
 			},
 			register (e) {
 				e.preventDefault();
-				if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-					this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+				// if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
+				// 	this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			/// Form Callbacks
 			//

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --hot",
-    "build": "webpack -p --hot"
+    "build": "webpack"
   },
   "author": "Alexey Iskhakov",
   "license": "MIT",

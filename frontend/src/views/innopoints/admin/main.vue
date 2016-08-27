@@ -5,10 +5,10 @@
 </template>
 
 <script>
-	import api from './../../../scripts/api.js'
-	import {token} from './../../../scripts/user.js'
+	var api = require( './../../../scripts/api.js');
+	var {token} = require( './../../../scripts/user.js');
 
-	export default {
+	module.exports =  {
 		data () {
 			return {
 				users : [],

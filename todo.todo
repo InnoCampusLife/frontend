@@ -1,0 +1,36 @@
+TODO:
+    User:
+        Innopoints:
+            List of applications:
+                * implement applications' list = pure list + ind. page || blocks; @high @tomorrow 
+                * search base || filters @low @inbackground
+            * Rework innopoints application form @critical @tomorrow
+        Shop:
+            List:
+                * implement store list = pure list + ind. page;
+                * search base
+            Orders:
+                * general list
+                * ind. pages
+                * cart
+    Admin/moder:
+        Innopoints:
+            List of applications:
+                * confirmation page for appl-s. @critical @tomorrow
+                * list with filters & search @high @?tomorrow
+                * search base || filters @low @inbackground
+        Shop:
+            List:
+                * implement store list = pure list + ind. page;
+                * search base
+                Admin actions:
+                    * delete
+                    * edit
+                    * add
+            Orders:
+                * general list
+                * ind. pages
+                * List:
+                    * change status
+
+    * Connect with Nikita for details. @high 

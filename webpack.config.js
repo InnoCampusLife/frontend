@@ -2,7 +2,7 @@ module.exports = {
     entry: './frontend/src/app.js',
     output: {
         path: './frontend/',
-        publicPath: 'frontend/',
+        publicPath: '/frontend/',
         filename: 'main.js'
     },
     module: {
@@ -13,13 +13,12 @@ module.exports = {
             { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
         ]
     },
+    // resolve: {
+    //     extensions: ['', '.js']
+    // },
     vue: {
         loaders: {
             js: 'babel'
         }
-    },
-    babel: {
-        presets: ['es2015'],
-        plugins: ['transform-runtime']
     }
 }
