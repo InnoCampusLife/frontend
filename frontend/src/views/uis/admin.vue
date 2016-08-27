@@ -25,10 +25,10 @@
 </template>
 
 <script>
-	import api from './../../scripts/api.js'
-	import {token} from './../../scripts/user.js'
+	var api= require('./../../api.js');
+	var {token}= require('./../../models/user.js');
 
-	export default {
+	module.export = {
 		data () {
 			return {
 				users : [],

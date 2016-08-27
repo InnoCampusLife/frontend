@@ -3,7 +3,7 @@
 </template>
 
 <script>
-	export default {
+	module.exports = {
 		ready () {
 			console.log('App is awaiting your command!');
 		}

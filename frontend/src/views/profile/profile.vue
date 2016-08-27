@@ -11,9 +11,9 @@
 </template>
 
 <script>
-	import user from './../scripts/user.js'
+	var user = require('./../../models/user.js');
 
-	export default {
+	module.exports =  {
 		data () {
 			return {
 				user : user
