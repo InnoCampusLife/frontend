@@ -1,22 +1,21 @@
 <template>
-	<pre v-if="$loadingRouteData">Loading...</pre>
+	<div style="margin: 42px;">
+		<pre v-if="$loadingRouteData">Loading...</pre>
 
-	<div v-for="appl in applications">
-		<br>
-		<h4 v-text="appl.type"></h4>
-		<div v-if="appl.personal">
-			
+		<div v-for="appl in applications">
+			<br>
+			<h4 v-text="appl.type"></h4>
+			<div>
+				<pre>{{ appl | json 4 }}</pre>
+			</div>
+			<hr>
 		</div>
-		<div v-if="appl.group">
-			
-		</div>
-		<hr>
 	</div>
 </template>
 
 <script>
-	var api = require( './../../api.js');
-	var user = require( './../../models/user.js');
+	var api = require( './../../../api.js');
+	var user = require( './../../../models/user.js');
 
 	module.exports =  {
 		data () {
@@ -27,7 +26,10 @@
 		},
 		route : {
 			data (transition) {
+				console.log('called get applications: ' + user.roles['uis']);
+				
 				user.innopoints.applications.get(null, (result) => {
+					console.log('got applications');
 					var res = [],
 					index = 0;
 
@@ -40,6 +42,9 @@
 					transition.next({
 						applications: res
 					});
+				},
+				(error) => {
+					console.log('haven\'t got applications: ' + error);
 				});
 			}
 		}
