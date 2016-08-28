@@ -6,20 +6,14 @@
 <script>
 	var sidebar = require('./sidebar.vue');
 	var content = require('./content.vue');
-	var user = require('./../models/user.js');
 
 	module.exports = {
-		data () {
-			return {
-				user: user
-			}
-		},
 		components : {
-			sidebar,
-			content
+			content,
+			sidebar
 		},
 		route (transition) {
-			user.update((result) => {
+			$route.user.update((result) => {
 				transition.next({
 					user: result
 				});

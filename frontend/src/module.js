@@ -1,15 +1,14 @@
-class Module {
-    /**
-     * Creates an instance of Module.
-     * 
-     * @param {string} name
-     * @param {Array<string>} userTypes (ascending)
-     */
-    constructor (name, userTypes) {
-        this.name = name;
-        this.userTypes = userTypes;
-    }
+/**
+ * Creates an instance of Module.
+ * 
+ * @param {string} name
+ * @param {Array<string>} userTypes (ascending)
+ */
+function Module (name, userTypes) {
+    this.name = name;
+    this.userTypes = userTypes;
     
+
     /**
      * Checks if a user has a specific role in a module
      * 
@@ -17,10 +16,11 @@ class Module {
      * @param {string} ofType
      * @returns boolean
      */
-    is (user, ofType) {
-        return user.roles[this.name] 
-            && this.has(ofType)
-            && user.roles[this.name].toLowerCase() == ofType.toLowerCase();
+    this.is = function (user, ofType) {
+        if (user.roles[this.name] !== null && user.roles[this.name] !== undefined && user.roles[this.name].toLowerCase() === ofType.toLowerCase())
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -29,8 +29,9 @@ class Module {
      * @param {string} role
      * @returns boolean
      */
-    has (role) {
-        return this.userTypes.indexOf(role) > -1;
+    this.get = function (role) {
+        return this.userTypes[this.userTypes.indexOf(role)];
     }
 }
+
 module.exports = Module;

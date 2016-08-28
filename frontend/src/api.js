@@ -1,3 +1,4 @@
+var config = require('./config.js');
 var api_url = config.server.api_url;
 
 var api = {
@@ -132,7 +133,7 @@ var api = {
 			data = {
 				id: identifier.id,
 				username: identifier.username
-			};
+			};			
 
 			ajax(type, url, data, successCallback, errorCallback);
 		}
@@ -261,7 +262,7 @@ var api = {
 				let 
 				type = "POST",
 				url  = this.url + token + "/applications",
-				data = { applicaiton : application };
+				data = { application };
 
 				ajax(type, url, data, successCallback, errorCallback);
 			},

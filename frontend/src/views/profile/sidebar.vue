@@ -1,8 +1,7 @@
 <template>
 	<aside besidebar>
-		<button menu block v-link="{ name: 'profile', params: { username: user.username } }"><span class="icon-user"></span></button>
-		<button menu block v-link="'/friends'"><span class="icon-users"></span></button>
-		<button menu block v-link="'/search'" ><span class="icon-search"></span></button>
+		<button menu block v-link="{ name: 'applications' }"><span class="icon-archive"></span></button>
+		<button menu block v-link="{ name: 'apply' }" ><span class="icon-doc-text"></span></button>
 	</aside>
 </template>
 

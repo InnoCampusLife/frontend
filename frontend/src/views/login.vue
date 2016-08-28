@@ -40,7 +40,7 @@
 </template>
 
 <script>
-	var user = require( './../scripts/user.js');
+	var user = require( './../models/user.js');
 
 	module.exports =  {
 		data () {
@@ -51,12 +51,12 @@
 		methods : {
 			login (e) {
 				e.preventDefault();
-				// this.user.authorize(password.value, function(status, result) {if (status) this.formSuccessCallback(result) else this.formErrorCallback});
+				this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			register (e) {
 				e.preventDefault();
 				// if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-				// 	this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+					// this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
 			},
 			/// Form Callbacks
 			//

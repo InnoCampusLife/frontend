@@ -47,9 +47,10 @@
 	var Vue = __webpack_require__(1);
 	var VueRouter = __webpack_require__(3);
 	var routes = __webpack_require__(4);
-	var app = __webpack_require__(30);
+	var user = __webpack_require__(7);
+	var app = __webpack_require__(61);
 
-	// window.user = user;
+	window.user = user;
 	// UNCOMMENT FOR DEBUG PURPOSES ONLY!!!
 
 	Vue.use(VueRouter);
@@ -60,20 +61,20 @@
 	}).map(routes);
 
 	// TODO: restore routing
-	router /*.beforeEach(function (transition) {
-	       if (!user.loggedIn) {
-	       if (transition.to.authorizedZone)
-	       transition.redirect('/login');
-	       else
-	       transition.next();
-	       }
-	       else {
-	       if (transition.to.loginPage)
-	       transition.redirect('/');
-	       else
-	       transition.next();
-	       }
-	       })*/.redirect({ '*': '/' }).alias({ '/': '/profile' });
+	router.beforeEach(transition => {
+		if (!user.loggedIn) {
+			if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
+		} else {
+			if (transition.to.loginPage) transition.redirect('/');else {
+				if (transition.to.adminZone) {
+					if (user.is.uis.moderator) transition.next();else {
+						alert('You don\'t have enough permissions to access this zone!');
+						transition.abort();
+					}
+				} else transition.next();
+			}
+		}
+	}).redirect({ '*': '/' });
 
 	router.start(app, 'app');
 
@@ -12998,36 +12999,75 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// Views
-	var main = __webpack_require__(5),
-	    test = __webpack_require__(18);
-
-	var user = __webpack_require__(13);
-
-	var authorizedZone = true,
+	var test = __webpack_require__(5);
+	var user = __webpack_require__(7);
+	var adminZone = true,
+	    authorizedZone = true,
 	    loginPage = true;
 
 	var router_view = { template: '<router-view></router-view>' };
 
 	module.exports = {
 		'/login': {
-			component: test,
+			component: __webpack_require__(13),
 			loginPage
 		},
 		'/': {
-			component: main,
+			component: __webpack_require__(16),
+			user: user,
 			subRoutes: {
 				'/profile': {
-					component: __webpack_require__(21),
+					component: __webpack_require__(25),
 					subRoutes: {
 						'/:username': {
-							component: __webpack_require__(27),
+							component: router_view,
 							name: 'profile',
+							user: user,
+							subRoutes: {
+								'/': {
+									component: __webpack_require__(34)
+								},
+								'/applications': {
+									component: __webpack_require__(37),
+									name: 'applications',
+									user: user
+								},
+								'/apply': {
+									component: __webpack_require__(40),
+									name: 'apply',
+									user: user
+								}
+							}
+						}
+					}
+				},
+				'/admnistration': {
+					component: __webpack_require__(43),
+					subRoutes: {
+						'/': {
+							component: __webpack_require__(51),
+							name: 'administration',
 							user: user
+						},
+						'/innopoints': {
+							component: router_view,
+							subRoutes: {
+								'/': {
+									component: __webpack_require__(55),
+									name: 'administration/innopoints',
+									user: user
+								},
+								'/apply': {
+									component: __webpack_require__(58),
+									name: 'administration/innopoints/apply',
+									user: user
+								}
+							}
 						}
 					}
 				}
 			},
-			authorizedZone: false
+			authorizedZone
 		}
 	};
 
@@ -13040,8 +13080,8 @@
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(17)
+	  console.warn("[vue-loader] frontend\\src\\views\\test.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(12)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13051,7 +13091,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-815f0f58/main.vue"
+	  var id = "_v-7b76a2ad/test.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -13064,14 +13104,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<sidebar user="user"></sidebar>
-	// 	<content></content>
+	// 	<h1>Current path: {{ $route.path }}</h1>
+	// 	<pre>{{ user | json 4 }}</pre>
+	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(7);
-	var content = __webpack_require__(10);
-	var user = __webpack_require__(13);
+	var user = __webpack_require__(7);
 
 	module.exports = {
 		data() {
@@ -13079,9 +13118,17 @@
 				user: user
 			};
 		},
-		components: {
-			sidebar,
-			content
+		route: {
+			data(transition) {
+				user.update(function (result) {
+					transition.next({
+						user: result
+					});
+				}, function (error) {
+					user.clear();
+					transition.redirect('/login');
+				});
+			}
 		}
 	};
 	// </script>
@@ -13090,119 +13137,75 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(8)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(9)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-b9130ede/sidebar.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<aside sidebar>
-	// 		<button menu block v-link="'/profile'"><span class="icon-user"></span></button>
-	//
-	// 		<button logout block><span class="icon-logout"></span></button>
-	// 	</aside>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		props: ['user']
-	};
-	// </script>
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside sidebar>\n\t<button menu block v-link=\"'/profile'\"><span class=\"icon-user\"></span></button>\n\n\t<button logout block><span class=\"icon-logout\"></span></button>\n</aside>\n";
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(11)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(12)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-b68069a4/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<main content style="margin-left: 96px;">
-	// 		<router-view></router-view>
-	// 	</main>
-	// </template>
-	//
-	// <script>
-	module.exports = {}
-	//This might come in handy...
-
-	// </script>
-	;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<main content style=\"margin-left: 96px;\">\n\t<router-view></router-view>\n</main>\n";
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var config = __webpack_require__(14);
+	var config = __webpack_require__(8);
+	var api = __webpack_require__(10);
 
 	var user = {
-		id: null,
-		username: null,
-		firstName: null,
-		lastName: null,
-		patronymic: null,
-		studyGroup: null,
-		tgId: null,
+		///For the sake of reactivity - C# style properties.
+		_id: null,
+		_username: null,
+		_role: null,
+		_firstName: null,
+		_lastName: null,
+		_patronymic: null,
+		_studyGroup: null,
+		_tgId: null,
+
+		//id
+		get id() {
+			return this._id ? this._id : this.storage.get('id');
+		},
+		set id(value) {
+			this._id = value;return this.storage.set('id', this._id);
+		},
+
+		//username
+		get username() {
+			return this._username ? this._username : this.storage.get('username');
+		},
+		set username(value) {
+			this._username = value;return this.storage.set('username', this._username);
+		},
+
+		//firstName
+		get firstName() {
+			return this._firstName ? this._firstName : this.storage.get('firstName');
+		},
+		set firstName(value) {
+			this._firstName = value;return this.storage.set('firstName', this._firstName);
+		},
+
+		//lastName
+		get lastName() {
+			return this._lastName ? this._lastName : this.storage.get('lastName');
+		},
+		set lastName(value) {
+			this._lastName = value;return this.storage.set('lastName', this._lastName);
+		},
+
+		//patronymic
+		get patronymic() {
+			return this._patronymic ? this._patronymic : this.storage.get('patronymic');
+		},
+		set patronymic(value) {
+			this._patronymic = value;return this.storage.set('patronymic', this._patronymic);
+		},
+
+		//studyGroup
+		get studyGroup() {
+			return this._studyGroup ? this._studyGroup : this.storage.get('studyGroup');
+		},
+		set studyGroup(value) {
+			this._studyGroup = value;return this.storage.set('studyGroup', this._studyGroup);
+		},
+
+		//tgId
+		get tgId() {
+			return this._tgId ? this._tgId : this.storage.get('tgId');
+		},
+		set tgId(value) {
+			this._tgId = value;return this.storage.set('tgId', this._tgId);
+		},
 
 		get token() {
 			return this.storage.get(config.token_name);
@@ -13219,7 +13222,11 @@
 			return ln + fn + pn;
 		},
 
-		storage: __webpack_require__(16),
+		get loggedIn() {
+			return this.storage.get('usertoken') ? true : false;
+		},
+
+		storage: __webpack_require__(11),
 
 		roles: {},
 
@@ -13242,6 +13249,12 @@
 			uis: {
 				get moderator() {
 					return config.modules['uis'].is(user, 'moderator');
+				},
+				get student() {
+					return config.modules['uis'].is(user, 'student');
+				},
+				get ghost() {
+					return config.modules['uis'].is(user, 'ghost');
 				}
 			}
 		},
@@ -13258,10 +13271,18 @@
 			this.firstName = user.firstName;
 			this.lastName = user.lastName;
 			this.patronymic = user.patronymic;
-			this.role = user.role;
 			this.studyGroup = user.studyGroup;
 			this.tgId = user.tgId;
+			this.email = user.email;
 			this.token = user.token;
+
+			// if (moduleName == 'uis')
+			this.roles.uis = user.role;
+			// else
+			// for (let key in config.modules) {
+			// var _module = config.modules[key];
+			// user.roles[_module.name] = _module.userTypes[0];
+			// }
 
 			return this;
 		},
@@ -13274,13 +13295,16 @@
 			api.accounts.authorize(this.username, password, successCallback, errorCallback);
 		},
 		register(password, successCallback, errorCallback) {
-			api.accounts.createAccount(this.username, password, successCallback, errorCallback);
+			api.accounts.create(this.username, password, successCallback, errorCallback);
 		},
 
 		update(successCallback, errorCallback) {
+			console.log('called update');
+
 			let cur_user = this;
 
 			api.accounts.get(cur_user.token, function (result) {
+				console.log('updated');
 				cur_user.set(result);
 				if (successCallback) successCallback(cur_user);
 			}, function (error) {
@@ -13351,9 +13375,205 @@
 	//
 	///
 
+	///Innopoints account
+	//
+	user.innopoints = {
+		///For the sake of reactivity - C# style properties.
+		_id: null,
+		_amount: null,
+
+		//id
+		get id() {
+			return this._id ? this._id : user.storage.get('innopoints.id');
+		},
+		set id(value) {
+			return user.storage.set('innopoints.id', this._id = value);
+		},
+
+		//amount
+		get amount() {
+			if (this._amount === null) {
+				if (user.storage.get('innopoints.amount')) return user.storage.get('innopoints.amount');else return 0;
+			} else return this._amount;
+		},
+		set amount(value) {
+			return user.storage.set('innopoints.amount', this._amount = value);
+		},
+
+		set(points) {
+			this.id = points.owner;
+			this.amount = points.points_amount;
+		},
+
+		///API shorthand
+		//
+		update(successCallback, errorCallback) {
+			let cur_user = user;
+
+			api.innopoints.user.getAccount(cur_user.token, function (result) {
+				cur_user.innopoints.set(result);
+				if (successCallback) successCallback(result);
+			}, function (error) {
+				if (errorCallback) errorCallback(error);
+			});
+		},
+
+		createAccount(successCallback, errorCallback) {
+			let cur_user = user;
+
+			api.innopoints.user.createAccount(cur_user.token, function (result) {
+				cur_user.innopoints.set(result);
+				if (successCallback) successCallback(result);
+			}, function (error) {
+				if (errorCallback) errorCallback(error);
+			});
+		},
+
+		application: {
+			create: function (application, successCallback, errorCallback) {
+				console.log(user.is.uis);
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.createApplication(user.token, application, successCallback, errorCallback);
+				} else if (user.is.uis.student) {
+					api.innopoints.user.createApplication(user.token, application, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			send: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.sendApplication(appl_id, user.token, successCallback, errorCallback);
+				} else if (user.is.uis.student) {
+					api.innopoints.user.sendApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			update: function (appl_id, new_params, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.updateApplication(appl_id, new_params, user.token, successCallback, errorCallback);
+				} else if (user.is.uis.student) {
+					api.innopoints.user.updateApplication(appl_id, new_params, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			get: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.getApplication(appl_id, user.token, successCallback, errorCallback);
+				} else if (user.is.uis.student) {
+					api.innopoints.user.getApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			delete: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.student) {
+					api.innopoints.user.deleteApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			approve: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.approveApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			reject: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.rejectApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			dismiss: function (appl_id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.dismissApplication(appl_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			getFile: function (appl_id, file_id, successCallback, errorCallback) {
+				if (user.is.uis.student) {
+					api.innopoints.user.getFile(appl_id, file_id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
+		},
+
+		applications: {
+			get: function (status, successCallback, errorCallback) {
+				if (status) {
+					if (user.is.uis.moderator) {
+						///TODO - fix this numbers - pagination???
+						api.innopoints.admin.getAllApplicationsWithStatus(status, user.token, 100, 100, successCallback, errorCallback);
+					}if (user.is.uis.student) {
+						api.innopoints.user.getApplicationsWithStatus(status, user.token, 100, 100, successCallback, errorCallback);
+					} else {
+						if (errorCallback) errorCallback("Not enough rights");
+					}
+				} else {
+					if (user.is.uis.student) {
+						api.innopoints.user.getApplications(user.token, 100, 100, successCallback, errorCallback);
+					} else {
+						if (errorCallback) errorCallback("Not enough rights");
+					}
+				}
+			}
+		},
+
+		account: {
+			get: function (id, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.getUserAccount(id, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			},
+
+			update: function (id, points_amount, successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					api.innopoints.admin.updateUserAccount(id, points_amount, user.token, function (result) {
+						if (successCallback) successCallback(result);
+					}, function (error) {
+						if (errorCallback) errorCallback(error);
+					});
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
+		},
+
+		accounts: {
+			get: function (successCallback, errorCallback) {
+				if (user.is.uis.moderator) {
+					///TODO - fix this numbers - pagination???
+					api.innopoints.admin.getUserAccount(100, 100, user.token, successCallback, errorCallback);
+				} else {
+					if (errorCallback) errorCallback("Not enough rights");
+				}
+			}
+		}
+		//
+		///
+	};
+	//
+	///
+
 	for (let key in config.modules) {
 		var _module = config.modules[key];
-		user.roles[_module.name] = _module.userTypes[0];
+		if (!user.roles[_module.name]) user.roles[_module.name] = _module.userTypes[0];
 	}
 
 	// for (let _module in config.modules)
@@ -13363,14 +13583,14 @@
 	module.exports.token = user.token;
 
 /***/ },
-/* 14 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Module = __webpack_require__(15);
+	var Module = __webpack_require__(9);
 
 	var config = {
 		server: {
-			ip: "85.143.215.11",
+			ip: "uis.university.innopolis.ru",
 			port: 8770,
 			get api_url() {
 				return "http://" + this.ip + ":" + this.port + "/api/";
@@ -13385,20 +13605,18 @@
 	module.exports = config;
 
 /***/ },
-/* 15 */
+/* 9 */
 /***/ function(module, exports) {
 
-	class Module {
-	    /**
-	     * Creates an instance of Module.
-	     * 
-	     * @param {string} name
-	     * @param {Array<string>} userTypes (ascending)
-	     */
-	    constructor(name, userTypes) {
-	        this.name = name;
-	        this.userTypes = userTypes;
-	    }
+	/**
+	 * Creates an instance of Module.
+	 * 
+	 * @param {string} name
+	 * @param {Array<string>} userTypes (ascending)
+	 */
+	function Module(name, userTypes) {
+	    this.name = name;
+	    this.userTypes = userTypes;
 
 	    /**
 	     * Checks if a user has a specific role in a module
@@ -13407,9 +13625,9 @@
 	     * @param {string} ofType
 	     * @returns boolean
 	     */
-	    is(user, ofType) {
-	        return user.roles[this.name] && this.has(ofType) && user.roles[this.name].toLowerCase() == ofType.toLowerCase();
-	    }
+	    this.is = function (user, ofType) {
+	        if (user.roles[this.name] !== null && user.roles[this.name] !== undefined && user.roles[this.name].toLowerCase() === ofType.toLowerCase()) return true;else return false;
+	    };
 
 	    /**
 	     * Checks if a module has a specific role
@@ -13417,14 +13635,584 @@
 	     * @param {string} role
 	     * @returns boolean
 	     */
-	    has(role) {
-	        return this.userTypes.indexOf(role) > -1;
-	    }
+	    this.get = function (role) {
+	        return this.userTypes[this.userTypes.indexOf(role)];
+	    };
 	}
+
 	module.exports = Module;
 
 /***/ },
-/* 16 */
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var config = __webpack_require__(8);
+	var api_url = config.server.api_url;
+
+	var api = {
+		url: api_url,
+		accounts: {
+			version: 1,
+			name: "accounts",
+			get url() {
+				return api_url + "v" + this.version + "/" + this.name + "/";
+			},
+
+			/**
+	   * Requests to create a new user account in accounts API
+	   * 
+	   * @param {string} _username
+	   * @param {string} _password
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			create: function (_username, _password, successCallback, errorCallback) {
+				let type = "POST",
+				    url = this.url,
+				    data = {
+					username: _username,
+					password: _password
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {string} _username
+	   * @param {string} _password
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			authorize: function (_username, _password, successCallback, errorCallback) {
+				let type = "POST",
+				    url = this.url + "auth",
+				    data = {
+					username: _username,
+					password: _password
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} token
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			get: function (token, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + token,
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			///MODER METHODS
+			//
+			/**
+	   * 
+	   * 
+	   * @param {any} moder_token
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			list: function (moder_token, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + moder_token + "/listAccounts",
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} moder_token
+	   * @param {any} account_id
+	   * @param {any} new_role
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			updateRole: function (moder_token, account_id, new_role, successCallback, errorCallback) {
+				let type = "PUT",
+				    url = this.url + moder_token + "/updateRole",
+				    data = { accountId: account_id, newRole: new_role };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			//
+			///
+
+			/**
+	   * 
+	   * 
+	   * @param {any} token
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			exists: function (token, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + token + "/exists",
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} token
+	   * @param {object} identifier contains id xor username
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			getBio: function (token, identifier, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + token + "/getBio",
+				    data = {
+					id: identifier.id,
+					username: identifier.username
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			}
+		},
+		innopoints: {
+			version: 1,
+			name: "points",
+			get url() {
+				return api_url + "v" + this.version + "/" + this.name + "/";
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} skip_count
+	   * @param {any} limit_count
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			getActivities: function (skip_count, limit_count, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + "activities",
+				    data = { skip: skip_count, limit: limit_count };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} cat_id
+	   * @param {any} skip_count
+	   * @param {any} limit_count
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			getActivitiesInCategory: function (cat_id, skip_count, limit_count, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + "activities/" + cat_id,
+				    data = { skip: skip_count, limit: limit_count };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			/**
+	   * 
+	   * 
+	   * @param {any} skip_count
+	   * @param {any} limit_count
+	   * @param {any} successCallback
+	   * @param {any} errorCallback
+	   */
+			getCategories: function (skip_count, limit_count, successCallback, errorCallback) {
+				let type = "GET",
+				    url = this.url + "categories",
+				    data = { skip: skip_count, limit: limit_count };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			///USER METHODS
+			//
+			user: {
+				get url() {
+					return api.innopoints.url + "accounts/";
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getAccount: function (token, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + token,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				createAccount: function (token, successCallback, errorCallback) {
+					let type = "POST",
+					    url = this.url + token,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} file_id
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getFile: function (appl_id, file_id, token, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + token + "/applications/" + appl_id + "/files/" + file_id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} token
+	    * @param {any} application
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				createApplication: function (token, application, successCallback, errorCallback) {
+					let type = "POST",
+					    url = this.url + token + "/applications",
+					    data = { application };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} new_params
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				updateApplication: function (appl_id, new_params, token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + token + "/applications/" + appl_id,
+					    data = new_params;
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				sendApplication: function (appl_id, token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + token + "/applications/" + appl_id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getApplication: function (appl_id, token, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + token + "/applications/" + appl_id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				deleteApplication: function (appl_id, token, successCallback, errorCallback) {
+					let type = "DELETE",
+					    url = this.url + token + "/applications/" + appl_id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} token
+	    * @param {any} skip_count
+	    * @param {any} limit_count
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getApplications: function (token, skip_count, limit_count, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + token + "/applications",
+					    data = { skip: skip_count, limit: limit_count };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} status
+	    * @param {any} token
+	    * @param {any} skip_count
+	    * @param {any} limit_count
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getApplicationsWithStatus: function (status, token, skip_count, limit_count, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + token + "/applications/" + status,
+					    data = { skip: skip_count, limit: limit_count };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				}
+			},
+			//
+			///
+
+			///ADMIN METHODS
+			//
+			admin: {
+				get url() {
+					return api.url + "admin/";
+				},
+				/**
+	    * 
+	    * 
+	    * @param {any} admin_token
+	    * @param {any} skip_count
+	    * @param {any} limit_count
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getUserAccounts: function (admin_token, skip_count, limit_count, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + admin_token,
+					    data = { skip: skip_count, limit: limit_count };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} id
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getUserAccount: function (id, admin_token, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + admin_token + "/accounts/" + id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} id
+	    * @param {any} points
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				updateUserAccount: function (id, points, admin_token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + admin_token + "/accounts/" + id,
+					    data = { points_amount: points };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} status
+	    * @param {any} admin_token
+	    * @param {any} skip_count
+	    * @param {any} limit_count
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getAllApplicationsWithStatus: function (status, admin_token, skip_count, limit_count, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + admin_token + "/applications/" + status,
+					    data = { skip: skip_count, limit: limit_count };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} admin_token
+	    * @param {any} application
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				createApplication: function (admin_token, application, successCallback, errorCallback) {
+					let type = "POST",
+					    url = this.url + admin_token + "/applications",
+					    data = { applicaiton: application };
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} new_params
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				updateApplication: function (appl_id, new_params, admin_token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + admin_token + "/applications/" + appl_id,
+					    data = new_params;
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				getApplication: function (appl_id, admin_token, successCallback, errorCallback) {
+					let type = "GET",
+					    url = this.url + admin_token + "/applications/" + appl_id,
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				approveApplication: function (appl_id, admin_token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + admin_token + "/applications/" + appl_id + "/approve",
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				rejectApplication: function (appl_id, admin_token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + admin_token + "/applications/" + appl_id + "/reject",
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+
+				/**
+	    * 
+	    * 
+	    * @param {any} appl_id
+	    * @param {any} admin_token
+	    * @param {any} successCallback
+	    * @param {any} errorCallback
+	    */
+				dismissApplication: function (appl_id, admin_token, successCallback, errorCallback) {
+					let type = "PUT",
+					    url = this.url + admin_token + "/applications/" + appl_id + "/to_rework",
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				}
+			}
+			//
+			///
+		},
+		polls: {}
+	};
+
+	function ajax(type, url, data, successCallback, errorCallback) {
+		let xhr = new XMLHttpRequest();
+		xhr.open(type, url, true);
+		xhr.onload = function () {
+			if (xhr.response.result) {
+				console.log(xhr.response.status);
+
+				if (successCallback) successCallback(xhr.response.result);
+			} else if (xhr.response.error) {
+				console.log(xhr.response.error);
+
+				if (errorCallback) errorCallback(xhr.response.error);
+			}
+		};
+		xhr.dataType = "json";
+		xhr.contentType = 'json';
+		xhr.responseType = 'json';
+		xhr.setRequestHeader('Content-Type', 'application/json');
+
+		xhr.send(JSON.stringify(data));
+	}
+
+	module.exports = api;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -13443,10 +14231,225 @@
 	};
 
 /***/ },
-/* 17 */
+/* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<sidebar user=\"user\"></sidebar>\n<content></content>\n";
+	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 4 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(14)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\login.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(15)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-5449dd44/login.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<form stacked>
+	// 		<!-- TODO : rework oninput events -->
+	// 		<input
+	// 			type="text"
+	// 			name="username"
+	// 			id="username"
+	// 			placeholder="Username"
+	// 			autocomplete="off"
+	// 			maxlength="32"
+	// 			autofocus 
+	// 			v-on:input="usernameInputEvent"
+	// 			v-model="user.username"
+	// 			@keyup.enter="login"
+	// 		>
+	// 		<input
+	// 			type="password"
+	// 			name="password"
+	// 			id="password"
+	// 			placeholder="Password"
+	// 			autocomplete="off"
+	// 			maxlength="64"
+	// 			v-on:input="passwordInputEvent"
+	// 			@keyup.enter="login"
+	// 		>
+	// 		<div>
+	// 			<button
+	// 				type="button"
+	// 				@click="login"
+	// 				@keyup.enter="login"
+	// 			>login</button>
+	//
+	// 			<button
+	// 				type="button"
+	// 				@click="register"
+	// 				@keyup.enter="register"
+	// 			>register</button>
+	// 		</div>
+	// 	</form>
+	// </template>
+	//
+	// <script>
+	var user = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				user: user
+			};
+		},
+		methods: {
+			login(e) {
+				e.preventDefault();
+				this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+			},
+			register(e) {
+				e.preventDefault();
+				// if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
+				// this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+			},
+			/// Form Callbacks
+			//
+			formSuccessCallback(result) {
+				this.user.set(result);
+				this.$router.go("/");
+			},
+			formErrorCallback(result) {
+				// TODO set error tooltip info
+			},
+			//
+			///
+
+			///Reusable LoginData checkers
+			//
+			usernameInputEvent(e) {
+				this.checkUsernameInput();
+			},
+
+			checkUsernameInput(strict = false) {
+				let regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
+				let ufe = !regex.test(this.user.username);
+
+				if (ufe) this.setError("Username must contain at least 3 alphanumeric characters!", 'username');else this.removeError('username');
+
+				return !ufe;
+			},
+
+			passwordInputEvent(e) {
+				this.checkPasswordInput();
+			},
+
+			checkPasswordInput(strict = false) {
+				let regex = strict ? /^.{5,64}$/ : /^.*$/;
+				let pfe = !regex.test(password.value);
+
+				if (pfe) this.setError("Password must be more than 8 symbols long!", 'password');else this.removeError('password');
+
+				return !pfe;
+			},
+
+			//TODO
+			setError(error, toWhat) {
+				console.log(error);
+			},
+
+			//TODO
+			removeError(fromWhat) {}
+			// console.log(fromWhat);
+
+			//
+			///
+		}
+	};
+	// </script>
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<form stacked>\n\t<!-- TODO : rework oninput events -->\n\t<input\n\t\ttype=\"text\"\n\t\tname=\"username\"\n\t\tid=\"username\"\n\t\tplaceholder=\"Username\"\n\t\tautocomplete=\"off\"\n\t\tmaxlength=\"32\"\n\t\tautofocus \n\t\tv-on:input=\"usernameInputEvent\"\n\t\tv-model=\"user.username\"\n\t\t@keyup.enter=\"login\"\n\t>\n\t<input\n\t\ttype=\"password\"\n\t\tname=\"password\"\n\t\tid=\"password\"\n\t\tplaceholder=\"Password\"\n\t\tautocomplete=\"off\"\n\t\tmaxlength=\"64\"\n\t\tv-on:input=\"passwordInputEvent\"\n\t\t@keyup.enter=\"login\"\n\t>\n\t<div>\n\t\t<button\n\t\t\ttype=\"button\"\n\t\t\t@click=\"login\"\n\t\t\t@keyup.enter=\"login\"\n\t\t>login</button>\n\n\t\t<button\n\t\t\ttype=\"button\"\n\t\t\t@click=\"register\"\n\t\t\t@keyup.enter=\"register\"\n\t\t>register</button>\n\t</div>\n</form>\n";
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(17)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(24)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-815f0f58/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<sidebar></sidebar>
+	// 	<content></content>
+	// </template>
+	//
+	// <script>
+	var sidebar = __webpack_require__(18);
+	var content = __webpack_require__(21);
+	var user = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				user: user
+			};
+		},
+		components: {
+			sidebar,
+			content
+		},
+		route(transition) {
+			user.update(result => {
+				transition.next({
+					user: result
+				});
+			});
+		}
+	};
+	// </script>
 
 /***/ },
 /* 18 */
@@ -13457,7 +14460,7 @@
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\test.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] frontend\\src\\views\\sidebar.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(20)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -13468,7 +14471,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-7b76a2ad/test.vue"
+	  var id = "_v-b9130ede/sidebar.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -13478,33 +14481,27 @@
 
 /***/ },
 /* 19 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	// <template>
-	// 	<h1>Current path: {{ $route.path }}</h1>
-	// 	<pre>{{ user | json 4 }}</pre>
-	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+	// 	<aside sidebar>
+	// 		<button menu block v-link="{ name: 'profile', params: { username: $route.user.username } }"><span class="icon-user"></span></button>
+	//
+	// 		<button menu block v-link="{ name: 'administration', params: { username: $route.user.username } }" v-if="$route.user.is.uis.moderator"><span class="icon-users"></span></button>
+	//
+	// 		<button logout @click="logout" block><span class="icon-logout"></span></button>
+	// 	</aside>
 	// </template>
 	//
 	// <script>
-	var user = __webpack_require__(13);
-
-	export default {
+	module.exports = {
 		data() {
-			return {
-				user: user
-			};
+			return {};
 		},
-		route: {
-			data(transition) {
-				user.update(function (result) {
-					transition.next({
-						user: result
-					});
-				}, function (error) {
-					user.clear();
-					transition.redirect('/login');
-				});
+		methods: {
+			logout(e) {
+				this.$route.user.clear();
+				this.$router.go('/login');
 			}
 		}
 	};
@@ -13514,7 +14511,7 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 4 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
+	module.exports = "\n<aside sidebar>\n\t<button menu block v-link=\"{ name: 'profile', params: { username: $route.user.username } }\"><span class=\"icon-user\"></span></button>\n\t\n\t<button menu block v-link=\"{ name: 'administration', params: { username: $route.user.username } }\" v-if=\"$route.user.is.uis.moderator\"><span class=\"icon-users\"></span></button>\n\n\t<button logout @click=\"logout\" block><span class=\"icon-logout\"></span></button>\n</aside>\n";
 
 /***/ },
 /* 21 */
@@ -13525,8 +14522,65 @@
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(23)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-b68069a4/content.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<main content style="margin-left: 96px;">
+	// 		<router-view></router-view>
+	// 	</main>
+	// </template>
+	//
+	// <script>
+	module.exports = {}
+	//This might come in handy...
+
+	// </script>
+	;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<main content style=\"margin-left: 96px;\">\n\t<router-view></router-view>\n</main>\n";
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(26)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\profile\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(26)
+	__vue_template__ = __webpack_require__(33)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13545,40 +14599,49 @@
 	})()}
 
 /***/ },
-/* 22 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<sidebar user="user"></sidebar>
-	// 	<router-view></router-view>
+	// 	<div v-if="!$route.user.is.uis.moderator">
+	// 		<sidebar></sidebar>
+	// 		<content></content>
+	// 	</div>
+	// 	<div v-else style="margin: 42px">
+	// 		<router-view></router-view>
+	// 	</div>
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(23);
+	var sidebar = __webpack_require__(27);
+	var content = __webpack_require__(30);
 
 	module.exports = {
-		data() {
-			return {
-				user: {}
-			};
-		},
 		components: {
+			content,
 			sidebar
+		},
+		route(transition) {
+			$route.user.update(result => {
+				transition.next({
+					user: result
+				});
+			});
 		}
 	};
 	// </script>
 
 /***/ },
-/* 23 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(24)
+	__vue_script__ = __webpack_require__(28)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\profile\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(25)
+	__vue_template__ = __webpack_require__(29)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13597,14 +14660,13 @@
 	})()}
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports) {
 
 	// <template>
 	// 	<aside besidebar>
-	// 		<button menu block v-link="{ name: 'profile', params: { username: user.username } }"><span class="icon-user"></span></button>
-	// 		<button menu block v-link="'/friends'"><span class="icon-users"></span></button>
-	// 		<button menu block v-link="'/search'" ><span class="icon-search"></span></button>
+	// 		<button menu block v-link="{ name: 'applications' }"><span class="icon-archive"></span></button>
+	// 		<button menu block v-link="{ name: 'apply' }" ><span class="icon-doc-text"></span></button>
 	// 	</aside>
 	// </template>
 	//
@@ -13615,28 +14677,79 @@
 	// </script>
 
 /***/ },
-/* 25 */
+/* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside besidebar>\n\t<button menu block v-link=\"{ name: 'profile', params: { username: user.username } }\"><span class=\"icon-user\"></span></button>\n\t<button menu block v-link=\"'/friends'\"><span class=\"icon-users\"></span></button>\n\t<button menu block v-link=\"'/search'\" ><span class=\"icon-search\"></span></button>\n</aside>\n";
+	module.exports = "\n<aside besidebar>\n\t<button menu block v-link=\"{ name: 'applications' }\"><span class=\"icon-archive\"></span></button>\n\t<button menu block v-link=\"{ name: 'apply' }\" ><span class=\"icon-doc-text\"></span></button>\n</aside>\n";
 
 /***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<sidebar user=\"user\"></sidebar>\n<router-view></router-view>\n";
-
-/***/ },
-/* 27 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(28)
+	__vue_script__ = __webpack_require__(31)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\profile\\content.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(32)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-46cfa07b/content.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<main content style="margin-left: 156px;">
+	// 		<router-view></router-view>
+	// 	</main>
+	// </template>
+	//
+	// <script>
+	module.exports = {}
+	//This might come in handy...
+
+	// </script>
+	;
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<main content style=\"margin-left: 156px;\">\n\t<router-view></router-view>\n</main>\n";
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div v-if=\"!$route.user.is.uis.moderator\">\n\t<sidebar></sidebar>\n\t<content></content>\n</div>\n<div v-else style=\"margin: 42px\">\n\t<router-view></router-view>\n</div>\n";
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(35)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\profile\\profile.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(29)
+	__vue_template__ = __webpack_require__(36)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13655,25 +14768,28 @@
 	})()}
 
 /***/ },
-/* 28 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
 	// 	<h1>{{ user.username }}'s profile</h1>
 	// 	<div block>
 	// 		<pre>{{ user.id }}</pre>
-	// 		<pre>{{ user.role }}</pre>
+	// 		<pre>{{ user.roles.uis }}</pre>
 	// 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
 	// 		<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
 	// 		<pre v-show="user.fullName != ''">{{ user.fullName }}</pre>
 	// 		<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
 	// 	</div>
+	// 	<div block>
+	// 		<router-view></router-view>
+	// 	</div>
 	// </template>
 	//
 	// <script>
-	var user = __webpack_require__(13);
+	var user = __webpack_require__(7);
 
-	export default {
+	module.exports = {
 		data() {
 			return {
 				user: user
@@ -13682,10 +14798,20 @@
 		route: {
 			data(transition) {
 				console.log("Called get in user");
+				var route = this.$route;
 				user.update(function (result) {
+					// console.log(route.params.username);
+					// if (route.params.username == result.username)
 					transition.next({
 						user: result
 					});
+					// else
+					// 	require('./../../api.js').accounts.getBio(user.token, {username: route.params.username},
+					// 		function (result) {
+					// 			transition.next({
+					// 				user : result
+					// 			});
+					// 		});
 				}, function (error) {
 					user.clear();
 					transition.redirect('/login');
@@ -13696,22 +14822,1028 @@
 	// </script>
 
 /***/ },
-/* 29 */
+/* 36 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1>{{ user.username }}'s profile</h1>\n<div block>\n\t<pre>{{ user.id }}</pre>\n\t<pre>{{ user.role }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.fullName != ''\">{{ user.fullName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n";
+	module.exports = "\n<h1>{{ user.username }}'s profile</h1>\n<div block>\n\t<pre>{{ user.id }}</pre>\n\t<pre>{{ user.roles.uis }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.fullName != ''\">{{ user.fullName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n<div block>\n\t<router-view></router-view>\n</div>\n";
 
 /***/ },
-/* 30 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(31)
+	__vue_script__ = __webpack_require__(38)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\profile\\innopoints\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(39)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-5d3d0fa4/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<div style="margin: 42px;">
+	// 		<pre v-if="$loadingRouteData">Loading...</pre>
+	//
+	// 		<div v-for="appl in applications">
+	// 			<br>
+	// 			<h4 v-text="appl.type"></h4>
+	// 			<div>
+	// 				<pre>{{ appl | json 4 }}</pre>
+	// 			</div>
+	// 			<hr>
+	// 		</div>
+	// 	</div>
+	// </template>
+	//
+	// <script>
+	var api = __webpack_require__(10);
+	var user = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				user: user,
+				applications: []
+			};
+		},
+		route: {
+			data(transition) {
+				console.log('called get applications: ' + user.roles['uis']);
+
+				user.innopoints.applications.get(null, result => {
+					console.log('got applications');
+					var res = [],
+					    index = 0;
+
+					for (appl of result) {
+						user.innopoints.application.get(appl.id, _result => {
+							res[index] = _result;
+						});
+						index++;
+					}
+					transition.next({
+						applications: res
+					});
+				}, error => {
+					console.log('haven\'t got applications: ' + error);
+				});
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div style=\"margin: 42px;\">\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<div v-for=\"appl in applications\">\n\t\t<br>\n\t\t<h4 v-text=\"appl.type\"></h4>\n\t\t<div>\n\t\t\t<pre>{{ appl | json 4 }}</pre>\n\t\t</div>\n\t\t<hr>\n\t</div>\n</div>\n";
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(41)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\profile\\innopoints\\apply.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(42)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-1ea7d36e/apply.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<form id="ip_request" style="margin:42px;">
+	// 		<h2 style="padding: 0">Request innopoints</h2>
+	//
+	// 		<hr/>
+	//
+	// 		<div  style="width: 100%;">
+	// 			<div  style="float: left;width: 46%">
+	// 				<label for="self">
+	// 					<input type="radio" name="request type" id="self" value="personal" v-model="current.type" checked/>
+	// 					Personal
+	// 				</label>
+	// 			</div>
+	// 			<div  style="float: right;width: 46%">
+	// 				<label for="group">
+	// 					<input type="radio" name="request type" id="group" value="group" v-model="current.type"/>
+	// 					Group
+	// 				</label>
+	// 			</div>
+	// 		</div>
+	//
+	//
+	// 		<br>
+	// 		<br>
+	//
+	// 		<pre v-show="$loadingRouteData">Loading...</pre>
+	// 		<div v-show="!$loadingRouteData" style="width: 100%;">
+	//
+	// 			Activivty's category
+	// 			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="categoryChanged">
+	// 				<option value="blank" selected>Choose Category...</option>
+	// 				<option value="">All</option>
+	// 				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
+	// 			</select>
+	//
+	// 		</div>
+	//
+	// 		<br>
+	//
+	// 		<div>
+	// 			<div v-show="!current.isPersonal">
+	// 				<button type="button" @click="current_users_count_inc">+</button>
+	// 				<button type="button" @click="current_users_count_dec" v-show="current.users_count > 1">-</button>
+	// 				<br>
+	// 				<br>
+	// 			</div>
+	//
+	// 			<div v-for="i in (current.isPersonal ? 1 : current.users_count)" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
+	// 				<legend v-show="!current.isPersonal">
+	// 					<input type="text" placeholder="username" v-model="current.users[i].username" required readonly="{{ i == 0 }}">
+	// 				</legend>
+	// 				<br>
+	// 				<div v-show="categorySelected">
+	//
+	// 					<div style="width: 100%;">
+	// 						Activity
+	// 						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activityChanged">
+	// 							<option value="0" selected>Choose Activity...</option>
+	// 							<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
+	// 						</select>
+	// 					</div>
+	// 					<br>
+	// 					<div v-show="showAmount(current.users[i].activity_id)" style="width: 100%;">
+	// 						<label>
+	// 							Time spent/quantity: 
+	// 							<input block type="number" class="amount" min="0" max="365" value="0" v-model="current.users[i].amount">
+	// 						</label>
+	// 					</div>
+	//
+	// 				</div>
+	// 			</div>
+	// 			<br>
+	// 		</div>
+	//
+	// 		<div style="width: 100%;">
+	// 			<label>
+	// 				Attached files: 
+	// 				<input block type="file" id="upload" @change="uploaded" id="upload" multiple>
+	// 			</label>
+	// 		</div>
+	// 		<br/>
+	// 		<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
+	// 		<br>
+	//
+	// 		<pre v-if="!categorySelected">Select Category!</pre>
+	// 		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
+	// 		<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
+	// 		<br>
+	// 		<button v-if="ableToSend" block type="button" @click="send" id="send">send</button>
+	// 	</form>
+	// </template>
+	//
+	// <script>
+	var api = __webpack_require__(10);
+	var user = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				user: user,
+				categories: [],
+				activities: [],
+				activitySelected: false,
+				categorySelected: false,
+				ableToSend: false,
+				current: {
+					application: {},
+					type: "personal",
+					get isPersonal() {
+						return this.type == "personal";
+					},
+					category_id: 0,
+					users_count: 1,
+					users: [{
+						username: user.username,
+						activity_id: 0,
+						amount: 0
+					}],
+					comment: null
+				}
+			};
+		},
+		methods: {
+			current_users_count_inc() {
+				if (!this.current.users[this.current.users_count]) this.current.users[this.current.users_count] = {
+					username: '',
+					activity_id: 0,
+					amount: 0
+				};
+				this.current.users_count++;
+			},
+			current_users_count_dec() {
+				if (this.current.users[this.current.users_count - 1]) this.current.users[this.current.users_count - 1] = {
+					username: '',
+					activity_id: 0,
+					amount: 0
+				};
+				this.current.users_count--;
+			},
+			categoryChanged(e) {
+				this.categorySelected = this.activitySelected = false;
+
+				if (e.target.value != 'blank') {
+					if (e.target.value) api.innopoints.getActivitiesInCategory(this.current.category_id, 0, 100, this.setActivities);else api.innopoints.getActivities(0, 100, this.setActivities);
+				}
+			},
+			activityChanged(e) {
+				let counter = 0;
+
+				for (let _user of this.current.users) counter += _user.activity_id ? 1 : 0;
+
+				this.activitySelected = counter == this.current.users_count;
+			},
+			setActivities(result) {
+				this.activities = result;
+				this.categorySelected = true;
+			},
+			uploaded(e) {
+				console.log(e.target.files);
+			},
+			accept(e) {
+				accept.textContent = "accepting...";
+				this.current.application.type = this.current.type;
+
+				//TODO - catch bugs and exceptions
+
+				if (this.current.isPersonal) {
+					let activity = this.findById(this.activities, this.current.users[0].activity_id),
+					    amount = parseInt(this.current.users[0].amount),
+					    total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
+
+					this.current.application.personal = {
+						work: {
+							activity,
+							amount,
+							total_price
+						}
+					};
+				} else {
+					this.current.application.group = {
+						work: []
+					};
+
+					for (let cur_user of this.current.users) {
+						let activity = this.findById(this.activities, cur_user.activity_id),
+						    amount = parseInt(cur_user.amount),
+						    total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
+
+						this.current.application.group.work.push({
+							activity,
+							amount,
+							total_price
+						});
+					}
+				}
+
+				this.current.application.comment = this.current.comment;
+				this.current.application.files = upload.files;
+				console.log(this.current.application);
+
+				user.innopoints.application.create(this.current.application, this.acceptSuccess, this.acceptError);
+			},
+			acceptSuccess(result) {
+				accept.textContent = "accepted ✓";
+				this.ableToSend = true;
+			},
+			acceptError(error) {
+				alert('Unsuccessful: ' + error);
+				send.textContent = "send";
+				accept.textContent = "accept";
+			},
+
+			send(e) {
+				send.textContent = "sending...";
+				user.innopoints.application.send(this.current.application.id, this.sendSuccess, this.sendError);
+			},
+			sendSuccess(result) {
+				send.textContent = "sent ✓";
+
+				this.ableToSend = false;
+				this.current.application = {};
+				this.current.category_id = 0;
+				this.current.users_count = 1;
+				this.current.users = [{
+					username: user.username,
+					activity_id: 0,
+					amount: 0
+				}];
+				upload.value = '';
+			},
+			sendError(error) {
+				alert('Unsuccessful!');
+				send.textContent = "send";
+				accept.textContent = "accept";
+			},
+
+			showAmount(id) {
+				let temp = this.findById(this.activities, id);
+				return temp && temp.type != 'permanent';
+			},
+			findById(array, id) {
+				return array.find(x => x.id == id);
+			}
+		},
+		route: {
+			data(transition) {
+				console.log('calling update for innopoints');
+
+				user.innopoints.update(function () {
+					console.log('calling get for innopoints');
+					api.innopoints.getCategories(0, 10000, //TODO - fix categories amount
+					function (result) {
+						transition.next({
+							categories: result
+						});
+					});
+				}, function () {
+					user.innopoints.createAccount(function () {
+						console.log('calling create for innopoints');
+						api.innopoints.getCategories(0, 10000, //TODO - fix categories amount
+						function (result) {
+							transition.next({
+								categories: result
+							});
+						});
+					});
+				});
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<form id=\"ip_request\" style=\"margin:42px;\">\n\t<h2 style=\"padding: 0\">Request innopoints</h2>\n\n\t<hr/>\n\n\t<div  style=\"width: 100%;\">\n\t\t<div  style=\"float: left;width: 46%\">\n\t\t\t<label for=\"self\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"self\" value=\"personal\" v-model=\"current.type\" checked/>\n\t\t\t\tPersonal\n\t\t\t</label>\n\t\t</div>\n\t\t<div  style=\"float: right;width: 46%\">\n\t\t\t<label for=\"group\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"group\" value=\"group\" v-model=\"current.type\"/>\n\t\t\t\tGroup\n\t\t\t</label>\n\t\t</div>\n\t</div>\n\n\n\t<br>\n\t<br>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"categoryChanged\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<div>\n\t\t<div v-show=\"!current.isPersonal\">\n\t\t\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t\t\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t\t\t<br>\n\t\t\t<br>\n\t\t</div>\n\n\t\t<div v-for=\"i in (current.isPersonal ? 1 : current.users_count)\" :style=\"!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''\">\n\t\t\t<legend v-show=\"!current.isPersonal\">\n\t\t\t\t<input type=\"text\" placeholder=\"username\" v-model=\"current.users[i].username\" required readonly=\"{{ i == 0 }}\">\n\t\t\t</legend>\n\t\t\t<br>\n\t\t\t<div v-show=\"categorySelected\">\n\n\t\t\t\t<div style=\"width: 100%;\">\n\t\t\t\t\tActivity\n\t\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activityChanged\">\n\t\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<br>\n\t\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\tTime spent/quantity: \n\t\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"0\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<br>\n\t</div>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files: \n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" id=\"upload\" multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" id=\"accept\">accept</button>\n\t<br>\n\t<button v-if=\"ableToSend\" block type=\"button\" @click=\"send\" id=\"send\">send</button>\n</form>\n";
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(44)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\administration\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(50)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-efb232a8/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<sidebar></sidebar>
+	// 	<content></content>
+	// </template>
+	//
+	// <script>
+	var sidebar = __webpack_require__(45);
+	var content = __webpack_require__(47);
+
+	module.exports = {
+		components: {
+			content,
+			sidebar
+		},
+		route(transition) {
+			$route.user.update(result => {
+				transition.next({
+					user: result
+				});
+			});
+		}
+	};
+	// </script>
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(46)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-55094b39/sidebar.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<aside besidebar>\n\t<button menu block v-link=\"{ name: 'administration/innopoints' }\"><span class=\"icon-info\"></span></button>\n\t<button menu block v-link=\"{ name: 'administration/innopoints/apply' }\" ><span class=\"icon-doc-text\"></span></button>\n</aside>\n";
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(48)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\administration\\content.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(49)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-56529dd6/content.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<main content style="margin-left: 156px;">
+	// 		<router-view></router-view>
+	// 	</main>
+	// </template>
+	//
+	// <script>
+	module.exports = {}
+	//This might come in handy...
+
+	// </script>
+	;
+
+/***/ },
+/* 49 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<main content style=\"margin-left: 156px;\">\n\t<router-view></router-view>\n</main>\n";
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(52)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\administration\\admin.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(54)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-e0cbc228/admin.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {// <template>
+	// 	<div block>
+	// 		<h1>List of registered users:</h1>
+	//
+	// 		<p v-if="$loadingRouteData">Loading users' list...</p>
+	//
+	// 		<ul>
+	// 			<li v-for="user in users">
+	// 				<hr>
+	// 				{{$index}} : <p><span>{{ user.username }} ({{ user.role | capitalize }})</span> : <span>{{ user.fullname | capitalize}}</span> : <span>@{{ user.tgId }}</span>;</p>
+	// 				<select name="role_select" id="a{{ user.id }}" @change="selectChanged">
+	// 					<option value="ghost" :selected="user.role == 'ghost'">Ghost</option>
+	// 					<option value="student" :selected="user.role == 'student'">Student</option>
+	// 				</select>
+	// 			</li>
+	// 		</ul>
+	//
+	// 		<button padding style="border-width: 0px;width: 100%;height: 30px;"
+	// 			id="acceptRoles"
+	// 			v-show="roleChanged"
+	// 			@click="sendRoles"
+	// 			@keyup.enter="sendRoles"
+	// 		>accept changes</button>
+	// 	</div>
+	// </template>
+	//
+	// <script>
+	var api = __webpack_require__(10);
+	var { token } = __webpack_require__(7);
+
+	module.export = {
+		data() {
+			return {
+				users: [],
+				moderToken: token,
+				roleChanged: false
+			};
+		},
+		methods: {
+			sendRoles(e) {
+				for (let user of this.users) {
+					let newRole = document.getElementById('a' + user.id).value;
+					if (newRole != user.role) api.accounts.updateRole(this.moderToken, user.id, user.role = newRole);
+				}
+
+				e.target.textContent = "accepted ✓";
+			},
+			selectChanged(e) {
+				this.roleChanged = true;
+				document.getElementById('acceptRoles').textContent = "accept changes";
+			}
+		},
+		route: {
+			data(transition) {
+				api.accounts.exists(token, function () {
+					console.log("Called exists in admin_side");
+					api.accounts.list(token, function (result) {
+						transition.next({
+							users: result
+						});
+					}, transition.abort //Don't let non-moder enter this 'page'.
+					);
+				}, function (error) {
+					user.clear();
+					transition.redirect('/login');
+				});
+			}
+		}
+	};
+	// </script>
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53)(module)))
+
+/***/ },
+/* 53 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div block>\n\t<h1>List of registered users:</h1>\n\n\t<p v-if=\"$loadingRouteData\">Loading users' list...</p>\n\n\t<ul>\n\t\t<li v-for=\"user in users\">\n\t\t\t<hr>\n\t\t\t{{$index}} : <p><span>{{ user.username }} ({{ user.role | capitalize }})</span> : <span>{{ user.fullname | capitalize}}</span> : <span>@{{ user.tgId }}</span>;</p>\n\t\t\t<select name=\"role_select\" id=\"a{{ user.id }}\" @change=\"selectChanged\">\n\t\t\t\t<option value=\"ghost\" :selected=\"user.role == 'ghost'\">Ghost</option>\n\t\t\t\t<option value=\"student\" :selected=\"user.role == 'student'\">Student</option>\n\t\t\t</select>\n\t\t</li>\n\t</ul>\n\n\t<button padding style=\"border-width: 0px;width: 100%;height: 30px;\"\n\t\tid=\"acceptRoles\"\n\t\tv-show=\"roleChanged\"\n\t\t@click=\"sendRoles\"\n\t\t@keyup.enter=\"sendRoles\"\n\t>accept changes</button>\n</div>\n";
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(56)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\administration\\innopoints\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(57)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-d62a2aee/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<div style="margin: 42px;">
+	// 		<pre v-if="$loadingRouteData">Loading...</pre>
+	//
+	// 		<div v-for="appl in applications">
+	// 			<br>
+	// 			<h4 v-text="appl.type"></h4>
+	// 			<div>
+	// 				<pre>{{ appl | json 4 }}</pre>
+	// 			</div>
+	// 			<hr>
+	// 		</div>
+	// 	</div>
+	// </template>
+	//
+	// <script>
+	var api = __webpack_require__(10);
+	var user = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				user: user,
+				applications: []
+			};
+		},
+		route: {
+			data(transition) {
+				console.log('called get applications: ' + user.roles['uis']);
+
+				user.innopoints.applications.get(null, result => {
+					console.log('got applications');
+					var res = [],
+					    index = 0;
+
+					for (appl of result) {
+						user.innopoints.application.get(appl.id, _result => {
+							res[index] = _result;
+						});
+						index++;
+					}
+					transition.next({
+						applications: res
+					});
+				}, error => {
+					console.log('haven\'t got applications: ' + error);
+				});
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div style=\"margin: 42px;\">\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<div v-for=\"appl in applications\">\n\t\t<br>\n\t\t<h4 v-text=\"appl.type\"></h4>\n\t\t<div>\n\t\t\t<pre>{{ appl | json 4 }}</pre>\n\t\t</div>\n\t\t<hr>\n\t</div>\n</div>\n";
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(59)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\administration\\innopoints\\apply.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(60)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-c35e2164/apply.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<form id="ip_request" style="margin: 42px;">
+	// 		<h2 style="padding: 0">Request innopoints</h2>
+	//
+	// 		<hr/>
+	//
+	// 		<pre v-show="$loadingRouteData">Loading...</pre>
+	// 		<div v-show="!$loadingRouteData" style="width: 100%;">
+	//
+	// 			Activivty's category
+	// 			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="categoryChanged">
+	// 				<option value="blank" selected>Choose Category...</option>
+	// 				<option value="">All</option>
+	// 				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
+	// 			</select>
+	//
+	// 		</div>
+	//
+	// 		<br>
+	//
+	// 		<button type="button" @click="current_users_count_inc">+</button>
+	// 		<button type="button" @click="current_users_count_dec" v-show="current.users_count > 1">-</button>
+	// 		<br>
+	// 		<br>
+	//
+	// 		<div v-for="i in current.users_count" style="border: 1px solid; padding: 8px; margin: 4px;">
+	// 			<legend>
+	// 				<input type="text" placeholder="username" v-model="current.users[i].username" required>
+	// 			</legend>
+	// 			<br>
+	// 			<div v-show="categorySelected">
+	//
+	// 				<div style="width: 100%;">
+	// 					Activity
+	// 					<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activityChanged">
+	// 						<option value="0" selected>Choose Activity...</option>
+	// 						<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
+	// 					</select>
+	// 				</div>
+	// 				<br>
+	// 				<div v-show="showAmount(current.users[i].activity_id)" style="width: 100%;">
+	// 					<label>
+	// 						Time spent/quantity: 
+	// 						<input block type="number" class="amount" min="0" max="365" value="0" v-model="current.users[i].amount">
+	// 					</label>
+	// 				</div>
+	//
+	// 			</div>
+	// 		</div>
+	// 		<br>
+	//
+	// 		<div style="width: 100%;">
+	// 			<label>
+	// 				Attached files: 
+	// 				<input block type="file" id="upload" @change="uploaded" v-el:upload multiple>
+	// 			</label>
+	// 		</div>
+	// 		<br/>
+	// 		<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
+	// 		<br>
+	//
+	// 		<pre v-if="!categorySelected">Select Category!</pre>
+	// 		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
+	// 		<button v-if="activitySelected" block type="button" @click="accept" v-el:accept>accept</button>
+	// 		<br>
+	// 		<button v-if="ableToSend" block type="button" @click="send" v-el:send>send</button>
+	// 	</form>
+	// </template>
+	//
+	// <script>
+	var api = __webpack_require__(10);
+	var admin = __webpack_require__(7);
+
+	module.exports = {
+		data() {
+			return {
+				admin: admin,
+				categories: [],
+				activities: [],
+				activitySelected: false,
+				categorySelected: false,
+				ableToSend: false,
+				current: {
+					application: {},
+					category_id: 0,
+					users_count: 1,
+					users: [{
+						username: '',
+						activity_id: 0,
+						amount: 0
+					}],
+					comment: null
+				}
+			};
+		},
+		methods: {
+			current_users_count_inc() {
+				if (!this.current.users[this.current.users_count]) this.current.users[this.current.users_count] = {
+					username: '',
+					activity_id: 0,
+					amount: 0
+				};
+				this.current.users_count++;
+			},
+			current_users_count_dec() {
+				if (this.current.users[this.current.users_count - 1]) this.current.users[this.current.users_count - 1] = {
+					username: '',
+					activity_id: 0,
+					amount: 0
+				};
+				this.current.users_count--;
+			},
+			categoryChanged(e) {
+				this.categorySelected = this.activitySelected = false;
+
+				if (e.target.value != 'blank') {
+					if (e.target.value) api.innopoints.getActivitiesInCategory(this.current.category_id, 0, 100, this.setActivities);else api.innopoints.getActivities(0, 100, this.setActivities);
+				}
+			},
+			activityChanged(e) {
+				let counter = 0;
+
+				for (let _user of this.current.users) counter += _user.activity_id ? 1 : 0;
+
+				this.activitySelected = counter == this.current.users_count;
+			},
+			setActivities(result) {
+				this.activities = result;
+				this.categorySelected = true;
+			},
+			uploaded(e) {
+				console.log(e.target.files);
+			},
+			accept(e) {
+				this.$els.accept.textContent = "accepting...";
+				this.current.application.type = this.current.type;
+
+				//TODO - catch bugs and exceptions
+				this.current.application.group = {
+					work: []
+				};
+
+				for (let cur_user of this.current.users) {
+					let activity = this.findById(this.activities, cur_user.activity_id),
+					    amount = parseInt(cur_user.amount),
+					    total_price = activity.type == 'permanent' ? activity.price : amount * activity.price;
+
+					this.current.application.group.work.push({
+						activity,
+						amount,
+						total_price
+					});
+				}
+
+				this.current.application.comment = this.current.comment;
+				this.current.application.files = this.$els.upload.files;
+
+				user.innopoints.application.create(this.current.application, this.acceptSuccess, this.acceptError);
+			},
+			acceptSuccess(result) {
+				this.$els.accept.textContent = "accepted ✓";
+				this.ableToSend = true;
+			},
+			acceptError(error) {
+				alert('Unsuccessful!');
+				this.$els.send.textContent = "send";
+				this.$els.accept.textContent = "accept";
+			},
+
+			send(e) {
+				this.$els.send.textContent = "sending...";
+				user.innopoints.application.send(this.current.application.id, this.sendSuccess, this.sendError);
+			},
+			sendSuccess(result) {
+				this.$els.send.textContent = "sent ✓";
+
+				this.ableToSend = false;
+				this.current.application = {};
+				this.current.category_id = 0;
+				this.current.users_count = 1;
+				this.current.users = [];
+				this.$els.upload.value = '';
+			},
+			sendError(error) {
+				alert('Unsuccessful!');
+				this.$els.send.textContent = "send";
+				this.$els.accept.textContent = "accept";
+			},
+
+			showAmount(id) {
+				let temp = this.findById(this.activities, id);
+				return temp && temp.type != 'permanent';
+			},
+			findById(array, id) {
+				return array.find(x => x.id == id);
+			}
+		},
+		route: {
+			data(transition) {
+				api.innopoints.getCategories(0, 10000, //TODO - fix categories amount
+				function (result) {
+					transition.next({
+						categories: result
+					});
+				});
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 60 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<form id=\"ip_request\" style=\"margin: 42px;\">\n\t<h2 style=\"padding: 0\">Request innopoints</h2>\n\n\t<hr/>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"categoryChanged\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t<br>\n\t<br>\n\n\t<div v-for=\"i in current.users_count\" style=\"border: 1px solid; padding: 8px; margin: 4px;\">\n\t\t<legend>\n\t\t\t<input type=\"text\" placeholder=\"username\" v-model=\"current.users[i].username\" required>\n\t\t</legend>\n\t\t<br>\n\t\t<div v-show=\"categorySelected\">\n\n\t\t\t<div style=\"width: 100%;\">\n\t\t\t\tActivity\n\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activityChanged\">\n\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t\t<br>\n\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t<label>\n\t\t\t\t\tTime spent/quantity: \n\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"0\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t</label>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<br>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files: \n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" v-el:upload multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" v-el:accept>accept</button>\n\t<br>\n\t<button v-if=\"ableToSend\" block type=\"button\" @click=\"send\" v-el:send>send</button>\n</form>\n";
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(62)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\app.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(32)
+	__vue_template__ = __webpack_require__(63)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13730,7 +15862,7 @@
 	})()}
 
 /***/ },
-/* 31 */
+/* 62 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -13746,7 +15878,7 @@
 	// </script>
 
 /***/ },
-/* 32 */
+/* 63 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<router-view></router-view>\n";

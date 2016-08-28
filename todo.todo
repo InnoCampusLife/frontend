@@ -2,9 +2,9 @@ TODO:
     User:
         Innopoints:
             List of applications:
-                * implement applications' list = pure list + ind. page || blocks; @high @tomorrow 
+                * implement applications' list = pure list + ind. page || blocks; @high @today 
                 * search base || filters @low @inbackground
-            * Rework innopoints application form @critical @tomorrow
+            * Rework innopoints application form @critical @today
         Shop:
             List:
                 * implement store list = pure list + ind. page;
@@ -16,8 +16,8 @@ TODO:
     Admin/moder:
         Innopoints:
             List of applications:
-                * confirmation page for appl-s. @critical @tomorrow
-                * list with filters & search @high @?tomorrow
+                * confirmation page for appl-s. @critical @today
+                * list with filters & search @high @?today
                 * search base || filters @low @inbackground
         Shop:
             List:

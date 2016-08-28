@@ -1,9 +1,10 @@
 var Vue       = require('vue');
 var VueRouter = require('vue-router');
 var routes    = require('./routes.js');
+var user      = require('./models/user.js');
 var app       = require('./views/app.vue');
 
-// window.user = user;
+window.user = user;
 // UNCOMMENT FOR DEBUG PURPOSES ONLY!!!
 
 Vue.use(VueRouter);
@@ -14,7 +15,7 @@ var router = new VueRouter({
 }).map(routes);
 
 // TODO: restore routing
-router/*.beforeEach(function (transition) {
+router.beforeEach((transition) => {
 	if (!user.loggedIn) {
 		if (transition.to.authorizedZone)
 			transition.redirect('/login');
@@ -24,9 +25,18 @@ router/*.beforeEach(function (transition) {
 	else {
 		if (transition.to.loginPage)
 			transition.redirect('/');
-		else
-			transition.next();
+		else {
+			if (transition.to.adminZone) {
+				if (user.is.uis.moderator)
+					transition.next();
+				else { 
+					alert('You don\'t have enough permissions to access this zone!');
+					transition.abort();
+				}
+			}
+			else transition.next();
+		}
 	}
-})*/.redirect({'*':'/'}).alias({'/':'/profile'});
+}).redirect({'*':'/'});
 
 router.start(app, 'app');
