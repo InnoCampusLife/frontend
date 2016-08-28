@@ -63,6 +63,19 @@ module.exports = {
 						}
 					}
 				},
+			},
+			'/shop' : {
+				component: require('./views/shop/main.vue'),
+				subRoutes: {
+					'/' : {
+						component: require('./views/shop/shop.vue'), 
+						name: 'shop'
+					},
+					'/:item' : {
+						component: require('./views/shop/item.vue'),
+						name: 'item'
+					},
+				},
 			}
 		},
 		authorizedZone

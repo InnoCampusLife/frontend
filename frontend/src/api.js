@@ -195,6 +195,48 @@ var api = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
+		shop : {
+			get url() { return api.innopoints.url + "shop/" },
+
+			getItems : function (skip_count, limit_count, fields, order, successCallback, errorCallback) {
+				let
+				type = "GET",
+				url = this.url + "items",
+				data = {
+					skip: skip_count || 0,
+					limit: limit_count || 1000,
+					fields: fields || 'title',
+					order: order || 'ASC'
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			getItemsInCategory : function (skip_count, limit_count, fields, order, category_id, successCallback, errorCallback) {
+				let
+				type = "GET",
+				url = this.url + "items",
+				data = {
+					skip: skip_count || 0,
+					limit: limit_count || 1000,
+					fields: fields || 'title',
+					order: order || 'ASC',
+					category_id: category_id
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			getItem : function (id, successCallback, errorCallback) {
+				let
+				type = "GET",
+				url = this.url + "items/" + id,
+				data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+		},
+
 		///USER METHODS
 		//
 		user : {
@@ -379,7 +421,7 @@ var api = {
 		///ADMIN METHODS
 		//
 		admin : {
-			get url() { return api.url + "admin/"; },
+			get url() { return api.innopoints.url + "admin/"; },
 			/**
 			 * 
 			 * 
