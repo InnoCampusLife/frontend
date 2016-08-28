@@ -1,6 +1,7 @@
 <template>
 	<aside sidebar>
 		<button menu block v-link="{ name: 'profile', params: { username: $route.user.username } }"><span class="icon-user"></span></button>
+		<button menu block v-link="{ name: 'shop' }"><span class="icon-basket"></span></button>
 		
 		<button menu block v-link="{ name: 'administration', params: { username: $route.user.username } }" v-if="$route.user.is.uis.moderator"><span class="icon-users"></span></button>
 
