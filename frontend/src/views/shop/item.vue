@@ -1,5 +1,16 @@
 <template>
-    <pre> {{ item | json 4 }} </pre>
+    <div >
+        <h3>{{ item.title }} : {{ item.price }}</h3>
+        <img :src="item.image_link">
+        <h4 v-text="item.category_title"></h4>
+        <p v-show="item.possible_joint_purchase">This item can be bought by a group of {{ item.max_buyers }}!</p>
+        <div v-for="option in item.options" style="display: block">
+            <select name="option.title" :id="option.title">
+                <option value="">Choose {{option.title}}</option>
+                <option v-for="value in option.values" :value="value">{{ value }}</option>
+            </select>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -12,9 +23,8 @@
             }
         },
         route : {
-            data (transition) {
-                console.log(this.$route.params.item);
-                
+            data (transition) {           
+                var $route = this.$route;
                 api.innopoints.shop.getItem(this.$route.params.item, (result) => {
                     transition.next({
                         item: result
