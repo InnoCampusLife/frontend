@@ -1,7 +1,7 @@
 <template>
-	<main content style="margin-left: 96px;">
+	<section content>
 		<router-view></router-view>
-	</main>
+	</section>
 </template>
 
 <script>

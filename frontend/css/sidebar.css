@@ -1,0 +1,119 @@
+aside {
+	z-index: 99;
+}
+
+aside[sidebar] {
+	position: relative;
+	float: left;
+	background-color: #1e2124;
+	height: 100vh;
+	width: 78px;
+}
+aside[sidebar] button[menu] {
+	width: 49px;
+	height: 49px;
+	border-width: 0;
+	background-color: #5a6772;
+	color: white;
+	margin: 14px;
+    padding: 12px;
+}
+
+aside[sidebar] [menu][info] {
+    text-align: center;
+    padding: 0;
+    margin: 2% 10%;
+    width: 80%;
+    color: white;	
+    height: 16px;
+    font-size: smaller;
+}
+
+aside[sidebar] [menu][info] span {
+    padding: 5%;
+}
+
+aside[sidebar] [menu][info] span:last-of-type::before {
+    font-size: small;
+    content: attr(data-icon);
+    margin-right: 8px;
+    vertical-align: top;
+}
+
+aside[sidebar] [menu][separator] {
+	height: 2px;
+	margin: 0 20%;
+	background-color: #aaa;
+	width: 60%;
+}
+
+aside[main][sidebar] button[menu] {
+	border-radius: 100%;
+}
+
+aside[main][sidebar] button[menu]:first-of-type {
+	margin-top: 18px;
+}
+
+aside[main][sidebar] button[menu].v-link-active,
+aside[main][sidebar] button[menu]:hover {
+	border-radius: 25%;
+	background-color: #1c79c3;
+}
+
+aside[main][sidebar] button[logout] {
+	color: white;
+	background-color: transparent;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 8px;
+	width: 100%;
+	height: 4rem;
+	border-width: 0;
+}
+
+aside[main][sidebar] button[logout]:hover {
+	background-color: rgba(255,255,255,0.15);
+}
+
+aside[main][sidebar] button[logout]::before {
+	font-size: 1.5rem;
+    display: inline-block;
+    font-family: "Ionicons" !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    line-height: 1;
+	content: "\f254";
+    -webkit-font-smoothing: antialiased;
+}
+
+aside[main][sidebar] button[logout]:hover::before {
+	content: "\f200";
+}
+
+aside[secondary][sidebar] {
+	background-color: #2f3237;
+	height: 100vh;
+	width: 240px;
+	/* border-left: 1px solid #000; */
+}
+
+aside[secondary][sidebar] button[menu] {
+	width: 100%;
+	height: 3rem;
+	border-width: 0;
+	background-color: transparent;
+	color: white;
+	margin: 0.5rem 0;
+	font-size: large;
+}
+
+aside[secondary][sidebar] button[menu].v-link-active,
+aside[secondary][sidebar] button[menu]:hover {
+	background-color: #5a6772;
+}

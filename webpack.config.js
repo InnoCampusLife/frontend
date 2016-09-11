@@ -3,7 +3,7 @@ module.exports = {
     output: {
         path: './frontend/',
         publicPath: '/frontend/',
-        filename: 'main.js'
+        filename: 'index.js'
     },
     module: {
         loaders: [
