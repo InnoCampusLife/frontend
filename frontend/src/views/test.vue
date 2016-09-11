@@ -5,27 +5,17 @@
 </template>
 
 <script>
-	var user = require('./../models/user.js');
 
 	module.exports =  {
 		data () {
 			return {
-				user : user
+				user : this.$router.app.user
 			}
 		},
 		route: {
-			data (transition) {
-				user.update(
-					function (result) {
-						transition.next({
-							user : result
-						});
-					},
-					function (error) {
-						user.clear();
-						transition.redirect('/login');
-					}
-				);
+			data(transition) {
+				this.user.account.update(transition.next);
+				console.log("test route updated!");
 			}
 		}
 	}

@@ -1,16 +1,8 @@
-var Module = require('./module.js');
-
-var config = {
+module.exports = {
 	server : {
 		ip : "uis.university.innopolis.ru",
 		port : 8770,
-		get api_url() { return "http://" + this.ip + ":" + this.port + "/api/" } 
+		get api_url() { return "http://" + this.ip + ":" + (this.port || 21) + "/api/" } 
 	},
-	token_name: "usertoken",
-	modules: {}
+	token_name: "usertoken"
 };
-
-
-config.modules['uis'] = new Module('uis', ['ghost', 'student', 'moderator']);
-
-module.exports = config;

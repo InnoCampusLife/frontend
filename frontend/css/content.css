@@ -1,0 +1,9 @@
+section[content] {
+	overflow: auto;
+}
+
+main[content] {
+	padding: 2rem;
+	overflow: auto;
+	text-align: center;
+}
