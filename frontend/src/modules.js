@@ -71,14 +71,14 @@ var modules = {
 		},
 
 		set (data) {
-			this.id         = !!data.id 		/*&& !!this.id 			*/&& data.id;
-			this.username   = !!data.username 	/*&& !!this.username 		*/&& data.username;
-			this.role       = !!data.role 		/*&& !!this.role 			*/&& data.role;
-			this.firstName  = !!data.firstName 	/*&& !!this.firstName 	*/&& data.firstName;
-			this.lastName   = !!data.lastName 	/*&& !!this.lastName 		*/&& data.lastName;
-			this.patronymic = !!data.patronymic /*&& !!this.patronymic 	*/&& data.patronymic;
-			this.studyGroup = !!data.studyGroup /*&& !!this.studyGroup 	*/&& data.studyGroup;
-			this.token      = !!data.token 		/*&& !!this.token 		*/&& data.token;
+			if (data.id) 		 this.id         = data.id;
+			if (data.username) 	 this.username   = data.username;
+			if (data.role) 		 this.role       = data.role;
+			if (data.firstName)  this.firstName  = data.firstName;
+			if (data.lastName) 	 this.lastName   = data.lastName;
+			if (data.patronymic) this.patronymic = data.patronymic;
+			if (data.studyGroup) this.studyGroup = data.studyGroup;
+			if (data.token) 	 this.token      = data.token;
 		},
 
 		update (successCallback, errorCallback) {
@@ -168,7 +168,7 @@ var modules = {
 			let 
 			type = "GET",
 			url  = this.url + this.token + "/getBio?" + (identifier.id ? "id=" + identifier.id : "username=" + identifier.username),
-			data = '';			
+			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},

@@ -1,4 +1,24 @@
-section[product] {
-	padding: initial;
-	margin: 1rem;
+[shop] {
+    -moz-columns: 15rem;
+         columns: 15rem;
+}
+
+[product] {
+	display: inline-block;
+	text-align: center;
+	margin: 0.5rem;
+	padding: 1rem;
+	background: #fff;
+	border: 1px solid hsla(210,38%,93%,1);
+	cursor: pointer;
+	width: 12rem;
+}
+
+[product]:hover {
+	background: hsla(210,38%,93%,1);
+}
+
+[product] img {
+	width: 100%;
+	height: auto;
 }

@@ -1,15 +1,16 @@
 <template>
-	<!-- TODO chats, other profiles an etc. -->
-	<aside secondary sidebar>
-
+	<aside menubar>
+		<div menu>
+			
+		</div>
 	</aside>
 </template>
 
 <script>
 	module.exports = {
-		data() {
+		data () {
 			return {
-				// user: this.$router.app.user.account
+				user : this.$router.app.user
 			}
 		}
 	}

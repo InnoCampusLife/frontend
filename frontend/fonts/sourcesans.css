@@ -1,0 +1,30 @@
+/* font-family: "SourceSansProRegular"; */
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url("./SourceSansProRegular/SourceSansProRegular.eot");
+    src: url("./SourceSansProRegular/SourceSansProRegular.eot?#iefix")format("embedded-opentype"),
+    url("./SourceSansProRegular/SourceSansProRegular.woff") format("woff"),
+    url("./SourceSansProRegular/SourceSansProRegular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "SourceSansProLight"; */
+@font-face {
+    font-family: "Source Sans Pro Light";
+    src: url("./SourceSansProLight/SourceSansProLight.eot");
+    src: url("./SourceSansProLight/SourceSansProLight.eot?#iefix")format("embedded-opentype"),
+    url("./SourceSansProLight/SourceSansProLight.woff") format("woff"),
+    url("./SourceSansProLight/SourceSansProLight.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "SourceSansProBold"; */
+@font-face {
+    font-family: "Source Sans Pro Bold";
+    src: url("./SourceSansProBold/SourceSansProBold.eot");
+    src: url("./SourceSansProBold/SourceSansProBold.eot?#iefix")format("embedded-opentype"),
+    url("./SourceSansProBold/SourceSansProBold.woff") format("woff"),
+    url("./SourceSansProBold/SourceSansProBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}

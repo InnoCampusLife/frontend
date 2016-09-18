@@ -1,7 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
+/* @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600'); */
+@import url('./themify-icons.css');
+@import url('./../fonts/sourcesans.css');
 @import url('./transitions.css');
 @import url('./helpers.css');
 @import url('./content.css');
 @import url('./sidebar.css');
-@import url('./lockscreen.css');
 @import url('./shop.css');

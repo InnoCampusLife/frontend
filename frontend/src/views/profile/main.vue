@@ -1,21 +1,20 @@
 <template>
 	<!-- <sidebar></sidebar> -->
-	<content></content>
+	<content>
+		<div slot="header">
+			
+		</div>
+	</content>
 </template>
 
 <script>
-	// var sidebar = require('./sidebar.vue');
-	var content = require('./content.vue');
+	var sidebar = require('./sidebar.vue');
+	var content = require('./../content.vue');
 
 	module.exports = {
 		components : {
-			content,
-			// sidebar
-		},
-		route (transition) {
-			this.$router.app.user.account.update((result) => {
-				transition.next();
-			});
+			sidebar,
+			content
 		}
 	}
 </script>

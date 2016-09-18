@@ -1,16 +1,14 @@
 <template>
 	<sidebar></sidebar>
-	<content></content>
+	<router-view></router-view>
 </template>
 
 <script>
 	var sidebar = require('./sidebar.vue');
-	var content = require('./content.vue');
 
 	module.exports = {
 		components : {
-			sidebar,
-			content
+			sidebar
 		},
 		route: {
 			data(transition) {

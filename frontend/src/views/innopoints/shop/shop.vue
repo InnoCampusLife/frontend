@@ -1,11 +1,11 @@
 <template>
-    <section product v-for="item in items">
-        <div v-link="{ name: 'item', params: { item: item.id } }" style="cursor: pointer;">
+    <section shop>
+        <section product v-for="item in items" v-link="{ name: 'item', params: { item: item.id } }">
             <h4>{{ item.title }} : {{ item.price }}</h4>
             <img :src="item.image_link">
             <p v-text="item.category.title"></p>
-        </div>
-        <hr>
+            <hr>
+        </section>
     </section>
 </template>
 
