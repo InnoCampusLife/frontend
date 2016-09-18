@@ -48,12 +48,12 @@
 [sidebar] [menu] > [item][id]::before {
     display: block;
     font-size: 2rem;
-    padding: 0.5rem;
 }
 
 [sidebar] [menu] > [item][id]::after {
     display: block;
     content: attr(id);
+    font-size: 1rem;
 }
 
 [sidebar] [menu] [item].v-link-active {

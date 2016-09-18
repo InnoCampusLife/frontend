@@ -1,7 +1,7 @@
 <template>
 	<header>
 		<slot></slot>
-		<button id="logout" @click="logout" block>logout</button>
+		<button title="Lock the application." id="logout" icon="&#xe603;" @click="logout" block></button>
 	</header><!-- /header -->
 </template>
 

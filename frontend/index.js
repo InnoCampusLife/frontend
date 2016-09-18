@@ -13639,6 +13639,9 @@
 			'/': {
 				component: __webpack_require__(14),
 				subRoutes: {
+					'/': {
+						component: { template: '' }
+					},
 					'/profile': {
 						component: __webpack_require__(20),
 						subRoutes: {
@@ -13973,7 +13976,9 @@
 	// 	<aside sidebar>
 	// 		<div menu>
 	// 			<button item id="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
-	// 			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }"></button>
+	// 			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }" v-if="user.innopoints.data.id"></button>
+	// 			<button item id="Create Innopoints Account" v-if="!user.innopoints.data.id"></button>
+	// 			<button item id="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
 	// 		</div>
 	// 	</aside>
 	// </template>
@@ -13992,7 +13997,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item id=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item id=\"Innopoints\" points=\"{{ user.innopoints.data.amount || 239 }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username } }\"></button>\n\t</div>\n</aside>\n";
+	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item id=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item id=\"Innopoints\" points=\"{{ user.innopoints.data.amount || 239 }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username } }\" v-if=\"user.innopoints.data.id\"></button>\n\t\t<button item id=\"Create Innopoints Account\" v-if=\"!user.innopoints.data.id\"></button>\n\t\t<button item id=\"Accounts\" icon=\"&#xe699;\" v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\"></button>\n\t</div>\n</aside>\n";
 
 /***/ },
 /* 19 */
@@ -14198,7 +14203,7 @@
 	// <template>
 	// 	<header>
 	// 		<slot></slot>
-	// 		<button id="logout" @click="logout" block>logout</button>
+	// 		<button title="Lock the application." id="logout" icon="&#xe603;" @click="logout" block></button>
 	// 	</header><!-- /header -->
 	// </template>
 	//
@@ -14222,7 +14227,7 @@
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<header>\n\t<slot></slot>\n\t<button id=\"logout\" @click=\"logout\" block>logout</button>\n</header><!-- /header -->\n";
+	module.exports = "\n<header>\n\t<slot></slot>\n\t<button title=\"Lock the application.\" id=\"logout\" icon=\"&#xe603;\" @click=\"logout\" block></button>\n</header><!-- /header -->\n";
 
 /***/ },
 /* 30 */

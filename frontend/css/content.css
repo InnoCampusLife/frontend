@@ -69,16 +69,21 @@ main[content] > [scroller-y] {
 button#logout {
     float: right;
     height: 3rem;
-    width: 6rem;
+    width: 3rem;
     padding: 0;
     color: hsla(210, 1%, 1%, 0.7);
     text-align: center;
     line-height: initial;
     text-transform: inherit;
+    cursor: pointer;
     /* border-radius: 0.2rem; */
 }
+button#logout::before {
+    font-size: 1.5rem;
+}
 
-button#logout:hover {
-    color: #fff;
-    background: hsla(221, 17%, 15%, 0.75);
+button#logout:hover::before {
+    content: "\e62b";
+/*     color: #fff;
+    background: hsla(221, 17%, 15%, 0.75); */
 }

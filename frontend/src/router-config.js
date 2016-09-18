@@ -13,6 +13,9 @@ module.exports = function(router) {
 		'/': {
 			component: require('./views/main.vue'),
 			subRoutes: {
+				'/' : {
+					component: { template: '' }
+				},
 				'/profile' : {
 					component: require('./views/profile/main.vue'),
 					subRoutes:{

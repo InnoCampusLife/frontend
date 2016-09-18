@@ -2,7 +2,9 @@
 	<aside sidebar>
 		<div menu>
 			<button item id="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
-			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }"></button>
+			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }" v-if="user.innopoints.data.id"></button>
+			<button item id="Create Innopoints Account" v-if="!user.innopoints.data.id"></button>
+			<button item id="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
 		</div>
 	</aside>
 </template>
