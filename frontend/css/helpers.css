@@ -88,6 +88,7 @@ span::before { content: attr(data-before) "  "; }
 [icon]::before {
 	font-family: 'themify';
 	content: attr(icon) "  ";
+	padding: 0.5rem;
 }
 [icon]::after {
 	font-family: 'themify';
