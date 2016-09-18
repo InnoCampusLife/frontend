@@ -1,9 +1,84 @@
-section[content] {
-	overflow: auto;
+body {
+    font-family: "Source Sans Pro";
+    overflow: hidden;
+}
+
+button {
+    background-color: transparent;
+    border: none;
 }
 
 main[content] {
-	padding: 2rem;
-	overflow: auto;
-	text-align: center;
+    height: 100%;
+    font-size: 1.1rem;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    color: #000;
+    background-color: #f4f7fa;
+}
+
+main[content] > div {
+    position: relative;
+    padding: 2rem;
+    border-top: 1px solid #d2d2d2;
+}
+
+main[content] > header {
+    padding: 1.5rem;
+    color: hsla(210, 1%, 1%, 0.7);
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1rem;
+    background-color: #fff;
+    text-transform: uppercase;
+}
+
+main[content] > header > div[content] {
+    float: left;
+    height: 3rem;
+    width: auto;
+    line-height: 3rem;
+}
+
+main[content] > header > div[content] button[item] {
+    padding: 0 2rem;
+    color: #fff;
+    background: hsl(226, 100%, 65%);
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+main[content] > header > div[content] button[item]:focus,
+main[content] > header > div[content] button[item]:hover {
+    background: hsl(226, 100%, 68%);
+}
+
+main[content] > header > div[content] button[item].v-link-active,
+main[content] > header > div[content] button[item]:active {
+    background: hsl(226, 100%, 60%);
+}
+
+main[content] > [scroller-y] {
+    height: calc(100% - 10rem);
+}
+
+button#logout {
+    float: right;
+    height: 3rem;
+    width: 6rem;
+    padding: 0;
+    color: hsla(210, 1%, 1%, 0.7);
+    text-align: center;
+    line-height: initial;
+    text-transform: inherit;
+    /* border-radius: 0.2rem; */
+}
+
+button#logout:hover {
+    color: #fff;
+    background: hsla(221, 17%, 15%, 0.75);
 }

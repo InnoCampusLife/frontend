@@ -13143,14 +13143,14 @@
 			},
 
 			set(data) {
-				this.id = !!data.id /*&& !!this.id 			*/ && data.id;
-				this.username = !!data.username /*&& !!this.username 		*/ && data.username;
-				this.role = !!data.role /*&& !!this.role 			*/ && data.role;
-				this.firstName = !!data.firstName /*&& !!this.firstName 	*/ && data.firstName;
-				this.lastName = !!data.lastName /*&& !!this.lastName 		*/ && data.lastName;
-				this.patronymic = !!data.patronymic /*&& !!this.patronymic 	*/ && data.patronymic;
-				this.studyGroup = !!data.studyGroup /*&& !!this.studyGroup 	*/ && data.studyGroup;
-				this.token = !!data.token /*&& !!this.token 		*/ && data.token;
+				if (data.id) this.id = data.id;
+				if (data.username) this.username = data.username;
+				if (data.role) this.role = data.role;
+				if (data.firstName) this.firstName = data.firstName;
+				if (data.lastName) this.lastName = data.lastName;
+				if (data.patronymic) this.patronymic = data.patronymic;
+				if (data.studyGroup) this.studyGroup = data.studyGroup;
+				if (data.token) this.token = data.token;
 			},
 
 			update(successCallback, errorCallback) {
@@ -13640,49 +13640,53 @@
 				component: __webpack_require__(14),
 				subRoutes: {
 					'/profile': {
-						component: __webpack_require__(23),
+						component: __webpack_require__(20),
 						subRoutes: {
 							'/:username': {
 								name: 'profile',
-								component: __webpack_require__(29)
+								component: __webpack_require__(32)
 							}
 						}
 					},
 					'/accounts': {
-						component: __webpack_require__(32),
+						component: __webpack_require__(35),
 						subRoutes: {
 							'/': {
-								component: __webpack_require__(41),
+								component: __webpack_require__(38),
 								name: 'accounts'
 							}
 						}
 					},
 					'/innopoints': {
-						component: __webpack_require__(44),
+						component: __webpack_require__(41),
 						subRoutes: {
-							'/shop': {
-								component: __webpack_require__(53),
-								subRoutes: {
-									'/': {
-										component: __webpack_require__(56),
-										name: 'shop'
-									},
-									'/:item': {
-										component: __webpack_require__(59),
-										name: 'item'
-									}
-								}
-							},
 							'/:username': {
 								component: router_view,
 								subRoutes: {
 									'/': {
-										component: __webpack_require__(62),
+										component: { template: '' },
+										name: 'innopoints'
+									},
+									'/applications': {
+										component: __webpack_require__(47),
 										name: 'applications'
 									},
 									'/apply': {
-										component: __webpack_require__(65),
+										component: __webpack_require__(50),
 										name: 'apply'
+									},
+									'/shop': {
+										component: router_view,
+										subRoutes: {
+											'/': {
+												component: __webpack_require__(53),
+												name: 'shop'
+											},
+											'/:item': {
+												component: __webpack_require__(56),
+												name: 'item'
+											}
+										}
 									}
 								}
 							}
@@ -13693,7 +13697,6 @@
 			}
 		});
 
-		// TODO: restore routing
 		router.beforeEach(transition => {
 			if (!user.loggedIn) {
 				if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
@@ -13701,7 +13704,8 @@
 				if (transition.to.loginPage) transition.redirect('/');else transition.next();
 			}
 		}).redirect({
-			'*': ''
+			'*': '/',
+			'/innopoints/:username/': '/innopoints/:username/applications'
 		});
 
 		return router;
@@ -13740,237 +13744,10 @@
 /***/ function(module, exports) {
 
 	// <template>
-	// <style>
-	// 	main[wrapper] * {
-	// 	  box-sizing: border-box;
-	// 	  margin: 0;
-	// 	  padding: 0;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] [container] {
-	// 	  font-family: 'Source Sans Pro', sans-serif;
-	// 	  color: white;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] [container] ::-webkit-input-placeholder {
-	// 	  font-family: 'Source Sans Pro', sans-serif;
-	// 	  color: white;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] [container] :-moz-placeholder {
-	// 	  font-family: 'Source Sans Pro', sans-serif;
-	// 	  color: white;
-	// 	  opacity: 1;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] [container] ::-moz-placeholder {
-	// 	  font-family: 'Source Sans Pro', sans-serif;
-	// 	  color: white;
-	// 	  opacity: 1;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] [container] :-ms-input-placeholder {
-	// 	  font-family: 'Source Sans Pro', sans-serif;
-	// 	  color: white;
-	// 	  font-weight: 300;
-	// 	}
-	// 	main[wrapper][login] {
-	// 		transition: none;
-	// 	  background: rgba(0, 0, 0, 0.4);
-	// 	  -webkit-filter: hue-rotate(45deg);
-	// 	  filter: hue-rotate(45deg);
-	// 	  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-	// 	  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
-	// 	  position: absolute;
-	// 	  top: 0;
-	// 	  left: 0;
-	// 	  width: 100vw;
-	// 	  height: 100vh;
-	// 	  overflow: hidden;
-	// 	}
-	// 	main[wrapper][form-success] [container] h1 {
-	// 	  -webkit-transform: translateY(85px);
-	// 	          transform: translateY(85px);
-	// 	}
-	// 	[container] {
-	// 	  max-width: 600px;
-	// 	  margin: 0 auto;
-	// 	  height: 400px;
-	// 	  text-align: center;
-	// 	}
-	// 	[container] h1 {
-	// 	  font-size: 40px;
-	// 	  -webkit-transition-duration: 1s;
-	// 	          transition-duration: 1s;
-	// 	  -webkit-transition-timing-function: ease-in-put;
-	// 	          transition-timing-function: ease-in-put;
-	// 	  font-weight: 200;
-	// 	}
-	// 	main[wrapper] form {
-	// 	  padding: 20px 0;
-	// 	  position: relative;
-	// 	  z-index: 2;
-	// 	  text-align: center;
-	// 	}
-	// 	main[wrapper] form input {
-	// 	  -webkit-appearance: none;
-	// 	     -moz-appearance: none;
-	// 	          appearance: none;
-	// 	  outline: 0;
-	// 	  border: 1px solid rgba(255, 255, 255, 0.4);
-	// 	  background-color: rgba(255, 255, 255, 0.2);
-	// 	  width: 250px;
-	// 	  border-radius: 3px;
-	// 	  padding: 10px 15px;
-	// 	  margin: 0 auto 10px auto;
-	// 	  display: block;
-	// 	  text-align: center;
-	// 	  font-size: 18px;
-	// 	  color: white;
-	// 	  -webkit-transition-duration: 0.25s;
-	// 	          transition-duration: 0.25s;
-	// 	  font-weight: bolder;
-	// 	}
-	// 	main[wrapper] form input:hover {
-	// 	  background-color: rgba(255, 255, 255, 0.4);
-	// 	}
-	// 	main[wrapper] form input:focus {
-	// 	  background-color: white;
-	// 	  color: rgba(0, 0, 0, 0.7);
-	// 	}
-	// 	main[wrapper] form button {
-	// 	  -webkit-appearance: none;
-	// 	     -moz-appearance: none;
-	// 	          appearance: none;
-	// 	  outline: 0;
-	// 	  background-color: white;
-	// 	  border: 0;
-	// 	  padding: 10px 15px;
-	// 	  color: rgba(0, 0, 0, 0.7);
-	// 	  border-radius: 3px;
-	// 	  width: 250px;
-	// 	  cursor: pointer;
-	// 	  font-size: 18px;
-	// 	  -webkit-transition-duration: 0.25s;
-	// 	          transition-duration: 0.25s;
-	// 	}
-	// 	main[wrapper] form button:hover {
-	// 	  background-color: #f5f7f9;
-	// 	}
-	// 	main[wrapper] [bubbles] {
-	// 	  position: absolute;
-	// 	  top: 0;
-	// 	  left: 0;
-	// 	  width: 100%;
-	// 	  height: 100%;
-	// 	  z-index: 1;
-	// 	}
-	// 	main[wrapper] [bubbles] li {
-	// 	  position: absolute;
-	// 	  list-style: none;
-	// 	  display: block;
-	// 	  width: 40px;
-	// 	  height: 40px;
-	// 	  background-color: rgba(255, 255, 255, 0.15);
-	// 	  bottom: -160px;
-	// 	  -webkit-animation: square 25s infinite;
-	// 	  animation: square 25s infinite;
-	// 	  -webkit-transition-timing-function: linear;
-	// 	  transition-timing-function: linear;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(1) {
-	// 	  left: 10%;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(2) {
-	// 	  left: 20%;
-	// 	  width: 80px;
-	// 	  height: 80px;
-	// 	  -webkit-animation-delay: 2s;
-	// 	          animation-delay: 2s;
-	// 	  -webkit-animation-duration: 17s;
-	// 	          animation-duration: 17s;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(3) {
-	// 	  left: 25%;
-	// 	  -webkit-animation-delay: 4s;
-	// 	          animation-delay: 4s;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(4) {
-	// 	  left: 40%;
-	// 	  width: 60px;
-	// 	  height: 60px;
-	// 	  -webkit-animation-duration: 22s;
-	// 	          animation-duration: 22s;
-	// 	  background-color: rgba(255, 255, 255, 0.25);
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(5) {
-	// 	  left: 70%;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(6) {
-	// 	  left: 80%;
-	// 	  width: 120px;
-	// 	  height: 120px;
-	// 	  -webkit-animation-delay: 3s;
-	// 	          animation-delay: 3s;
-	// 	  background-color: rgba(255, 255, 255, 0.2);
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(7) {
-	// 	  left: 32%;
-	// 	  width: 160px;
-	// 	  height: 160px;
-	// 	  -webkit-animation-delay: 7s;
-	// 	          animation-delay: 7s;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(8) {
-	// 	  left: 55%;
-	// 	  width: 20px;
-	// 	  height: 20px;
-	// 	  -webkit-animation-delay: 15s;
-	// 	          animation-delay: 15s;
-	// 	  -webkit-animation-duration: 40s;
-	// 	          animation-duration: 40s;
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(9) {
-	// 	  left: 25%;
-	// 	  width: 10px;
-	// 	  height: 10px;
-	// 	  -webkit-animation-delay: 2s;
-	// 	          animation-delay: 2s;
-	// 	  -webkit-animation-duration: 40s;
-	// 	          animation-duration: 40s;
-	// 	  background-color: rgba(255, 255, 255, 0.3);
-	// 	}
-	// 	main[wrapper] [bubbles] li:nth-child(10) {
-	// 	  left: 90%;
-	// 	  width: 160px;
-	// 	  height: 160px;
-	// 	  -webkit-animation-delay: 11s;
-	// 	          animation-delay: 11s;
-	// 	}
-	// 	@-webkit-keyframes square {
-	// 	  0% {
-	// 	    -webkit-transform: translateY(0);
-	// 	            transform: translateY(0);
-	// 	  }
-	// 	  100% {
-	// 	    -webkit-transform: translateY(-120vh) rotate(600deg);
-	// 	            transform: translateY(-120vh) rotate(600deg);
-	// 	  }
-	// 	}
-	// 	@keyframes square {
-	// 	  0% {
-	// 	    -webkit-transform: translateY(0);
-	// 	            transform: translateY(0);
-	// 	  }
-	// 	  100% {
-	// 	    -webkit-transform: translateY(-160vh) rotate(600deg);
-	// 	            transform: translateY(-160vh) rotate(600deg);
-	// 	  }
-	// 	}
-	// </style>
+	// <link rel="stylesheet" href="/css/login.css">
 	// <main wrapper login flex center children>
 	// 	<div container>
-	// 		<h1>Welcome</h1>
+	// 		<h1 style="transition: color 0 none;">Welcome</h1>
 	// 			<form login>
 	// 				<!-- TODO : rework oninput events -->
 	// 				<input
@@ -14100,7 +13877,7 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<style>\r\n\tmain[wrapper] * {\r\n\t  box-sizing: border-box;\r\n\t  margin: 0;\r\n\t  padding: 0;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] [container] {\r\n\t  font-family: 'Source Sans Pro', sans-serif;\r\n\t  color: white;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] [container] ::-webkit-input-placeholder {\r\n\t  font-family: 'Source Sans Pro', sans-serif;\r\n\t  color: white;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] [container] :-moz-placeholder {\r\n\t  font-family: 'Source Sans Pro', sans-serif;\r\n\t  color: white;\r\n\t  opacity: 1;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] [container] ::-moz-placeholder {\r\n\t  font-family: 'Source Sans Pro', sans-serif;\r\n\t  color: white;\r\n\t  opacity: 1;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] [container] :-ms-input-placeholder {\r\n\t  font-family: 'Source Sans Pro', sans-serif;\r\n\t  color: white;\r\n\t  font-weight: 300;\r\n\t}\r\n\tmain[wrapper][login] {\r\n\t\ttransition: none;\r\n\t  background: rgba(0, 0, 0, 0.4);\r\n\t  -webkit-filter: hue-rotate(45deg);\r\n\t  filter: hue-rotate(45deg);\r\n\t  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);\r\n\t  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);\r\n\t  position: absolute;\r\n\t  top: 0;\r\n\t  left: 0;\r\n\t  width: 100vw;\r\n\t  height: 100vh;\r\n\t  overflow: hidden;\r\n\t}\r\n\tmain[wrapper][form-success] [container] h1 {\r\n\t  -webkit-transform: translateY(85px);\r\n\t          transform: translateY(85px);\r\n\t}\r\n\t[container] {\r\n\t  max-width: 600px;\r\n\t  margin: 0 auto;\r\n\t  height: 400px;\r\n\t  text-align: center;\r\n\t}\r\n\t[container] h1 {\r\n\t  font-size: 40px;\r\n\t  -webkit-transition-duration: 1s;\r\n\t          transition-duration: 1s;\r\n\t  -webkit-transition-timing-function: ease-in-put;\r\n\t          transition-timing-function: ease-in-put;\r\n\t  font-weight: 200;\r\n\t}\r\n\tmain[wrapper] form {\r\n\t  padding: 20px 0;\r\n\t  position: relative;\r\n\t  z-index: 2;\r\n\t  text-align: center;\r\n\t}\r\n\tmain[wrapper] form input {\r\n\t  -webkit-appearance: none;\r\n\t     -moz-appearance: none;\r\n\t          appearance: none;\r\n\t  outline: 0;\r\n\t  border: 1px solid rgba(255, 255, 255, 0.4);\r\n\t  background-color: rgba(255, 255, 255, 0.2);\r\n\t  width: 250px;\r\n\t  border-radius: 3px;\r\n\t  padding: 10px 15px;\r\n\t  margin: 0 auto 10px auto;\r\n\t  display: block;\r\n\t  text-align: center;\r\n\t  font-size: 18px;\r\n\t  color: white;\r\n\t  -webkit-transition-duration: 0.25s;\r\n\t          transition-duration: 0.25s;\r\n\t  font-weight: bolder;\r\n\t}\r\n\tmain[wrapper] form input:hover {\r\n\t  background-color: rgba(255, 255, 255, 0.4);\r\n\t}\r\n\tmain[wrapper] form input:focus {\r\n\t  background-color: white;\r\n\t  color: rgba(0, 0, 0, 0.7);\r\n\t}\r\n\tmain[wrapper] form button {\r\n\t  -webkit-appearance: none;\r\n\t     -moz-appearance: none;\r\n\t          appearance: none;\r\n\t  outline: 0;\r\n\t  background-color: white;\r\n\t  border: 0;\r\n\t  padding: 10px 15px;\r\n\t  color: rgba(0, 0, 0, 0.7);\r\n\t  border-radius: 3px;\r\n\t  width: 250px;\r\n\t  cursor: pointer;\r\n\t  font-size: 18px;\r\n\t  -webkit-transition-duration: 0.25s;\r\n\t          transition-duration: 0.25s;\r\n\t}\r\n\tmain[wrapper] form button:hover {\r\n\t  background-color: #f5f7f9;\r\n\t}\r\n\tmain[wrapper] [bubbles] {\r\n\t  position: absolute;\r\n\t  top: 0;\r\n\t  left: 0;\r\n\t  width: 100%;\r\n\t  height: 100%;\r\n\t  z-index: 1;\r\n\t}\r\n\tmain[wrapper] [bubbles] li {\r\n\t  position: absolute;\r\n\t  list-style: none;\r\n\t  display: block;\r\n\t  width: 40px;\r\n\t  height: 40px;\r\n\t  background-color: rgba(255, 255, 255, 0.15);\r\n\t  bottom: -160px;\r\n\t  -webkit-animation: square 25s infinite;\r\n\t  animation: square 25s infinite;\r\n\t  -webkit-transition-timing-function: linear;\r\n\t  transition-timing-function: linear;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(1) {\r\n\t  left: 10%;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(2) {\r\n\t  left: 20%;\r\n\t  width: 80px;\r\n\t  height: 80px;\r\n\t  -webkit-animation-delay: 2s;\r\n\t          animation-delay: 2s;\r\n\t  -webkit-animation-duration: 17s;\r\n\t          animation-duration: 17s;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(3) {\r\n\t  left: 25%;\r\n\t  -webkit-animation-delay: 4s;\r\n\t          animation-delay: 4s;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(4) {\r\n\t  left: 40%;\r\n\t  width: 60px;\r\n\t  height: 60px;\r\n\t  -webkit-animation-duration: 22s;\r\n\t          animation-duration: 22s;\r\n\t  background-color: rgba(255, 255, 255, 0.25);\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(5) {\r\n\t  left: 70%;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(6) {\r\n\t  left: 80%;\r\n\t  width: 120px;\r\n\t  height: 120px;\r\n\t  -webkit-animation-delay: 3s;\r\n\t          animation-delay: 3s;\r\n\t  background-color: rgba(255, 255, 255, 0.2);\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(7) {\r\n\t  left: 32%;\r\n\t  width: 160px;\r\n\t  height: 160px;\r\n\t  -webkit-animation-delay: 7s;\r\n\t          animation-delay: 7s;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(8) {\r\n\t  left: 55%;\r\n\t  width: 20px;\r\n\t  height: 20px;\r\n\t  -webkit-animation-delay: 15s;\r\n\t          animation-delay: 15s;\r\n\t  -webkit-animation-duration: 40s;\r\n\t          animation-duration: 40s;\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(9) {\r\n\t  left: 25%;\r\n\t  width: 10px;\r\n\t  height: 10px;\r\n\t  -webkit-animation-delay: 2s;\r\n\t          animation-delay: 2s;\r\n\t  -webkit-animation-duration: 40s;\r\n\t          animation-duration: 40s;\r\n\t  background-color: rgba(255, 255, 255, 0.3);\r\n\t}\r\n\tmain[wrapper] [bubbles] li:nth-child(10) {\r\n\t  left: 90%;\r\n\t  width: 160px;\r\n\t  height: 160px;\r\n\t  -webkit-animation-delay: 11s;\r\n\t          animation-delay: 11s;\r\n\t}\r\n\t@-webkit-keyframes square {\r\n\t  0% {\r\n\t    -webkit-transform: translateY(0);\r\n\t            transform: translateY(0);\r\n\t  }\r\n\t  100% {\r\n\t    -webkit-transform: translateY(-120vh) rotate(600deg);\r\n\t            transform: translateY(-120vh) rotate(600deg);\r\n\t  }\r\n\t}\r\n\t@keyframes square {\r\n\t  0% {\r\n\t    -webkit-transform: translateY(0);\r\n\t            transform: translateY(0);\r\n\t  }\r\n\t  100% {\r\n\t    -webkit-transform: translateY(-160vh) rotate(600deg);\r\n\t            transform: translateY(-160vh) rotate(600deg);\r\n\t  }\r\n\t}\r\n</style>\r\n<main wrapper login flex center children>\r\n\t<div container>\r\n\t\t<h1>Welcome</h1>\r\n\t\t\t<form login>\r\n\t\t\t\t<!-- TODO : rework oninput events -->\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"username\"\r\n\t\t\t\t\tid=\"username\"\r\n\t\t\t\t\tplaceholder=\"Username\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"32\"\r\n\t\t\t\t\tv-on:input=\"usernameInputEvent\"\r\n\t\t\t\t\tv-model=\"user.account.username\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"password\"\r\n\t\t\t\t\tname=\"password\"\r\n\t\t\t\t\tid=\"password\"\r\n\t\t\t\t\tplaceholder=\"Password\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"64\"\r\n\t\t\t\t\tv-on:input=\"passwordInputEvent\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"login\"\r\n\t\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t\t>login</button>\r\n\r\n\t\t\t\t\t<!-- <button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"register\"\r\n\t\t\t\t\t\t@keyup.enter=\"register\"\r\n\t\t\t\t\t>register</button> -->\r\n\t\t\t\t</div>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t\t<ul bubbles>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t</ul>\r\n\t</div>\r\n</template>";
+	module.exports = "\r\n<link rel=\"stylesheet\" href=\"/css/login.css\">\r\n<main wrapper login flex center children>\r\n\t<div container>\r\n\t\t<h1 style=\"transition: color 0 none;\">Welcome</h1>\r\n\t\t\t<form login>\r\n\t\t\t\t<!-- TODO : rework oninput events -->\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"username\"\r\n\t\t\t\t\tid=\"username\"\r\n\t\t\t\t\tplaceholder=\"Username\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"32\"\r\n\t\t\t\t\tv-on:input=\"usernameInputEvent\"\r\n\t\t\t\t\tv-model=\"user.account.username\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"password\"\r\n\t\t\t\t\tname=\"password\"\r\n\t\t\t\t\tid=\"password\"\r\n\t\t\t\t\tplaceholder=\"Password\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"64\"\r\n\t\t\t\t\tv-on:input=\"passwordInputEvent\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"login\"\r\n\t\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t\t>login</button>\r\n\r\n\t\t\t\t\t<!-- <button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"register\"\r\n\t\t\t\t\t\t@keyup.enter=\"register\"\r\n\t\t\t\t\t>register</button> -->\r\n\t\t\t\t</div>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t\t<ul bubbles>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t</ul>\r\n\t</div>\r\n</template>";
 
 /***/ },
 /* 14 */
@@ -14112,7 +13889,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(22)
+	__vue_template__ = __webpack_require__(19)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14136,17 +13913,15 @@
 
 	// <template>
 	// 	<sidebar></sidebar>
-	// 	<content></content>
+	// 	<router-view></router-view>
 	// </template>
 	//
 	// <script>
 	var sidebar = __webpack_require__(16);
-	var content = __webpack_require__(19);
 
 	module.exports = {
 		components: {
-			sidebar,
-			content
+			sidebar
 		},
 		route: {
 			data(transition) {
@@ -14195,20 +13970,236 @@
 /***/ function(module, exports) {
 
 	// <template>
-	// 	<aside main sidebar>
-	// 		<button menu block data-points="239" v-link="{ name: 'profile', params: { username: user.account.username } }"><i class="material-icons">&#xE7FD;</i></button>
-	// 		<div menu info><span class="ion" data-icon="&#xf316;" v-text="user.innopoints.data.amount"></span></div>
-	// 		<div menu separator></div>
-	// 		<template v-if="user.account.isModerator">
-	// 			<button menu block v-link="{ name: 'accounts' }"><i class="material-icons">&#xE8D3;</i></button>
-	// 			<button menu block v-link="{ name: 'apply', params: { username: user.username } }" ><i class="material-icons">&#xE3BB;</i></button>
-	// 		</template>
-	// 		<template v-if="user.account.isStudent">
-	// 			<button menu block v-link="{ name: 'apply', params: { username: user.username } }" ><i class="material-icons">&#xE3BB;</i></button>
-	// 		</template>
-	//
-	// 		<button logout @click="logout" block class="ion"></button>
+	// 	<aside sidebar>
+	// 		<div menu>
+	// 			<button item id="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
+	// 			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }"></button>
+	// 		</div>
 	// 	</aside>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data() {
+			return {
+				user: this.$router.app.user
+			};
+		}
+	};
+	// </script>
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item id=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item id=\"Innopoints\" points=\"{{ user.innopoints.data.amount || 239 }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username } }\"></button>\n\t</div>\n</aside>\n";
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<sidebar></sidebar>\n<router-view></router-view>\n";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(21)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\profile\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(31)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-16a06e27/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<!-- <sidebar></sidebar> -->
+	// 	<content>
+	// 		<div slot="header">
+	//
+	// 		</div>
+	// 	</content>
+	// </template>
+	//
+	// <script>
+	var sidebar = __webpack_require__(22);
+	var content = __webpack_require__(25);
+
+	module.exports = {
+		components: {
+			sidebar,
+			content
+		}
+	};
+	// </script>
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(23)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\profile\\sidebar.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(24)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-45864dde/sidebar.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<aside menubar>
+	// 		<div menu>
+	//
+	// 		</div>
+	// 	</aside>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data() {
+			return {
+				user: this.$router.app.user
+			};
+		}
+	};
+	// </script>
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t\n\t</div>\n</aside>\n";
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(26)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(30)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-b68069a4/content.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<!-- <main content scroller-y force> -->
+	// 	<main content scroller-y>
+	// 		<main-header>
+	// 			<slot name="header"></slot>
+	// 		</main-header>
+	// 		<div scroller-x>
+	// 			<router-view></router-view>
+	// 		</div>
+	// 	</main>
+	// </template>
+	//
+	// <script>
+	var mainHeader = __webpack_require__(27);
+
+	module.exports = {
+		components: {
+			mainHeader
+		}
+	};
+	// </script>
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(28)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\header.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(29)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-739e9330/header.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<header>
+	// 		<slot></slot>
+	// 		<button id="logout" @click="logout" block>logout</button>
+	// 	</header><!-- /header -->
 	// </template>
 	//
 	// <script>
@@ -14228,189 +14219,34 @@
 	// </script>
 
 /***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside main sidebar>\n\t<button menu block data-points=\"239\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"><i class=\"material-icons\">&#xE7FD;</i></button>\n\t<div menu info><span class=\"ion\" data-icon=\"&#xf316;\" v-text=\"user.innopoints.data.amount\"></span></div>\n\t<div menu separator></div>\n\t<template v-if=\"user.account.isModerator\">\n\t\t<button menu block v-link=\"{ name: 'accounts' }\"><i class=\"material-icons\">&#xE8D3;</i></button>\n\t\t<button menu block v-link=\"{ name: 'apply', params: { username: user.username } }\" ><i class=\"material-icons\">&#xE3BB;</i></button>\n\t</template>\n\t<template v-if=\"user.account.isStudent\">\n\t\t<button menu block v-link=\"{ name: 'apply', params: { username: user.username } }\" ><i class=\"material-icons\">&#xE3BB;</i></button>\n\t</template>\n\t\n\t<button logout @click=\"logout\" block class=\"ion\"></button>\n</aside>\n";
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(20)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(21)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-b68069a4/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 20 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<section content>
-	// 		<router-view></router-view>
-	// 	</section>
-	// </template>
-	//
-	// <script>
-	module.exports = {}
-	//This might come in handy...
-
-	// </script>
-	;
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<section content>\n\t<router-view></router-view>\n</section>\n";
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(24)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\profile\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(28)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-16a06e27/main.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// <template>
-	// 	<!-- <sidebar></sidebar> -->
-	// 	<content></content>
-	// </template>
-	//
-	// <script>
-	// var sidebar = require('./sidebar.vue');
-	var content = __webpack_require__(25);
-
-	module.exports = {
-		components: {
-			content
-		},
-		route(transition) {
-			this.$router.app.user.account.update(result => {
-				transition.next();
-			});
-		}
-	};
-	// </script>
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(26)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\profile\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(27)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-46cfa07b/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<main content>
-	// 		<router-view></router-view>
-	// 	</main>
-	// </template>
-	//
-	// <script>
-	module.exports = {}
-	//This might come in handy...
-
-	// </script>
-	;
-
-/***/ },
-/* 27 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<main content>\n\t<router-view></router-view>\n</main>\n";
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<!-- <sidebar></sidebar> -->\n<content></content>\n";
-
-/***/ },
 /* 29 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<header>\n\t<slot></slot>\n\t<button id=\"logout\" @click=\"logout\" block>logout</button>\n</header><!-- /header -->\n";
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<!-- <main content scroller-y force> -->\n<main content scroller-y>\n\t<main-header>\n\t\t<slot name=\"header\"></slot>\n\t</main-header>\n\t<div scroller-x>\n\t\t<router-view></router-view>\n\t</div>\n</main>\n";
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<!-- <sidebar></sidebar> -->\n<content>\n\t<div slot=\"header\">\n\t\t\n\t</div>\n</content>\n";
+
+/***/ },
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(30)
+	__vue_script__ = __webpack_require__(33)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\profile\\profile.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(31)
+	__vue_template__ = __webpack_require__(34)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14429,7 +14265,7 @@
 	})()}
 
 /***/ },
-/* 30 */
+/* 33 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -14451,46 +14287,51 @@
 	module.exports = {
 		data() {
 			return {
-				user: this.$router.app.user.account
+				user: {}
 			};
 		},
 		route: {
 			data(transition) {
 				console.log("Called get in user");
-				var route = this.$route;
-				console.log(route.params.username);
 
-				if (route.params.username == this.$router.app.user.account.username) {
-					this.$router.app.user.account.update(transition.next);
-				} else this.$router.app.user.account.getBio({ username: route.params.username }, function (result) {
-					console.log(result);
-					result.username = route.params.username;
-					transition.next({
-						user: result
+				var username = this.$route.params.username;
+				var user = this.$router.app.user.account;
+
+				if (user.username != username) {
+					console.log("called getBio: " + username);
+					user.getBio({ username: username }, function (result) {
+						console.log(result);
+						transition.next({
+							user: result
+						});
 					});
-				});
+				} else {
+					if (user.id) transition.next({ user: user });else user.exists(result => {
+						transition.next({ user: user });
+					});
+				}
 			}
 		}
 	};
 	// </script>
 
 /***/ },
-/* 31 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<h1>{{ user.username }}'s profile</h1>\n<div block>\n\t<pre>{{ user.id }}</pre>\n\t<pre>{{ user.role }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.fullName != ''\">{{ user.fullName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n<div block>\n\t<router-view></router-view>\n</div>\n";
 
 /***/ },
-/* 32 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(33)
+	__vue_script__ = __webpack_require__(36)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\accounts\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(40)
+	__vue_template__ = __webpack_require__(37)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14509,155 +14350,44 @@
 	})()}
 
 /***/ },
-/* 33 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<sidebar></sidebar>
-	// 	<content></content>
+	// 	<content>
+	// 		<div slot="header">
+	//
+	// 		</div>
+	// 	</content>
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(34);
-	var content = __webpack_require__(37);
+	var content = __webpack_require__(25);
 
 	module.exports = {
 		components: {
-			content,
-			sidebar
-		},
-		route(transition) {
-			this.$router.app.user.account.update(result => {
-				transition.next();
-			});
+			content
 		}
 	};
 	// </script>
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(35)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\accounts\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(36)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-00ee6dfe/sidebar.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 35 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<aside secondary sidebar>
-	// 		<template v-if="user.isModerator">
-	// 			<button menu block v-link="{ name: 'accounts' }">manage accounts</button>
-	// 		</template>
-	// 	</aside>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data() {
-			return {
-				user: this.$router.app.user.account
-			};
-		}
-	};
-	// </script>
-
-/***/ },
-/* 36 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside secondary sidebar>\n\t<template v-if=\"user.isModerator\">\n\t\t<button menu block v-link=\"{ name: 'accounts' }\">manage accounts</button>\n\t</template>\n</aside>\n";
 
 /***/ },
 /* 37 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(38)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\accounts\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(39)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-00d21b9e/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
+	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t\n\t</div>\n</content>\n";
 
 /***/ },
 /* 38 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<main content>
-	// 		<router-view></router-view>
-	// 	</main>
-	// </template>
-	//
-	// <script>
-	module.exports = {}
-	//This might come in handy...
-
-	// </script>
-	;
-
-/***/ },
-/* 39 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<main content>\n\t<router-view></router-view>\n</main>\n";
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
-
-/***/ },
-/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(42)
+	__vue_script__ = __webpack_require__(39)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\accounts\\admin.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(43)
+	__vue_template__ = __webpack_require__(40)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14676,7 +14406,7 @@
 	})()}
 
 /***/ },
-/* 42 */
+/* 39 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -14742,22 +14472,22 @@
 	// </script>
 
 /***/ },
-/* 43 */
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div block>\n\t<h1>List of registered users:</h1>\n\n\t<p v-if=\"$loadingRouteData\">Loading users' list...</p>\n\n\t<ul>\n\t\t<li v-for=\"user in users\">\n\t\t\t<hr>\n\t\t\t{{$index}} : <p><span>{{ user.username }} ({{ user.role | capitalize }})</span> : <span>{{ user.fullname | capitalize}}</span> : <span>@{{ user.tgId }}</span>;</p>\n\t\t\t<select name=\"role_select\" id=\"a{{ user.id }}\" @change=\"selectChanged\">\n\t\t\t\t<option value=\"ghost\" :selected=\"user.role == 'ghost'\">Ghost</option>\n\t\t\t\t<option value=\"student\" :selected=\"user.role == 'student'\">Student</option>\n\t\t\t</select>\n\t\t</li>\n\t</ul>\n\n\t<button padding style=\"border-width: 0px;width: 100%;height: 30px;\"\n\t\tid=\"acceptRoles\"\n\t\tv-show=\"roleChanged\"\n\t\t@click=\"sendRoles\"\n\t\t@keyup.enter=\"sendRoles\"\n\t>accept changes</button>\n</div>\n";
 
 /***/ },
-/* 44 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(45)
+	__vue_script__ = __webpack_require__(42)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(52)
+	__vue_template__ = __webpack_require__(46)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14776,42 +14506,41 @@
 	})()}
 
 /***/ },
-/* 45 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
 	// 	<sidebar></sidebar>
-	// 	<content></content>
+	// 	<content>
+	// 		<div content slot="header">
+	// 			<button item v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">Request Innopoints</button>
+	// 		</div>
+	// 	</content>
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(46);
-	var content = __webpack_require__(49);
+	var sidebar = __webpack_require__(43);
+	var content = __webpack_require__(25);
 
 	module.exports = {
 		components: {
-			content,
-			sidebar
-		},
-		route(transition) {
-			this.$router.app.user.account.update(result => {
-				transition.next();
-			});
+			sidebar,
+			content
 		}
 	};
 	// </script>
 
 /***/ },
-/* 46 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(47)
+	__vue_script__ = __webpack_require__(44)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(48)
+	__vue_template__ = __webpack_require__(45)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14830,20 +14559,21 @@
 	})()}
 
 /***/ },
-/* 47 */
+/* 44 */
 /***/ function(module, exports) {
 
 	// <template>
-	// 	<aside secondary sidebar>
-	// 		<template v-if="user.isStudent">
-	// 			<button menu block v-link="{ name: 'applications', params: { username: user.username } }">applications</button>
-	// 			<button menu block v-link="{ name: 'apply', params: { username: user.username } }" >apply</button>
-	// 		</template>
-	// 		<template v-if="user.isModerator">
-	// 			<button menu block v-link="{ name: 'applications', params: { username: 'all' } }">applications</button>
-	// 			<button menu block v-link="{ name: 'apply', params: { username: user.username } }" >apply</button>
-	// 		</template>
-	// 		<button menu block v-link="{ name: 'shop' }">shop</span></button>
+	// 	<aside menubar>
+	// 		<div menu>
+	// 			<div id="applications">
+	// 				<button main item v-link="{ name: 'applications', params: { username: user.account.username } }">Applications</button>
+	// 			</div>
+	// 			<div id="shop">
+	// 				<button main item v-link="{ name: 'shop', params: { username: user.account.username } }">Shop</button>
+	// 				<button item>cart</button>
+	// 				<button item>orders</button>
+	// 			</div>
+	// 		</div>
 	// 	</aside>
 	// </template>
 	//
@@ -14851,302 +14581,54 @@
 	module.exports = {
 		data() {
 			return {
-				user: this.$router.app.user.account
+				user: this.$router.app.user
 			};
 		}
 	};
 	// </script>
 
 /***/ },
+/* 45 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t<div id=\"applications\">\n\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username } }\">Applications</button>\n\t\t</div>\n\t\t<div id=\"shop\">\n\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\">Shop</button>\n\t\t\t<button item>cart</button>\n\t\t\t<button item>orders</button>\n\t\t</div>\n\t</div>\n</aside>\n";
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<sidebar></sidebar>\n<content>\n\t<div content slot=\"header\">\n\t\t<button item v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\">Request Innopoints</button>\n\t</div>\n</content>\n";
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(48)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\applications.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(49)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-0517eb6a/applications.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
 /* 48 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside secondary sidebar>\n\t<template v-if=\"user.isStudent\">\n\t\t<button menu block v-link=\"{ name: 'applications', params: { username: user.username } }\">applications</button>\n\t\t<button menu block v-link=\"{ name: 'apply', params: { username: user.username } }\" >apply</button>\n\t</template>\n\t<template v-if=\"user.isModerator\">\n\t\t<button menu block v-link=\"{ name: 'applications', params: { username: 'all' } }\">applications</button>\n\t\t<button menu block v-link=\"{ name: 'apply', params: { username: user.username } }\" >apply</button>\n\t</template>\n\t<button menu block v-link=\"{ name: 'shop' }\">shop</span></button>\n</aside>\n";
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(50)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(51)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-1f65bc81/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 50 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<main content>
-	// 		<router-view></router-view>
-	// 	</main>
-	// </template>
-	//
-	// <script>
-	module.exports = {}
-	//This might come in handy...
-
-	// </script>
-	;
-
-/***/ },
-/* 51 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<main content>\n\t<router-view></router-view>\n</main>\n";
-
-/***/ },
-/* 52 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(54)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(55)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-2bba2fe7/main.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 54 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<section flex>
-	// 		<router-view></router-view>
-	// 	</section>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		route(transition) {
-			// $route.user.update((result) => {
-			// 	transition.next({
-			// 		user: result
-			// 	});
-			// });
-		}
-	};
-	// </script>
-
-/***/ },
-/* 55 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<section flex>\n\t<router-view></router-view>\n</section>\n";
-
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(57)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\shop.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(58)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-17a61ea4/shop.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 57 */
-/***/ function(module, exports) {
-
-	// <template>
-	//     <section product v-for="item in items">
-	//         <div v-link="{ name: 'item', params: { item: item.id } }" style="cursor: pointer;">
-	//             <h4>{{ item.title }} : {{ item.price }}</h4>
-	//             <img :src="item.image_link">
-	//             <p v-text="item.category.title"></p>
-	//         </div>
-	//         <hr>
-	//     </section>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-	    data() {
-	        return {
-	            items: []
-	        };
-	    },
-	    route: {
-	        data: function (transition) {
-	            this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', result => {
-	                transition.next({
-	                    items: result
-	                });
-	            });
-	        }
-	    }
-	};
-	// </script>
-
-/***/ },
-/* 58 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<section product v-for=\"item in items\">\n    <div v-link=\"{ name: 'item', params: { item: item.id } }\" style=\"cursor: pointer;\">\n        <h4>{{ item.title }} : {{ item.price }}</h4>\n        <img :src=\"item.image_link\">\n        <p v-text=\"item.category.title\"></p>\n    </div>\n    <hr>\n</section>\n";
-
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(60)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\item.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(61)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-726a6841/item.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 60 */
-/***/ function(module, exports) {
-
-	// <template>
-	//     <div>
-	//         <h3>{{ item.title }} : {{ item.price }}</h3>
-	//         <img :src="item.image_link">
-	//         <h4 v-text="item.category_title"></h4>
-	//         <p v-show="item.possible_joint_purchase">This item can be bought by a group of {{ item.max_buyers }}!</p>
-	//         <div v-for="option in item.options" style="display: block">
-	//             <select name="option.title" :id="option.title">
-	//                 <option value="">Choose {{option.title}}</option>
-	//                 <option v-for="value in option.values" :value="value">{{ value }}</option>
-	//             </select>
-	//         </div>
-	//     </div>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-	    data() {
-	        return {
-	            item: {}
-	        };
-	    },
-	    route: {
-	        data(transition) {
-	            var $route = this.$route;
-	            this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, result => {
-	                transition.next({
-	                    item: result
-	                });
-	            });
-	        }
-	    }
-	};
-	// </script>
-
-/***/ },
-/* 61 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div>\n    <h3>{{ item.title }} : {{ item.price }}</h3>\n    <img :src=\"item.image_link\">\n    <h4 v-text=\"item.category_title\"></h4>\n    <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n    <div v-for=\"option in item.options\" style=\"display: block\">\n        <select name=\"option.title\" :id=\"option.title\">\n            <option value=\"\">Choose {{option.title}}</option>\n            <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n        </select>\n    </div>\n</div>\n";
-
-/***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(63)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\points\\applications.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(64)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-841463f8/applications.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 63 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -15192,22 +14674,22 @@
 	// </script>
 
 /***/ },
-/* 64 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div style=\"margin: 42px;\">\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<div v-for=\"appl in applications\">\n\t\t<br>\n\t\t<h4 v-text=\"appl.type\"></h4>\n\t\t<div>\n\t\t\t<pre>{{ appl | json 4 }}</pre>\n\t\t</div>\n\t\t<hr>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 65 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(66)
+	__vue_script__ = __webpack_require__(51)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\points\\apply.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(67)
+	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\apply.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(52)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15217,7 +14699,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-707d4f5d/apply.vue"
+	  var id = "_v-1ca544f6/apply.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15226,7 +14708,7 @@
 	})()}
 
 /***/ },
-/* 66 */
+/* 51 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -15464,10 +14946,151 @@
 	// </script>
 
 /***/ },
-/* 67 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<form id=\"ip_request\">\n\t<h2 style=\"padding: 0\">Request innopoints</h2>\n\n\t<hr/>\n\n\t<div v-if=\"user.account.isStudent\" style=\"width: 100%;\">\n\t\t<div  style=\"float: left;width: 46%\">\n\t\t\t<label for=\"self\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"self\" value=\"personal\" v-model=\"current.type\"/>\n\t\t\t\tPersonal\n\t\t\t</label>\n\t\t</div>\n\t\t<div  style=\"float: right;width: 46%\">\n\t\t\t<label for=\"group\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"group\" value=\"group\" v-model=\"current.type\"/>\n\t\t\t\tGroup\n\t\t\t</label>\n\t\t</div>\n\t<br>\n\t</div>\n\n\n\t<br>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"categoryChanged\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<div>\n\t\t<div v-show=\"!current.isPersonal\">\n\t\t\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t\t\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t\t\t<br>\n\t\t\t<br>\n\t\t</div>\n\n\t\t<div v-for=\"i in (current.isPersonal ? 1 : current.users_count)\" :style=\"!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''\">\n\t\t\t<legend v-if=\"!current.isPersonal\">\n\t\t\t\t<input type=\"text\" placeholder=\"username\" v-model=\"current.users[i].username\" required>\n\t\t\t</legend>\n\t\t\t<br>\n\t\t\t<div v-show=\"categorySelected\">\n\n\t\t\t\t<div style=\"width: 100%;\">\n\t\t\t\t\tActivity\n\t\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activityChanged\">\n\t\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<br>\n\t\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\tTime spent/quantity:\n\t\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"1\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<br>\n\t</div>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files:\n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" id=\"upload\" multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" id=\"accept\">accept</button>\n\t<br>\n\t<button v-if=\"ableToSend\" block type=\"button\" @click=\"send\" id=\"send\">send</button>\n</form>\n";
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(54)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\shop.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(55)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-17a61ea4/shop.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 54 */
+/***/ function(module, exports) {
+
+	// <template>
+	//     <section shop>
+	//         <section product v-for="item in items" v-link="{ name: 'item', params: { item: item.id } }">
+	//             <h4>{{ item.title }} : {{ item.price }}</h4>
+	//             <img :src="item.image_link">
+	//             <p v-text="item.category.title"></p>
+	//             <hr>
+	//         </section>
+	//     </section>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+	    data() {
+	        return {
+	            items: []
+	        };
+	    },
+	    route: {
+	        data: function (transition) {
+	            this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', result => {
+	                transition.next({
+	                    items: result
+	                });
+	            });
+	        }
+	    }
+	};
+	// </script>
+
+/***/ },
+/* 55 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<section shop>\n    <section product v-for=\"item in items\" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h4>\n        <img :src=\"item.image_link\">\n        <p v-text=\"item.category.title\"></p>\n        <hr>\n    </section>\n</section>\n";
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(57)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\item.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(58)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-726a6841/item.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	// <template>
+	//     <div>
+	//         <h3>{{ item.title }} : {{ item.price }}</h3>
+	//         <img :src="item.image_link">
+	//         <h4 v-text="item.category_title"></h4>
+	//         <p v-show="item.possible_joint_purchase">This item can be bought by a group of {{ item.max_buyers }}!</p>
+	//         <div v-for="option in item.options" style="display: block">
+	//             <select name="option.title" :id="option.title">
+	//                 <option value="">Choose {{option.title}}</option>
+	//                 <option v-for="value in option.values" :value="value">{{ value }}</option>
+	//             </select>
+	//         </div>
+	//     </div>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+	    data() {
+	        return {
+	            item: {}
+	        };
+	    },
+	    route: {
+	        data(transition) {
+	            var $route = this.$route;
+	            this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, result => {
+	                transition.next({
+	                    item: result
+	                });
+	            });
+	        }
+	    }
+	};
+	// </script>
+
+/***/ },
+/* 58 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div>\n    <h3>{{ item.title }} : {{ item.price }}</h3>\n    <img :src=\"item.image_link\">\n    <h4 v-text=\"item.category_title\"></h4>\n    <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n    <div v-for=\"option in item.options\" style=\"display: block\">\n        <select name=\"option.title\" :id=\"option.title\">\n            <option value=\"\">Choose {{option.title}}</option>\n            <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n        </select>\n    </div>\n</div>\n";
 
 /***/ }
 /******/ ]);

@@ -1,119 +1,110 @@
-aside {
-	z-index: 99;
-}
-
-aside[sidebar] {
-	position: relative;
-	float: left;
-	background-color: #1e2124;
-	height: 100vh;
-	width: 78px;
-}
-aside[sidebar] button[menu] {
-	width: 49px;
-	height: 49px;
-	border-width: 0;
-	background-color: #5a6772;
-	color: white;
-	margin: 14px;
-    padding: 12px;
-}
-
-aside[sidebar] [menu][info] {
-    text-align: center;
+[sidebar] {
+    width: 7rem;
+    height: 100%;
+    float: left;
     padding: 0;
-    margin: 2% 10%;
+    color: #fff;
+    background-color: hsl(225, 14%, 22%);
+    z-index: 99;
+}
+
+[sidebar] [menu] > * {
+    display: block;
+    height: 6rem;
+    width: 7rem;
+    color: hsl(214, 11%, 46%);
+    cursor: pointer;
+}
+
+[sidebar] [menu] > *:hover{
+    color: #fff;
+    background-color: hsl(226, 100%, 68%);
+}
+
+[sidebar] > header {
+    background-color: #4c76ff;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    height: 7rem;
+    line-height: 7rem;
+    font-size: 1.1rem;
+}
+
+[sidebar] > header.v-link-active,
+[sidebar] > header:hover {
+    background-color: hsla(226,100%,68%,1);
+}
+
+[sidebar] [menu] {
+    height: 100%;
+    border-right: 1px solid rgba(98, 99, 100, 0.2);
+}
+
+[sidebar] [menu] > [item][id][points]::before {
+    font-family: "Source Sans Pro Light";
+    content: attr(points);
+}
+[sidebar] [menu] > [item][id]::before {
+    display: block;
+    font-size: 2rem;
+    padding: 0.5rem;
+}
+
+[sidebar] [menu] > [item][id]::after {
+    display: block;
+    content: attr(id);
+}
+
+[sidebar] [menu] [item].v-link-active {
+    color: #fff;
+    background: hsla(228,79%,62%,1);
+}
+
+
+
+aside[menubar] {
+    width: 18rem;
+    height: 100%;
+    float: left;
+    z-index: 98;
+    background-color: hsl(224, 16%, 19%);
+}
+
+aside[menubar] [menu] {
+    color: #fff;
+    height: 100%;
+    border-left: 1px solid hsla(0, 0%, 0%, 0.2);
+}
+
+aside[menubar] [menu] div[id] {
     width: 80%;
-    color: white;	
-    height: 16px;
-    font-size: smaller;
+    display: block;
+    margin: 0 1.5rem;
+    padding: 1rem 0;
 }
 
-aside[sidebar] [menu][info] span {
-    padding: 5%;
+aside[menubar] [menu] div[id]:not(:last-of-type) {
+    border-bottom: 1px solid hsla(221,17%,14%,1);
 }
 
-aside[sidebar] [menu][info] span:last-of-type::before {
-    font-size: small;
-    content: attr(data-icon);
-    margin-right: 8px;
-    vertical-align: top;
+aside[menubar] [menu] div[id] [item] {
+    display: block;
+    padding: 0.5rem 1.5rem;
+    margin: 0.3rem 0;
+    text-align: left;
+    width: 100%;
+    color: hsla(215,5%,50%,1);
+    cursor: pointer;
+    /* border-radius: 0.2rem; */
 }
 
-aside[sidebar] [menu][separator] {
-	height: 2px;
-	margin: 0 20%;
-	background-color: #aaa;
-	width: 60%;
+aside[menubar] [menu] div[id] [main][item] {
+    color: #fff;
 }
 
-aside[main][sidebar] button[menu] {
-	border-radius: 100%;
-}
-
-aside[main][sidebar] button[menu]:first-of-type {
-	margin-top: 18px;
-}
-
-aside[main][sidebar] button[menu].v-link-active,
-aside[main][sidebar] button[menu]:hover {
-	border-radius: 25%;
-	background-color: #1c79c3;
-}
-
-aside[main][sidebar] button[logout] {
-	color: white;
-	background-color: transparent;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	padding: 8px;
-	width: 100%;
-	height: 4rem;
-	border-width: 0;
-}
-
-aside[main][sidebar] button[logout]:hover {
-	background-color: rgba(255,255,255,0.15);
-}
-
-aside[main][sidebar] button[logout]::before {
-	font-size: 1.5rem;
-    display: inline-block;
-    font-family: "Ionicons" !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    text-rendering: auto;
-    line-height: 1;
-	content: "\f254";
-    -webkit-font-smoothing: antialiased;
-}
-
-aside[main][sidebar] button[logout]:hover::before {
-	content: "\f200";
-}
-
-aside[secondary][sidebar] {
-	background-color: #2f3237;
-	height: 100vh;
-	width: 240px;
-	/* border-left: 1px solid #000; */
-}
-
-aside[secondary][sidebar] button[menu] {
-	width: 100%;
-	height: 3rem;
-	border-width: 0;
-	background-color: transparent;
-	color: white;
-	margin: 0.5rem 0;
-	font-size: large;
-}
-
-aside[secondary][sidebar] button[menu].v-link-active,
-aside[secondary][sidebar] button[menu]:hover {
-	background-color: #5a6772;
+aside[menubar] [menu] div[id] [item].v-link-active,
+aside[menubar] [menu] div[id] [item]:hover {
+    color: #fff;
+    background-color: hsla(221,17%,15%,1);
 }

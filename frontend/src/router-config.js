@@ -15,7 +15,7 @@ module.exports = function(router) {
 			subRoutes: {
 				'/profile' : {
 					component: require('./views/profile/main.vue'),
-					subRoutes: {
+					subRoutes:{
 						'/:username' : {
 							name: 'profile',
 							component: require('./views/profile/profile.vue')
@@ -34,30 +34,34 @@ module.exports = function(router) {
 				'/innopoints' : {
 					component: require('./views/innopoints/main.vue'),
 					subRoutes: {
-						'/shop' : {
-							component: require('./views/innopoints/shop/main.vue'),
-							subRoutes: {
-								'/' : {
-									component: require('./views/innopoints/shop/shop.vue'), 
-									name: 'shop'
-								},
-								'/:item' : {
-									component: require('./views/innopoints/shop/item.vue'),
-									name: 'item'
-								},
-							},
-						},
 						'/:username' : {
 							component: router_view,
 							subRoutes: {
 								'/' : {
-									component: require('./views/innopoints/points/applications.vue'),
+									component: { template: '' },
+									name: 'innopoints'
+								},
+								'/applications' : {
+									component: require('./views/innopoints/applications.vue'),
 									name: 'applications'
 								},
 								'/apply' : {
-									component: require('./views/innopoints/points/apply.vue'),
+									component: require('./views/innopoints/apply.vue'),
 									name: 'apply'
-								}
+								},
+								'/shop' : {
+									component: router_view,
+									subRoutes: {
+										'/' : {
+											component: require('./views/innopoints/shop/shop.vue'), 
+											name: 'shop'
+										},
+										'/:item' : {
+											component: require('./views/innopoints/shop/item.vue'),
+											name: 'item'
+										},
+									},
+								},
 							}
 						}
 					}
@@ -67,7 +71,6 @@ module.exports = function(router) {
 		}
 	});
 
-	// TODO: restore routing
 	router.beforeEach((transition) => {
 		if (!user.loggedIn) {
 			if (transition.to.authorizedZone)
@@ -82,7 +85,8 @@ module.exports = function(router) {
 				transition.next();
 		}
 	}).redirect({
-		'*':''
+		'*':'/',
+		'/innopoints/:username/':'/innopoints/:username/applications'
 	});
 
 	return router;

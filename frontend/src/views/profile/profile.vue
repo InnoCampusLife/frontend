@@ -17,30 +17,35 @@
 	module.exports =  {
 		data () {
 			return {
-				user : this.$router.app.user.account
+				user : {}
 			}
 		},
 		route: {
 			data (transition) {
 				console.log("Called get in user");
-				var route = this.$route;
-				console.log(route.params.username);
-				
-				if (route.params.username == this.$router.app.user.account.username) {
-					this.$router.app.user.account.update(transition.next);
-				}
-				else
-					this.$router.app.user.account.getBio({username: route.params.username},
+
+				var username = this.$route.params.username;
+				var user = this.$router.app.user.account;
+
+				if (user.username != username) {
+					console.log("called getBio: " + username);
+					user.getBio({username: username},
 						function (result) {
 							console.log(result);
-							result.username = route.params.username;
 							transition.next({
 								user : result
 							});
-
 						}
 					);
-					
+				}
+				else {
+					if (user.id)
+						transition.next({user: user});
+					else
+						user.exists(result => {
+							transition.next({user: user});
+						});
+				}		
 			}
 		}
 	}
