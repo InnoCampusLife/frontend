@@ -6,7 +6,7 @@
 [fill][screen] {position: absolute;	top: 0;	left: 0; width: 100vw; height: 100vh;}
 [fill][parent] {margin: 0; width: 100%; height: 100%;}
 
-[list] {display: list-item;}
+/* [list] {display: list-item;} */
 
 [table] {display: table;}
 
@@ -28,7 +28,9 @@
 [center][children] { text-align: center; }
 
 [flex] {display: -ms-flexbox;display: flex;}
+[flex][wrap] {flex-wrap: wrap;}
 [flex][column] {-ms-flex-direction: column;flex-direction: column;}
+[flex][row] {-ms-flex-direction: row;flex-direction: row;}
 [flex][center][children], [flex][column][center][children] {-ms-flex-align: center;-ms-grid-row-align: center;align-items: center; -ms-flex-pack: center; justify-content: center;}
 [flex] [grow] { -ms-flex-positive: 1; flex-grow: 1; }
 
@@ -77,22 +79,26 @@
 [hidden] {opacity: 0; visibility: hidden;}
 
 [scroller] { overflow: auto !important; }
-[scroller-y] { overflow-y: auto !important; overflow-x: hidden !important; }
-[scroller-y][force] { overflow-y: scroll !important; }
-[scroller-x] { overflow-x: auto !important; overflow-y: hidden !important; }
-[scroller-x][force] { overflow-x: scroll !important; }
+[scroller-y] { overflow-y: auto !important; overflow-x: hidden; }
+[scroller-y-force] { overflow-y: scroll !important; }
+[scroller-x] { overflow-x: auto !important; overflow-y: hidden; }
+[scroller-x-force] { overflow-x: scroll !important; }
 
-span::after { content: "  " attr(data-after); }
-span::before { content: attr(data-before) "  "; }
+[data-after]::after { content: attr(data-after); }
+[data-before]::before { content: attr(data-before); }
 
 [icon]::before {
 	font-family: 'themify';
 	content: attr(icon) "  ";
 	padding: 0.5rem;
 }
-[icon]::after {
-	font-family: 'themify';
-	content: "  " attr(icon-after);
+
+[no-select] {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;  
 }
 
 [default] { all: initial !important; }

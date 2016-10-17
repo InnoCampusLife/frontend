@@ -1,10 +1,6 @@
 <template>
 	<sidebar></sidebar>
-	<content>
-		<div content slot="header">
-			<button item v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">Request Innopoints</button>
-		</div>
-	</content>
+	<content></content>
 </template>
 
 <script>

@@ -13056,15 +13056,16 @@
 	//
 	// <script>
 	module.exports = {
-		ready() {
+		ready: function () {
 			console.log('App is awaiting your command!');
 		},
-		data() {
+		data: function () {
 			return {
 				user: {
 					account: __webpack_require__(6).accounts,
 					innopoints: __webpack_require__(6).innopoints
-				}
+				},
+				query: null
 			};
 		}
 	};
@@ -13081,7 +13082,7 @@
 	var modules = {
 		accounts: {
 			roles: ['ghost', 'student', 'moderator'],
-			have(role) {
+			have: function (role) {
 				return !!(this.roles.indexOf(role) > -1);
 			},
 
@@ -13108,7 +13109,7 @@
 				var ln = !!this.lastName ? this.lastName + ' ' : '';
 				var fn = !!this.firstName ? this.firstName : '';
 				var pn = !!this.patronymic ? ' ' + this.patronymic : '';
-				return ln + fn + pn;
+				return fn + ln + pn;
 			},
 
 			get loggedIn() {
@@ -13127,11 +13128,11 @@
 				return !!this.is('moderator');
 			},
 
-			is(ofType) {
+			is: function (ofType) {
 				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 			},
 
-			clear() {
+			clear: function () {
 				this.id = null;
 				this.role = null;
 				this.firstName = null;
@@ -13142,7 +13143,7 @@
 				this.storage.clear();
 			},
 
-			set(data) {
+			set: function (data) {
 				if (data.id) this.id = data.id;
 				if (data.username) this.username = data.username;
 				if (data.role) this.role = data.role;
@@ -13153,9 +13154,10 @@
 				if (data.token) this.token = data.token;
 			},
 
-			update(successCallback, errorCallback) {
-				this.get(result => {
-					this.set(result);
+			update: function (successCallback, errorCallback) {
+				var that = this;
+				this.get(function (result) {
+					that.set(result);
 					if (successCallback) successCallback(result);
 				}, errorCallback);
 			},
@@ -13172,12 +13174,16 @@
 				return api_url + "v" + this.version + "/" + this.name + "/";
 			},
 
-			create: function (password, successCallback, errorCallback) {
+			create: function (password, email, successCallback, errorCallback) {
 				let type = "POST",
 				    url = this.url,
 				    data = {
 					username: this.username,
-					password: password
+					password: password,
+					email: email,
+					firstName: this.firstName,
+					lastName: this.lastName,
+					studyGroup: this.studyGroup
 				};
 
 				ajax(type, url, data, successCallback, errorCallback);
@@ -13241,7 +13247,7 @@
 		},
 		innopoints: {
 			roles: ['student', 'admin'],
-			have(role) {
+			have: function (role) {
 				return !!(this.roles.indexOf(role) > -1);
 			},
 			data: {
@@ -13263,16 +13269,19 @@
 					return !!this.is('admin');
 				},
 
-				is(ofType) {
-					return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+				is: function (ofType) {
+					return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 				},
 
-				update(successCallback, errorCallback) {
-					modules.innopoints.api.user.get(result => {
-						this.id = result.id;
-						this.amount = result.points_amount || 0;
-						this.role = result.type;
-					});
+				update: function (successCallback, errorCallback) {
+					var that = this;
+					modules.innopoints.api.user.get(function (result) {
+						that.id = result.id;
+						that.amount = result.points_amount || 0;
+						that.role = result.type;
+
+						if (successCallback) successCallback(result);
+					}, errorCallback);
 				}
 			},
 
@@ -13379,14 +13388,14 @@
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 
-					applicaiton: {
+					application: {
 						get url() {
 							return modules.innopoints.api.user.url;
 						},
 						create: function (application, successCallback, errorCallback) {
 							let type = "POST",
 							    url = this.url + modules.accounts.token + "/applications",
-							    data = { application };
+							    data = { application: application };
 
 							ajax(type, url, data, successCallback, errorCallback);
 						},
@@ -13401,7 +13410,7 @@
 
 						send: function (appl_id, successCallback, errorCallback) {
 							let type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 							    data = '';
 
 							ajax(type, url, data, successCallback, errorCallback);
@@ -13428,13 +13437,6 @@
 						get url() {
 							return modules.innopoints.api.user.url;
 						},
-						get: function (skip_count, limit_count, successCallback, errorCallback) {
-							let type = "GET",
-							    url = this.url + modules.accounts.token + "/applications",
-							    data = { skip: skip_count, limit: limit_count };
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
 
 						getWithStatus: function (status, skip_count, limit_count, successCallback, errorCallback) {
 							let type = "GET",
@@ -13442,6 +13444,22 @@
 							    data = { skip: skip_count, limit: limit_count };
 
 							ajax(type, url, data, successCallback, errorCallback);
+						},
+
+						get: function (skip_count, limit_count, successCallback, errorCallback) {
+							var that = this;
+							this.getWithStatus("in_process", 0, 1000, function (result) {
+								that.getWithStatus("rejected", 0, 1000, function (result1) {
+									that.getWithStatus("rework", 0, 1000, function (result2) {
+										that.getWithStatus("approved", 0, 1000, function (result3) {
+											result = result.concat(result1);
+											result = result.concat(result2);
+											result = result.concat(result3);
+											if (successCallback) successCallback(result);
+										}, errorCallback);
+									}, errorCallback);
+								}, errorCallback);
+							}, errorCallback);
 						}
 					}
 				},
@@ -13490,14 +13508,30 @@
 							    data = { skip: skip_count, limit: limit_count };
 
 							ajax(type, url, data, successCallback, errorCallback);
-						}
+						},
 
+						get: function (successCallback, errorCallback) {
+							var that = this;
+							this.getWithStatus("in_process", 0, 1000, function (result) {
+								that.getWithStatus("rejected", 0, 1000, function (result1) {
+									that.getWithStatus("rework", 0, 1000, function (result2) {
+										that.getWithStatus("approved", 0, 1000, function (result3) {
+											result = result.concat(result1);
+											result = result.concat(result2);
+											result = result.concat(result3);
+											if (successCallback) successCallback(result);
+										}, errorCallback);
+									}, errorCallback);
+								}, errorCallback);
+							}, errorCallback);
+						}
 					},
 
-					applicaiton: {
+					application: {
 						get url() {
 							return modules.innopoints.api.admin.url;
 						},
+
 						create: function (application, successCallback, errorCallback) {
 							let type = "POST",
 							    url = this.url + modules.accounts.token + "/applications",
@@ -13634,16 +13668,16 @@
 		router.map({
 			'/login': {
 				component: __webpack_require__(11),
-				loginPage
+				loginPage: loginPage
 			},
 			'/': {
 				component: __webpack_require__(14),
 				subRoutes: {
 					'/': {
-						component: { template: '' }
+						component: __webpack_require__(20)
 					},
 					'/profile': {
-						component: __webpack_require__(20),
+						component: __webpack_require__(26),
 						subRoutes: {
 							'/:username': {
 								name: 'profile',
@@ -13671,8 +13705,13 @@
 										name: 'innopoints'
 									},
 									'/applications': {
-										component: __webpack_require__(47),
-										name: 'applications'
+										component: router_view,
+										subRoutes: {
+											'/:filter': {
+												component: __webpack_require__(47),
+												name: 'applications'
+											}
+										}
 									},
 									'/apply': {
 										component: __webpack_require__(50),
@@ -13685,7 +13724,7 @@
 												component: __webpack_require__(53),
 												name: 'shop'
 											},
-											'/:item': {
+											'/item/:item': {
 												component: __webpack_require__(56),
 												name: 'item'
 											}
@@ -13696,11 +13735,11 @@
 						}
 					}
 				},
-				authorizedZone
+				authorizedZone: authorizedZone
 			}
 		});
 
-		router.beforeEach(transition => {
+		router.beforeEach(function (transition) {
 			if (!user.loggedIn) {
 				if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
 			} else {
@@ -13708,7 +13747,7 @@
 			}
 		}).redirect({
 			'*': '/',
-			'/innopoints/:username/': '/innopoints/:username/applications'
+			'/innopoints/:username/': '/innopoints/:username/applications/all'
 		});
 
 		return router;
@@ -13747,131 +13786,447 @@
 /***/ function(module, exports) {
 
 	// <template>
-	// <link rel="stylesheet" href="/css/login.css">
-	// <main wrapper login flex center children>
+	// <!-- <link type="text/css" rel="stylesheet" href="/css/login.css"> -->
+	// <style type="text/css" media="screen">
+	// 	main[wrapper] * {
+	// 		box-sizing: border-box;
+	// 		margin: 0;
+	// 		padding: 0;
+	// 	}
+	//
+	// 	main[wrapper][login] [container] {
+	// 		font-family: 'Source Sans Pro', sans-serif;
+	// 		color: white;
+	// 		font-weight: 100;
+	// 	}
+	//
+	// 	main[wrapper][login] [container] ::-webkit-input-placeholder,
+	// 	main[wrapper][login] [container] :-moz-placeholder,
+	// 	main[wrapper][login] [container] :-ms-input-placeholder,
+	// 	main[wrapper][login] [container] ::-moz-placeholder {
+	// 		font-family: 'Source Sans Pro', sans-serif;
+	// 		color: white;
+	// 		opacity: 1;
+	// 		font-weight: lighter;
+	// 	}
+	// 	main[wrapper][login] {
+	// 		transition: none;
+	// 		/* background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */
+	// 		background: hsl(225, 14%, 22%);
+	// 		position: absolute;
+	// 		top: 0;
+	// 		left: 0;
+	// 		width: 100vw;
+	// 		height: 100vh;
+	// 		overflow: hidden;
+	// 	}
+	// 	main[wrapper][form-success] [container] h1 {
+	// 		transform: translateY(85px);
+	// 	}
+	// 	[container] {
+	// 	    z-index: 1;
+	// 	    max-width: 600px;
+	// 	    text-align: center;
+	// 	}
+	// 	[container] h1 {
+	// 		font-size: 40px;
+	// 		transition-duration: 1s;
+	// 		transition-timing-function: ease-in-put;
+	// 		font-weight: 200;
+	// 	}
+	//
+	// 	main[wrapper] form {
+	// 		height: 25rem;
+	// 	    padding: 20px 0;
+	// 	    position: relative;
+	// 	    text-align: center;
+	// 	    z-index: 2;
+	// 	}
+	//
+	// 	main[wrapper] form input {
+	// 		-webkit-appearance: none;
+	// 		-moz-appearance: none;
+	// 		appearance: none;
+	// 		outline: 0;
+	// 		border: 0;
+	// 		background-color: rgba(255, 255, 255, 0.2);
+	// 		width: 250px;
+	// 		border-radius: 5px;
+	// 		padding: 10px 15px;
+	// 		margin: 0 auto 10px auto;
+	// 		display: block;
+	// 		/* text-align: center; */
+	// 		font-size: 18px;
+	// 		color: white;
+	// 		transition-duration: 0.25s;
+	// 	}
+	//
+	// 	main[wrapper] form input[error] {
+	// 		border: 1px solid red;
+	// 	}
+	//
+	// 	main[wrapper] form input:hover {
+	// 		background-color: rgba(255, 255, 255, 0.4);
+	// 	}
+	//
+	// 	main[wrapper] form input:active,
+	// 	main[wrapper] form input:focus {
+	// 		background-color: rgba(255,255,255,0.25);
+	// 	}
+	//
+	// 	main[wrapper] form button[place] {
+	// 	    -webkit-appearance: none;
+	// 	    -moz-appearance: none;
+	// 	    appearance: none;
+	// 	    position: absolute;
+	// 	    padding: 10px 15px;
+	// 	    color: #fff;
+	// 	    font-size: 1.2rem;
+	// 	    outline: 0;
+	// 	    border: 0;
+	// 	    border-top: 1px solid transparent;
+	// 	    cursor: pointer;
+	// 	    transform: translate3d(-50%,0,0);
+	// 	    transition: transform ease .5s, width ease .5s, background-color ease .2s, border-color ease .3s;
+	// 	    -webkit-user-select: none;
+	// 	    -moz-user-select: none;
+	// 	    -ms-user-select: none;
+	// 	    user-select: none;
+	// 	}
+	//
+	// 	main[wrapper] form button[place="form"] {
+	// 	    border-radius: 5px;
+	// 	    width: 250px;
+	// 	    background-color: rgba(255,255,255,0.3);
+	// 	}
+	//
+	// 	main[wrapper] form button[place="bottom"][purp="login"] {
+	// 	    transform: translate3d(-50%,5rem,0);
+	// 	}
+	//
+	// 	main[wrapper] form button[place="form"]:focus {
+	// 		background-color: rgba(255,255,255,0.2);
+	// 	}
+	//
+	// 	main[wrapper] form button[place="form"]:hover {
+	// 		background-color: rgba(255,255,255,0.4);
+	// 		/* transition: transform ease 0.5s, width ease .5s, background-color ease 0s, border-color ease .3s; */
+	//
+	// 	}
+	// 	main[wrapper] form button[place="form"]:active {
+	// 		background-color: rgba(255,255,255,.6);
+	// 	}
+	//
+	// 	main[wrapper] form button[place="bottom"] {
+	// 	    width: 7rem;
+	// 	    transform: translate3d(-50%,18.2rem,0);
+	// 	    z-index: 99;
+	// 	    border-top: 1px solid #fff;
+	// 	}
+	//
+	// 	main[wrapper] button[place="bottom"]:active,
+	// 	main[wrapper] button[place="bottom"]:hover {
+	// 	    border-top: 1px solid transparent;
+	// 	}
+	//
+	// 	main[wrapper] [background] {
+	// 		position: fixed;
+	// 		top: 0;
+	// 		left: 0;
+	// 		width: 100%;
+	// 		height: 100%;
+	// 		z-index: 0;
+	// 		opacity: 0.5;
+	// 		background: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg');
+	// 		background-repeat: no-repeat;
+	// 		background-position: center;
+	// 		background-size: cover;
+	// 	}
+	// 	/* main[wrapper] [background] li {
+	// 		position: absolute;
+	// 		list-style: none;
+	// 		display: block;
+	// 		width: 40px;
+	// 		height: 40px;
+	// 		background-color: #fff;
+	// 		opacity: 0.5;
+	// 		bottom: -160px;
+	// 		animation: square 25s infinite;
+	// 		transition-timing-function: linear; Chrome, Safari, Opera
+	// 		animation-delay: calc(12s + 60s);
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(1) {
+	// 		left: 10%;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(2) {
+	// 		left: 20%;
+	// 		width: 80px;
+	// 		height: 80px;
+	// 		animation-delay: calc(2s + 60s);
+	// 		animation-duration: 17s;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(3) {
+	// 		left: 25%;
+	// 		animation-delay: calc(4s + 60s);
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(4) {
+	// 		left: 40%;
+	// 		width: 60px;
+	// 		height: 60px;
+	// 		animation-duration: 22s;
+	// 		opacity: 0.25;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(5) {
+	// 		left: 70%;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(6) {
+	// 		left: 80%;
+	// 		width: 120px;
+	// 		height: 120px;
+	// 		animation-delay: calc(3s + 60s);
+	// 		opacity: 0.07;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(7) {
+	// 		left: 32%;
+	// 		width: 160px;
+	// 		height: 160px;
+	// 		animation-delay: calc(7s + 60s);
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(8) {
+	// 		left: 55%;
+	// 		width: 20px;
+	// 		height: 20px;
+	// 		animation-delay: calc(15s + 60s);
+	// 		animation-duration: 40s;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(9) {
+	// 		left: 25%;
+	// 		width: 10px;
+	// 		height: 10px;
+	// 		animation-delay: calc(2s + 60s);
+	// 		animation-duration: 40s;
+	// 		opacity: 0.05;
+	// 	}
+	// 	main[wrapper] [background] li:nth-child(10) {
+	// 		left: 90%;
+	// 		width: 160px;
+	// 		height: 160px;
+	// 		animation-delay: calc(11s + 60s);
+	// 	}
+	// 	@keyframes square {
+	// 		0% {
+	// 			transform: translateY(0);
+	// 		}
+	// 		100% {
+	// 			transform: translateY(-160vh) rotate(600deg);
+	// 		}
+	// 	} */
+	// </style>
+	// <main wrapper login flex center children scroller-y>
 	// 	<div container>
-	// 		<h1 style="transition: color 0 none;">Welcome</h1>
-	// 			<form login>
-	// 				<!-- TODO : rework oninput events -->
+	// 		<!-- <h1 style="font-family: 'Source Sans Pro', sans-serif;color: white;font-weight:lighter;">Welcome</h1> -->
+	// 		<form login>
+	// 			<!-- TODO : rework oninput events -->
+	// 			<input
+	// 				type="text"
+	// 				name="username"
+	// 				id="username"
+	// 				placeholder="Username"
+	// 				autocomplete="off"
+	// 				maxlength="32"
+	// 				v-on:input="usernameInputEvent"
+	// 				v-model="user.account.username"
+	// 				@keyup.enter="isLogin ? login($event) : register($event)"
+	// 			>
+	// 			<input
+	// 				type="password"
+	// 				name="password"
+	// 				id="password"
+	// 				placeholder="Password"
+	// 				autocomplete="off"
+	// 				maxlength="64"
+	// 				v-on:input="passwordInputEvent"
+	// 				@keyup.enter="isLogin ? login($event) : register($event)"
+	// 			>
+	// 			<div v-show="!isLogin" transition="height" transition-mode="out-in" style="height:212px"> 
+	// 				<input
+	// 					type="email"
+	// 					name="email"
+	// 					id="email"
+	// 					placeholder="Email"
+	// 					autocomplete="off"
+	// 					v-on:input="emailInputEvent"
+	// 					@keyup.enter="isLogin ? login($event) : register($event)"
+	// 				>
 	// 				<input
 	// 					type="text"
-	// 					name="username"
-	// 					id="username"
-	// 					placeholder="Username"
+	// 					name="firstname"
+	// 					id="firstname"
+	// 					placeholder="First Name"
 	// 					autocomplete="off"
-	// 					maxlength="32"
-	// 					v-on:input="usernameInputEvent"
-	// 					v-model="user.account.username"
-	// 					@keyup.enter="login"
+	// 					v-on:input="/*usernameInputEvent*/"
+	// 					v-model="user.account.firstName"
+	// 					@keyup.enter="isLogin ? login($event) : register($event)"
 	// 				>
 	// 				<input
-	// 					type="password"
-	// 					name="password"
-	// 					id="password"
-	// 					placeholder="Password"
+	// 					type="text"
+	// 					name="lastname"
+	// 					id="lastname"
+	// 					placeholder="Last Name"
 	// 					autocomplete="off"
-	// 					maxlength="64"
-	// 					v-on:input="passwordInputEvent"
-	// 					@keyup.enter="login"
+	// 					v-on:input="/*usernameInputEvent*/"
+	// 					v-model="user.account.lastName"
+	// 					@keyup.enter="isLogin ? login($event) : register($event)"
 	// 				>
-	// 				<div>
-	// 					<button
-	// 						type="button"
-	// 						@click="login"
-	// 						@keyup.enter="login"
-	// 					>login</button>
+	// 				<input
+	// 					type="text"
+	// 					name="group"
+	// 					id="group"
+	// 					placeholder="Study Group (BS1-2, BS4-1)"
+	// 					autocomplete="off"
+	// 					v-on:input="/*usernameInputEvent*/"
+	// 					v-model="user.account.studyGroup"
+	// 					@keyup.enter="isLogin ? login($event) : register($event)"
+	// 				>
+	// 			</div>
 	//
-	// 					<!-- <button
-	// 						type="button"
-	// 						@click="register"
-	// 						@keyup.enter="register"
-	// 					>register</button> -->
-	// 				</div>
-	// 			</form>
-	// 		</div>
-	// 		<ul bubbles>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 			<li></li>
-	// 		</ul>
+	// 			<button :place="isLogin ? 'form' : 'bottom'" style="color:#fff" purp="login"
+	// 				type="button"
+	// 				@click="login"
+	// 				@keyup.enter="login"
+	// 			>Log in</button>
+	// 			<button :place="isLogin ? 'bottom' : 'form'" style="color:#fff"
+	// 				type="button"
+	// 				@click="register"
+	// 				@keyup.enter="register"
+	// 			>Register</button>
+	// 		</form>
 	// 	</div>
+	// 	<ul background>
+	// <!-- 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li>
+	// 		<li></li> -->
+	// 	</ul>
+	// </main>
 	// </template>
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
-				user: this.$router.app.user
+				user: this.$router.app.user,
+				isLogin: true
 			};
 		},
 		methods: {
-			login(e) {
+			login: function (e) {
 				e.preventDefault();
-				this.user.account.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+				if (this.isLogin) this.user.account.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);else {
+					this.isLogin = true;
+					e.target.blur();
+				}
 			},
-			register(e) {
+			register: function (e) {
 				e.preventDefault();
-				// if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict'))
-				// this.user.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+				if (!this.isLogin) {
+					if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict') && this.checkEmailInput() && this.checkNameInput()) this.user.account.create(password.value, email.value, this.formSuccessCallback, this.formErrorCallback);
+				} else {
+					this.isLogin = false;
+					e.target.blur();
+				}
 			},
+
 			/// Form Callbacks
 			//
-			formSuccessCallback(result) {
+			formSuccessCallback: function (result) {
 				this.user.account.set(result);
 				this.$router.go("/");
 			},
-			formErrorCallback(result) {
-				// TODO set error tooltip info
+			formErrorCallback: function (result) {
+				//this.setError(result, 'username');
 			},
 			//
 			///
 
 			///Reusable LoginData checkers
 			//
-			usernameInputEvent(e) {
+			usernameInputEvent: function (e) {
 				this.checkUsernameInput();
 			},
 
-			checkUsernameInput(strict = false) {
+			checkUsernameInput: function (strict) {
 				let regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
-				let ufe = !regex.test(this.user.username);
+				let ufe = !regex.test(this.user.account.username);
 
-				if (ufe) this.setError("Username must contain at least 3 alphanumeric characters!", 'username');else this.removeError('username');
+				if (ufe) this.setError('username');else this.removeError('username');
 
 				return !ufe;
 			},
 
-			passwordInputEvent(e) {
+			passwordInputEvent: function (e) {
 				this.checkPasswordInput();
 			},
 
-			checkPasswordInput(strict = false) {
+			checkPasswordInput: function (strict) {
 				let regex = strict ? /^.{5,64}$/ : /^.*$/;
 				let pfe = !regex.test(password.value);
 
-				if (pfe) this.setError("Password must be more than 8 symbols long!", 'password');else this.removeError('password');
+				if (pfe) this.setError('password');else this.removeError('password');
+
+				return !pfe;
+			},
+
+			emailInputEvent: function (e) {
+				this.checkEmailInput();
+			},
+
+			checkEmailInput: function () {
+				let regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				let pfe = !regex.test(email.value);
+
+				if (pfe) this.setError('email');else this.removeError('email');
+
+				return !pfe;
+			},
+
+			nameInputEvent: function (e) {
+				this.checkNameInput();
+			},
+
+			checkNameInput: function () {
+				//([BS]|[MS])[1-4]-[0-9]+
+				let regex = /^.+$/;
+				let pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
+
+				if (pfe) {
+					this.setError('firstname');
+					this.setError('lastname');
+				} else {
+					this.removeError('firstname');
+					this.removeError('lastname');
+				}
 
 				return !pfe;
 			},
 
 			//TODO
-			setError(error, toWhat) {
-				console.log(error);
+			setError: function (toWhat) {
+				var elem = document.getElementById(toWhat);
+				elem.setAttribute('error', '');
 			},
 
 			//TODO
-			removeError(fromWhat) {}
-			// console.log(fromWhat);
-
-			//
-			///
+			removeError: function (fromWhat) {
+				var elem = document.getElementById(fromWhat);
+				elem.removeAttribute('error');
+			}
 		}
 	};
 	// </script>
@@ -13880,7 +14235,7 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<link rel=\"stylesheet\" href=\"/css/login.css\">\r\n<main wrapper login flex center children>\r\n\t<div container>\r\n\t\t<h1 style=\"transition: color 0 none;\">Welcome</h1>\r\n\t\t\t<form login>\r\n\t\t\t\t<!-- TODO : rework oninput events -->\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"username\"\r\n\t\t\t\t\tid=\"username\"\r\n\t\t\t\t\tplaceholder=\"Username\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"32\"\r\n\t\t\t\t\tv-on:input=\"usernameInputEvent\"\r\n\t\t\t\t\tv-model=\"user.account.username\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"password\"\r\n\t\t\t\t\tname=\"password\"\r\n\t\t\t\t\tid=\"password\"\r\n\t\t\t\t\tplaceholder=\"Password\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tmaxlength=\"64\"\r\n\t\t\t\t\tv-on:input=\"passwordInputEvent\"\r\n\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t>\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"login\"\r\n\t\t\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t\t\t>login</button>\r\n\r\n\t\t\t\t\t<!-- <button\r\n\t\t\t\t\t\ttype=\"button\"\r\n\t\t\t\t\t\t@click=\"register\"\r\n\t\t\t\t\t\t@keyup.enter=\"register\"\r\n\t\t\t\t\t>register</button> -->\r\n\t\t\t\t</div>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t\t<ul bubbles>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t\t<li></li>\r\n\t\t</ul>\r\n\t</div>\r\n</template>";
+	module.exports = "\r\n<!-- <link type=\"text/css\" rel=\"stylesheet\" href=\"/css/login.css\"> -->\r\n<style type=\"text/css\" media=\"screen\">\r\n\tmain[wrapper] * {\r\n\t\tbox-sizing: border-box;\r\n\t\tmargin: 0;\r\n\t\tpadding: 0;\r\n\t}\r\n\r\n\tmain[wrapper][login] [container] {\r\n\t\tfont-family: 'Source Sans Pro', sans-serif;\r\n\t\tcolor: white;\r\n\t\tfont-weight: 100;\r\n\t}\r\n\r\n\tmain[wrapper][login] [container] ::-webkit-input-placeholder,\r\n\tmain[wrapper][login] [container] :-moz-placeholder,\r\n\tmain[wrapper][login] [container] :-ms-input-placeholder,\r\n\tmain[wrapper][login] [container] ::-moz-placeholder {\r\n\t\tfont-family: 'Source Sans Pro', sans-serif;\r\n\t\tcolor: white;\r\n\t\topacity: 1;\r\n\t\tfont-weight: lighter;\r\n\t}\r\n\tmain[wrapper][login] {\r\n\t\ttransition: none;\r\n\t\t/* background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */\r\n\t\tbackground: hsl(225, 14%, 22%);\r\n\t\tposition: absolute;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100vw;\r\n\t\theight: 100vh;\r\n\t\toverflow: hidden;\r\n\t}\r\n\tmain[wrapper][form-success] [container] h1 {\r\n\t\ttransform: translateY(85px);\r\n\t}\r\n\t[container] {\r\n\t    z-index: 1;\r\n\t    max-width: 600px;\r\n\t    text-align: center;\r\n\t}\r\n\t[container] h1 {\r\n\t\tfont-size: 40px;\r\n\t\ttransition-duration: 1s;\r\n\t\ttransition-timing-function: ease-in-put;\r\n\t\tfont-weight: 200;\r\n\t}\r\n\r\n\tmain[wrapper] form {\r\n\t\theight: 25rem;\r\n\t    padding: 20px 0;\r\n\t    position: relative;\r\n\t    text-align: center;\r\n\t    z-index: 2;\r\n\t}\r\n\r\n\tmain[wrapper] form input {\r\n\t\t-webkit-appearance: none;\r\n\t\t-moz-appearance: none;\r\n\t\tappearance: none;\r\n\t\toutline: 0;\r\n\t\tborder: 0;\r\n\t\tbackground-color: rgba(255, 255, 255, 0.2);\r\n\t\twidth: 250px;\r\n\t\tborder-radius: 5px;\r\n\t\tpadding: 10px 15px;\r\n\t\tmargin: 0 auto 10px auto;\r\n\t\tdisplay: block;\r\n\t\t/* text-align: center; */\r\n\t\tfont-size: 18px;\r\n\t\tcolor: white;\r\n\t\ttransition-duration: 0.25s;\r\n\t}\r\n\r\n\tmain[wrapper] form input[error] {\r\n\t\tborder: 1px solid red;\r\n\t}\r\n\r\n\tmain[wrapper] form input:hover {\r\n\t\tbackground-color: rgba(255, 255, 255, 0.4);\r\n\t}\r\n\r\n\tmain[wrapper] form input:active,\r\n\tmain[wrapper] form input:focus {\r\n\t\tbackground-color: rgba(255,255,255,0.25);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place] {\r\n\t    -webkit-appearance: none;\r\n\t    -moz-appearance: none;\r\n\t    appearance: none;\r\n\t    position: absolute;\r\n\t    padding: 10px 15px;\r\n\t    color: #fff;\r\n\t    font-size: 1.2rem;\r\n\t    outline: 0;\r\n\t    border: 0;\r\n\t    border-top: 1px solid transparent;\r\n\t    cursor: pointer;\r\n\t    transform: translate3d(-50%,0,0);\r\n\t    transition: transform ease .5s, width ease .5s, background-color ease .2s, border-color ease .3s;\r\n\t    -webkit-user-select: none;\r\n\t    -moz-user-select: none;\r\n\t    -ms-user-select: none;\r\n\t    user-select: none;\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"] {\r\n\t    border-radius: 5px;\r\n\t    width: 250px;\r\n\t    background-color: rgba(255,255,255,0.3);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"bottom\"][purp=\"login\"] {\r\n\t    transform: translate3d(-50%,5rem,0);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"]:focus {\r\n\t\tbackground-color: rgba(255,255,255,0.2);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"]:hover {\r\n\t\tbackground-color: rgba(255,255,255,0.4);\r\n\t\t/* transition: transform ease 0.5s, width ease .5s, background-color ease 0s, border-color ease .3s; */\r\n\r\n\t}\r\n\tmain[wrapper] form button[place=\"form\"]:active {\r\n\t\tbackground-color: rgba(255,255,255,.6);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"bottom\"] {\r\n\t    width: 7rem;\r\n\t    transform: translate3d(-50%,18.2rem,0);\r\n\t    z-index: 99;\r\n\t    border-top: 1px solid #fff;\r\n\t}\r\n\r\n\tmain[wrapper] button[place=\"bottom\"]:active,\r\n\tmain[wrapper] button[place=\"bottom\"]:hover {\r\n\t    border-top: 1px solid transparent;\r\n\t}\r\n\r\n\tmain[wrapper] [background] {\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tz-index: 0;\r\n\t\topacity: 0.5;\r\n\t\tbackground: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg');\r\n\t\tbackground-repeat: no-repeat;\r\n\t\tbackground-position: center;\r\n\t\tbackground-size: cover;\r\n\t}\r\n\t/* main[wrapper] [background] li {\r\n\t\tposition: absolute;\r\n\t\tlist-style: none;\r\n\t\tdisplay: block;\r\n\t\twidth: 40px;\r\n\t\theight: 40px;\r\n\t\tbackground-color: #fff;\r\n\t\topacity: 0.5;\r\n\t\tbottom: -160px;\r\n\t\tanimation: square 25s infinite;\r\n\t\ttransition-timing-function: linear; Chrome, Safari, Opera\r\n\t\tanimation-delay: calc(12s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(1) {\r\n\t\tleft: 10%;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(2) {\r\n\t\tleft: 20%;\r\n\t\twidth: 80px;\r\n\t\theight: 80px;\r\n\t\tanimation-delay: calc(2s + 60s);\r\n\t\tanimation-duration: 17s;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(3) {\r\n\t\tleft: 25%;\r\n\t\tanimation-delay: calc(4s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(4) {\r\n\t\tleft: 40%;\r\n\t\twidth: 60px;\r\n\t\theight: 60px;\r\n\t\tanimation-duration: 22s;\r\n\t\topacity: 0.25;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(5) {\r\n\t\tleft: 70%;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(6) {\r\n\t\tleft: 80%;\r\n\t\twidth: 120px;\r\n\t\theight: 120px;\r\n\t\tanimation-delay: calc(3s + 60s);\r\n\t\topacity: 0.07;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(7) {\r\n\t\tleft: 32%;\r\n\t\twidth: 160px;\r\n\t\theight: 160px;\r\n\t\tanimation-delay: calc(7s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(8) {\r\n\t\tleft: 55%;\r\n\t\twidth: 20px;\r\n\t\theight: 20px;\r\n\t\tanimation-delay: calc(15s + 60s);\r\n\t\tanimation-duration: 40s;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(9) {\r\n\t\tleft: 25%;\r\n\t\twidth: 10px;\r\n\t\theight: 10px;\r\n\t\tanimation-delay: calc(2s + 60s);\r\n\t\tanimation-duration: 40s;\r\n\t\topacity: 0.05;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(10) {\r\n\t\tleft: 90%;\r\n\t\twidth: 160px;\r\n\t\theight: 160px;\r\n\t\tanimation-delay: calc(11s + 60s);\r\n\t}\r\n\t@keyframes square {\r\n\t\t0% {\r\n\t\t\ttransform: translateY(0);\r\n\t\t}\r\n\t\t100% {\r\n\t\t\ttransform: translateY(-160vh) rotate(600deg);\r\n\t\t}\r\n\t} */\r\n</style>\r\n<main wrapper login flex center children scroller-y>\r\n\t<div container>\r\n\t\t<!-- <h1 style=\"font-family: 'Source Sans Pro', sans-serif;color: white;font-weight:lighter;\">Welcome</h1> -->\r\n\t\t<form login>\r\n\t\t\t<!-- TODO : rework oninput events -->\r\n\t\t\t<input\r\n\t\t\t\ttype=\"text\"\r\n\t\t\t\tname=\"username\"\r\n\t\t\t\tid=\"username\"\r\n\t\t\t\tplaceholder=\"Username\"\r\n\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\tmaxlength=\"32\"\r\n\t\t\t\tv-on:input=\"usernameInputEvent\"\r\n\t\t\t\tv-model=\"user.account.username\"\r\n\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t>\r\n\t\t\t<input\r\n\t\t\t\ttype=\"password\"\r\n\t\t\t\tname=\"password\"\r\n\t\t\t\tid=\"password\"\r\n\t\t\t\tplaceholder=\"Password\"\r\n\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\tmaxlength=\"64\"\r\n\t\t\t\tv-on:input=\"passwordInputEvent\"\r\n\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t>\r\n\t\t\t<div v-show=\"!isLogin\" transition=\"height\" transition-mode=\"out-in\" style=\"height:212px\"> \r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"email\"\r\n\t\t\t\t\tname=\"email\"\r\n\t\t\t\t\tid=\"email\"\r\n\t\t\t\t\tplaceholder=\"Email\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tv-on:input=\"emailInputEvent\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"firstname\"\r\n\t\t\t\t\tid=\"firstname\"\r\n\t\t\t\t\tplaceholder=\"First Name\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.firstName\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"lastname\"\r\n\t\t\t\t\tid=\"lastname\"\r\n\t\t\t\t\tplaceholder=\"Last Name\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.lastName\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"group\"\r\n\t\t\t\t\tid=\"group\"\r\n\t\t\t\t\tplaceholder=\"Study Group (BS1-2, BS4-1)\"\r\n\t\t\t\t\tautocomplete=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.studyGroup\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t</div>\r\n\r\n\t\t\t<button :place=\"isLogin ? 'form' : 'bottom'\" style=\"color:#fff\" purp=\"login\"\r\n\t\t\t\ttype=\"button\"\r\n\t\t\t\t@click=\"login\"\r\n\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t>Log in</button>\r\n\t\t\t<button :place=\"isLogin ? 'bottom' : 'form'\" style=\"color:#fff\"\r\n\t\t\t\ttype=\"button\"\r\n\t\t\t\t@click=\"register\"\r\n\t\t\t\t@keyup.enter=\"register\"\r\n\t\t\t>Register</button>\r\n\t\t</form>\r\n\t</div>\r\n\t<ul background>\r\n<!-- \t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li> -->\r\n\t</ul>\r\n</main>\r\n";
 
 /***/ },
 /* 14 */
@@ -13927,13 +14282,23 @@
 			sidebar
 		},
 		route: {
-			data(transition) {
+			data: function (transition) {
 				console.log("called get in main");
+				var router = this.$router;
 				var user = this.$router.app.user;
-				user.account.update(result => {
-					user.innopoints.data.update(result => {
+				user.account.update(function (result) {
+					user.innopoints.data.update(function (result) {
 						transition.next();
+					}, function (error) {
+						user.innopoints.api.user.create(function (result) {
+							user.innopoints.data.update(function (result) {
+								transition.next();
+							});
+						});
 					});
+				}, function (error) {
+					console.log("updating error");
+					router.go('/login');
 				});
 			}
 		}
@@ -13975,20 +14340,27 @@
 	// <template>
 	// 	<aside sidebar>
 	// 		<div menu>
-	// 			<button item id="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
-	// 			<button item id="Innopoints" points="{{ user.innopoints.data.amount || 239 }}" v-link="{ name: 'innopoints', params: { username: user.account.username } }" v-if="user.innopoints.data.id"></button>
-	// 			<button item id="Create Innopoints Account" v-if="!user.innopoints.data.id"></button>
-	// 			<button item id="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
+	// 			<button item title="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
+	// 			<button item title="Innopoints" points="{{ user.innopoints.data.amount }}" v-link="{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }" v-if="user.innopoints.data.id"></button>
+	// 			<button item title="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
+	//
+	// 			<button item bottom logout title="Log out" id="logout" icon="&#xe603;" @click="logout" block></button>
 	// 		</div>
 	// 	</aside>
 	// </template>
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
 				user: this.$router.app.user
 			};
+		},
+		methods: {
+			logout: function (e) {
+				this.user.account.clear();
+				this.$router.go('/login');
+			}
 		}
 	};
 	// </script>
@@ -13997,7 +14369,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item id=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item id=\"Innopoints\" points=\"{{ user.innopoints.data.amount || 239 }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username } }\" v-if=\"user.innopoints.data.id\"></button>\n\t\t<button item id=\"Create Innopoints Account\" v-if=\"!user.innopoints.data.id\"></button>\n\t\t<button item id=\"Accounts\" icon=\"&#xe699;\" v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\"></button>\n\t</div>\n</aside>\n";
+	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item title=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item title=\"Innopoints\" points=\"{{ user.innopoints.data.amount }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }\" v-if=\"user.innopoints.data.id\"></button>\n\t\t<button item title=\"Accounts\" icon=\"&#xe699;\" v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\"></button>\n\n\t\t<button item bottom logout title=\"Log out\" id=\"logout\" icon=\"&#xe603;\" @click=\"logout\" block></button>\n\t</div>\n</aside>\n";
 
 /***/ },
 /* 19 */
@@ -14011,6 +14383,119 @@
 
 	var __vue_script__, __vue_template__
 	__vue_script__ = __webpack_require__(21)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(25)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-b68069a4/content.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<!-- <main content scroller-y-force> -->
+	// 	<main content>
+	// 		<!-- <main-header>
+	// 			<slot name="header"></slot>
+	// 		</main-header> -->
+	// 		<div scroller-x scroller-y>
+	// 			<router-view></router-view>
+	// 		</div>
+	// 	</main>
+	// </template>
+	//
+	// <script>
+	var mainHeader = __webpack_require__(22);
+
+	module.exports = {
+		components: {
+			mainHeader
+		}
+	};
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(23)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] frontend\\src\\views\\header.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(24)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-739e9330/header.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	// <template>
+	// 	<header>
+	// 		<slot></slot>
+	// 	</header><!-- /header -->
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data: function () {
+			return {
+				user: this.$router.app.user
+			};
+		}
+	};
+	// </script>
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<header>\n\t<slot></slot>\n</header><!-- /header -->\n";
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<!-- <main content scroller-y-force> -->\n<main content>\n\t<!-- <main-header>\n\t\t<slot name=\"header\"></slot>\n\t</main-header> -->\n\t<div scroller-x scroller-y>\n\t\t<router-view></router-view>\n\t</div>\n</main>\n";
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(27)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
@@ -14034,7 +14519,7 @@
 	})()}
 
 /***/ },
-/* 21 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
@@ -14047,8 +14532,8 @@
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(22);
-	var content = __webpack_require__(25);
+	var sidebar = __webpack_require__(28);
+	var content = __webpack_require__(20);
 
 	module.exports = {
 		components: {
@@ -14059,16 +14544,16 @@
 	// </script>
 
 /***/ },
-/* 22 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(23)
+	__vue_script__ = __webpack_require__(29)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\profile\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(24)
+	__vue_template__ = __webpack_require__(30)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14087,7 +14572,7 @@
 	})()}
 
 /***/ },
-/* 23 */
+/* 29 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -14100,140 +14585,19 @@
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
 				user: this.$router.app.user
 			};
 		}
 	};
 	// </script>
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t\n\t</div>\n</aside>\n";
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(26)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(30)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-b68069a4/content.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// <template>
-	// 	<!-- <main content scroller-y force> -->
-	// 	<main content scroller-y>
-	// 		<main-header>
-	// 			<slot name="header"></slot>
-	// 		</main-header>
-	// 		<div scroller-x>
-	// 			<router-view></router-view>
-	// 		</div>
-	// 	</main>
-	// </template>
-	//
-	// <script>
-	var mainHeader = __webpack_require__(27);
-
-	module.exports = {
-		components: {
-			mainHeader
-		}
-	};
-	// </script>
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(28)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\header.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(29)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-739e9330/header.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<header>
-	// 		<slot></slot>
-	// 		<button title="Lock the application." id="logout" icon="&#xe603;" @click="logout" block></button>
-	// 	</header><!-- /header -->
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data() {
-			return {
-				user: this.$router.app.user
-			};
-		},
-		methods: {
-			logout(e) {
-				this.user.account.clear();
-				this.$router.go('/login');
-			}
-		}
-	};
-	// </script>
-
-/***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<header>\n\t<slot></slot>\n\t<button title=\"Lock the application.\" id=\"logout\" icon=\"&#xe603;\" @click=\"logout\" block></button>\n</header><!-- /header -->\n";
 
 /***/ },
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<!-- <main content scroller-y force> -->\n<main content scroller-y>\n\t<main-header>\n\t\t<slot name=\"header\"></slot>\n\t</main-header>\n\t<div scroller-x>\n\t\t<router-view></router-view>\n\t</div>\n</main>\n";
+	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t\n\t</div>\n</aside>\n";
 
 /***/ },
 /* 31 */
@@ -14280,7 +14644,7 @@
 	// 		<pre>{{ user.role }}</pre>
 	// 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
 	// 		<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
-	// 		<pre v-show="user.fullName != ''">{{ user.fullName }}</pre>
+	// 		<pre v-show="user.firstName">{{ user.firstName + " " + user.lastName }}</pre>
 	// 		<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
 	// 	</div>
 	// 	<div block>
@@ -14296,7 +14660,7 @@
 			};
 		},
 		route: {
-			data(transition) {
+			data: function (transition) {
 				console.log("Called get in user");
 
 				var username = this.$route.params.username;
@@ -14311,7 +14675,7 @@
 						});
 					});
 				} else {
-					if (user.id) transition.next({ user: user });else user.exists(result => {
+					if (user.id) transition.next({ user: user });else user.exists(function (result) {
 						transition.next({ user: user });
 					});
 				}
@@ -14324,7 +14688,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1>{{ user.username }}'s profile</h1>\n<div block>\n\t<pre>{{ user.id }}</pre>\n\t<pre>{{ user.role }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.fullName != ''\">{{ user.fullName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n<div block>\n\t<router-view></router-view>\n</div>\n";
+	module.exports = "\n<h1>{{ user.username }}'s profile</h1>\n<div block>\n\t<pre>{{ user.id }}</pre>\n\t<pre>{{ user.role }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.firstName\">{{ user.firstName + \" \" + user.lastName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n<div block>\n\t<router-view></router-view>\n</div>\n";
 
 /***/ },
 /* 35 */
@@ -14359,15 +14723,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<content>
-	// 		<div slot="header">
-	//
-	// 		</div>
-	// 	</content>
+	// 	<content></content>
 	// </template>
 	//
 	// <script>
-	var content = __webpack_require__(25);
+	var content = __webpack_require__(20);
 
 	module.exports = {
 		components: {
@@ -14380,7 +14740,7 @@
 /* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t\n\t</div>\n</content>\n";
+	module.exports = "\n<content></content>\n";
 
 /***/ },
 /* 38 */
@@ -14442,14 +14802,14 @@
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
 				users: [],
 				roleChanged: false
 			};
 		},
 		methods: {
-			sendRoles(e) {
+			sendRoles: function (e) {
 				for (let user of this.users) {
 					let newRole = document.getElementById('a' + user.id).value;
 					if (newRole != user.role) this.$router.app.user.account.updateRole(user.id, user.role = newRole);
@@ -14457,13 +14817,13 @@
 
 				e.target.textContent = "accepted ✓";
 			},
-			selectChanged(e) {
+			selectChanged: function (e) {
 				this.roleChanged = true;
 				document.getElementById('acceptRoles').textContent = "accept changes";
 			}
 		},
 		route: {
-			data(transition) {
+			data: function (transition) {
 				var api = this.$router.app.user;
 				api.account.list(function (result) {
 					transition.next({
@@ -14516,16 +14876,12 @@
 
 	// <template>
 	// 	<sidebar></sidebar>
-	// 	<content>
-	// 		<div content slot="header">
-	// 			<button item v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">Request Innopoints</button>
-	// 		</div>
-	// 	</content>
+	// 	<content></content>
 	// </template>
 	//
 	// <script>
 	var sidebar = __webpack_require__(43);
-	var content = __webpack_require__(25);
+	var content = __webpack_require__(20);
 
 	module.exports = {
 		components: {
@@ -14570,13 +14926,28 @@
 	// <template>
 	// 	<aside menubar>
 	// 		<div menu>
-	// 			<div id="applications">
-	// 				<button main item v-link="{ name: 'applications', params: { username: user.account.username } }">Applications</button>
+	// 			<input type="search" id="search"
+	// 				:placeholder="'Search ' + $route.name"
+	// 				v-model="$router.app.query"
+	// 				v-show="$route.path.includes('applications') || $route.path.endsWith('shop')"
+	// 			/>
+	// 			<div id="_">
+	// 				<button main item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'all' } }">Applications</button>
+	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }">In process</button>
+	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'rejected' } }">Rejected</button>
+	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'rework' } }">In rework</button>
+	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'approved' } }">Approved</button>
 	// 			</div>
-	// 			<div id="shop">
+	// 			<div id="__">
 	// 				<button main item v-link="{ name: 'shop', params: { username: user.account.username } }">Shop</button>
 	// 				<button item>cart</button>
 	// 				<button item>orders</button>
+	// 			</div>
+	// 			<div id="___">
+	// 				<button item v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }" style="
+	// 					background: hsl(226, 100%, 60%);
+	// 					color: #fff;
+	// 				">Request Innopoints +</button>
 	// 			</div>
 	// 		</div>
 	// 	</aside>
@@ -14584,9 +14955,10 @@
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
-				user: this.$router.app.user
+				user: this.$router.app.user,
+				query: this.$router.app.query
 			};
 		}
 	};
@@ -14596,13 +14968,13 @@
 /* 45 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t<div id=\"applications\">\n\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username } }\">Applications</button>\n\t\t</div>\n\t\t<div id=\"shop\">\n\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\">Shop</button>\n\t\t\t<button item>cart</button>\n\t\t\t<button item>orders</button>\n\t\t</div>\n\t</div>\n</aside>\n";
+	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t<input type=\"search\" id=\"search\"\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"$route.path.includes('applications') || $route.path.endsWith('shop')\"\n\t\t/>\n\t\t<div id=\"_\">\n\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'all' } }\">Applications</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\">In process</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'rejected' } }\">Rejected</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'rework' } }\">In rework</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'approved' } }\">Approved</button>\n\t\t</div>\n\t\t<div id=\"__\">\n\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\">Shop</button>\n\t\t\t<button item>cart</button>\n\t\t\t<button item>orders</button>\n\t\t</div>\n\t\t<div id=\"___\">\n\t\t\t<button item v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\" style=\"\n\t\t\t\tbackground: hsl(226, 100%, 60%);\n\t\t\t\tcolor: #fff;\n\t\t\t\">Request Innopoints +</button>\n\t\t</div>\n\t</div>\n</aside>\n";
 
 /***/ },
 /* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<sidebar></sidebar>\n<content>\n\t<div content slot=\"header\">\n\t\t<button item v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\">Request Innopoints</button>\n\t</div>\n</content>\n";
+	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
 
 /***/ },
 /* 47 */
@@ -14637,41 +15009,155 @@
 /***/ function(module, exports) {
 
 	// <template>
-	// 	<div style="margin: 42px;">
+	// 	<div>
 	// 		<pre v-if="$loadingRouteData">Loading...</pre>
 	//
-	// 		<div v-for="appl in applications">
-	// 			<br>
-	// 			<h4 v-text="appl.type"></h4>
-	// 			<div>
-	// 				<pre>{{ appl | json 4 }}</pre>
-	// 			</div>
-	// 			<hr>
+	// 		<pre v-if="!applications.length && !$loadingRouteData">Empty</pre>
+	//
+	// 		<div card 
+	// 			v-for="appl in applications | filterBy $router.app.query in 'type' 'id' 'comment' 'creation_date'"
+	// 			:status="appl.status"
+	// 			:id="'card' + appl.id"
+	// 		>
+	// 			<header flex>
+	// 				<section left>
+	// 					<span>{{appl.type | capitalize}}</span> <span misc style="font-size:inherit">#{{appl.id}}</span>
+	// 					<span block misc>Status: <span :status="appl.status">{{appl.status.split('_').join(' ')}}</span></span>
+	// 				</section>
+	// 				<section right>
+	// 					<span misc v-text="appl.creation_date"></span>
+	// 				</section>
+	// 			</header><!-- header -->
+	// 			<section content v-show="appl.work">
+	// 				<div block>
+	// 					<h4 v-show="appl.type=='group'">Participants:</h4>
+	// 					<div>
+	// 						<div block v-for="work in appl.work"><span v-html="work.link"></span> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span></div>						
+	// 					</div>
+	// 				</div>
+	// 			</section>
+	// 			<section content v-show="appl.comment">
+	// 				<div block>
+	// 				<h4>Comment: </h4>
+	// 				<p>{{appl.comment}}</p>
+	// 				</div>
+	// 			</section>			
+	// 			<footer v-if="user.innopoints.data.isAdmin && appl.status=='in_process'">
+	// 				<div block controls>
+	// 					<button item success data-id="{{appl.id}}" @click="approve">Approve</button>
+	// 					<button item error data-id="{{appl.id}}" @click="reject">Reject</button>
+	// 					<button item warning data-id="{{appl.id}}" @click="toRework">To rework</button>
+	// 				</div>
+	// 			</footer>
+	// 			<footer v-if="!user.innopoints.data.isAdmin">
+	// 				<div block controls>
+	// 					<button item error data-id="{{appl.id}}" @click="_delete" v-show="(appl.status=='in_process' || appl.status=='rework')">Delete</button>
+	// 					<button item success data-id="{{appl.id}}" @click="resend" v-show="(appl.status=='rework')">Resend</button>
+	// 				</div>
+	// 			</footer>
 	// 		</div>
 	// 	</div>
 	// </template>
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			return {
 				user: this.$router.app.user,
+				query: this.$router.app.query,
 				applications: []
 			};
 		},
+		methods: {
+			approve: function (e) {
+				var route = this.$route;
+				var _appls = this.applications;
+				this.user.innopoints.api.admin.application.approve(e.target.dataset.id, function (result) {
+					appl_action_success(e.target.dataset.id, 'approved', _appls);
+				}, console.log);
+			},
+			reject: function (e) {
+				var route = this.$route;
+				var _appls = this.applications;
+				this.user.innopoints.api.admin.application.reject(e.target.dataset.id, function (result) {
+					appl_action_success(e.target.dataset.id, 'rejected', _appls);
+				}, console.log);
+			},
+			toRework: function (e) {
+				var route = this.$route;
+				var _appls = this.applications;
+				this.user.innopoints.api.admin.application.dismiss(e.target.dataset.id, function (result) {
+					appl_action_success(e.target.dataset.id, 'rework', _appls);
+				}, console.log);
+			},
+			_delete: function (e) {
+				var route = this.$route;
+				var _appls = this.applications;
+				this.user.innopoints.api.user.application.delete(e.target.dataset.id, function (result) {
+					console.log(result.description);
+					document.getElementById('card' + e.target.dataset.id).remove();
+				}, console.log);
+			},
+			resend: function (e) {
+				var route = this.$route;
+				var _appls = this.applications;
+				this.user.innopoints.api.user.application.send(e.target.dataset.id, function (result) {
+					appl_action_success(e.target.dataset.id, 'resend', _appls);
+				}, console.log);
+			},
+			appl_action_success: function (id, new_status, array) {
+				if (route.params.filter === 'all') array.find(x => x.id == id).status = new_status;else document.getElementById('card' + id).remove();
+			}
+			// For vue 2.0
+			// 	filter_appls() {
+			// 		var query = this.query;
+			// 		console.log(query);
+			// 		if (query) {
+			// 			var id = this.applications.find(x => x.id.includes(query));
+			// 			var type = this.applications.find(x => x.type.includes(query));
+			// 			var comment = this.applications.find(x => x.comment.includes(query));
+			// 		}
+			// 		else return this.applications;
+			// 	}
+		},
 		route: {
-			data(transition) {
+			data: function (transition) {
+				this.applications = [];
+				var route = this.$route;
 				var user = this.user;
-				user.innopoints.api.user.get(result => {
-					if (result.role == "admin") user.innopoints.api.admin.applications.get(result => {
-						transition.next({
-							applications: result
-						});
-					});else user.innopoints.api.user.applications.get(result => {
-						transition.next({
-							applications: result
-						});
+				var request = function (result) {
+					if (!result.length) transition.next();
+					console.log(result);
+					console.log("called appl get");
+					var _length = result.length;
+					result.forEach(function (res, _index) {
+						res.creation_date = new Date(res.creation_date.slice(0, -5).split('-').join('/')).toDateString();
+						if (res.work) res.work.forEach(function (work, index) {
+							work.link = '<a href=""></a>';
+							user.account.getBio({ id: work.actor }, function (result) {
+								work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + result.username + '">' + result.username + '</a>';
+							});
+							if (_index == _length - 1 && index == res.work.length - 1) {
+								transition.next({
+									applications: result
+								});
+							}
+						});else {
+							if (_index == _length - 1) {
+								transition.next({
+									applications: result
+								});
+							}
+						}
 					});
+				};
+				user.innopoints.api.user.get(function (result) {
+					console.log("called user get");
+					if (result.type == "admin") {
+						if (route.params.filter === 'all') user.innopoints.api.admin.applications.get(request);else user.innopoints.api.admin.applications.getWithStatus(route.params.filter, 0, 1000, request);
+					} else {
+						if (route.params.filter === 'all') user.innopoints.api.user.applications.get(0, 1000, request);else user.innopoints.api.user.applications.getWithStatus(route.params.filter, 0, 1000, request);
+					}
 				});
 			}
 		}
@@ -14682,7 +15168,7 @@
 /* 49 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div style=\"margin: 42px;\">\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<div v-for=\"appl in applications\">\n\t\t<br>\n\t\t<h4 v-text=\"appl.type\"></h4>\n\t\t<div>\n\t\t\t<pre>{{ appl | json 4 }}</pre>\n\t\t</div>\n\t\t<hr>\n\t</div>\n</div>\n";
+	module.exports = "\n<div>\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<pre v-if=\"!applications.length && !$loadingRouteData\">Empty</pre>\n\n\t<div card \n\t\tv-for=\"appl in applications | filterBy $router.app.query in 'type' 'id' 'comment' 'creation_date'\"\n\t\t:status=\"appl.status\"\n\t\t:id=\"'card' + appl.id\"\n\t>\n\t\t<header flex>\n\t\t\t<section left>\n\t\t\t\t<span>{{appl.type | capitalize}}</span> <span misc style=\"font-size:inherit\">#{{appl.id}}</span>\n\t\t\t\t<span block misc>Status: <span :status=\"appl.status\">{{appl.status.split('_').join(' ')}}</span></span>\n\t\t\t</section>\n\t\t\t<section right>\n\t\t\t\t<span misc v-text=\"appl.creation_date\"></span>\n\t\t\t</section>\n\t\t</header><!-- header -->\n\t\t<section content v-show=\"appl.work\">\n\t\t\t<div block>\n\t\t\t\t<h4 v-show=\"appl.type=='group'\">Participants:</h4>\n\t\t\t\t<div>\n\t\t\t\t\t<div block v-for=\"work in appl.work\"><span v-html=\"work.link\"></span> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span></div>\t\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</section>\n\t\t<section content v-show=\"appl.comment\">\n\t\t\t<div block>\n\t\t\t<h4>Comment: </h4>\n\t\t\t<p>{{appl.comment}}</p>\n\t\t\t</div>\n\t\t</section>\t\t\t\n\t\t<footer v-if=\"user.innopoints.data.isAdmin && appl.status=='in_process'\">\n\t\t\t<div block controls>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"approve\">Approve</button>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"reject\">Reject</button>\n\t\t\t\t<button item warning data-id=\"{{appl.id}}\" @click=\"toRework\">To rework</button>\n\t\t\t</div>\n\t\t</footer>\n\t\t<footer v-if=\"!user.innopoints.data.isAdmin\">\n\t\t\t<div block controls>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"_delete\" v-show=\"(appl.status=='in_process' || appl.status=='rework')\">Delete</button>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"resend\" v-show=\"(appl.status=='rework')\">Resend</button>\n\t\t\t</div>\n\t\t</footer>\n\t</div>\n</div>\n";
 
 /***/ },
 /* 50 */
@@ -14718,7 +15204,7 @@
 
 	// <template>
 	// 	<form id="ip_request">
-	// 		<h2 style="padding: 0">Request innopoints</h2>
+	// 		<h2>Request innopoints</h2>
 	//
 	// 		<hr/>
 	//
@@ -14745,7 +15231,7 @@
 	// 		<div v-show="!$loadingRouteData" style="width: 100%;">
 	//
 	// 			Activivty's category
-	// 			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="categoryChanged">
+	// 			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="category_changed">
 	// 				<option value="blank" selected>Choose Category...</option>
 	// 				<option value="">All</option>
 	// 				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
@@ -14763,16 +15249,15 @@
 	// 				<br>
 	// 			</div>
 	//
-	// 			<div v-for="i in (current.isPersonal ? 1 : current.users_count)" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
-	// 				<legend v-if="!current.isPersonal">
-	// 					<input type="text" placeholder="username" v-model="current.users[i].username" required>
+	// 			<div v-for="i of current.users_count" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
+	// 				<legend v-show="!current.isPersonal">
+	// 					<input data-index="{{i}}" type="text" placeholder="username" @input="username_changed" value="{{* i ? '' : user.account.username}}">
 	// 				</legend>
 	// 				<br>
 	// 				<div v-show="categorySelected">
-	//
 	// 					<div style="width: 100%;">
 	// 						Activity
-	// 						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activityChanged">
+	// 						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activity_changed">
 	// 							<option value="0" selected>Choose Activity...</option>
 	// 							<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
 	// 						</select>
@@ -14803,22 +15288,20 @@
 	// 		<pre v-if="!categorySelected">Select Category!</pre>
 	// 		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
 	// 		<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
-	// 		<br>
-	// 		<button v-if="ableToSend" block type="button" @click="send" id="send">send</button>
 	// 	</form>
 	// </template>
 	//
 	// <script>
 	module.exports = {
-		data() {
+		data: function () {
 			var init_type = this.$router.app.user.account.isStudent ? "personal" : "group";
+			console.log(this.$router.app.user.account.isStudent);
 			return {
 				user: this.$router.app.user,
 				categories: [],
 				activities: [],
 				activitySelected: false,
 				categorySelected: false,
-				ableToSend: false,
 				current: {
 					application: {},
 					type: init_type,
@@ -14828,7 +15311,7 @@
 					category_id: 0,
 					users_count: 1,
 					users: [{
-						username: this.$router.app.user.account.username,
+						user_id: this.$router.app.user.account.id,
 						activity_id: 0,
 						amount: 1
 					}],
@@ -14837,44 +15320,54 @@
 			};
 		},
 		methods: {
-			current_users_count_inc() {
+			current_users_count_inc: function () {
 				if (!this.current.users[this.current.users_count]) this.current.users[this.current.users_count] = {
-					username: '',
+					user_id: '',
 					activity_id: 0,
 					amount: 0
 				};
 				this.current.users_count++;
 			},
-			current_users_count_dec() {
+			current_users_count_dec: function () {
 				if (this.current.users[this.current.users_count - 1]) this.current.users[this.current.users_count - 1] = {
-					username: '',
+					user_id: '',
 					activity_id: 0,
 					amount: 0
 				};
 				this.current.users_count--;
 			},
-			categoryChanged(e) {
+			username_changed: function (e) {
+				var users = this.current.users;
+				console.log(e.target.dataset.index);
+				this.user.account.getBio({ username: e.target.value }, function (result) {
+					users[e.target.dataset.index].user_id = result.id;
+				}, function (error) {
+					console.log("wrong username!");
+					//TODO
+				});
+			},
+			category_changed: function (e) {
 				this.categorySelected = this.activitySelected = false;
 
 				if (e.target.value != 'blank') {
-					if (e.target.value) this.user.innopoints.api.getActivitiesInCategory(this.current.category_id, 0, 100, this.setActivities);else this.user.innopoints.api.getActivities(0, 100, this.setActivities);
+					if (e.target.value) this.user.innopoints.api.getActivitiesInCategory(this.current.category_id, 0, 1000, this.setActivities);else this.user.innopoints.api.getActivities(0, 1000, this.setActivities);
 				}
 			},
-			activityChanged(e) {
+			activity_changed: function (e) {
 				let counter = 0;
 
 				for (let _user of this.current.users) counter += _user.activity_id ? 1 : 0;
 
 				this.activitySelected = counter == this.current.users_count;
 			},
-			setActivities(result) {
+			setActivities: function (result) {
 				this.activities = result;
 				this.categorySelected = true;
 			},
-			uploaded(e) {
+			uploaded: function (e) {
 				console.log(e.target.files);
 			},
-			accept(e) {
+			accept: function (e) {
 				accept.textContent = "accepting...";
 				this.current.application.type = this.current.type;
 
@@ -14882,63 +15375,43 @@
 				this.current.application.work = [];
 
 				for (let cur_user of this.current.users) {
-					let activity = this.findById(this.activities, cur_user.activity_id),
-					    amount = parseInt(cur_user.amount),
-					    total_price = amount * activity.price;
+					let activity_id = this.findById(this.activities, cur_user.activity_id).id,
+					    amount = parseInt(cur_user.amount) || null;
 
 					this.current.application.work.push({
-						activity,
+						activity_id,
 						amount,
-						total_price
+						actor: cur_user.user_id
 					});
 				}
 
-				this.current.application.comment = this.current.comment;
-				this.current.application.files = upload.files;
 				console.log(this.current.application);
 
-				this.user.innopoints.api.application.create(this.current.application, this.acceptSuccess, this.error);
+				this.current.application.comment = this.current.comment;
+				this.current.application.files = upload.files;
+
+				if (this.user.account.isStudent) this.user.innopoints.api.user.application.create(this.current.application, this.acceptSuccess, this.error);else if (this.user.account.isModerator) this.user.innopoints.api.admin.application.create(this.current.application, this.acceptSuccess, this.error);
 			},
-			acceptSuccess(result) {
+			acceptSuccess: function (result) {
 				accept.textContent = "accepted ✓";
-				this.ableToSend = true;
 			},
-			error(error) {
+			error: function (error) {
 				alert('Unsuccessful: ' + error);
-				send.textContent = "send";
 				accept.textContent = "accept";
 			},
 
-			send(e) {
-				send.textContent = "sending...";
-				if (this.user.account.isStudent) this.user.innopoints.api.user.application.send(this.current.application.id, this.sendSuccess, this.error);else if (this.user.account.isModerator) this.user.innopoints.api.admin.application.send(this.current.application.id, this.sendSuccess, this.error);
-			},
-			sendSuccess(result) {
-				send.textContent = "sent ✓";
-
-				this.ableToSend = false;
-				this.current.application = {};
-				this.current.category_id = 0;
-				this.current.users_count = 1;
-				this.current.users = [{
-					username: this.user.account.username,
-					activity_id: 0,
-					amount: 1
-				}];
-				upload.value = '';
-			},
-
-			showAmount(id) {
+			showAmount: function (id) {
 				let temp = this.findById(this.activities, id);
 				return temp && temp.type != 'permanent';
 			},
-			findById(array, id) {
+			findById: function (array, id) {
 				return array.find(x => x.id == id);
 			}
 		},
 		route: {
-			data(transition) {
+			data: function (transition) {
 				console.log('calling get for innopoints');
+				this.$router.app.user.account.update();
 				this.$router.app.user.innopoints.api.getCategories(0, 10000, //TODO - fix categories amount
 				function (result) {
 					transition.next({
@@ -14954,7 +15427,7 @@
 /* 52 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<form id=\"ip_request\">\n\t<h2 style=\"padding: 0\">Request innopoints</h2>\n\n\t<hr/>\n\n\t<div v-if=\"user.account.isStudent\" style=\"width: 100%;\">\n\t\t<div  style=\"float: left;width: 46%\">\n\t\t\t<label for=\"self\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"self\" value=\"personal\" v-model=\"current.type\"/>\n\t\t\t\tPersonal\n\t\t\t</label>\n\t\t</div>\n\t\t<div  style=\"float: right;width: 46%\">\n\t\t\t<label for=\"group\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"group\" value=\"group\" v-model=\"current.type\"/>\n\t\t\t\tGroup\n\t\t\t</label>\n\t\t</div>\n\t<br>\n\t</div>\n\n\n\t<br>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"categoryChanged\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<div>\n\t\t<div v-show=\"!current.isPersonal\">\n\t\t\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t\t\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t\t\t<br>\n\t\t\t<br>\n\t\t</div>\n\n\t\t<div v-for=\"i in (current.isPersonal ? 1 : current.users_count)\" :style=\"!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''\">\n\t\t\t<legend v-if=\"!current.isPersonal\">\n\t\t\t\t<input type=\"text\" placeholder=\"username\" v-model=\"current.users[i].username\" required>\n\t\t\t</legend>\n\t\t\t<br>\n\t\t\t<div v-show=\"categorySelected\">\n\n\t\t\t\t<div style=\"width: 100%;\">\n\t\t\t\t\tActivity\n\t\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activityChanged\">\n\t\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<br>\n\t\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\tTime spent/quantity:\n\t\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"1\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<br>\n\t</div>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files:\n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" id=\"upload\" multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" id=\"accept\">accept</button>\n\t<br>\n\t<button v-if=\"ableToSend\" block type=\"button\" @click=\"send\" id=\"send\">send</button>\n</form>\n";
+	module.exports = "\n<form id=\"ip_request\">\n\t<h2>Request innopoints</h2>\n\n\t<hr/>\n\n\t<div v-if=\"user.account.isStudent\" style=\"width: 100%;\">\n\t\t<div  style=\"float: left;width: 46%\">\n\t\t\t<label for=\"self\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"self\" value=\"personal\" v-model=\"current.type\"/>\n\t\t\t\tPersonal\n\t\t\t</label>\n\t\t</div>\n\t\t<div  style=\"float: right;width: 46%\">\n\t\t\t<label for=\"group\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"group\" value=\"group\" v-model=\"current.type\"/>\n\t\t\t\tGroup\n\t\t\t</label>\n\t\t</div>\n\t<br>\n\t</div>\n\n\n\t<br>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"category_changed\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<div>\n\t\t<div v-show=\"!current.isPersonal\">\n\t\t\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t\t\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t\t\t<br>\n\t\t\t<br>\n\t\t</div>\n\n\t\t<div v-for=\"i of current.users_count\" :style=\"!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''\">\n\t\t\t<legend v-show=\"!current.isPersonal\">\n\t\t\t\t<input data-index=\"{{i}}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{* i ? '' : user.account.username}}\">\n\t\t\t</legend>\n\t\t\t<br>\n\t\t\t<div v-show=\"categorySelected\">\n\t\t\t\t<div style=\"width: 100%;\">\n\t\t\t\t\tActivity\n\t\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activity_changed\">\n\t\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<br>\n\t\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\tTime spent/quantity:\n\t\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"1\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<br>\n\t</div>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files:\n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" id=\"upload\" multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" id=\"accept\">accept</button>\n</form>\n";
 
 /***/ },
 /* 53 */
@@ -14990,7 +15463,7 @@
 
 	// <template>
 	//     <section shop>
-	//         <section product v-for="item in items" v-link="{ name: 'item', params: { item: item.id } }">
+	//         <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' " v-link="{ name: 'item', params: { item: item.id } }">
 	//             <h4>{{ item.title }} : {{ item.price }}</h4>
 	//             <img :src="item.image_link">
 	//             <p v-text="item.category.title"></p>
@@ -15001,14 +15474,15 @@
 	//
 	// <script>
 	module.exports = {
-	    data() {
+	    data: function () {
 	        return {
 	            items: []
 	        };
 	    },
 	    route: {
 	        data: function (transition) {
-	            this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', result => {
+	            this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', function (result) {
+	                console.log(result);
 	                transition.next({
 	                    items: result
 	                });
@@ -15022,7 +15496,7 @@
 /* 55 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<section shop>\n    <section product v-for=\"item in items\" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h4>\n        <img :src=\"item.image_link\">\n        <p v-text=\"item.category.title\"></p>\n        <hr>\n    </section>\n</section>\n";
+	module.exports = "\n<section shop>\n    <section product v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title' \" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h4>\n        <img :src=\"item.image_link\">\n        <p v-text=\"item.category.title\"></p>\n        <hr>\n    </section>\n</section>\n";
 
 /***/ },
 /* 56 */
@@ -15073,15 +15547,15 @@
 	//
 	// <script>
 	module.exports = {
-	    data() {
+	    data: function () {
 	        return {
 	            item: {}
 	        };
 	    },
 	    route: {
-	        data(transition) {
+	        data: function (transition) {
 	            var $route = this.$route;
-	            this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, result => {
+	            this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, function (result) {
 	                transition.next({
 	                    item: result
 	                });

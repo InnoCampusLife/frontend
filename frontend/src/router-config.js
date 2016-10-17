@@ -8,13 +8,13 @@ module.exports = function(router) {
 	router.map({
 		'/login': {
 			component: require('./views/login.vue'),
-			loginPage
+			loginPage:loginPage
 		},
 		'/': {
 			component: require('./views/main.vue'),
 			subRoutes: {
 				'/' : {
-					component: { template: '' }
+					component: require('./views/content.vue')
 				},
 				'/profile' : {
 					component: require('./views/profile/main.vue'),
@@ -45,8 +45,13 @@ module.exports = function(router) {
 									name: 'innopoints'
 								},
 								'/applications' : {
-									component: require('./views/innopoints/applications.vue'),
-									name: 'applications'
+									component: router_view,
+									subRoutes: {
+										'/:filter' : {
+											component: require('./views/innopoints/applications.vue'),
+											name: 'applications'
+										},
+									}
 								},
 								'/apply' : {
 									component: require('./views/innopoints/apply.vue'),
@@ -59,7 +64,7 @@ module.exports = function(router) {
 											component: require('./views/innopoints/shop/shop.vue'), 
 											name: 'shop'
 										},
-										'/:item' : {
+										'/item/:item' : {
 											component: require('./views/innopoints/shop/item.vue'),
 											name: 'item'
 										},
@@ -70,11 +75,11 @@ module.exports = function(router) {
 					}
 				}
 			},
-			authorizedZone
+			authorizedZone:authorizedZone
 		}
 	});
 
-	router.beforeEach((transition) => {
+	router.beforeEach(function(transition) {
 		if (!user.loggedIn) {
 			if (transition.to.authorizedZone)
 				transition.redirect('/login');
@@ -89,7 +94,7 @@ module.exports = function(router) {
 		}
 	}).redirect({
 		'*':'/',
-		'/innopoints/:username/':'/innopoints/:username/applications'
+		'/innopoints/:username/':'/innopoints/:username/applications/all'
 	});
 
 	return router;

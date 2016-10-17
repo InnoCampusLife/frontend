@@ -4,15 +4,16 @@
 
 <script>
 	module.exports = {
-		ready () {
+		ready : function () {
 			console.log('App is awaiting your command!');
 		},
-		data () {
+		data : function () {
 			return {
 				user : {
 					account: require('./../modules.js').accounts,
 					innopoints: require('./../modules.js').innopoints
 				},
+				query : null,
 			}
 		}
 	}

@@ -1,8 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600'); */
-@import url('./themify-icons.css');
 @import url('./../fonts/sourcesans.css');
+@import url('./themify-icons.css');
 @import url('./transitions.css');
 @import url('./helpers.css');
+@import url('./forms.css');
 @import url('./content.css');
+@import url('./card.css');
 @import url('./sidebar.css');
 @import url('./shop.css');

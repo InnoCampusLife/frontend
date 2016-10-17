@@ -26,14 +26,14 @@
 
 <script>
 	module.exports = {
-		data () {
+		data : function () {
 			return {
 				users : [],
 				roleChanged : false
 			}
 		},
 		methods: {
-			sendRoles(e) {
+			sendRoles : function (e) {
 				for (let user of this.users) {
 					let newRole = document.getElementById('a' + user.id).value;
 					if (newRole != user.role) this.$router.app.user.account.updateRole(user.id, user.role = newRole);
@@ -41,13 +41,13 @@
 
 				e.target.textContent = "accepted ✓";
 			},
-			selectChanged(e) {
+			selectChanged : function (e) {
 				this.roleChanged = true;
 				document.getElementById('acceptRoles').textContent = "accept changes";
 			}
 		},
 		route: {
-			data (transition) {
+			data  : function (transition) {
 				var api = this.$router.app.user;
 				api.account.list(
 					function (result) {

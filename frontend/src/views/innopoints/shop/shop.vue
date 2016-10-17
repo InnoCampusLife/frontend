@@ -1,6 +1,6 @@
 <template>
     <section shop>
-        <section product v-for="item in items" v-link="{ name: 'item', params: { item: item.id } }">
+        <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' " v-link="{ name: 'item', params: { item: item.id } }">
             <h4>{{ item.title }} : {{ item.price }}</h4>
             <img :src="item.image_link">
             <p v-text="item.category.title"></p>
@@ -11,14 +11,15 @@
 
 <script>
     module.exports = {
-        data() {
+        data : function () {
             return {
                 items: []
             }
         },
         route : {
             data : function (transition) {
-                this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', (result) => {
+                this.$router.app.user.innopoints.api.shop.getItems(0, 10000, 'title', 'ASC', function(result) {
+                    console.log(result);
                     transition.next({
                         items: result
                     });

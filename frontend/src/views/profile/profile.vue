@@ -5,7 +5,7 @@
 		<pre>{{ user.role }}</pre>
 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
 		<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
-		<pre v-show="user.fullName != ''">{{ user.fullName }}</pre>
+		<pre v-show="user.firstName">{{ user.firstName + " " + user.lastName }}</pre>
 		<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
 	</div>
 	<div block>
@@ -21,7 +21,7 @@
 			}
 		},
 		route: {
-			data (transition) {
+			data  : function (transition) {
 				console.log("Called get in user");
 
 				var username = this.$route.params.username;
@@ -42,7 +42,7 @@
 					if (user.id)
 						transition.next({user: user});
 					else
-						user.exists(result => {
+						user.exists(function(result) {
 							transition.next({user: user});
 						});
 				}		

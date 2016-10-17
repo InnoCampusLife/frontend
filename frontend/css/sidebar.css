@@ -12,7 +12,8 @@
     display: block;
     height: 6rem;
     width: 7rem;
-    color: hsl(214, 11%, 46%);
+    color: hsla(0, 0%, 100%, 0.5);
+    font-weight: 100;
     cursor: pointer;
 }
 
@@ -31,39 +32,55 @@
     font-size: 1.1rem;
 }
 
-[sidebar] > header.v-link-active,
+/* [sidebar] > header.v-link-active,
 [sidebar] > header:hover {
     background-color: hsla(226,100%,68%,1);
-}
+} */
 
 [sidebar] [menu] {
     height: 100%;
-    border-right: 1px solid rgba(98, 99, 100, 0.2);
+    /* border-right: 1px solid rgba(98, 99, 100, 0.2); */
 }
 
-[sidebar] [menu] > [item][id][points]::before {
-    font-family: "Source Sans Pro Light";
+[sidebar] [menu] > [item][title][points]::before {
     content: attr(points);
 }
-[sidebar] [menu] > [item][id]::before {
+[sidebar] [menu] > [item][title]::before {
     display: block;
     font-size: 2rem;
 }
 
-[sidebar] [menu] > [item][id]::after {
+[sidebar] [menu] > [item][title]::after {
     display: block;
-    content: attr(id);
+    content: attr(title);
     font-size: 1rem;
 }
 
-[sidebar] [menu] [item].v-link-active {
+[menu] [item].v-link-active,
+[menu] [item][active] {
     color: #fff;
-    background: hsla(228,79%,62%,1);
+    background: hsl(226, 100%, 60%);
+}
+
+[menu] [item][bottom] {
+    position: absolute;
+    bottom: 0;
+}
+
+[menu] [item][bottom]:hover {
+    color: #fff;
+    background: transparent;
+}
+
+#logout:hover::before {
+    content: "\e62b";
+/*     color: #fff;
+    background: hsla(221, 17%, 15%, 0.75); */
 }
 
 
 
-aside[menubar] {
+[menubar] {
     width: 18rem;
     height: 100%;
     float: left;
@@ -71,40 +88,58 @@ aside[menubar] {
     background-color: hsl(224, 16%, 19%);
 }
 
-aside[menubar] [menu] {
+[menubar] [menu] {
+    font-weight: 100;
     color: #fff;
-    height: 100%;
-    border-left: 1px solid hsla(0, 0%, 0%, 0.2);
+    /* height: 100%; */
+    padding: 1rem 0;
+    /* border-left: 1px solid hsla(0, 0%, 0%, 0.2); */
 }
 
-aside[menubar] [menu] div[id] {
+[menubar] [menu] div[id] {
     width: 80%;
     display: block;
     margin: 0 1.5rem;
     padding: 1rem 0;
 }
 
-aside[menubar] [menu] div[id]:not(:last-of-type) {
+[menubar] [menu] div[id]:not(:last-of-type) {
     border-bottom: 1px solid hsla(221,17%,14%,1);
 }
 
-aside[menubar] [menu] div[id] [item] {
+[menubar] [menu] div[id] [item] {
     display: block;
     padding: 0.5rem 1.5rem;
     margin: 0.3rem 0;
     text-align: left;
     width: 100%;
-    color: hsla(215,5%,50%,1);
+    color: hsla(0, 0%, 100%, 0.5);
     cursor: pointer;
     /* border-radius: 0.2rem; */
 }
 
-aside[menubar] [menu] div[id] [main][item] {
+[menubar] [menu] div[id] [main][item] {
     color: #fff;
 }
 
-aside[menubar] [menu] div[id] [item].v-link-active,
-aside[menubar] [menu] div[id] [item]:hover {
+[menubar] [menu] div[id] [item].v-link-active,
+[menubar] [menu] div[id] [item]:hover {
     color: #fff;
-    background-color: hsla(221,17%,15%,1);
+    background-color: hsl(224,16%,15%);
 }
+
+[menubar]  input[type="search"] {
+    width: 80%;
+    display: block;
+    margin: 0.6em 1.5rem;
+    padding: 0.5rem 1.5rem;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 1.1em;
+}
+
+[menubar]  input[type="search"]::-webkit-input-placeholder {color:hsla(0, 0%, 100%, 0.5);}
+[menubar]  input[type="search"]::-moz-placeholder          {color:hsla(0, 0%, 100%, 0.5);}/* Firefox 19+ */
+[menubar]  input[type="search"]:-moz-placeholder           {color:hsla(0, 0%, 100%, 0.5);}/* Firefox 18- */
+[menubar]  input[type="search"]:-ms-input-placeholder      {color:hsla(0, 0%, 100%, 0.5);}

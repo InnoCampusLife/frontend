@@ -7,13 +7,13 @@
 <script>
 
 	module.exports =  {
-		data () {
+		data  : function () {
 			return {
 				user : this.$router.app.user
 			}
 		},
 		route: {
-			data(transition) {
+			data : function (transition) {
 				this.user.account.update(transition.next);
 				console.log("test route updated!");
 			}

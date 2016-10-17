@@ -1,5 +1,6 @@
 body {
     font-family: "Source Sans Pro";
+    background-color: #f0f0f0;
     overflow: hidden;
 }
 
@@ -15,15 +16,19 @@ main[content] {
     overflow: hidden;
     box-sizing: border-box;
     color: #000;
-    background-color: #f4f7fa;
 }
 
 main[content] > div {
     position: relative;
     padding: 2rem;
-    border-top: 1px solid #d2d2d2;
+    /* border-top: 1px solid #fff; */
 }
 
+
+main[content] > div[scrolled] {
+    border-top: 1px solid #d2d2d2;
+}
+/* 
 main[content] > header {
     padding: 1.5rem;
     color: hsla(210, 1%, 1%, 0.7);
@@ -43,8 +48,8 @@ main[content] > header > div[content] {
 
 main[content] > header > div[content] button[item] {
     padding: 0 2rem;
-    color: #fff;
-    background: hsl(226, 100%, 65%);
+    color: #000;
+    background: transparent;
     cursor: pointer;
     -webkit-user-select: none;
        -moz-user-select: none;
@@ -54,36 +59,16 @@ main[content] > header > div[content] button[item] {
 
 main[content] > header > div[content] button[item]:focus,
 main[content] > header > div[content] button[item]:hover {
+    color: #fff;
     background: hsl(226, 100%, 68%);
 }
 
 main[content] > header > div[content] button[item].v-link-active,
 main[content] > header > div[content] button[item]:active {
+    color: #fff;
     background: hsl(226, 100%, 60%);
-}
+} */
 
 main[content] > [scroller-y] {
-    height: calc(100% - 10rem);
-}
-
-button#logout {
-    float: right;
-    height: 3rem;
-    width: 3rem;
-    padding: 0;
-    color: hsla(210, 1%, 1%, 0.7);
-    text-align: center;
-    line-height: initial;
-    text-transform: inherit;
-    cursor: pointer;
-    /* border-radius: 0.2rem; */
-}
-button#logout::before {
-    font-size: 1.5rem;
-}
-
-button#logout:hover::before {
-    content: "\e62b";
-/*     color: #fff;
-    background: hsla(221, 17%, 15%, 0.75); */
+    height: calc(100% - 4rem);
 }
