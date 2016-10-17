@@ -1,6 +1,6 @@
 <template>
 	<form id="ip_request">
-		<h2 style="padding: 0">Request innopoints</h2>
+		<h2>Request innopoints</h2>
 
 		<hr/>
 
@@ -27,7 +27,7 @@
 		<div v-show="!$loadingRouteData" style="width: 100%;">
 
 			Activivty's category
-			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="categoryChanged">
+			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="category_changed">
 				<option value="blank" selected>Choose Category...</option>
 				<option value="">All</option>
 				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
@@ -45,16 +45,15 @@
 				<br>
 			</div>
 
-			<div v-for="i in (current.isPersonal ? 1 : current.users_count)" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
-				<legend v-if="!current.isPersonal">
-					<input type="text" placeholder="username" v-model="current.users[i].username" required>
+			<div v-for="i of current.users_count" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
+				<legend v-show="!current.isPersonal">
+					<input data-index="{{i}}" type="text" placeholder="username" @input="username_changed" value="{{* i ? '' : user.account.username}}">
 				</legend>
 				<br>
 				<div v-show="categorySelected">
-
 					<div style="width: 100%;">
 						Activity
-						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activityChanged">
+						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activity_changed">
 							<option value="0" selected>Choose Activity...</option>
 							<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
 						</select>
@@ -85,22 +84,20 @@
 		<pre v-if="!categorySelected">Select Category!</pre>
 		<pre v-if="categorySelected && !activitySelected">Select Activity!</pre>
 		<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
-		<br>
-		<button v-if="ableToSend" block type="button" @click="send" id="send">send</button>
 	</form>
 </template>
 
 <script>
 	module.exports =  {
-		data () {
+		data  : function () {
 			var init_type = this.$router.app.user.account.isStudent ? "personal" : "group";
+			console.log(this.$router.app.user.account.isStudent);
 			return {
 				user : this.$router.app.user,
 				categories : [],
 				activities : [],
 				activitySelected : false,
 				categorySelected : false,
-				ableToSend : false,
 				current : {
 					application : {},
 					type : init_type,
@@ -109,7 +106,7 @@
 					users_count : 1,
 					users : [
 						{
-							username : this.$router.app.user.account.username,
+							user_id: this.$router.app.user.account.id,
 							activity_id : 0,
 							amount : 1
 						}
@@ -119,39 +116,53 @@
 			}
 		},
 		methods : {
-			current_users_count_inc() {
+			current_users_count_inc : function () {
 				if (!this.current.users[this.current.users_count])
 					this.current.users[this.current.users_count] = {
-						username : '',
+						user_id: '',
 						activity_id : 0,
 						amount : 0
 					};
 				this.current.users_count++;
 			},
-			current_users_count_dec() {
+			current_users_count_dec : function () {
 				if (this.current.users[this.current.users_count - 1])
 					this.current.users[this.current.users_count - 1] = {
-						username : '',
+						user_id: '',
 						activity_id : 0,
 						amount : 0
 					};
 				this.current.users_count--;
 			},
-			categoryChanged (e) {
+			username_changed  : function (e) {
+				var users = this.current.users;
+				console.log(e.target.dataset.index);
+				this.user.account.getBio(
+					{ username: e.target.value },
+					function(result) {
+						users[e.target.dataset.index].user_id = result.id;
+					},
+					function(error) {
+						console.log("wrong username!");
+						//TODO
+					}
+				);
+			},
+			category_changed  : function (e) {
 				this.categorySelected = this.activitySelected = false;
 
 				if (e.target.value != 'blank') {
 					if (e.target.value)
 						this.user
 						.innopoints.api
-						.getActivitiesInCategory(this.current.category_id, 0, 100, this.setActivities);
+						.getActivitiesInCategory(this.current.category_id, 0, 1000, this.setActivities);
 					else
 						this.user
 						.innopoints.api
-						.getActivities(0, 100, this.setActivities);
+						.getActivities(0, 1000, this.setActivities);
 				}
 			},
-			activityChanged (e) {
+			activity_changed  : function (e) {
 				let counter = 0;
 
 				for (let _user of this.current.users)
@@ -159,14 +170,14 @@
 
 				this.activitySelected = counter == this.current.users_count;
 			},
-			setActivities (result) {
+			setActivities  : function (result) {
 				this.activities = result;
 				this.categorySelected = true;
 			},
-			uploaded (e) {
+			uploaded  : function (e) {
 				console.log(e.target.files);
 			},
-			accept (e) {
+			accept  : function (e) {
 				accept.textContent = "accepting...";
 				this.current.application.type = this.current.type;
 
@@ -175,80 +186,54 @@
 
 
 				for (let cur_user of this.current.users) {
-					let activity = this.findById(this.activities, cur_user.activity_id),
-						amount = parseInt(cur_user.amount),
-						total_price = amount * activity.price;
+					let activity_id = this.findById(this.activities, cur_user.activity_id).id,
+						amount = parseInt(cur_user.amount) || null;
 
 					this.current.application.work.push({
-						activity,
+						activity_id,
 						amount,
-						total_price
+						actor: cur_user.user_id
 					});
 				}
 
-				this.current.application.comment = this.current.comment;
-				this.current.application.files = upload.files;
 				console.log(this.current.application);
 
-				this.user.innopoints.api.application.create(
-					this.current.application,
-					this.acceptSuccess,
-					this.error
-				);
-			},
-			acceptSuccess(result) {
-				accept.textContent = "accepted ✓";
-				this.ableToSend = true;
-			},
-			error(error) {
-				alert('Unsuccessful: ' + error);
-				send.textContent = "send";
-				accept.textContent = "accept";
-			},
+				this.current.application.comment = this.current.comment;
+				this.current.application.files = upload.files;
 
-			send (e) {
-				send.textContent = "sending...";
 				if (this.user.account.isStudent)
-					this.user.innopoints.api.user.application.send(
-						this.current.application.id,
-						this.sendSuccess,
+					this.user.innopoints.api.user.application.create(
+						this.current.application,
+						this.acceptSuccess,
 						this.error
 					);
 				else if (this.user.account.isModerator)
-					this.user.innopoints.api.admin.application.send(
-						this.current.application.id,
-						this.sendSuccess,
+					this.user.innopoints.api.admin.application.create(
+						this.current.application,
+						this.acceptSuccess,
 						this.error
 					);
 			},
-			sendSuccess (result) {
-				send.textContent = "sent ✓";
-
-				this.ableToSend = false;
-				this.current.application = {};
-				this.current.category_id = 0;
-				this.current.users_count = 1;
-				this.current.users = [
-					{
-						username : this.user.account.username,
-						activity_id : 0,
-						amount : 1
-					}
-				];
-				upload.value = '';
+			acceptSuccess : function (result) {
+				accept.textContent = "accepted ✓";
+			},
+			error : function (error) {
+				alert('Unsuccessful: ' + error);
+				accept.textContent = "accept";
 			},
 
-			showAmount (id) {
+			showAmount  : function (id) {
 				let temp = this.findById(this.activities, id);
 				return temp && temp.type != 'permanent';
 			},
-			findById (array, id) {
+			findById : function (array, id) {
 				return array.find(x => x.id == id);
 			}
 		},
 		route : {
-			data (transition) {
+			data  : function (transition) {
 		        console.log('calling get for innopoints');
+		        this.$router.app.user.account.update();
 				this.$router.app.user.innopoints.api.getCategories(0,10000, //TODO - fix categories amount
 					function (result) {
 						transition.next({

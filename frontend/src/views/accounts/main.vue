@@ -1,9 +1,5 @@
 <template>
-	<content>
-		<div slot="header">
-			
-		</div>
-	</content>
+	<content></content>
 </template>
 
 <script>

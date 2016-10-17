@@ -11,14 +11,28 @@
 			sidebar
 		},
 		route: {
-			data(transition) {
+			data : function (transition) {
 				console.log("called get in main");
+				var router = this.$router;
 				var user = this.$router.app.user;
-				user.account.update(result => {
-					user.innopoints.data.update(result => {
-						transition.next();
-					});
-				});
+				user.account.update(
+					function(result) {
+						user.innopoints.data.update(
+							function(result) {
+								transition.next();
+							}, function(error) {
+								user.innopoints.api.user.create(function(result) {
+									user.innopoints.data.update(function(result) {
+										transition.next();
+									});
+								});
+							}
+						);
+					}, function(error) {
+						console.log("updating error");
+						router.go('/login');
+					}
+				);
 			}
 		}
 	}

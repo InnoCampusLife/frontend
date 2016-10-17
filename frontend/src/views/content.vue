@@ -1,10 +1,10 @@
 <template>
-	<!-- <main content scroller-y force> -->
-	<main content scroller-y>
-		<main-header>
+	<!-- <main content scroller-y-force> -->
+	<main content>
+		<!-- <main-header>
 			<slot name="header"></slot>
-		</main-header>
-		<div scroller-x>
+		</main-header> -->
+		<div scroller-x scroller-y>
 			<router-view></router-view>
 		</div>
 	</main>
@@ -16,6 +16,14 @@
 	module.exports = {
 		components: {
 			mainHeader
-		}
+		},
+		// methods: {
+		// 	scrl : function (e) {
+		// 		if (e.target.scrollTop > 49)
+		// 			e.target.setAttribute('scrolled', '');
+		// 		else
+		// 			e.target.removeAttribute('scrolled');
+		// 	}
+		// }
 	}
 </script>

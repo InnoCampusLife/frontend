@@ -10,21 +10,21 @@
 }
 /* font-family: "SourceSansProLight"; */
 @font-face {
-    font-family: "Source Sans Pro Light";
+    font-family: "Source Sans Pro";
     src: url("./SourceSansProLight/SourceSansProLight.eot");
     src: url("./SourceSansProLight/SourceSansProLight.eot?#iefix")format("embedded-opentype"),
     url("./SourceSansProLight/SourceSansProLight.woff") format("woff"),
     url("./SourceSansProLight/SourceSansProLight.ttf") format("truetype");
     font-style: normal;
-    font-weight: normal;
+    font-weight: 100;
 }
 /* font-family: "SourceSansProBold"; */
 @font-face {
-    font-family: "Source Sans Pro Bold";
+    font-family: "Source Sans Pro";
     src: url("./SourceSansProBold/SourceSansProBold.eot");
     src: url("./SourceSansProBold/SourceSansProBold.eot?#iefix")format("embedded-opentype"),
     url("./SourceSansProBold/SourceSansProBold.woff") format("woff"),
     url("./SourceSansProBold/SourceSansProBold.ttf") format("truetype");
     font-style: normal;
-    font-weight: normal;
+    font-weight: bold;
 }

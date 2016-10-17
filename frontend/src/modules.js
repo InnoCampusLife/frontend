@@ -9,7 +9,7 @@ var modules = {
 			'student',
 			'moderator'
 		],
-		have (role) {
+		have : function (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
 
@@ -36,7 +36,7 @@ var modules = {
 			var ln = (!!this.lastName 	? 		this.lastName + ' ' : '');
 			var fn = (!!this.firstName 	? 		this.firstName 	 	: '');
 			var pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
-			return ln + fn + pn;
+			return fn + ln + pn;
 		},
 		
 		get loggedIn () {
@@ -55,11 +55,11 @@ var modules = {
 			return !!this.is('moderator');
 		},
 
-		is (ofType) {
+		is : function (ofType) {
 			return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 		},
 
-		clear () {
+		clear : function () {
 			this.id         = null;
 			this.role       = null;
 			this.firstName  = null;
@@ -70,7 +70,7 @@ var modules = {
 			this.storage.clear();
 		},
 
-		set (data) {
+		set : function (data) {
 			if (data.id) 		 this.id         = data.id;
 			if (data.username) 	 this.username   = data.username;
 			if (data.role) 		 this.role       = data.role;
@@ -81,9 +81,10 @@ var modules = {
 			if (data.token) 	 this.token      = data.token;
 		},
 
-		update (successCallback, errorCallback) {
-			this.get((result) => {
-					this.set(result);
+		update : function (successCallback, errorCallback) {
+			var that = this;
+			this.get(function(result) {
+					that.set(result);
 					if (successCallback) successCallback(result);
 				},
 				errorCallback
@@ -100,13 +101,17 @@ var modules = {
 		name : "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-		create : function (password, successCallback, errorCallback) {
+		create : function (password, email, successCallback, errorCallback) {
 			let 
 			type = "POST",
 			url  = this.url,
 			data = {
 				username: this.username,
-				password: password
+				password: password,
+				email: email,
+				firstName: this.firstName,
+				lastName: this.lastName,
+				studyGroup: this.studyGroup
 			};
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -180,7 +185,7 @@ var modules = {
 			'student',
 			'admin'
 		],
-		have (role) {
+		have  : function (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
 		data : {
@@ -202,16 +207,19 @@ var modules = {
 				return !!this.is('admin');
 			},
 
-			is (ofType) {
-				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+			is : function (ofType) {
+				return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 			},
 
-			update (successCallback, errorCallback)	{
-				modules.innopoints.api.user.get(result => {
-					this.id = result.id;
-					this.amount = result.points_amount || 0;
-					this.role = result.type;
-				});
+			update : function (successCallback, errorCallback)	{
+				var that = this;
+				modules.innopoints.api.user.get(function(result) {
+					that.id = result.id;
+					that.amount = result.points_amount || 0;
+					that.role = result.type;
+
+					if (successCallback) successCallback(result);
+				}, errorCallback);
 			}
 		},
 
@@ -321,13 +329,13 @@ var modules = {
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
-				applicaiton : {
+				application : {
 					get url() { return modules.innopoints.api.user.url },
 					create : function (application, successCallback, errorCallback) {
 						let 
 						type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
-						data = { application };
+						data = { application:application };
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
@@ -344,7 +352,7 @@ var modules = {
 					send : function (appl_id, successCallback, errorCallback) {
 						let 
 						type = "PUT",
-						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
+						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 						data = '';
 
 						ajax(type, url, data, successCallback, errorCallback);
@@ -371,14 +379,6 @@ var modules = {
 				
 				applications : {
 					get url() { return modules.innopoints.api.user.url },
-					get : function (skip_count, limit_count, successCallback, errorCallback) {
-						let 
-						type = "GET",
-						url  = this.url + modules.accounts.token + "/applications",
-						data = { skip: skip_count, limit: limit_count };
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
 
 					getWithStatus : function (status, skip_count, limit_count, successCallback, errorCallback) {
 						let 
@@ -388,6 +388,22 @@ var modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
+
+					get : function(skip_count, limit_count, successCallback, errorCallback) {
+						var that = this;
+						this.getWithStatus("in_process", 0, 1000, function(result) {
+							that.getWithStatus("rejected", 0, 1000, function(result1) {
+								that.getWithStatus("rework", 0, 1000, function(result2) {
+									that.getWithStatus("approved", 0, 1000, function(result3) {
+										result = result.concat(result1);
+										result = result.concat(result2);
+										result = result.concat(result3);
+										if (successCallback) successCallback(result);
+									}, errorCallback);
+								}, errorCallback);
+							}, errorCallback);
+						}, errorCallback);
+					}
 				},
 			},
 			//
@@ -437,10 +453,26 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 
+					get : function(successCallback, errorCallback) {
+						var that = this;
+						this.getWithStatus("in_process", 0, 1000, function(result) {
+							that.getWithStatus("rejected", 0, 1000, function(result1) {
+								that.getWithStatus("rework", 0, 1000, function(result2) {
+									that.getWithStatus("approved", 0, 1000, function(result3) {
+										result = result.concat(result1);
+										result = result.concat(result2);
+										result = result.concat(result3);
+										if (successCallback) successCallback(result);
+									}, errorCallback);
+								}, errorCallback);
+							}, errorCallback);
+						}, errorCallback);
+					}
 				},
 
-				applicaiton : {
+				application : {
 					get url() { return modules.innopoints.api.admin.url },
+
 					create : function (application, successCallback, errorCallback) {
 						let 
 						type = "POST",

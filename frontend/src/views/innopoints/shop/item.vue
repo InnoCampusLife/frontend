@@ -15,15 +15,15 @@
 
 <script>
     module.exports = {
-        data () {
+        data : function () {
             return {
                 item: {}
             }
         },
         route : {
-            data (transition) {           
+            data  : function (transition) {           
                 var $route = this.$route;
-                this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, (result) => {
+                this.$router.app.user.innopoints.api.shop.getItem(this.$route.params.item, function(result) {
                     transition.next({
                         item: result
                     });
