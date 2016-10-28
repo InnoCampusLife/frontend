@@ -1,145 +1,126 @@
 [sidebar] {
-    width: 7rem;
-    height: 100%;
-    float: left;
-    padding: 0;
-    color: #fff;
-    background-color: hsl(225, 14%, 22%);
-    z-index: 99;
-}
-
-[sidebar] [menu] > * {
     display: block;
-    height: 6rem;
-    width: 7rem;
-    color: hsla(0, 0%, 100%, 0.5);
-    font-weight: 100;
-    cursor: pointer;
-}
-
-[sidebar] [menu] > *:hover{
-    color: #fff;
-    background-color: hsl(226, 100%, 68%);
-}
-
-[sidebar] > header {
-    background-color: #4c76ff;
-    color: #fff;
-    text-transform: uppercase;
-    text-align: center;
-    height: 7rem;
-    line-height: 7rem;
-    font-size: 1.1rem;
-}
-
-/* [sidebar] > header.v-link-active,
-[sidebar] > header:hover {
-    background-color: hsla(226,100%,68%,1);
-} */
-
-[sidebar] [menu] {
-    height: 100%;
-    /* border-right: 1px solid rgba(98, 99, 100, 0.2); */
-}
-
-[sidebar] [menu] > [item][title][points]::before {
-    content: attr(points);
-}
-[sidebar] [menu] > [item][title]::before {
-    display: block;
-    font-size: 2rem;
-}
-
-[sidebar] [menu] > [item][title]::after {
-    display: block;
-    content: attr(title);
-    font-size: 1rem;
-}
-
-[menu] [item].v-link-active,
-[menu] [item][active] {
-    color: #fff;
-    background: hsl(226, 100%, 60%);
-}
-
-[menu] [item][bottom] {
-    position: absolute;
+    position: fixed;
+    width: 260px;
+    height: 100vh;
+    color: #FFF;
+    font-weight: normal;
+    background-size: cover;
+    background-position: center;
+    top: 0;
+    left: 0;
     bottom: 0;
-}
-
-[menu] [item][bottom]:hover {
-    color: #fff;
-    background: transparent;
-}
-
-#logout:hover::before {
-    content: "\e62b";
-/*     color: #fff;
-    background: hsla(221, 17%, 15%, 0.75); */
+    z-index: 1;
+    background: linear-gradient(to bottom, hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%);
+    background-size: 150% 150%;
 }
 
 
-
-[menubar] {
-    width: 18rem;
-    height: 100%;
-    float: left;
-    z-index: 98;
-    background-color: hsl(224, 16%, 19%);
+@media screen and (max-width: 768px) {
+    [sidebar] {
+        margin-left: -260px;
+    }
 }
 
-[menubar] [menu] {
-    font-weight: 100;
-    color: #fff;
-    /* height: 100%; */
-    padding: 1rem 0;
-    /* border-left: 1px solid hsla(0, 0%, 0%, 0.2); */
+[sidebar] > [header] {
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-[menubar] [menu] div[id] {
-    width: 80%;
+[sidebar] > [header] > span {
+    text-transform: uppercase;
+    padding: 5px 0px;
     display: block;
-    margin: 0 1.5rem;
-    padding: 1rem 0;
+    font-size: 20px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: normal;
+    line-height: 30px;
 }
 
-[menubar] [menu] div[id]:not(:last-of-type) {
-    border-bottom: 1px solid hsla(221,17%,14%,1);
+[sidebar] > [menu] {
+    margin-top: 20px;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
 }
 
-[menubar] [menu] div[id] [item] {
-    display: block;
-    padding: 0.5rem 1.5rem;
-    margin: 0.3rem 0;
-    text-align: left;
-    width: 100%;
-    color: hsla(0, 0%, 100%, 0.5);
-    cursor: pointer;
-    /* border-radius: 0.2rem; */
-}
-
-[menubar] [menu] div[id] [main][item] {
-    color: #fff;
-}
-
-[menubar] [menu] div[id] [item].v-link-active,
-[menubar] [menu] div[id] [item]:hover {
-    color: #fff;
-    background-color: hsl(224,16%,15%);
-}
-
-[menubar]  input[type="search"] {
-    width: 80%;
-    display: block;
-    margin: 0.6em 1.5rem;
-    padding: 0.5rem 1.5rem;
-    background: transparent;
+[sidebar] > [menu] [item] {
+    display: inline;
+    position: relative;
+    color: #FFFFFF;
+    margin: 5px 15px;
+    opacity: .86;
+    border-radius: 4px;
+    width: calc(100% - 30px);
     border: 0;
-    color: #fff;
-    font-size: 1.1em;
+    padding: 10px 15px;
+    text-align: left;
+    transition: opacity .15s ease-in, background-color .15s ease-in;
 }
 
-[menubar]  input[type="search"]::-webkit-input-placeholder {color:hsla(0, 0%, 100%, 0.5);}
-[menubar]  input[type="search"]::-moz-placeholder          {color:hsla(0, 0%, 100%, 0.5);}/* Firefox 19+ */
-[menubar]  input[type="search"]:-moz-placeholder           {color:hsla(0, 0%, 100%, 0.5);}/* Firefox 18- */
-[menubar]  input[type="search"]:-ms-input-placeholder      {color:hsla(0, 0%, 100%, 0.5);}
+[sidebar] > [menu] [item][left] {
+    margin: 5px 0 5px 15px;
+    border-radius: 4px 0 0 4px;
+    width: calc(70% - 15px);
+}
+
+[sidebar] > [menu] [item][right] {
+    margin: 5px 15px 5px 0;
+    border-radius: 0 4px 4px 0;
+    width: calc(30% - 15px);
+}
+
+[sidebar] > [menu] [item]:hover {
+    background: rgba(255, 255, 255, 0.13);
+    opacity: 1;
+}
+
+[sidebar] > [menu] [item][left]:hover + [right] {
+    background: rgba(255, 255, 255, 0.1);
+}
+[sidebar] > [menu] [item][left] + [right]:hover {
+
+}
+
+[sidebar] > [menu] [item][left].v-link-active + [right] {
+    background: rgba(255, 255, 255, 0.13);
+}
+
+[sidebar] > [menu] [item][left] + [right].v-link-active,
+[sidebar] > [menu] [item].v-link-active {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.23);
+}
+
+[sidebar] > [menu] [item] > span {
+    float: left;
+    margin-right: 1.2rem;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+
+[sidebar] > [menu] [item] > [icon] {
+    font-size: 28px;
+}
+
+[sidebar] > [menu] [item] > [text] {
+    margin: 0;
+    line-height: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+}
+
+#logout {
+    position: absolute;
+    width: calc(100% - 30px);
+    left: 0;
+    bottom: 10px;
+    background: rgba(255, 255, 255, 0.14);
+    opacity: 1;
+    color: #FFFFFF;
+}

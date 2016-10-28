@@ -1,6 +1,6 @@
 body {
-    font-family: "Source Sans Pro";
-    background-color: #f0f0f0;
+    font-family: "Roboto";
+    background-color: #f7f7f7;
     overflow: hidden;
 }
 
@@ -10,12 +10,19 @@ button {
 }
 
 main[content] {
+    margin-left: 260px;
     height: 100%;
     font-size: 1.1rem;
     text-align: center;
     overflow: hidden;
     box-sizing: border-box;
     color: #000;
+}
+
+@media screen and (max-width: 768px) {
+    main[content] {
+        margin-left: 0;
+    }
 }
 
 main[content] > div {
@@ -28,12 +35,12 @@ main[content] > div {
 main[content] > div[scrolled] {
     border-top: 1px solid #d2d2d2;
 }
-/* 
+
 main[content] > header {
-    padding: 1.5rem;
+    /* padding: 1.5rem; */
     color: hsla(210, 1%, 1%, 0.7);
-    height: 3rem;
-    line-height: 3rem;
+    /* height: 3rem; */
+    /* line-height: 3rem; */
     font-size: 1rem;
     background-color: #fff;
     text-transform: uppercase;
@@ -67,7 +74,7 @@ main[content] > header > div[content] button[item].v-link-active,
 main[content] > header > div[content] button[item]:active {
     color: #fff;
     background: hsl(226, 100%, 60%);
-} */
+}
 
 main[content] > [scroller-y] {
     height: calc(100% - 4rem);
