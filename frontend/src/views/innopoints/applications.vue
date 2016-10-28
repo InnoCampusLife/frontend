@@ -12,6 +12,7 @@
 			<header flex>
 				<section left>
 					<span>{{appl.type | capitalize}}</span> <span misc style="font-size:inherit">#{{appl.id}}</span>
+					<span block misc>By <span>{{appl.author.username}}</span></span>
 					<span block misc>Status: <span :status="appl.status">{{appl.status.split('_').join(' ')}}</span></span>
 				</section>
 				<section right>
@@ -124,12 +125,11 @@
 					console.log("called appl get");
 					var _length = result.length;
 					result.forEach(function(res, _index) {
-						res.creation_date = new Date(res.creation_date.slice(0, -5).split('-').join('/')).toDateString();
+						res.creation_date = new Date(res.creation_date * 1000).toDateString();
 						if (res.work) res.work.forEach(function(work, index) {
-								work.link = '<a href=""></a>';
-								user.account.getBio({id:work.actor}, function(result) {
-									work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + result.username + '">' + result.username + '</a>';
-								});
+								// user.account.getBio({id:work.actor}, function(result) {
+								work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + work.actor.username + '">' + work.actor.username + '</a>';
+								// });
 								if ((_index == (_length - 1)) && (index == (res.work.length - 1))) {
 									transition.next({
 										applications: result

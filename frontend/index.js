@@ -13535,7 +13535,7 @@
 						create: function (application, successCallback, errorCallback) {
 							let type = "POST",
 							    url = this.url + modules.accounts.token + "/applications",
-							    data = { applicaiton: application };
+							    data = { application: application };
 
 							ajax(type, url, data, successCallback, errorCallback);
 						},
@@ -13708,24 +13708,24 @@
 										component: router_view,
 										subRoutes: {
 											'/:filter': {
-												component: __webpack_require__(47),
+												component: __webpack_require__(44),
 												name: 'applications'
 											}
 										}
 									},
 									'/apply': {
-										component: __webpack_require__(50),
+										component: __webpack_require__(47),
 										name: 'apply'
 									},
 									'/shop': {
 										component: router_view,
 										subRoutes: {
 											'/': {
-												component: __webpack_require__(53),
+												component: __webpack_require__(50),
 												name: 'shop'
 											},
 											'/item/:item': {
-												component: __webpack_require__(56),
+												component: __webpack_require__(53),
 												name: 'item'
 											}
 										}
@@ -14339,13 +14339,39 @@
 
 	// <template>
 	// 	<aside sidebar>
-	// 		<div menu>
-	// 			<button item title="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
-	// 			<button item title="Innopoints" points="{{ user.innopoints.data.amount }}" v-link="{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }" v-if="user.innopoints.data.id"></button>
-	// 			<button item title="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
+	// 		<div header v-link="'/'"><span>UIS</span></div header>
+	// 		<ul menu>
+	// 			<li>
+	// 				<button item v-link="{ name: 'profile', params: { username: user.account.username } }">
+	// 					<span icon></span>
+	// 					<p text>Profile</p>
+	// 				</button>
+	// 			</li>
+	// 			<li>
+	// 				<button item left v-link="{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }" v-if="user.innopoints.data.id">
+	// 					<span info v-text="user.innopoints.data.amount"></span>
+	// 					<p text>Innopoints</p>
+	// 				</button>
+	// 				<button item right v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">
+	// 					<p text="" style="
+	// 						text-align: center;
+	// 					">+</p>
+	// 				</button>
+	// 			</li>
+	// 			<li>
+	// 				<button item v-link="{ name: 'accounts' }" v-if="user.account.isModerator">
+	// 					<span icon></span>
+	// 					<p text>Accounts</p>
+	// 				</button>
+	// 			</li>
 	//
-	// 			<button item bottom logout title="Log out" id="logout" icon="&#xe603;" @click="logout" block></button>
-	// 		</div>
+	// 			<li>
+	// 				<button item bottom logout id="logout" @click="logout" block>
+	// 					<span icon></span>
+	// 					<p text>Log out</p>
+	// 				</button>
+	// 			</li>
+	// 		</ul>
 	// 	</aside>
 	// </template>
 	//
@@ -14369,7 +14395,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside sidebar>\n\t<div menu>\n\t\t<button item title=\"Profile\" icon=\"&#xe602;\" v-link=\"{ name: 'profile', params: { username: user.account.username } }\"></button>\n\t\t<button item title=\"Innopoints\" points=\"{{ user.innopoints.data.amount }}\" v-link=\"{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }\" v-if=\"user.innopoints.data.id\"></button>\n\t\t<button item title=\"Accounts\" icon=\"&#xe699;\" v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\"></button>\n\n\t\t<button item bottom logout title=\"Log out\" id=\"logout\" icon=\"&#xe603;\" @click=\"logout\" block></button>\n\t</div>\n</aside>\n";
+	module.exports = "\n<aside sidebar>\n\t<div header v-link=\"'/'\"><span>UIS</span></div header>\n\t<ul menu>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'profile', params: { username: user.account.username } }\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Profile</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item left v-link=\"{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }\" v-if=\"user.innopoints.data.id\">\n\t\t\t\t<span info v-text=\"user.innopoints.data.amount\"></span>\n\t\t\t\t<p text>Innopoints</p>\n\t\t\t</button>\n\t\t\t<button item right v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\">\n\t\t\t\t<p text=\"\" style=\"\n\t\t\t\t\ttext-align: center;\n\t\t\t\t\">+</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Accounts</p>\n\t\t\t</button>\n\t\t</li>\n\n\t\t<li>\n\t\t\t<button item bottom logout id=\"logout\" @click=\"logout\" block>\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Log out</p>\n\t\t\t</button>\n\t\t</li>\n\t</ul>\n</aside>\n";
 
 /***/ },
 /* 19 */
@@ -14410,12 +14436,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<!-- <main content scroller-y-force> -->
-	// 	<main content>
-	// 		<!-- <main-header>
+	// 	<main content scroller-y-force>
+	// 	<!-- <main content> -->
+	// 		<main-header>
 	// 			<slot name="header"></slot>
-	// 		</main-header> -->
-	// 		<div scroller-x scroller-y>
+	// 		</main-header>
+	// 		<div scroller-x>
 	// 			<router-view></router-view>
 	// 		</div>
 	// 	</main>
@@ -14488,7 +14514,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<!-- <main content scroller-y-force> -->\n<main content>\n\t<!-- <main-header>\n\t\t<slot name=\"header\"></slot>\n\t</main-header> -->\n\t<div scroller-x scroller-y>\n\t\t<router-view></router-view>\n\t</div>\n</main>\n";
+	module.exports = "\n<main content scroller-y-force>\n<!-- <main content> -->\n\t<main-header>\n\t\t<slot name=\"header\"></slot>\n\t</main-header>\n\t<div scroller-x>\n\t\t<router-view></router-view>\n\t</div>\n</main>\n";
 
 /***/ },
 /* 26 */
@@ -14852,7 +14878,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(46)
+	__vue_template__ = __webpack_require__(43)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14875,118 +14901,84 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// <template>
-	// 	<sidebar></sidebar>
-	// 	<content></content>
+	// 	<content>
+	// 		<div slot="header" flex center children>
+	// 			<input type="search" id="search" inline
+	// 				:placeholder="'Search ' + $route.name"
+	// 				v-model="$router.app.query"
+	// 				v-show="showApplications || showShop"
+	// 			/>
+	// 			<div menu>
+	// 				<template v-if="showApplications">
+	// 					<select name="applications" id="applications" @change="filter_changed" inline>
+	// 						<option value="all">All Applications</option>
+	// 						<option value="in_process">In process</option>
+	// 						<option value="rejected">Rejected</option>
+	// 						<option value="rework">In rework</option>
+	// 						<option value="approved">Approved</option>
+	// 					</select>
+	// 				</template>
+	// 				<div id="__" inline>
+	// 					<button main item v-link="{ name: 'shop', params: { username: user.account.username } }" inline>Shop</button>
+	// 					<button item inline>cart</button>
+	// 					<button item inline>orders</button>
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	</content>
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(43);
 	var content = __webpack_require__(20);
 
 	module.exports = {
+		data: function () {
+			var route = this.$route;
+			return {
+				route: route,
+				user: this.$router.app.user,
+				get showApplications() {
+					console.log(this.route.path.includes('applications'));return this.route.path.includes('applications');
+				},
+				get showShop() {
+					console.log(this.route.path.endsWith('shop'));return this.route.path.endsWith('shop');
+				}
+			};
+		},
 		components: {
-			sidebar,
 			content
+		},
+		methods: {
+			filter_changed: function (e) {
+				this.$router.go({
+					name: 'applications',
+					params: {
+						username: this.user.account.username,
+						filter: e.target.value
+					}
+				});
+			}
 		}
 	};
 	// </script>
 
 /***/ },
 /* 43 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(44)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(45)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-1e1c69e4/sidebar.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
+	module.exports = "\n<content>\n\t<div slot=\"header\" flex center children>\n\t\t<input type=\"search\" id=\"search\" inline\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"showApplications || showShop\"\n\t\t/>\n\t\t<div menu>\n\t\t\t<template v-if=\"showApplications\">\n\t\t\t\t<select name=\"applications\" id=\"applications\" @change=\"filter_changed\" inline>\n\t\t\t\t\t<option value=\"all\">All Applications</option>\n\t\t\t\t\t<option value=\"in_process\">In process</option>\n\t\t\t\t\t<option value=\"rejected\">Rejected</option>\n\t\t\t\t\t<option value=\"rework\">In rework</option>\n\t\t\t\t\t<option value=\"approved\">Approved</option>\n\t\t\t\t</select>\n\t\t\t</template>\n\t\t\t<div id=\"__\" inline>\n\t\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\" inline>Shop</button>\n\t\t\t\t<button item inline>cart</button>\n\t\t\t\t<button item inline>orders</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</content>\n";
 
 /***/ },
 /* 44 */
-/***/ function(module, exports) {
-
-	// <template>
-	// 	<aside menubar>
-	// 		<div menu>
-	// 			<input type="search" id="search"
-	// 				:placeholder="'Search ' + $route.name"
-	// 				v-model="$router.app.query"
-	// 				v-show="$route.path.includes('applications') || $route.path.endsWith('shop')"
-	// 			/>
-	// 			<div id="_">
-	// 				<button main item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'all' } }">Applications</button>
-	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }">In process</button>
-	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'rejected' } }">Rejected</button>
-	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'rework' } }">In rework</button>
-	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'approved' } }">Approved</button>
-	// 			</div>
-	// 			<div id="__">
-	// 				<button main item v-link="{ name: 'shop', params: { username: user.account.username } }">Shop</button>
-	// 				<button item>cart</button>
-	// 				<button item>orders</button>
-	// 			</div>
-	// 			<div id="___">
-	// 				<button item v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }" style="
-	// 					background: hsl(226, 100%, 60%);
-	// 					color: #fff;
-	// 				">Request Innopoints +</button>
-	// 			</div>
-	// 		</div>
-	// 	</aside>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data: function () {
-			return {
-				user: this.$router.app.user,
-				query: this.$router.app.query
-			};
-		}
-	};
-	// </script>
-
-/***/ },
-/* 45 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<aside menubar>\n\t<div menu>\n\t\t<input type=\"search\" id=\"search\"\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"$route.path.includes('applications') || $route.path.endsWith('shop')\"\n\t\t/>\n\t\t<div id=\"_\">\n\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'all' } }\">Applications</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\">In process</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'rejected' } }\">Rejected</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'rework' } }\">In rework</button>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'approved' } }\">Approved</button>\n\t\t</div>\n\t\t<div id=\"__\">\n\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\">Shop</button>\n\t\t\t<button item>cart</button>\n\t\t\t<button item>orders</button>\n\t\t</div>\n\t\t<div id=\"___\">\n\t\t\t<button item v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\" style=\"\n\t\t\t\tbackground: hsl(226, 100%, 60%);\n\t\t\t\tcolor: #fff;\n\t\t\t\">Request Innopoints +</button>\n\t\t</div>\n\t</div>\n</aside>\n";
-
-/***/ },
-/* 46 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<sidebar></sidebar>\n<content></content>\n";
-
-/***/ },
-/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(48)
+	__vue_script__ = __webpack_require__(45)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\applications.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(49)
+	__vue_template__ = __webpack_require__(46)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15005,7 +14997,7 @@
 	})()}
 
 /***/ },
-/* 48 */
+/* 45 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -15022,6 +15014,7 @@
 	// 			<header flex>
 	// 				<section left>
 	// 					<span>{{appl.type | capitalize}}</span> <span misc style="font-size:inherit">#{{appl.id}}</span>
+	// 					<span block misc>By <span>{{appl.author.username}}</span></span>
 	// 					<span block misc>Status: <span :status="appl.status">{{appl.status.split('_').join(' ')}}</span></span>
 	// 				</section>
 	// 				<section right>
@@ -15131,12 +15124,11 @@
 					console.log("called appl get");
 					var _length = result.length;
 					result.forEach(function (res, _index) {
-						res.creation_date = new Date(res.creation_date.slice(0, -5).split('-').join('/')).toDateString();
+						res.creation_date = new Date(res.creation_date * 1000).toDateString();
 						if (res.work) res.work.forEach(function (work, index) {
-							work.link = '<a href=""></a>';
-							user.account.getBio({ id: work.actor }, function (result) {
-								work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + result.username + '">' + result.username + '</a>';
-							});
+							// user.account.getBio({id:work.actor}, function(result) {
+							work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + work.actor.username + '">' + work.actor.username + '</a>';
+							// });
 							if (_index == _length - 1 && index == res.work.length - 1) {
 								transition.next({
 									applications: result
@@ -15165,22 +15157,22 @@
 	// </script>
 
 /***/ },
-/* 49 */
+/* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div>\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<pre v-if=\"!applications.length && !$loadingRouteData\">Empty</pre>\n\n\t<div card \n\t\tv-for=\"appl in applications | filterBy $router.app.query in 'type' 'id' 'comment' 'creation_date'\"\n\t\t:status=\"appl.status\"\n\t\t:id=\"'card' + appl.id\"\n\t>\n\t\t<header flex>\n\t\t\t<section left>\n\t\t\t\t<span>{{appl.type | capitalize}}</span> <span misc style=\"font-size:inherit\">#{{appl.id}}</span>\n\t\t\t\t<span block misc>Status: <span :status=\"appl.status\">{{appl.status.split('_').join(' ')}}</span></span>\n\t\t\t</section>\n\t\t\t<section right>\n\t\t\t\t<span misc v-text=\"appl.creation_date\"></span>\n\t\t\t</section>\n\t\t</header><!-- header -->\n\t\t<section content v-show=\"appl.work\">\n\t\t\t<div block>\n\t\t\t\t<h4 v-show=\"appl.type=='group'\">Participants:</h4>\n\t\t\t\t<div>\n\t\t\t\t\t<div block v-for=\"work in appl.work\"><span v-html=\"work.link\"></span> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span></div>\t\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</section>\n\t\t<section content v-show=\"appl.comment\">\n\t\t\t<div block>\n\t\t\t<h4>Comment: </h4>\n\t\t\t<p>{{appl.comment}}</p>\n\t\t\t</div>\n\t\t</section>\t\t\t\n\t\t<footer v-if=\"user.innopoints.data.isAdmin && appl.status=='in_process'\">\n\t\t\t<div block controls>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"approve\">Approve</button>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"reject\">Reject</button>\n\t\t\t\t<button item warning data-id=\"{{appl.id}}\" @click=\"toRework\">To rework</button>\n\t\t\t</div>\n\t\t</footer>\n\t\t<footer v-if=\"!user.innopoints.data.isAdmin\">\n\t\t\t<div block controls>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"_delete\" v-show=\"(appl.status=='in_process' || appl.status=='rework')\">Delete</button>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"resend\" v-show=\"(appl.status=='rework')\">Resend</button>\n\t\t\t</div>\n\t\t</footer>\n\t</div>\n</div>\n";
+	module.exports = "\n<div>\n\t<pre v-if=\"$loadingRouteData\">Loading...</pre>\n\n\t<pre v-if=\"!applications.length && !$loadingRouteData\">Empty</pre>\n\n\t<div card \n\t\tv-for=\"appl in applications | filterBy $router.app.query in 'type' 'id' 'comment' 'creation_date'\"\n\t\t:status=\"appl.status\"\n\t\t:id=\"'card' + appl.id\"\n\t>\n\t\t<header flex>\n\t\t\t<section left>\n\t\t\t\t<span>{{appl.type | capitalize}}</span> <span misc style=\"font-size:inherit\">#{{appl.id}}</span>\n\t\t\t\t<span block misc>By <span>{{appl.author.username}}</span></span>\n\t\t\t\t<span block misc>Status: <span :status=\"appl.status\">{{appl.status.split('_').join(' ')}}</span></span>\n\t\t\t</section>\n\t\t\t<section right>\n\t\t\t\t<span misc v-text=\"appl.creation_date\"></span>\n\t\t\t</section>\n\t\t</header><!-- header -->\n\t\t<section content v-show=\"appl.work\">\n\t\t\t<div block>\n\t\t\t\t<h4 v-show=\"appl.type=='group'\">Participants:</h4>\n\t\t\t\t<div>\n\t\t\t\t\t<div block v-for=\"work in appl.work\"><span v-html=\"work.link\"></span> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span></div>\t\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</section>\n\t\t<section content v-show=\"appl.comment\">\n\t\t\t<div block>\n\t\t\t<h4>Comment: </h4>\n\t\t\t<p>{{appl.comment}}</p>\n\t\t\t</div>\n\t\t</section>\t\t\t\n\t\t<footer v-if=\"user.innopoints.data.isAdmin && appl.status=='in_process'\">\n\t\t\t<div block controls>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"approve\">Approve</button>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"reject\">Reject</button>\n\t\t\t\t<button item warning data-id=\"{{appl.id}}\" @click=\"toRework\">To rework</button>\n\t\t\t</div>\n\t\t</footer>\n\t\t<footer v-if=\"!user.innopoints.data.isAdmin\">\n\t\t\t<div block controls>\n\t\t\t\t<button item error data-id=\"{{appl.id}}\" @click=\"_delete\" v-show=\"(appl.status=='in_process' || appl.status=='rework')\">Delete</button>\n\t\t\t\t<button item success data-id=\"{{appl.id}}\" @click=\"resend\" v-show=\"(appl.status=='rework')\">Resend</button>\n\t\t\t</div>\n\t\t</footer>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 50 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(51)
+	__vue_script__ = __webpack_require__(48)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\apply.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(52)
+	__vue_template__ = __webpack_require__(49)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15199,7 +15191,7 @@
 	})()}
 
 /***/ },
-/* 51 */
+/* 48 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -15424,22 +15416,22 @@
 	// </script>
 
 /***/ },
-/* 52 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<form id=\"ip_request\">\n\t<h2>Request innopoints</h2>\n\n\t<hr/>\n\n\t<div v-if=\"user.account.isStudent\" style=\"width: 100%;\">\n\t\t<div  style=\"float: left;width: 46%\">\n\t\t\t<label for=\"self\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"self\" value=\"personal\" v-model=\"current.type\"/>\n\t\t\t\tPersonal\n\t\t\t</label>\n\t\t</div>\n\t\t<div  style=\"float: right;width: 46%\">\n\t\t\t<label for=\"group\">\n\t\t\t\t<input type=\"radio\" name=\"request type\" id=\"group\" value=\"group\" v-model=\"current.type\"/>\n\t\t\t\tGroup\n\t\t\t</label>\n\t\t</div>\n\t<br>\n\t</div>\n\n\n\t<br>\n\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\t<div v-show=\"!$loadingRouteData\" style=\"width: 100%;\">\n\n\t\tActivivty's category\n\t\t<select id=\"activity_category\" style=\"width: 100%;\" v-model=\"current.category_id\" @change=\"category_changed\">\n\t\t\t<option value=\"blank\" selected>Choose Category...</option>\n\t\t\t<option value=\"\">All</option>\n\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\">{{ category.title }}</option>\n\t\t</select>\n\n\t</div>\n\n\t<br>\n\n\t<div>\n\t\t<div v-show=\"!current.isPersonal\">\n\t\t\t<button type=\"button\" @click=\"current_users_count_inc\">+</button>\n\t\t\t<button type=\"button\" @click=\"current_users_count_dec\" v-show=\"current.users_count > 1\">-</button>\n\t\t\t<br>\n\t\t\t<br>\n\t\t</div>\n\n\t\t<div v-for=\"i of current.users_count\" :style=\"!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''\">\n\t\t\t<legend v-show=\"!current.isPersonal\">\n\t\t\t\t<input data-index=\"{{i}}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{* i ? '' : user.account.username}}\">\n\t\t\t</legend>\n\t\t\t<br>\n\t\t\t<div v-show=\"categorySelected\">\n\t\t\t\t<div style=\"width: 100%;\">\n\t\t\t\t\tActivity\n\t\t\t\t\t<select class=\"activity\" style=\"width: 100%;\" v-model=\"current.users[i].activity_id\" @change=\"activity_changed\">\n\t\t\t\t\t\t<option value=\"0\" selected>Choose Activity...</option>\n\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\">{{ activity.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<br>\n\t\t\t\t<div v-show=\"showAmount(current.users[i].activity_id)\" style=\"width: 100%;\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\tTime spent/quantity:\n\t\t\t\t\t\t<input block type=\"number\" class=\"amount\" min=\"1\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\">\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<br>\n\t</div>\n\n\t<div style=\"width: 100%;\">\n\t\t<label>\n\t\t\tAttached files:\n\t\t\t<input block type=\"file\" id=\"upload\" @change=\"uploaded\" id=\"upload\" multiple>\n\t\t</label>\n\t</div>\n\t<br/>\n\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\"></textarea>\n\t<br>\n\n\t<pre v-if=\"!categorySelected\">Select Category!</pre>\n\t<pre v-if=\"categorySelected && !activitySelected\">Select Activity!</pre>\n\t<button v-if=\"activitySelected\" block type=\"button\" @click=\"accept\" id=\"accept\">accept</button>\n</form>\n";
 
 /***/ },
-/* 53 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(54)
+	__vue_script__ = __webpack_require__(51)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\shop.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(55)
+	__vue_template__ = __webpack_require__(52)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15458,16 +15450,22 @@
 	})()}
 
 /***/ },
-/* 54 */
+/* 51 */
 /***/ function(module, exports) {
 
 	// <template>
 	//     <section shop>
 	//         <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' " v-link="{ name: 'item', params: { item: item.id } }">
-	//             <h4>{{ item.title }} : {{ item.price }}</h4>
+	//             <h4>{{ item.title }} : {{ item.price }}</h3>
 	//             <img :src="item.image_link">
-	//             <p v-text="item.category.title"></p>
-	//             <hr>
+	//             <h4 v-text="item.category_title"></h4>
+	//             <p v-show="item.possible_joint_purchase">This item can be bought by a group of {{ item.max_buyers }}!</p>
+	//             <div v-for="option in item.options" style="display: block">
+	//                 <select name="option.title" :id="option.title">
+	//                     <option value="">Choose {{option.title}}</option>
+	//                     <option v-for="value in option.values" :value="value">{{ value }}</option>
+	//                 </select>
+	//             </div>
 	//         </section>
 	//     </section>
 	// </template>
@@ -15493,22 +15491,22 @@
 	// </script>
 
 /***/ },
-/* 55 */
+/* 52 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<section shop>\n    <section product v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title' \" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h4>\n        <img :src=\"item.image_link\">\n        <p v-text=\"item.category.title\"></p>\n        <hr>\n    </section>\n</section>\n";
+	module.exports = "\n<section shop>\n    <section product v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title' \" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h3>\n        <img :src=\"item.image_link\">\n        <h4 v-text=\"item.category_title\"></h4>\n        <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n        <div v-for=\"option in item.options\" style=\"display: block\">\n            <select name=\"option.title\" :id=\"option.title\">\n                <option value=\"\">Choose {{option.title}}</option>\n                <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n            </select>\n        </div>\n    </section>\n</section>\n";
 
 /***/ },
-/* 56 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(57)
+	__vue_script__ = __webpack_require__(54)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] frontend\\src\\views\\innopoints\\shop\\item.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(58)
+	__vue_template__ = __webpack_require__(55)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15527,7 +15525,7 @@
 	})()}
 
 /***/ },
-/* 57 */
+/* 54 */
 /***/ function(module, exports) {
 
 	// <template>
@@ -15566,7 +15564,7 @@
 	// </script>
 
 /***/ },
-/* 58 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div>\n    <h3>{{ item.title }} : {{ item.price }}</h3>\n    <img :src=\"item.image_link\">\n    <h4 v-text=\"item.category_title\"></h4>\n    <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n    <div v-for=\"option in item.options\" style=\"display: block\">\n        <select name=\"option.title\" :id=\"option.title\">\n            <option value=\"\">Choose {{option.title}}</option>\n            <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n        </select>\n    </div>\n</div>\n";

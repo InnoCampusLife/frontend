@@ -477,7 +477,7 @@ var modules = {
 						let 
 						type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
-						data = { applicaiton : application };
+						data = { application : application };
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},

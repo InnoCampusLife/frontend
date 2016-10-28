@@ -1,10 +1,10 @@
 <template>
-	<!-- <main content scroller-y-force> -->
-	<main content>
-		<!-- <main-header>
+	<main content scroller-y-force>
+	<!-- <main content> -->
+		<main-header>
 			<slot name="header"></slot>
-		</main-header> -->
-		<div scroller-x scroller-y>
+		</main-header>
+		<div scroller-x>
 			<router-view></router-view>
 		</div>
 	</main>

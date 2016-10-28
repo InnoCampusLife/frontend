@@ -1,12 +1,38 @@
 <template>
 	<aside sidebar>
-		<div menu>
-			<button item title="Profile" icon="&#xe602;" v-link="{ name: 'profile', params: { username: user.account.username } }"></button>
-			<button item title="Innopoints" points="{{ user.innopoints.data.amount }}" v-link="{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }" v-if="user.innopoints.data.id"></button>
-			<button item title="Accounts" icon="&#xe699;" v-link="{ name: 'accounts' }" v-if="user.account.isModerator"></button>
+		<div header v-link="'/'"><span>UIS</span></div header>
+		<ul menu>
+			<li>
+				<button item v-link="{ name: 'profile', params: { username: user.account.username } }">
+					<span icon></span>
+					<p text>Profile</p>
+				</button>
+			</li>
+			<li>
+				<button item left v-link="{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }" v-if="user.innopoints.data.id">
+					<span info v-text="user.innopoints.data.amount"></span>
+					<p text>Innopoints</p>
+				</button>
+				<button item right v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">
+					<p text="" style="
+						text-align: center;
+					">+</p>
+				</button>
+			</li>
+			<li>
+				<button item v-link="{ name: 'accounts' }" v-if="user.account.isModerator">
+					<span icon></span>
+					<p text>Accounts</p>
+				</button>
+			</li>
 
-			<button item bottom logout title="Log out" id="logout" icon="&#xe603;" @click="logout" block></button>
-		</div>
+			<li>
+				<button item bottom logout id="logout" @click="logout" block>
+					<span icon></span>
+					<p text>Log out</p>
+				</button>
+			</li>
+		</ul>
 	</aside>
 </template>
 
