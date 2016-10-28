@@ -24,7 +24,9 @@
 
 [sidebar] > [header] {
     padding: 10px 15px;
+    height: 64px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
 }
 
 [sidebar] > [header] > span {
@@ -35,7 +37,7 @@
     color: #FFFFFF;
     text-align: center;
     font-weight: normal;
-    line-height: 30px;
+    line-height: 32px;
 }
 
 [sidebar] > [menu] {
@@ -56,6 +58,7 @@
     border: 0;
     padding: 10px 15px;
     text-align: left;
+    cursor: pointer;
     transition: opacity .15s ease-in, background-color .15s ease-in;
 }
 
@@ -76,16 +79,8 @@
     opacity: 1;
 }
 
-[sidebar] > [menu] [item][left]:hover + [right] {
-    background: rgba(255, 255, 255, 0.1);
-}
-[sidebar] > [menu] [item][left] + [right]:hover {
-
-}
-
-[sidebar] > [menu] [item][left].v-link-active + [right] {
-    background: rgba(255, 255, 255, 0.13);
-}
+[sidebar] > [menu] [item][left]:hover + [right] { background: rgba(255, 255, 255, 0.1); }
+[sidebar] > [menu] [item][left].v-link-active + [right] { background: rgba(255, 255, 255, 0.13); }
 
 [sidebar] > [menu] [item][left] + [right].v-link-active,
 [sidebar] > [menu] [item].v-link-active {
@@ -93,16 +88,12 @@
     background: rgba(255, 255, 255, 0.23);
 }
 
+[sidebar] > [menu] [item] > span,
 [sidebar] > [menu] [item] > span {
     float: left;
     margin-right: 1.2rem;
     width: 30px;
     text-align: center;
-    line-height: 30px;
-}
-
-[sidebar] > [menu] [item] > [icon] {
-    font-size: 28px;
 }
 
 [sidebar] > [menu] [item] > [text] {
@@ -113,6 +104,16 @@
     text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
     font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+}
+
+[sidebar] > [menu] [item] > [icon] {
+    font-size: 28px;
+}
+
+[sidebar] > [menu] [item] > [info] {
+    font-weight: 100;
+    text-align: center;
+    line-height: 30px;
 }
 
 #logout {

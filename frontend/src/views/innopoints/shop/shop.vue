@@ -1,6 +1,6 @@
 <template>
     <section shop>
-        <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' " v-link="{ name: 'item', params: { item: item.id } }">
+        <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
             <h4>{{ item.title }} : {{ item.price }}</h3>
             <img :src="item.image_link">
             <h4 v-text="item.category_title"></h4>

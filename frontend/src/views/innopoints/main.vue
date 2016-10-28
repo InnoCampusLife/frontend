@@ -1,20 +1,25 @@
 <template>
 	<content>
-		<div slot="header" flex center children>
+		<div content slot="header" flex align center>
 			<input type="search" id="search" inline
 				:placeholder="'Search ' + $route.name"
 				v-model="$router.app.query"
-				v-show="showApplications || showShop"
+				v-show="$route.path.includes('applications') || $route.path.endsWith('shop')"
 			/>
 			<div menu>
-				<template v-if="showApplications">
-					<select name="applications" id="applications" @change="filter_changed" inline>
+				<template v-if="$route.path.includes('applications')">
+					<select item name="applications" id="applications" @change="filter_changed" inline>
 						<option value="all">All Applications</option>
 						<option value="in_process">In process</option>
 						<option value="rejected">Rejected</option>
 						<option value="rework">In rework</option>
 						<option value="approved">Approved</option>
 					</select>
+				</template>
+				<template v-else>
+					<button main item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'all' } }" inline>
+						Applications
+					</button>
 				</template>
 				<div id="__" inline>
 					<button main item v-link="{ name: 'shop', params: { username: user.account.username } }" inline>Shop</button>
@@ -35,8 +40,6 @@
 			return {
 				route: route,
 				user : this.$router.app.user,
-				get showApplications() { console.log(this.route.path.includes('applications')); return this.route.path.includes('applications'); },
-				get showShop() { console.log(this.route.path.endsWith('shop')); return this.route.path.endsWith('shop'); }
 			}
 		},
 		components : {

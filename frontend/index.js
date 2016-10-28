@@ -14353,9 +14353,7 @@
 	// 					<p text>Innopoints</p>
 	// 				</button>
 	// 				<button item right v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">
-	// 					<p text="" style="
-	// 						text-align: center;
-	// 					">+</p>
+	// 					<p text info>&#x2795;</p>
 	// 				</button>
 	// 			</li>
 	// 			<li>
@@ -14395,7 +14393,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside sidebar>\n\t<div header v-link=\"'/'\"><span>UIS</span></div header>\n\t<ul menu>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'profile', params: { username: user.account.username } }\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Profile</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item left v-link=\"{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }\" v-if=\"user.innopoints.data.id\">\n\t\t\t\t<span info v-text=\"user.innopoints.data.amount\"></span>\n\t\t\t\t<p text>Innopoints</p>\n\t\t\t</button>\n\t\t\t<button item right v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\">\n\t\t\t\t<p text=\"\" style=\"\n\t\t\t\t\ttext-align: center;\n\t\t\t\t\">+</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Accounts</p>\n\t\t\t</button>\n\t\t</li>\n\n\t\t<li>\n\t\t\t<button item bottom logout id=\"logout\" @click=\"logout\" block>\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Log out</p>\n\t\t\t</button>\n\t\t</li>\n\t</ul>\n</aside>\n";
+	module.exports = "\n<aside sidebar>\n\t<div header v-link=\"'/'\"><span>UIS</span></div header>\n\t<ul menu>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'profile', params: { username: user.account.username } }\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Profile</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item left v-link=\"{ name: 'innopoints', params: { username: user.account.username, filter: 'all' } }\" v-if=\"user.innopoints.data.id\">\n\t\t\t\t<span info v-text=\"user.innopoints.data.amount\"></span>\n\t\t\t\t<p text>Innopoints</p>\n\t\t\t</button>\n\t\t\t<button item right v-link=\"{ name: 'apply', params: { username: $router.app.user.account.username } }\">\n\t\t\t\t<p text info>&#x2795;</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'accounts' }\" v-if=\"user.account.isModerator\">\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Accounts</p>\n\t\t\t</button>\n\t\t</li>\n\n\t\t<li>\n\t\t\t<button item bottom logout id=\"logout\" @click=\"logout\" block>\n\t\t\t\t<span icon></span>\n\t\t\t\t<p text>Log out</p>\n\t\t\t</button>\n\t\t</li>\n\t</ul>\n</aside>\n";
 
 /***/ },
 /* 19 */
@@ -14902,21 +14900,26 @@
 
 	// <template>
 	// 	<content>
-	// 		<div slot="header" flex center children>
+	// 		<div content slot="header" flex align center>
 	// 			<input type="search" id="search" inline
 	// 				:placeholder="'Search ' + $route.name"
 	// 				v-model="$router.app.query"
-	// 				v-show="showApplications || showShop"
+	// 				v-show="$route.path.includes('applications') || $route.path.endsWith('shop')"
 	// 			/>
 	// 			<div menu>
-	// 				<template v-if="showApplications">
-	// 					<select name="applications" id="applications" @change="filter_changed" inline>
+	// 				<template v-if="$route.path.includes('applications')">
+	// 					<select item name="applications" id="applications" @change="filter_changed" inline>
 	// 						<option value="all">All Applications</option>
 	// 						<option value="in_process">In process</option>
 	// 						<option value="rejected">Rejected</option>
 	// 						<option value="rework">In rework</option>
 	// 						<option value="approved">Approved</option>
 	// 					</select>
+	// 				</template>
+	// 				<template v-else>
+	// 					<button main item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'all' } }" inline>
+	// 						Applications
+	// 					</button>
 	// 				</template>
 	// 				<div id="__" inline>
 	// 					<button main item v-link="{ name: 'shop', params: { username: user.account.username } }" inline>Shop</button>
@@ -14936,13 +14939,7 @@
 			var route = this.$route;
 			return {
 				route: route,
-				user: this.$router.app.user,
-				get showApplications() {
-					console.log(this.route.path.includes('applications'));return this.route.path.includes('applications');
-				},
-				get showShop() {
-					console.log(this.route.path.endsWith('shop'));return this.route.path.endsWith('shop');
-				}
+				user: this.$router.app.user
 			};
 		},
 		components: {
@@ -14966,7 +14963,7 @@
 /* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<content>\n\t<div slot=\"header\" flex center children>\n\t\t<input type=\"search\" id=\"search\" inline\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"showApplications || showShop\"\n\t\t/>\n\t\t<div menu>\n\t\t\t<template v-if=\"showApplications\">\n\t\t\t\t<select name=\"applications\" id=\"applications\" @change=\"filter_changed\" inline>\n\t\t\t\t\t<option value=\"all\">All Applications</option>\n\t\t\t\t\t<option value=\"in_process\">In process</option>\n\t\t\t\t\t<option value=\"rejected\">Rejected</option>\n\t\t\t\t\t<option value=\"rework\">In rework</option>\n\t\t\t\t\t<option value=\"approved\">Approved</option>\n\t\t\t\t</select>\n\t\t\t</template>\n\t\t\t<div id=\"__\" inline>\n\t\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\" inline>Shop</button>\n\t\t\t\t<button item inline>cart</button>\n\t\t\t\t<button item inline>orders</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</content>\n";
+	module.exports = "\n<content>\n\t<div content slot=\"header\" flex align center>\n\t\t<input type=\"search\" id=\"search\" inline\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"$route.path.includes('applications') || $route.path.endsWith('shop')\"\n\t\t/>\n\t\t<div menu>\n\t\t\t<template v-if=\"$route.path.includes('applications')\">\n\t\t\t\t<select item name=\"applications\" id=\"applications\" @change=\"filter_changed\" inline>\n\t\t\t\t\t<option value=\"all\">All Applications</option>\n\t\t\t\t\t<option value=\"in_process\">In process</option>\n\t\t\t\t\t<option value=\"rejected\">Rejected</option>\n\t\t\t\t\t<option value=\"rework\">In rework</option>\n\t\t\t\t\t<option value=\"approved\">Approved</option>\n\t\t\t\t</select>\n\t\t\t</template>\n\t\t\t<template v-else>\n\t\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'all' } }\" inline>\n\t\t\t\t\tApplications\n\t\t\t\t</button>\n\t\t\t</template>\n\t\t\t<div id=\"__\" inline>\n\t\t\t\t<button main item v-link=\"{ name: 'shop', params: { username: user.account.username } }\" inline>Shop</button>\n\t\t\t\t<button item inline>cart</button>\n\t\t\t\t<button item inline>orders</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</content>\n";
 
 /***/ },
 /* 44 */
@@ -15455,7 +15452,7 @@
 
 	// <template>
 	//     <section shop>
-	//         <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' " v-link="{ name: 'item', params: { item: item.id } }">
+	//         <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
 	//             <h4>{{ item.title }} : {{ item.price }}</h3>
 	//             <img :src="item.image_link">
 	//             <h4 v-text="item.category_title"></h4>
@@ -15494,7 +15491,7 @@
 /* 52 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<section shop>\n    <section product v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title' \" v-link=\"{ name: 'item', params: { item: item.id } }\">\n        <h4>{{ item.title }} : {{ item.price }}</h3>\n        <img :src=\"item.image_link\">\n        <h4 v-text=\"item.category_title\"></h4>\n        <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n        <div v-for=\"option in item.options\" style=\"display: block\">\n            <select name=\"option.title\" :id=\"option.title\">\n                <option value=\"\">Choose {{option.title}}</option>\n                <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n            </select>\n        </div>\n    </section>\n</section>\n";
+	module.exports = "\n<section shop>\n    <section product v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title' \">\n        <h4>{{ item.title }} : {{ item.price }}</h3>\n        <img :src=\"item.image_link\">\n        <h4 v-text=\"item.category_title\"></h4>\n        <p v-show=\"item.possible_joint_purchase\">This item can be bought by a group of {{ item.max_buyers }}!</p>\n        <div v-for=\"option in item.options\" style=\"display: block\">\n            <select name=\"option.title\" :id=\"option.title\">\n                <option value=\"\">Choose {{option.title}}</option>\n                <option v-for=\"value in option.values\" :value=\"value\">{{ value }}</option>\n            </select>\n        </div>\n    </section>\n</section>\n";
 
 /***/ },
 /* 53 */

@@ -14,9 +14,7 @@
 					<p text>Innopoints</p>
 				</button>
 				<button item right v-link="{ name: 'apply', params: { username: $router.app.user.account.username } }">
-					<p text="" style="
-						text-align: center;
-					">+</p>
+					<p text info>&#x2795;</p>
 				</button>
 			</li>
 			<li>
