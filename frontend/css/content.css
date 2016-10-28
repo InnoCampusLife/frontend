@@ -39,6 +39,8 @@ main[content] > div[scrolled] {
 main[content] > header {
     /* padding: 1.5rem; */
     color: hsla(210, 1%, 1%, 0.7);
+    height: 64px;
+    padding: 10px 15px;
     /* height: 3rem; */
     /* line-height: 3rem; */
     font-size: 1rem;
@@ -46,15 +48,12 @@ main[content] > header {
     text-transform: uppercase;
 }
 
-main[content] > header > div[content] {
-    float: left;
-    height: 3rem;
-    width: auto;
-    line-height: 3rem;
+main[content] > header > [content] {
+    height: 100%;
 }
 
-main[content] > header > div[content] button[item] {
-    padding: 0 2rem;
+main[content] > header > [content] [item] {
+    margin: 0 2rem;
     color: #000;
     background: transparent;
     cursor: pointer;
@@ -64,14 +63,14 @@ main[content] > header > div[content] button[item] {
             user-select: none;
 }
 
-main[content] > header > div[content] button[item]:focus,
-main[content] > header > div[content] button[item]:hover {
+main[content] > header > [content] [item]:focus,
+main[content] > header > [content] [item]:hover {
     color: #fff;
     background: hsl(226, 100%, 68%);
 }
 
-main[content] > header > div[content] button[item].v-link-active,
-main[content] > header > div[content] button[item]:active {
+main[content] > header > [content] [item].v-link-active,
+main[content] > header > [content] [item]:active {
     color: #fff;
     background: hsl(226, 100%, 60%);
 }

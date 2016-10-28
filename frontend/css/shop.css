@@ -10,12 +10,7 @@
 	padding: 1rem;
 	background: #fff;
 	border: 1px solid hsla(210,38%,93%,1);
-	cursor: pointer;
 	width: 12rem;
-}
-
-[product]:hover {
-	background: hsla(210,38%,93%,1);
 }
 
 [product] img {
