@@ -53,7 +53,8 @@ main[content] > header > [content] {
 }
 
 main[content] > header > [content] [item] {
-    margin: 0 2rem;
+    border: 0;
+    padding: 0.5rem 1rem;
     color: #000;
     background: transparent;
     cursor: pointer;

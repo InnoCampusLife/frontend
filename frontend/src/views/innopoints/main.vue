@@ -1,7 +1,7 @@
 <template>
 	<content>
 		<div content slot="header" flex align center>
-			<input type="search" id="search" inline
+			<input item type="search" id="search" inline
 				:placeholder="'Search ' + $route.name"
 				v-model="$router.app.query"
 				v-show="$route.path.includes('applications') || $route.path.endsWith('shop')"
