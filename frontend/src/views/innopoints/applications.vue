@@ -1,10 +1,11 @@
 <template>
 	<div>
-		<pre v-if="$loadingRouteData">Loading...</pre>
+		<pre v-show="$loadingRouteData">Loading...</pre>
 
-		<pre v-if="!applications.length && !$loadingRouteData">Empty</pre>
+		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
 
 		<div card 
+			v-if="applications.length"
 			v-for="appl in applications | filterBy $router.app.query in 'type' 'id' 'comment' 'creation_date'"
 			:status="appl.status"
 			:id="'card' + appl.id"
@@ -12,7 +13,6 @@
 			<header flex>
 				<section left>
 					<span>{{appl.type | capitalize}}</span> <span misc style="font-size:inherit">#{{appl.id}}</span>
-					<span block misc>By <span>{{appl.author.username}}</span></span>
 					<span block misc>Status: <span :status="appl.status">{{appl.status.split('_').join(' ')}}</span></span>
 				</section>
 				<section right>
@@ -23,7 +23,9 @@
 				<div block>
 					<h4 v-show="appl.type=='group'">Participants:</h4>
 					<div>
-						<div block v-for="work in appl.work"><span v-html="work.link"></span> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span></div>						
+						<div block v-for="work in appl.work">
+							<a :href="'http://uis.university.innopolis.ru:8770/profile/' + work.actor.username">{{work.actor.username}}</a> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span>
+						</div>						
 					</div>
 				</div>
 			</section>
@@ -61,43 +63,42 @@
 		},
 		methods : {
 			approve : function(e) {
-				var route = this.$route;
 				var _appls = this.applications;
+				var appl_action_success = this.appl_action_success;
 				this.user.innopoints.api.admin.application.approve(e.target.dataset.id, function(result) {
 					appl_action_success(e.target.dataset.id, 'approved', _appls);
 				}, console.log);
 			},
 			reject : function(e) {
-				var route = this.$route;
 				var _appls = this.applications;
+				var appl_action_success = this.appl_action_success;
 				this.user.innopoints.api.admin.application.reject(e.target.dataset.id, function(result) {
 					appl_action_success(e.target.dataset.id, 'rejected', _appls);
 				}, console.log);
 			},
 			toRework : function(e) {
-				var route = this.$route;
 				var _appls = this.applications;
+				var appl_action_success = this.appl_action_success;
 				this.user.innopoints.api.admin.application.dismiss(e.target.dataset.id, function(result) {
 					appl_action_success(e.target.dataset.id, 'rework', _appls);
 				}, console.log);
 			},
 			_delete : function(e) {
-				var route = this.$route;
 				var _appls = this.applications;
 				this.user.innopoints.api.user.application.delete(e.target.dataset.id, function(result) {
-					console.log(result.description);
+					console.log(result);
 					document.getElementById('card'+e.target.dataset.id).remove();
 				}, console.log);
 			},
 			resend : function(e) {
-				var route = this.$route;
 				var _appls = this.applications;
+				var appl_action_success = this.appl_action_success;
 				this.user.innopoints.api.user.application.send(e.target.dataset.id, function(result) {
 					appl_action_success(e.target.dataset.id, 'resend', _appls);
 				}, console.log);
 			},
 			appl_action_success : function(id, new_status, array) {
-				if (route.params.filter==='all')
+				if (this.$route.params.filter==='all')
 					array.find(x => x.id == id).status = new_status;
 				else
 					document.getElementById('card'+id).remove();
@@ -127,9 +128,6 @@
 					result.forEach(function(res, _index) {
 						res.creation_date = new Date(res.creation_date * 1000).toDateString();
 						if (res.work) res.work.forEach(function(work, index) {
-								// user.account.getBio({id:work.actor}, function(result) {
-								work.link = '<a href="http://uis.university.innopolis.ru:8770/profile/' + work.actor.username + '">' + work.actor.username + '</a>';
-								// });
 								if ((_index == (_length - 1)) && (index == (res.work.length - 1))) {
 									transition.next({
 										applications: result
