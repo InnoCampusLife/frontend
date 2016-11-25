@@ -5,6 +5,7 @@ PREFERENCES_LIST : {
         "secondary_color",          # '#3217ad'
         "dark_theme",               # true/false
         "rounded_corners",          # true/false
-        "opacity_&_blur_enabled"    # true/false
+        "opacity_&_blur_enabled",   # true/false
+        "fixHeader"
 	}
 }

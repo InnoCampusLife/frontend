@@ -8,12 +8,15 @@
 			console.log('App is awaiting your command!');
 		},
 		data : function () {
+			var Vue = require('Vue');
+			var bus = new Vue();
+			var modules = require('./../modules.js');
 			return {
 				user : {
-					account: require('./../modules.js').accounts,
-					innopoints: require('./../modules.js').innopoints
+					account: modules.accounts,
+					innopoints: modules.innopoints
 				},
-				query : null,
+				query : null
 			}
 		}
 	}

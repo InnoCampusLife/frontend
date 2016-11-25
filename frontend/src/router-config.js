@@ -14,11 +14,16 @@ module.exports = function(router) {
 			component: require('./views/main.vue'),
 			subRoutes: {
 				'/' : {
-					component: require('./views/content.vue')
+					component: require('./views/content.vue'),
+					subRoutes: {
+						'/' : {
+							component: require('./views/test.vue')
+						}
+					}
 				},
 				'/profile' : {
 					component: require('./views/profile/main.vue'),
-					subRoutes:{
+					subRoutes: {
 						'/:username' : {
 							name: 'profile',
 							component: require('./views/profile/profile.vue')
@@ -57,23 +62,23 @@ module.exports = function(router) {
 									component: require('./views/innopoints/apply.vue'),
 									name: 'apply'
 								},
-								'/shop' : {
-									component: router_view,
-									subRoutes: {
-										'/' : {
-											component: require('./views/innopoints/shop/shop.vue'), 
-											name: 'shop'
-										},
-										'/item/:item' : {
-											component: require('./views/innopoints/shop/item.vue'),
-											name: 'item'
-										},
-									},
-								},
 							}
 						}
 					}
-				}
+				},
+				'/shop' : {
+					component: require('./views/shop/main.vue'),
+					subRoutes: {
+						'/' : {
+							component: require('./views/shop/shop.vue'), 
+							name: 'shop'
+						},
+						'/item/:item' : {
+							component: require('./views/shop/item.vue'),
+							name: 'item'
+						},
+					},
+				},
 			},
 			authorizedZone:authorizedZone
 		}
@@ -94,7 +99,7 @@ module.exports = function(router) {
 		}
 	}).redirect({
 		'*':'/',
-		'/innopoints/:username/':'/innopoints/:username/applications/all'
+		'/innopoints/:username/':'/innopoints/:username/applications/'
 	});
 
 	return router;

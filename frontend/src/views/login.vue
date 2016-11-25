@@ -8,7 +8,7 @@
 	}
 
 	main[wrapper][login] [container] {
-		font-family: 'Source Sans Pro', sans-serif;
+		font-family: 'Roboto', sans-serif;
 		color: white;
 		font-weight: 100;
 	}
@@ -17,10 +17,10 @@
 	main[wrapper][login] [container] :-moz-placeholder,
 	main[wrapper][login] [container] :-ms-input-placeholder,
 	main[wrapper][login] [container] ::-moz-placeholder {
-		font-family: 'Source Sans Pro', sans-serif;
+		font-family: 'Roboto', sans-serif;
 		color: white;
 		opacity: 1;
-		font-weight: lighter;
+		font-weight: 100;
 	}
 	main[wrapper][login] {
 		transition: none;
@@ -132,7 +132,7 @@
 
 	main[wrapper] form button[place="bottom"] {
 	    width: 7rem;
-	    transform: translate3d(-50%,18.2rem,0);
+	    transform: translate3d(-50%,5rem,0);
 	    z-index: 99;
 	    border-top: 1px solid #fff;
 	}
@@ -151,6 +151,9 @@
 		z-index: 0;
 		opacity: 0.5;
 		background: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg');
+	    /* background: -webkit-linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */
+	    /* background: -o-linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */
+	    /* background: linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: cover;
@@ -245,7 +248,7 @@
 				name="username"
 				id="username"
 				placeholder="Username"
-				autocomplete="off"
+				autocompvare="off"
 				maxlength="32"
 				v-on:input="usernameInputEvent"
 				v-model="user.account.username"
@@ -256,7 +259,7 @@
 				name="password"
 				id="password"
 				placeholder="Password"
-				autocomplete="off"
+				autocompvare="off"
 				maxlength="64"
 				v-on:input="passwordInputEvent"
 				@keyup.enter="isLogin ? login($event) : register($event)"
@@ -267,7 +270,7 @@
 					name="email"
 					id="email"
 					placeholder="Email"
-					autocomplete="off"
+					autocompvare="off"
 					v-on:input="emailInputEvent"
 					@keyup.enter="isLogin ? login($event) : register($event)"
 				>
@@ -276,7 +279,7 @@
 					name="firstname"
 					id="firstname"
 					placeholder="First Name"
-					autocomplete="off"
+					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.firstName"
 					@keyup.enter="isLogin ? login($event) : register($event)"
@@ -286,7 +289,7 @@
 					name="lastname"
 					id="lastname"
 					placeholder="Last Name"
-					autocomplete="off"
+					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.lastName"
 					@keyup.enter="isLogin ? login($event) : register($event)"
@@ -296,7 +299,7 @@
 					name="group"
 					id="group"
 					placeholder="Study Group (BS1-2, BS4-1)"
-					autocomplete="off"
+					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.studyGroup"
 					@keyup.enter="isLogin ? login($event) : register($event)"
@@ -315,7 +318,7 @@
 			>Register</button>
 		</form>
 	</div>
-	<ul background>
+	<!-- <ul background> -->
 <!-- 		<li></li>
 		<li></li>
 		<li></li>
@@ -326,7 +329,7 @@
 		<li></li>
 		<li></li>
 		<li></li> -->
-	</ul>
+	<!-- </ul> -->
 </main>
 </template>
 
@@ -342,7 +345,11 @@
 			login  : function (e) {
 				e.preventDefault();
 				if (this.isLogin)
-					this.user.account.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);
+					this.user.account.authorize(
+						password.value,
+						this.formSuccessCallback,
+						this.formErrorCallback
+					);
 				else {
 					this.isLogin = true;
 					e.target.blur();
@@ -354,9 +361,13 @@
 					if (this.checkUsernameInput('strict')
 					 && this.checkPasswordInput('strict')
 					 && this.checkEmailInput()
-					 && this.checkNameInput()
-				 	)
-						this.user.account.create(password.value, email.value, this.formSuccessCallback, this.formErrorCallback);
+					 && this.checkNameInput())
+						this.user.account.create(
+							password.value,
+							email.value,
+							this.formSuccessCallback,
+							this.formErrorCallback
+						);
 				}
 				else {
 					this.isLogin = false;
@@ -381,8 +392,8 @@
 			usernameInputEvent  : function (e) { this.checkUsernameInput(); },
 
 			checkUsernameInput : function (strict) {
-				let regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
-				let ufe = !regex.test(this.user.account.username);
+				var regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
+				var ufe = !regex.test(this.user.account.username);
 
 				if (ufe)
 					this.setError('username');
@@ -395,8 +406,8 @@
 			passwordInputEvent : function (e) { this.checkPasswordInput(); },
 
 			checkPasswordInput : function (strict) {
-				let regex = strict ? /^.{5,64}$/ : /^.*$/;
-				let pfe = !regex.test(password.value);
+				var regex = strict ? /^.{5,64}$/ : /^.*$/;
+				var pfe = !regex.test(password.value);
 
 				if (pfe)
 					this.setError('password');
@@ -409,8 +420,8 @@
 			emailInputEvent  : function (e) { this.checkEmailInput(); },
 
 			checkEmailInput  : function () {
-				let regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-				let pfe = !regex.test(email.value);
+				var regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				var pfe = !regex.test(email.value);
 
 				if (pfe)
 					this.setError('email');
@@ -424,8 +435,8 @@
 
 			checkNameInput  : function () {
 				//([BS]|[MS])[1-4]-[0-9]+
-				let regex = /^.+$/
-				let pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
+				var regex = /^.+$/
+				var pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
 
 				if (pfe) {
 					this.setError('firstname');

@@ -10,7 +10,7 @@
 
 			Activivty's category
 			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="category_changed">
-				<option value="blank" selected>Choose Category...</option>
+				<option value="" selected>Choose Category...</option>
 				<option value="">All</option>
 				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
 			</select>
@@ -35,7 +35,7 @@
 					<div style="width: 100%;">
 						Activity
 						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activity_changed">
-							<option value="blank" selected>Choose Activity...</option>
+							<option value="" selected>Choose Activity...</option>
 							<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
 						</select>
 					</div>
@@ -71,9 +71,9 @@
 <script>
 	module.exports =  {
 		data : function () {
-			var user = this.$router.app.user
+			var user = this.$root.user
 			return {
-				user : this.$router.app.user,
+				user : user,
 				categories : [],
 				activities : [],
 				activitySelected : false,
@@ -85,7 +85,7 @@
 					users : [
 						{
 							user_id: user.account.id,
-							activity_id : 'blank',
+							activity_id : '',
 							amount : 1
 						}
 					],
@@ -97,7 +97,7 @@
 			current_users_count_inc : function () {
 				this.current.users.push({
 					user_id: null,
-					activity_id : 'blank',
+					activity_id : '',
 					amount : 1
 				});
 				this.activity_changed();
@@ -121,22 +121,16 @@
 			},
 			category_changed  : function (e) {
 				this.categorySelected = this.activitySelected = false;
-				if (e.target.value != 'blank') {
-					if (e.target.value)
-						this.user
-						.innopoints.api
-						.getActivitiesInCategory(this.current.category_id, 0, 1000, this.setActivities);
-					else
-						this.user
-						.innopoints.api
-						.getActivities(0, 1000, this.setActivities);
-				}
+				this.user.innopoints.api.getActivities({
+					cat_id: this.current.category_id,
+					successCallback: this.setActivities
+				});
 			},
 			activity_changed  : function (e) {
-				let counter = 0;
-				for (let _user of this.current.users) {
-					if (_user.activity_id != 'blank') counter++;
-				}
+				var counter = 0;
+				this.current.users.forEach(function(_user) {
+					if (_user.activity_id !== '') counter++;
+				});
 				this.activitySelected = (counter == this.current.users.length);
 			},
 			setActivities  : function (result) {
@@ -152,33 +146,29 @@
 				//TODO - catch bugs and exceptions
 				this.current.application.work = [];
 
-				for (let cur_user of this.current.users) {
-					let activity_id = this.findById(this.activities, cur_user.activity_id).id,
+				var that = this;
+
+				this.current.users.some(function(cur_user) {
+					var activity_id = that.activities.find(function(x){ return x.id == cur_user.activity_id }).id,
 						amount = parseInt(cur_user.amount) || null;
 
-					this.current.application.work.push({
-						activity_id,
-						amount,
+					that.current.application.work.push({
+						activity_id:activity_id,
+						amount:amount,
 						actor: cur_user.user_id
 					});
-					
-					if (this.current.isPersonal) break;
-				}
+
+					if (that.current.isPersonal) return true;
+				});
 
 				this.current.application.comment = this.current.comment;
 				this.current.application.files = upload.files;
-				if (this.user.account.isStudent)
-					this.user.innopoints.api.user.application.create(
-						this.current.application,
-						this.acceptSuccess,
-						this.error
-					);
-				else if (this.user.account.isModerator)
-					this.user.innopoints.api.admin.application.create(
-						this.current.application,
-						this.acceptSuccess,
-						this.error
-					);
+				
+				this.user.innopoints.api.user.application.create(
+					this.current.application,
+					this.acceptSuccess,
+					this.error
+				);
 			},
 			acceptSuccess : function (result) {
 				accept.textContent = "accepted ✓";
@@ -188,11 +178,8 @@
 				accept.textContent = "accept";
 			},
 			showAmount  : function (id) {
-				let temp = this.findById(this.activities, id);
+				var temp = this.activities.find(function(x){ return x.id == id });
 				return temp && temp.type != 'permanent';
-			},
-			findById : function (array, id) {
-				return array.find(x => x.id == id);
 			}
 		},
 		route : {
@@ -200,13 +187,13 @@
 		        console.log('calling get for innopoints');
 		        var user = this.$router.app.user;
 		        this.$router.app.user.account.update(function(result) {
-					user.innopoints.api.getCategories(0,10000, //TODO - fix categories amount
-						function (result) {
+					user.innopoints.api.getCategories({
+						successCallback: function (result) {
 							transition.next({
 								categories : result
 							});
 						}
-					);
+					});
 				});
 			}
 		}

@@ -8,8 +8,11 @@
 	module.exports = {
 		data : function () {
 			return {
-				user: this.$router.app.user
+				
 			}
+		},
+		methods: {
+			
 		}
 	}
 </script>

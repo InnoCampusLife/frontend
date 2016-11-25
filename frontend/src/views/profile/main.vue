@@ -1,5 +1,4 @@
 <template>
-	<!-- <sidebar></sidebar> -->
 	<content>
 		<div slot="header">
 			
@@ -8,13 +7,11 @@
 </template>
 
 <script>
-	var sidebar = require('./sidebar.vue');
 	var content = require('./../content.vue');
 
 	module.exports = {
 		components : {
-			sidebar,
-			content
+			content:content
 		}
 	}
 </script>
