@@ -1,4 +1,3 @@
-var storage = require('./storage.js');
 var config  = require('./config.js');
 var api_url = config.server.api_url;
 
@@ -10,7 +9,7 @@ var modules = {
 			'moderator'
 		],
 		have : function (role) {
-			return !!(this.roles.indexOf(role) > -1);
+			return !!(this.roles.indexOf(role.toLowerCase()) > -1);
 		},
 
 		//data
@@ -91,7 +90,33 @@ var modules = {
 			);
 		},
 
-		storage : storage,
+		storage : require('./storage.js'),
+
+		preferences : {
+			//TODO
+			fixHeader: true,
+
+			save : function(successCallback, errorCallback) {
+				var that = this;
+				var 
+				type = "PUT",
+				url  = this.url + modules.accounts.token + '/updatePreferences',
+				data = { 
+					preferences : that
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			get : function(successCallback, errorCallback) {
+				var 
+				type = "GET",
+				url  = this.url + modules.accounts.token + '/getPreferences',
+				data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			}
+		},
 
 		//
 		
@@ -102,7 +127,7 @@ var modules = {
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
 		create : function (password, email, successCallback, errorCallback) {
-			let 
+			var 
 			type = "POST",
 			url  = this.url,
 			data = {
@@ -118,7 +143,7 @@ var modules = {
 		},
 
 		authorize : function (password, successCallback, errorCallback) {
-			let 
+			var 
 			type = "POST",
 			url  = this.url + "auth",
 			data = {
@@ -130,7 +155,7 @@ var modules = {
 		},
 
 		get : function (successCallback, errorCallback) {
-			let 
+			var 
 			type = "GET",
 			url  = this.url + this.token,
 			data = '';
@@ -141,7 +166,7 @@ var modules = {
 		///MODER METHODS
 		//
 		list : function (successCallback, errorCallback) {
-			let
+			var
 			type = "GET",
 			url  = this.url + this.token + "/listAccounts",
 			data = '';
@@ -150,7 +175,7 @@ var modules = {
 		},
 
 		updateRole : function (account_id, new_role, successCallback, errorCallback) {
-			let
+			var
 			type = "PUT",
 			url  = this.url + this.token + "/updateRole",
 			data = { accountId: account_id, newRole: new_role };
@@ -161,7 +186,7 @@ var modules = {
 		///
 
 		exists : function (successCallback, errorCallback) {
-			let 
+			var 
 			type = "GET",
 			url  = this.url + this.token + "/exists",
 			data = '';
@@ -169,16 +194,14 @@ var modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		getBio : function (identifier, successCallback, errorCallback) {
-			let 
+		getBio : function (args, successCallback, errorCallback) {
+			var 
 			type = "GET",
-			url  = this.url + this.token + "/getBio?" + (identifier.id ? "id=" + identifier.id : "username=" + identifier.username),
+			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
-
-		//
 	},
 	innopoints : {
 		roles : [
@@ -193,11 +216,7 @@ var modules = {
 			amount	: null,
 			role 	: null,
 
-			activities: [],
-			categories: [],
-
-			items :		[],
-			currentItem : null,
+			// cart : [],
 
 			get isStudent () {
 				return !!this.is('student');
@@ -213,13 +232,16 @@ var modules = {
 
 			update : function (successCallback, errorCallback)	{
 				var that = this;
-				modules.innopoints.api.user.get(function(result) {
-					that.id = result.id;
-					that.amount = result.points_amount || 0;
-					that.role = result.type;
+				modules.innopoints.api.user.get({
+					successCallback: function(result) {
+						that.id = result.id;
+						that.amount = result.points_amount || 0;
+						that.role = result.type;
 
-					if (successCallback) successCallback(result);
-				}, errorCallback);
+						if (successCallback) successCallback(result);
+					},
+					errorCallback: errorCallback
+				});
 			}
 		},
 
@@ -228,67 +250,44 @@ var modules = {
 			name : "points",
 			get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-			getActivities : function (skip_count, limit_count, successCallback, errorCallback) {
-				let
+			getActivities : function (args) {
+				var
 				type = "GET",
-				url = this.url + "activities",
-				data = { skip: skip_count, limit: limit_count };
+				url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
+				data = { skip: args.skip_count || null, limit: args.limit_count || null };
 
-				ajax(type, url, data, successCallback, errorCallback);
+				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
-			getActivitiesInCategory : function (cat_id, skip_count, limit_count, successCallback, errorCallback) {
-				let
-				type = "GET",
-				url = this.url + "activities/" + cat_id,
-				data = { skip: skip_count, limit: limit_count };
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			getCategories : function (skip_count, limit_count, successCallback, errorCallback) {
-				let
+			getCategories : function (args) {
+				var
 				type = "GET",
 				url = this.url + "categories",
-				data = { skip: skip_count, limit: limit_count };
+				data = { skip: args.skip_count || null, limit: args.limit_count || null };
 
-				ajax(type, url, data, successCallback, errorCallback);
+				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
 			shop : {
 				get url() { return modules.innopoints.api.url + "shop/" },
 
-				getItems : function (skip_count, limit_count, fields, order, successCallback, errorCallback) {
-					let
+				getItems : function (args) {
+					var
 					type = "GET",
 					url = this.url + "items",
 					data = {
-						skip: skip_count || 0,
-						limit: limit_count || 1000,
-						fields: fields || 'title',
-						order: order || 'ASC'
+						skip: args.skip_count || null,
+						limit: args.limit_count || null,
+						fields: args.fields || 'title',
+						order: args.order || 'ASC',
+						category_id: args.category_id || null
 					};
 
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-
-				getItemsInCategory : function (skip_count, limit_count, fields, order, category_id, successCallback, errorCallback) {
-					let
-					type = "GET",
-					url = this.url + "items",
-					data = {
-						skip: skip_count || 0,
-						limit: limit_count || 1000,
-						fields: fields || 'title',
-						order: order || 'ASC',
-						category_id: category_id
-					};
-
-					ajax(type, url, data, successCallback, errorCallback);
+					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
 				getItem : function (id, successCallback, errorCallback) {
-					let
+					var
 					type = "GET",
 					url = this.url + "items/" + id,
 					data = '';
@@ -297,22 +296,24 @@ var modules = {
 				},
 			},
 
-			///USER METHODS
-			//
 			user : {
-				get url() { return modules.innopoints.api.url + "accounts/" },
+				get isAdmin() { return modules.innopoints.data.isAdmin; },
+				get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/") },
 
-				get : function (successCallback, errorCallback) {
-					let 
+				get : function (args) {
+					var 
 					type = "GET",
-					url  = this.url + modules.accounts.token,
+					url  = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
 					data = '';
 
-					ajax(type, url, data, successCallback, errorCallback);
+					if (this.isAdmin) if(args.id)
+						url += "/accounts/" + args.id;
+
+					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
 				create : function (successCallback, errorCallback) {
-					let 
+					var 
 					type = "POST",
 					url  = this.url + modules.accounts.token,
 					data = '';
@@ -321,7 +322,7 @@ var modules = {
 				},
 				
 				getFile : function (appl_id, file_id, successCallback, errorCallback) {
-					let 
+					var 
 					type = "GET",
 					url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
 					data = '';
@@ -329,10 +330,29 @@ var modules = {
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
+				getAccounts : function (args) {
+					var 
+					type = "GET",
+					url  = this.url + modules.accounts.token,
+					data = { skip: args.skip_count || null, limit: args.limit_count || null };
+
+					ajax(type, url, data, args.successCallback, args.errorCallback);
+				},
+
+				updateAccount : function (args) {
+					var 
+					type = "PUT",
+					url  = this.url + modules.accounts.token + "/accounts/" + args.id,
+					data = { points_amount : args.points };
+
+					ajax(type, url, data, args.successCallback, args.errorCallback);
+				},
+
 				application : {
 					get url() { return modules.innopoints.api.user.url },
+
 					create : function (application, successCallback, errorCallback) {
-						let 
+						var 
 						type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
 						data = { application:application };
@@ -341,7 +361,7 @@ var modules = {
 					},
 					
 					update : function (appl_id, new_params, successCallback, errorCallback) {
-						let 
+						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = new_params;
@@ -350,7 +370,7 @@ var modules = {
 					},
 					
 					send : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 						data = '';
@@ -359,7 +379,7 @@ var modules = {
 					},
 					
 					get : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
@@ -368,132 +388,8 @@ var modules = {
 					},
 					
 					delete : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "DELETE",
-						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
-						data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-				},
-				
-				applications : {
-					get url() { return modules.innopoints.api.user.url },
-
-					getWithStatus : function (status, skip_count, limit_count, successCallback, errorCallback) {
-						let 
-						type = "GET",
-						url  = this.url + modules.accounts.token + "/applications/" + status,
-						data = { skip: skip_count, limit: limit_count };
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					get : function(skip_count, limit_count, successCallback, errorCallback) {
-						var that = this;
-						this.getWithStatus("in_process", 0, 1000, function(result) {
-							that.getWithStatus("rejected", 0, 1000, function(result1) {
-								that.getWithStatus("rework", 0, 1000, function(result2) {
-									that.getWithStatus("approved", 0, 1000, function(result3) {
-										result = result.concat(result1);
-										result = result.concat(result2);
-										result = result.concat(result3);
-										if (successCallback) successCallback(result);
-									}, errorCallback);
-								}, errorCallback);
-							}, errorCallback);
-						}, errorCallback);
-					}
-				},
-			},
-			//
-			///
-
-			///ADMIN METHODS
-			//
-			admin : {
-				get url() { return modules.innopoints.api.url + "admin/"; },
-
-				getUserAccounts : function (skip_count, limit_count, successCallback, errorCallback) {
-					let 
-					type = "GET",
-					url  = this.url + modules.accounts.token,
-					data = { skip: skip_count, limit: limit_count };
-
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-
-				getUserAccount : function (id, admin_successCallback, errorCallback) {
-					let 
-					type = "GET",
-					url  = this.url + modules.accounts.token + "/accounts/" + id,
-					data = '';
-
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-
-				updateUserAccount : function (id, points, admin_successCallback, errorCallback) {
-					let 
-					type = "PUT",
-					url  = this.url + modules.accounts.token + "/accounts/" + id,
-					data = { points_amount : points };
-
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-
-				applications : {
-					get url() { return modules.innopoints.api.admin.url },
-
-					getWithStatus : function (status, skip_count, limit_count, successCallback, errorCallback) {
-						let 
-						type = "GET",
-						url  = this.url + modules.accounts.token + "/applications/" + status,
-						data = { skip: skip_count, limit: limit_count };
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					get : function(successCallback, errorCallback) {
-						var that = this;
-						this.getWithStatus("in_process", 0, 1000, function(result) {
-							that.getWithStatus("rejected", 0, 1000, function(result1) {
-								that.getWithStatus("rework", 0, 1000, function(result2) {
-									that.getWithStatus("approved", 0, 1000, function(result3) {
-										result = result.concat(result1);
-										result = result.concat(result2);
-										result = result.concat(result3);
-										if (successCallback) successCallback(result);
-									}, errorCallback);
-								}, errorCallback);
-							}, errorCallback);
-						}, errorCallback);
-					}
-				},
-
-				application : {
-					get url() { return modules.innopoints.api.admin.url },
-
-					create : function (application, successCallback, errorCallback) {
-						let 
-						type = "POST",
-						url  = this.url + modules.accounts.token + "/applications",
-						data = { application : application };
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-					
-					update : function (appl_id, new_params, successCallback, errorCallback) {
-						let 
-						type = "PUT",
-						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
-						data = new_params;
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-					
-					get : function (appl_id, successCallback, errorCallback) {
-						let 
-						type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
 
@@ -501,7 +397,7 @@ var modules = {
 					},
 					
 					approve : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
 						data = '';
@@ -510,7 +406,7 @@ var modules = {
 					},
 					
 					reject : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
 						data = '';
@@ -519,23 +415,38 @@ var modules = {
 					},
 					
 					dismiss : function (appl_id, successCallback, errorCallback) {
-						let 
+						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
 						data = '';
 
 						ajax(type, url, data, successCallback, errorCallback);
 					}
+				},
+				
+				applications : {
+					get url() { return modules.innopoints.api.user.url },
+
+					get : function (args, that) {
+						if (!that) that = this;
+						if (args.status == 'all')
+							args.status = null;
+
+						var 
+						type = "GET",
+						url  = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
+						data = { skip: args.skip_count, limit: args.limit_count };
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					}
 				}
 			}
-			//
-			///
 		}
 	}
 };
 
 function ajax (type, url, data, successCallback, errorCallback) {
-	let xhr = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 	xhr.open(type, url, true);
 	xhr.onload = function() {
 	  	if (xhr.response.result) {

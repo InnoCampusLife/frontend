@@ -1,7 +1,6 @@
 <template>
-	<h1>{{ user.username }}'s profile</h1>
 	<div block>
-		<pre>{{ user.id }}</pre>
+		<pre>{{ user.username }}</pre>
 		<pre>{{ user.role }}</pre>
 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
 		<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
@@ -15,7 +14,7 @@
 
 <script>
 	module.exports =  {
-		data () {
+		data : function () {
 			return {
 				user : {}
 			}
@@ -25,7 +24,9 @@
 				console.log("Called get in user");
 
 				var username = this.$route.params.username;
-				var user = this.$router.app.user.account;
+				var user = this.$root.user.account;
+
+				console.log(this.$root);
 
 				if (user.username != username) {
 					console.log("called getBio: " + username);

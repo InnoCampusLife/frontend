@@ -8,13 +8,13 @@
 
 	module.exports = {
 		components : {
-			sidebar
+			sidebar:sidebar
 		},
 		route: {
 			data : function (transition) {
 				console.log("called get in main");
 				var router = this.$router;
-				var user = this.$router.app.user;
+				var user = this.$root.user;
 				user.account.update(
 					function(result) {
 						user.innopoints.data.update(

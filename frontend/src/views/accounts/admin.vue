@@ -7,11 +7,7 @@
 		<ul>
 			<li v-for="user in users">
 				<hr>
-				{{$index}} : <p><span>{{ user.username }} ({{ user.role | capitalize }})</span> : <span>{{ user.fullname | capitalize}}</span> : <span>@{{ user.tgId }}</span>;</p>
-				<select name="role_select" id="a{{ user.id }}" @change="selectChanged">
-					<option value="ghost" :selected="user.role == 'ghost'">Ghost</option>
-					<option value="student" :selected="user.role == 'student'">Student</option>
-				</select>
+				<user :user="user" :role-changed="roleChanged"></user>
 			</li>
 		</ul>
 
@@ -29,26 +25,29 @@
 		data : function () {
 			return {
 				users : [],
-				roleChanged : false
+				dirty: false
 			}
+		},
+		components : {
+			user : require('./user.vue')
 		},
 		methods: {
 			sendRoles : function (e) {
-				for (let user of this.users) {
-					let newRole = document.getElementById('a' + user.id).value;
-					if (newRole != user.role) this.$router.app.user.account.updateRole(user.id, user.role = newRole);
-				}
+				var update = this.$router.app.user.account.updateRole;
+				this.users.forEach(function(user) {
+					var newRole = document.getElementById('a' + user.id).value;
+					if (newRole != user.role) update(user.id, user.role = newRole);
+				});
 
 				e.target.textContent = "accepted ✓";
 			},
-			selectChanged : function (e) {
-				this.roleChanged = true;
+			roleChanged : function(e) {
 				document.getElementById('acceptRoles').textContent = "accept changes";
 			}
 		},
 		route: {
 			data  : function (transition) {
-				var api = this.$router.app.user;
+				var api = this.$root.user;
 				api.account.list(
 					function (result) {
 						transition.next({

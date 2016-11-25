@@ -101,4 +101,6 @@
 	user-select: none;  
 }
 
+[animate] { transition: all ease .3s; }
+
 [default] { all: initial !important; }

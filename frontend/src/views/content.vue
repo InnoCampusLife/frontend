@@ -1,10 +1,9 @@
 <template>
-	<main content scroller-y-force>
-	<!-- <main content> -->
+	<main content :scroller-y-force="!user.account.preferences.fixHeader">
 		<main-header>
 			<slot name="header"></slot>
 		</main-header>
-		<div scroller-x>
+		<div scroller-x :scroller-y="user.account.preferences.fixHeader" @scroll="scrl">
 			<router-view></router-view>
 		</div>
 	</main>
@@ -14,16 +13,21 @@
 	var mainHeader = require('./header.vue');
 
 	module.exports = {
-		components: {
-			mainHeader
+		data : function () {
+			return {
+				user: this.$root.user
+			}
 		},
-		// methods: {
-		// 	scrl : function (e) {
-		// 		if (e.target.scrollTop > 49)
-		// 			e.target.setAttribute('scrolled', '');
-		// 		else
-		// 			e.target.removeAttribute('scrolled');
-		// 	}
-		// }
+		components: {
+			mainHeader:mainHeader
+		},
+		methods: {
+			scrl : function (e) {
+				if (e.target.scrollTop > 31)
+					e.target.parentElement.childNodes[1].setAttribute('scrolled', '');
+				else
+					e.target.parentElement.childNodes[1].removeAttribute('scrolled');
+			}
+		}
 	}
 </script>

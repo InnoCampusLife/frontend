@@ -7,7 +7,7 @@
 
 	module.exports = {
 		components : {
-			content
+			content:content
 		}
 	}
 </script>
