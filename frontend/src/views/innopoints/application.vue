@@ -23,8 +23,8 @@
 		</section>
 		<section content v-show="application.comment">
 			<div block>
-			<h4>Comment: </h4>
-			<p>{{application.comment}}</p>
+				<h4>Comment: </h4>
+				<p v-for="comment in application.comment.split('\n')">{{comment}}</p>
 			</div>
 		</section>
 		<section content v-show="application.files.length > 0">

@@ -11,7 +11,7 @@
     left: 0;
     bottom: 0;
     z-index: 1;
-    background: linear-gradient(to bottom, hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%);
+    background: linear-gradient(to bottom, hsl(271, 74%, 63%) 0%, hsla(269, 100%, 44%, 0.75) 100%);
     background-size: 150% 150%;
 }
 
