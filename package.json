@@ -2,9 +2,10 @@
   "name": "UIS",
   "version": "2.0.1",
   "description": "Unified Information System's portal of Innopolis University.",
-  "main": "app.js",
+  "main": "frontend/app.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "dev": "webpack-dev-server --inline --hot"
   },
   "author": "Alexey Iskhakov",
   "license": "MIT",
