@@ -1,12 +1,11 @@
 <template>
 	<div block>
-		<h1>List of registered users:</h1>
+		<h1>Registered users</h1>
 
-		<p v-if="$loadingRouteData">Loading users' list...</p>
+		<p v-if="$loadingRouteData">Loading users…</p>
 
 		<ul>
 			<li v-for="user in users">
-				<hr>
 				<user :user="user" :role-changed="roleChanged"></user>
 			</li>
 		</ul>
@@ -19,6 +18,10 @@
 		>accept changes</button>
 	</div>
 </template>
+
+<style lang="less" scoped>
+	
+</style>
 
 <script>
 	module.exports = {
