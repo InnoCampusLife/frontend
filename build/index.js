@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/build/";
+/******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -43,6 +43,8 @@
 /******/ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	var Vue = __webpack_require__(1);
 	var VueRouter = __webpack_require__(3);
@@ -13094,16 +13096,18 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<router-view></router-view>
 	// </template>
 	//
 	// <script>
 	module.exports = {
-		ready: function () {
+		ready: function ready() {
 			console.log('App is awaiting your command!');
 		},
-		data: function () {
+		data: function data() {
 			var Vue = __webpack_require__(6);
 			var bus = new Vue();
 			var modules = __webpack_require__(7);
@@ -23202,13 +23206,15 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	var config = __webpack_require__(8);
 	var api_url = config.server.api_url;
 
 	var modules = {
 		accounts: {
 			roles: ['ghost', 'student', 'moderator'],
-			have: function (role) {
+			have: function have(role) {
 				return !!(this.roles.indexOf(role.toLowerCase()) > -1);
 			},
 
@@ -23254,11 +23260,11 @@
 				return !!this.is('moderator');
 			},
 
-			is: function (ofType) {
+			is: function is(ofType) {
 				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 			},
 
-			clear: function () {
+			clear: function clear() {
 				this.id = null;
 				this.role = null;
 				this.firstName = null;
@@ -23269,7 +23275,7 @@
 				this.storage.clear();
 			},
 
-			set: function (data) {
+			set: function set(data) {
 				if (data.id) this.id = data.id;
 				if (data.username) this.username = data.username;
 				if (data.role) this.role = data.role;
@@ -23280,7 +23286,7 @@
 				if (data.token) this.token = data.token;
 			},
 
-			update: function (successCallback, errorCallback) {
+			update: function update(successCallback, errorCallback) {
 				var that = this;
 				this.get(function (result) {
 					that.set(result);
@@ -23294,7 +23300,7 @@
 				//TODO
 				fixHeader: true,
 
-				save: function (successCallback, errorCallback) {
+				save: function save(successCallback, errorCallback) {
 					var that = this;
 					var type = "PUT",
 					    url = this.url + modules.accounts.token + '/updatePreferences',
@@ -23305,7 +23311,7 @@
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
-				get: function (successCallback, errorCallback) {
+				get: function get(successCallback, errorCallback) {
 					var type = "GET",
 					    url = this.url + modules.accounts.token + '/getPreferences',
 					    data = '';
@@ -23324,7 +23330,7 @@
 				return api_url + "v" + this.version + "/" + this.name + "/";
 			},
 
-			create: function (password, email, successCallback, errorCallback) {
+			create: function create(password, email, successCallback, errorCallback) {
 				var type = "POST",
 				    url = this.url,
 				    data = {
@@ -23339,7 +23345,7 @@
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			authorize: function (password, successCallback, errorCallback) {
+			authorize: function authorize(password, successCallback, errorCallback) {
 				var type = "POST",
 				    url = this.url + "auth",
 				    data = {
@@ -23350,7 +23356,7 @@
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			get: function (successCallback, errorCallback) {
+			get: function get(successCallback, errorCallback) {
 				var type = "GET",
 				    url = this.url + this.token,
 				    data = '';
@@ -23360,7 +23366,7 @@
 
 			///MODER METHODS
 			//
-			list: function (successCallback, errorCallback) {
+			list: function list(successCallback, errorCallback) {
 				var type = "GET",
 				    url = this.url + this.token + "/listAccounts",
 				    data = '';
@@ -23368,7 +23374,7 @@
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			updateRole: function (account_id, new_role, successCallback, errorCallback) {
+			updateRole: function updateRole(account_id, new_role, successCallback, errorCallback) {
 				var type = "PUT",
 				    url = this.url + this.token + "/updateRole",
 				    data = { accountId: account_id, newRole: new_role };
@@ -23378,7 +23384,7 @@
 			//
 			///
 
-			exists: function (successCallback, errorCallback) {
+			exists: function exists(successCallback, errorCallback) {
 				var type = "GET",
 				    url = this.url + this.token + "/exists",
 				    data = '';
@@ -23386,7 +23392,7 @@
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			getBio: function (args, successCallback, errorCallback) {
+			getBio: function getBio(args, successCallback, errorCallback) {
 				var type = "GET",
 				    url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
 				    data = '';
@@ -23396,7 +23402,7 @@
 		},
 		innopoints: {
 			roles: ['student', 'admin'],
-			have: function (role) {
+			have: function have(role) {
 				return !!(this.roles.indexOf(role) > -1);
 			},
 			data: {
@@ -23414,19 +23420,19 @@
 					return !!this.is('admin');
 				},
 
-				is: function (ofType) {
+				is: function is(ofType) {
 					return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 				},
 
-				update: function (successCallback, errorCallback) {
+				update: function update(_successCallback, errorCallback) {
 					var that = this;
 					modules.innopoints.api.user.get({
-						successCallback: function (result) {
+						successCallback: function successCallback(result) {
 							that.id = result.id;
 							that.amount = result.points_amount || 0;
 							that.role = result.type;
 
-							if (successCallback) successCallback(result);
+							if (_successCallback) _successCallback(result);
 						},
 						errorCallback: errorCallback
 					});
@@ -23440,7 +23446,7 @@
 					return api_url + "v" + this.version + "/" + this.name + "/";
 				},
 
-				getActivities: function (args) {
+				getActivities: function getActivities(args) {
 					var type = "GET",
 					    url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
 					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
@@ -23448,7 +23454,7 @@
 					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
-				getCategories: function (args) {
+				getCategories: function getCategories(args) {
 					var type = "GET",
 					    url = this.url + "categories",
 					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
@@ -23461,7 +23467,7 @@
 						return modules.innopoints.api.url + "shop/";
 					},
 
-					getItems: function (args) {
+					getItems: function getItems(args) {
 						var type = "GET",
 						    url = this.url + "items",
 						    data = {
@@ -23475,7 +23481,7 @@
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
 
-					getItem: function (id, successCallback, errorCallback) {
+					getItem: function getItem(id, successCallback, errorCallback) {
 						var type = "GET",
 						    url = this.url + "items/" + id,
 						    data = '';
@@ -23492,7 +23498,7 @@
 						return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/");
 					},
 
-					get: function (args) {
+					get: function get(args) {
 						var type = "GET",
 						    url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
 						    data = '';
@@ -23502,7 +23508,7 @@
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
 
-					create: function (successCallback, errorCallback) {
+					create: function create(successCallback, errorCallback) {
 						var type = "POST",
 						    url = this.url + modules.accounts.token,
 						    data = '';
@@ -23510,7 +23516,7 @@
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 
-					getFile: function (appl_id, file_id, successCallback, errorCallback) {
+					getFile: function getFile(appl_id, file_id, successCallback, errorCallback) {
 						var type = "GET",
 						    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
 						    data = '';
@@ -23518,7 +23524,7 @@
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 
-					getAccounts: function (args) {
+					getAccounts: function getAccounts(args) {
 						var type = "GET",
 						    url = this.url + modules.accounts.token,
 						    data = { skip: args.skip_count || null, limit: args.limit_count || null };
@@ -23526,7 +23532,7 @@
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
 
-					updateAccount: function (args) {
+					updateAccount: function updateAccount(args) {
 						var type = "PUT",
 						    url = this.url + modules.accounts.token + "/accounts/" + args.id,
 						    data = { points_amount: args.points };
@@ -23539,7 +23545,7 @@
 							return modules.innopoints.api.user.url;
 						},
 
-						create: function (application, successCallback, errorCallback) {
+						create: function create(application, successCallback, errorCallback) {
 							var type = "POST",
 							    url = this.url + modules.accounts.token + "/applications",
 							    data = { application: application };
@@ -23547,7 +23553,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						update: function (appl_id, new_params, successCallback, errorCallback) {
+						update: function update(appl_id, new_params, successCallback, errorCallback) {
 							var type = "PUT",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
 							    data = new_params;
@@ -23555,7 +23561,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						send: function (appl_id, successCallback, errorCallback) {
+						send: function send(appl_id, successCallback, errorCallback) {
 							var type = "PUT",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 							    data = '';
@@ -23563,7 +23569,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						get: function (appl_id, successCallback, errorCallback) {
+						get: function get(appl_id, successCallback, errorCallback) {
 							var type = "GET",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
 							    data = '';
@@ -23571,7 +23577,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						delete: function (appl_id, successCallback, errorCallback) {
+						delete: function _delete(appl_id, successCallback, errorCallback) {
 							var type = "DELETE",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
 							    data = '';
@@ -23579,7 +23585,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						approve: function (appl_id, successCallback, errorCallback) {
+						approve: function approve(appl_id, successCallback, errorCallback) {
 							var type = "PUT",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
 							    data = '';
@@ -23587,7 +23593,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						reject: function (appl_id, successCallback, errorCallback) {
+						reject: function reject(appl_id, successCallback, errorCallback) {
 							var type = "PUT",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
 							    data = '';
@@ -23595,7 +23601,7 @@
 							ajax(type, url, data, successCallback, errorCallback);
 						},
 
-						dismiss: function (appl_id, successCallback, errorCallback) {
+						dismiss: function dismiss(appl_id, successCallback, errorCallback) {
 							var type = "PUT",
 							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
 							    data = '';
@@ -23609,7 +23615,7 @@
 							return modules.innopoints.api.user.url;
 						},
 
-						get: function (args, that) {
+						get: function get(args, that) {
 							if (!that) that = this;
 							if (args.status == 'all') args.status = null;
 
@@ -23654,6 +23660,8 @@
 /* 8 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	module.exports = {
 		server: {
 			ip: "uis.university.innopolis.ru",
@@ -23669,17 +23677,19 @@
 /* 9 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	module.exports = {
-		get: function (key) {
+		get: function get(key) {
 			return localStorage.getItem(key);
 		},
 
-		set: function (key, value) {
+		set: function set(key, value) {
 			if (value) localStorage.setItem(key, value);
 			return localStorage.getItem(key);
 		},
 
-		clear: function () {
+		clear: function clear() {
 			localStorage.clear();
 		}
 	};
@@ -23693,6 +23703,8 @@
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	var user = __webpack_require__(7).accounts;
 
@@ -23827,6 +23839,8 @@
 /***/ },
 /* 13 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	// <template>
 	// <!-- <link type="text/css" rel="stylesheet" href="/css/login.css"> -->
@@ -24165,21 +24179,21 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: this.$router.app.user,
 				isLogin: true
 			};
 		},
 		methods: {
-			login: function (e) {
+			login: function login(e) {
 				e.preventDefault();
 				if (this.isLogin) this.user.account.authorize(password.value, this.formSuccessCallback, this.formErrorCallback);else {
 					this.isLogin = true;
 					e.target.blur();
 				}
 			},
-			register: function (e) {
+			register: function register(e) {
 				e.preventDefault();
 				if (!this.isLogin) {
 					if (this.checkUsernameInput('strict') && this.checkPasswordInput('strict') && this.checkEmailInput() && this.checkNameInput()) this.user.account.create(password.value, email.value, this.formSuccessCallback, this.formErrorCallback);
@@ -24191,11 +24205,11 @@
 
 			/// Form Callbacks
 			//
-			formSuccessCallback: function (result) {
+			formSuccessCallback: function formSuccessCallback(result) {
 				this.user.account.set(result);
 				this.$router.go("/");
 			},
-			formErrorCallback: function (result) {
+			formErrorCallback: function formErrorCallback(result) {
 				//this.setError(result, 'username');
 			},
 			//
@@ -24203,11 +24217,11 @@
 
 			///Reusable LoginData checkers
 			//
-			usernameInputEvent: function (e) {
+			usernameInputEvent: function usernameInputEvent(e) {
 				this.checkUsernameInput();
 			},
 
-			checkUsernameInput: function (strict) {
+			checkUsernameInput: function checkUsernameInput(strict) {
 				var regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
 				var ufe = !regex.test(this.user.account.username);
 
@@ -24216,11 +24230,11 @@
 				return !ufe;
 			},
 
-			passwordInputEvent: function (e) {
+			passwordInputEvent: function passwordInputEvent(e) {
 				this.checkPasswordInput();
 			},
 
-			checkPasswordInput: function (strict) {
+			checkPasswordInput: function checkPasswordInput(strict) {
 				var regex = strict ? /^.{5,64}$/ : /^.*$/;
 				var pfe = !regex.test(password.value);
 
@@ -24229,11 +24243,11 @@
 				return !pfe;
 			},
 
-			emailInputEvent: function (e) {
+			emailInputEvent: function emailInputEvent(e) {
 				this.checkEmailInput();
 			},
 
-			checkEmailInput: function () {
+			checkEmailInput: function checkEmailInput() {
 				var regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 				var pfe = !regex.test(email.value);
 
@@ -24242,11 +24256,11 @@
 				return !pfe;
 			},
 
-			nameInputEvent: function (e) {
+			nameInputEvent: function nameInputEvent(e) {
 				this.checkNameInput();
 			},
 
-			checkNameInput: function () {
+			checkNameInput: function checkNameInput() {
 				//([BS]|[MS])[1-4]-[0-9]+
 				var regex = /^.+$/;
 				var pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
@@ -24263,13 +24277,13 @@
 			},
 
 			//TODO
-			setError: function (toWhat) {
+			setError: function setError(toWhat) {
 				var elem = document.getElementById(toWhat);
 				elem.setAttribute('error', '');
 			},
 
 			//TODO
-			removeError: function (fromWhat) {
+			removeError: function removeError(fromWhat) {
 				var elem = document.getElementById(fromWhat);
 				elem.removeAttribute('error');
 			}
@@ -24315,6 +24329,8 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
 	// <template>
 	// 	<sidebar></sidebar>
 	// 	<router-view></router-view>
@@ -24328,7 +24344,7 @@
 			sidebar: sidebar
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				console.log("called get in main");
 				var router = this.$router;
 				var user = this.$root.user;
@@ -24383,6 +24399,8 @@
 /* 18 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	// <template>
 	// 	<aside sidebar>
 	// 		<div header v-link="'/'"><span>UIS</span></div header>
@@ -24425,13 +24443,13 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: this.$router.app.user
 			};
 		},
 		methods: {
-			logout: function (e) {
+			logout: function logout(e) {
 				this.user.account.clear();
 				this.$router.go('/login');
 			}
@@ -24483,6 +24501,8 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<main content :scroller-y-force="!user.account.preferences.fixHeader">
 	// 		<main-header>
@@ -24498,7 +24518,7 @@
 	var mainHeader = __webpack_require__(23);
 
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: this.$root.user
 			};
@@ -24507,7 +24527,7 @@
 			mainHeader: mainHeader
 		},
 		methods: {
-			scrl: function (e) {
+			scrl: function scrl(e) {
 				if (e.target.scrollTop > 31) e.target.parentElement.childNodes[1].setAttribute('scrolled', '');else e.target.parentElement.childNodes[1].removeAttribute('scrolled');
 			}
 		}
@@ -24546,6 +24566,8 @@
 /* 24 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	// <template>
 	// 	<header>
 	// 		<slot></slot>
@@ -24554,7 +24576,7 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {};
 		},
 		methods: {}
@@ -24605,6 +24627,8 @@
 /* 28 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	// <template>
 	// 	<h1>Current path: {{ $route.path }}</h1>
 	// 	<pre style="text-align:left">{{ user | json 4 }}</pre>
@@ -24614,13 +24638,13 @@
 	// <script>
 
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: this.$router.app.user
 			};
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				this.user.account.update(transition.next);
 				console.log("test route updated!");
 			}
@@ -24665,6 +24689,8 @@
 /***/ },
 /* 31 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	// <template>
 	// 	<content>
@@ -24722,6 +24748,8 @@
 /* 34 */
 /***/ function(module, exports) {
 
+	"use strict";
+
 	// <template>
 	// 	<div block>
 	// 		<pre>{{ user.username }}</pre>
@@ -24738,13 +24766,13 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: {}
 			};
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				console.log("Called get in user");
 
 				var username = this.$route.params.username;
@@ -24808,6 +24836,8 @@
 /* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<content></content>
 	// </template>
@@ -24860,6 +24890,8 @@
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<div block>
 	// 		<h1>List of registered users:</h1>
@@ -24884,7 +24916,7 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				users: [],
 				dirty: false
@@ -24894,7 +24926,7 @@
 			user: __webpack_require__(41)
 		},
 		methods: {
-			sendRoles: function (e) {
+			sendRoles: function sendRoles(e) {
 				var update = this.$router.app.user.account.updateRole;
 				this.users.forEach(function (user) {
 					var newRole = document.getElementById('a' + user.id).value;
@@ -24903,12 +24935,12 @@
 
 				e.target.textContent = "accepted ✓";
 			},
-			roleChanged: function (e) {
+			roleChanged: function roleChanged(e) {
 				document.getElementById('acceptRoles').textContent = "accept changes";
 			}
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				var api = this.$root.user;
 				api.account.list(function (result) {
 					transition.next({
@@ -24953,6 +24985,8 @@
 /* 42 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	// <template>
 	// 	<div>
 	// 		<p><span>{{ user.username }} ({{ user.role | capitalize }})</span> : <span>{{ user.firstName + " " + user.lastName | capitalize}}</span> : <span>@{{ user.tgId }}</span>;</p>
@@ -24965,12 +24999,12 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {};
 		},
 		props: ['user', 'roleChanged'],
 		methods: {
-			selectChanged: function (e) {
+			selectChanged: function selectChanged(e) {
 				this.roleChanged(e);
 			}
 		}
@@ -25021,6 +25055,8 @@
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<content>
 	// 		<div content slot="header" flex align center>
@@ -25062,7 +25098,7 @@
 	var content = __webpack_require__(21);
 
 	module.exports = {
-		data: function () {
+		data: function data() {
 			// var route = this.$route;
 			return {
 				route: this.$route,
@@ -25073,7 +25109,7 @@
 			content: content
 		},
 		methods: {
-			filter_changed: function (e) {
+			filter_changed: function filter_changed(e) {
 				this.$router.go({
 					name: 'applications',
 					params: {
@@ -25124,6 +25160,8 @@
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	// 	<div>
 	// 		<pre v-show="$loadingRouteData">Loading...</pre>
@@ -25142,7 +25180,7 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			return {
 				user: this.$root.user,
 				applications: []
@@ -25166,21 +25204,21 @@
 			// 		else return this.applications;
 			// 	}
 			// 	
-			action_success: function (id, new_status) {
+			action_success: function action_success(id, new_status) {
 				if (this.$route.params.filter === 'all' || this.$route.params.filter == null) this.applications.find(function (x) {
 					return x.id == id;
 				}).status = new_status;else document.getElementById('card' + id).remove();
 			}
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				this.applications = [];
 				var params = this.$route.params;
 				var user = this.user;
 
 				if (user.innopoints.data.isAdmin && !params.filter || params.filter == 'all') params.filter = null;
 
-				var request = function (result) {
+				var request = function request(result) {
 					// if (!result.length) {
 					// 	transition.next();
 					// 	return;
@@ -25198,7 +25236,7 @@
 				};
 
 				user.innopoints.api.user.get({
-					successCallback: function (result) {
+					successCallback: function successCallback(result) {
 						console.log("called user get");
 						user.innopoints.api.user.applications.get({
 							status: params.filter || null,
@@ -25242,6 +25280,8 @@
 /***/ },
 /* 51 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	// <template>
 	// 	<div card
@@ -25298,35 +25338,35 @@
 	module.exports = {
 		props: ['application', 'user', 'success'],
 		methods: {
-			approve: function (e) {
+			approve: function approve(e) {
 				var _appls = this.applications;
 				var appl_action_success = this.appl_action_success;
 				this.user.innopoints.api.user.application.approve(e.target.dataset.id, function (result) {
 					success(e.target.dataset.id, 'approved', _appls);
 				}, console.log);
 			},
-			reject: function (e) {
+			reject: function reject(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.reject(e.target.dataset.id, function (result) {
 					success(e.target.dataset.id, 'rejected', _appls);
 				}, console.log);
 			},
-			toRework: function (e) {
+			toRework: function toRework(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.dismiss(e.target.dataset.id, function (result) {
 					success(e.target.dataset.id, 'rework', _appls);
 				}, console.log);
 			},
-			_delete: function (e) {
+			_delete: function _delete(e) {
 				var _appls = this.applications;
 				this.user.innopoints.api.user.application.delete(e.target.dataset.id, function (result) {
 					console.log(result);
 					document.getElementById('card' + e.target.dataset.id).remove();
 				}, console.log);
 			},
-			resend: function (e) {
+			resend: function resend(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.send(e.target.dataset.id, function (result) {
@@ -25380,6 +25420,8 @@
 /***/ },
 /* 55 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	// <template>
 	// 	<form id="ip_request">
@@ -25453,7 +25495,7 @@
 	//
 	// <script>
 	module.exports = {
-		data: function () {
+		data: function data() {
 			var user = this.$root.user;
 			return {
 				user: user,
@@ -25477,7 +25519,7 @@
 			};
 		},
 		methods: {
-			current_users_count_inc: function () {
+			current_users_count_inc: function current_users_count_inc() {
 				this.current.users.push({
 					user_id: null,
 					activity_id: '',
@@ -25485,11 +25527,11 @@
 				});
 				this.activity_changed();
 			},
-			current_users_count_dec: function () {
+			current_users_count_dec: function current_users_count_dec() {
 				this.current.users.pop();
 				this.activity_changed();
 			},
-			username_changed: function (e) {
+			username_changed: function username_changed(e) {
 				var users = this.current.users;
 				this.user.account.getBio({ username: e.target.value }, function (result) {
 					users[e.target.dataset.index].user_id = result.id;
@@ -25498,28 +25540,38 @@
 					//TODO
 				});
 			},
-			category_changed: function (e) {
+			category_changed: function category_changed(e) {
 				this.categorySelected = this.activitySelected = false;
 				this.user.innopoints.api.getActivities({
 					cat_id: this.current.category_id,
 					successCallback: this.setActivities
 				});
 			},
-			activity_changed: function (e) {
+			activity_changed: function activity_changed(e) {
 				var counter = 0;
 				this.current.users.forEach(function (_user) {
 					if (_user.activity_id !== '') counter++;
 				});
 				this.activitySelected = counter == this.current.users.length;
 			},
-			setActivities: function (result) {
+			setActivities: function setActivities(result) {
 				this.activities = result;
 				this.categorySelected = true;
 			},
-			uploaded: function (e) {
+			uploaded: function uploaded(e) {
 				console.log(e.target.files);
 			},
-			accept: function (e) {
+			accept: function (_accept) {
+				function accept(_x) {
+					return _accept.apply(this, arguments);
+				}
+
+				accept.toString = function () {
+					return _accept.toString();
+				};
+
+				return accept;
+			}(function (e) {
 				accept.textContent = "accepting...";
 				this.current.application.type = this.current.isPersonal ? "personal" : "group";
 				//TODO - catch bugs and exceptions
@@ -25546,15 +25598,15 @@
 				this.current.application.files = upload.files;
 
 				this.user.innopoints.api.user.application.create(this.current.application, this.acceptSuccess, this.error);
-			},
-			acceptSuccess: function (result) {
+			}),
+			acceptSuccess: function acceptSuccess(result) {
 				accept.textContent = "accepted ✓";
 			},
-			error: function (error) {
-				alert('Unsuccessful: ' + error);
+			error: function error(_error) {
+				alert('Unsuccessful: ' + _error);
 				accept.textContent = "accept";
 			},
-			showAmount: function (id) {
+			showAmount: function showAmount(id) {
 				var temp = this.activities.find(function (x) {
 					return x.id == id;
 				});
@@ -25562,12 +25614,12 @@
 			}
 		},
 		route: {
-			data: function (transition) {
+			data: function data(transition) {
 				console.log('calling get for innopoints');
 				var user = this.$router.app.user;
 				this.$router.app.user.account.update(function (result) {
 					user.innopoints.api.getCategories({
-						successCallback: function (result) {
+						successCallback: function successCallback(result) {
 							transition.next({
 								categories: result
 							});
@@ -25616,6 +25668,8 @@
 /***/ },
 /* 58 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	// <template>
 	// 	<content>
@@ -25675,6 +25729,8 @@
 /* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	// <template>
 	//     <section shop>
 	//         <section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
@@ -25692,7 +25748,7 @@
 	var storage = __webpack_require__(9);
 
 	module.exports = {
-	    data: function () {
+	    data: function data() {
 	        return {
 	            items: [],
 	            // cartItems: [],
@@ -25703,10 +25759,10 @@
 	        item: __webpack_require__(62)
 	    },
 	    route: {
-	        data: function (transition) {
+	        data: function data(transition) {
 	            var _cart = JSON.parse(storage.get('cart'));
 	            this.$router.app.user.innopoints.api.shop.getItems({
-	                successCallback: function (result) {
+	                successCallback: function successCallback(result) {
 	                    console.log(result);
 	                    transition.next({
 	                        items: result
@@ -25716,7 +25772,7 @@
 	        }
 	    },
 	    methods: {
-	        buy: function (item) {
+	        buy: function buy(item) {
 	            // if (!item.selected && item.combinations) {
 	            // 	alert("Select options!");
 	            // 	return;
@@ -25769,6 +25825,8 @@
 /***/ },
 /* 63 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	// <template>
 	//     <div>
