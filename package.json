@@ -16,7 +16,6 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-runtime": "^6.9.2",
     "css-loader": "^0.23.1",
-    "jade": "^1.11.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "style-loader": "^0.13.1",
@@ -29,7 +28,6 @@
   },
   "dependencies": {
     "vue": "^1.0.26",
-    "vue-router": "^0.7.13",
-    "vue-scrollbar": "^1.0.4"
+    "vue-router": "^0.7.13"
   }
 }

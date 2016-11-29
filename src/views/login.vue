@@ -1,5 +1,3 @@
-<template>
-<!-- <link type="text/css" rel="stylesheet" href="/css/login.css"> -->
 <style type="text/css" media="screen">
 	main[wrapper] * {
 		box-sizing: border-box;
@@ -238,6 +236,9 @@
 		}
 	} */
 </style>
+
+<template>
+<!-- <link type="text/css" rel="stylesheet" href="/css/login.css"> -->
 <main wrapper login flex center children scroller-y>
 	<div container>
 		<!-- <h1 style="font-family: 'Source Sans Pro', sans-serif;color: white;font-weight:lighter;">Welcome</h1> -->
