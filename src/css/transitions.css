@@ -1,0 +1,36 @@
+* {
+	/* transition: all .15s ease, border-width .1s linear;  */
+}
+
+.fade-transition {
+	transition: all .15s ease, opacity .1s ease, visibility .1s ease;
+	opacity: 1;
+	visibility: visible;
+}
+.fade-enter,
+.fade-leave {
+	opacity: 0 !important;
+	visibility: hidden !important;
+}
+
+
+
+.height-transition {
+	transition: all .15s ease, height .5s ease;
+	height: initial;
+	overflow: hidden;
+}
+.height-enter,
+.height-leave {
+	height: 0 !important;
+	overflow: hidden;
+}
+
+
+[card] > footer [controls] [item] {
+    transition: all .2s ease;
+}
+
+[sidebar] > [menu] [item] {
+    transition: opacity .15s ease-in, background-color .15s ease-in;
+}

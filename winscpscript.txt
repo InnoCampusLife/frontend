@@ -1,2 +1,2 @@
 open frontend_uis
-keepuptodate E:\Programming\Projects\University\UIS\frontend\frontend /home/frontend/test_frontend
+keepuptodate E:\Programming\Projects\University\UIS\frontend\build /home/frontend/test_frontend
