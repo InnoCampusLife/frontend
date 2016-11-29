@@ -294,6 +294,37 @@ var modules = {
 
 					ajax(type, url, data, successCallback, errorCallback);
 				},
+
+				order : {
+					get url() { return modules.innopoints.api.user.url },
+
+					create : function(args) {
+						var
+						type = "POST",
+						url  = this.url + modules.accounts.token + '/orders',
+						data = '';
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					update : function(args) {
+						var
+						type = "POST",
+						url  = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
+						data = '';
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					delete : function(args) {
+						var
+						type = "DELETE",
+						url  = this.url + modules.accounts.token + '/orders/' + args.id,
+						data = '';
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					}
+				}
 			},
 
 			user : {
