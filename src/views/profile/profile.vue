@@ -26,8 +26,6 @@
 				var username = this.$route.params.username;
 				var user = this.$root.user.account;
 
-				console.log(this.$root);
-
 				if (user.username != username) {
 					console.log("called getBio: " + username);
 					user.getBio({username: username},

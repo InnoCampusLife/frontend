@@ -12,7 +12,11 @@
 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }">
 					<span icon class="pe-7s-medal"></span>
 					<p text style="float: left;">Innopoints</p>
-					<span info right style="float: right;display: inline-table;margin: 0;"v-text="user.innopoints.data.amount"></span>
+					<span info right
+						v-show="user.account.isStudent && !user.innopoints.isAdmin"
+						style="float: right;display: inline-table;margin: 0;"
+						v-text="user.innopoints.data.amount"
+					></span>
 				</button>
 			</li>
 			<li>
