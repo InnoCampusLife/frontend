@@ -1,71 +1,101 @@
+<style lang="less" scoped>
+	.flex-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	#heading_activity_category {
+		flex-grow: 1;
+	}
+
+	#wrap_select_activity_category {
+		flex-grow: 1;
+	}
+
+	#activity_category {
+		display: block;
+		width: 100%;
+	}
+</style>
+
 <template>
-	<form id="ip_request">
-		<h2>Request innopoints</h2>
+	<div card class="card">
+		<form id="ip_request">
+			<h1>New Application by {{ user.account.username }}</h1>
 
-		<hr/>
-		<br>
+			<hr>
 
-		<pre v-show="$loadingRouteData">Loading...</pre>
-		<div v-show="!$loadingRouteData" style="width: 100%;">
-
-			Activivty's category
-			<select id="activity_category" style="width: 100%;" v-model="current.category_id" @change="category_changed">
-				<option value="" selected>Choose Category...</option>
-				<option value="">All</option>
-				<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
-			</select>
-
-		</div>
-
-		<br>
-
-		<div>
-			<button type="button" @click="current_users_count_inc">+</button>
-			<button type="button" @click="current_users_count_dec" v-show="current.users.length > 1">-</button>
-			<br>
-			<br>
-
-			<div v-for="i of current.users.length" :style="!current.isPersonal ? 'border: 1px solid; padding: 8px; margin: 4px;' : ''">
-				<!-- <p>{{i}} : {{current.users.length}}</p> -->
-				<legend v-show="!current.isPersonal">
-					<input data-index="{{i}}" type="text" placeholder="username" @input="username_changed" value="{{i ? '' : user.account.username}}">
-				</legend>
-				<br>
-				<div v-show="categorySelected">
-					<div style="width: 100%;">
-						Activity
-						<select class="activity" style="width: 100%;" v-model="current.users[i].activity_id" @change="activity_changed">
-							<option value="" selected>Choose Activity...</option>
-							<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
-						</select>
-					</div>
-					<br>
-					<div v-show="showAmount(current.users[i].activity_id)" style="width: 100%;">
-						<label>
-							Time spent/quantity:
-							<input block type="number" class="amount" min="1" max="365" value="0" v-model="current.users[i].amount">
-						</label>
-					</div>
-
+			<pre v-show="!$loadingRouteData">Loading…</pre>
+			
+			<div v-show="!!$loadingRouteData" id="wrap_activity_category" class="flex-container">
+				<div id="heading_activity_category">
+					<label for="activity_category">Category</label>
+				</div>
+				<div id="wrap_select_activity_category">
+					<select id="activity_category" v-model="current.category_id" @change="category_changed">
+						<option value="" selected>Select Category</option>
+						<option value="">All</option>
+						<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
+					</select>
 				</div>
 			</div>
-			<br>
-		</div>
 
-		<div style="width: 100%;">
-			<label>
-				Attached files:
-				<input block type="file" id="upload" @change="uploaded" id="upload" multiple>
-			</label>
-		</div>
-		<br/>
-		<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
-		<br>
+			<hr>
 
-		<pre v-if="!categorySelected">Select Category!</pre>
-		<pre v-if="categorySelected && !activitySelected">Fill in the rest!</pre>
-		<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
-	</form>
+			<div>
+				<h2>Participants</h2>
+				<!-- <button type="button" @click="current_users_count_inc">+</button> -->
+				<!-- <button type="button" @click="current_users_count_dec" 
+						v-show="current.users.length > 1">-</button> -->
+				<div v-for="i of current.users.length">
+					<!-- <p>{{i}} : {{current.users.length}}</p> -->
+
+					<div>
+						<span>#</span>
+						<span>{{ i + 1 }}</span>
+					</div>
+					
+					<div>
+						<label for="username">Username</label>
+							<input id="username" data-index="{{ i }}" type="text" placeholder="username" @input="username_changed" value="{{ i ? '' : user.account.username }}">
+					</div>
+					
+					<!-- Check is category is selected: v-show="!categorySelected" -->
+
+						<div>
+							<label for="activity">Activity</label>
+							<select id="activity" class="activity" v-model="current.users[i].activity_id" @change="activity_changed">
+								<option value="" selected>Choose Activity...</option>
+								<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
+							</select>
+						</div>
+						
+						<div v-show="!showAmount(current.users[i].activity_id)">
+							<label>
+								Time spent/quantity:
+								<input type="number" class="amount" min="1" max="365" value="0" v-model="current.users[i].amount">
+							</label>
+						</div>
+
+				</div>
+				
+			</div>
+
+			<hr>
+
+			<div>
+				<label>
+					Attached files:
+					<input block type="file" id="upload" @change="uploaded" id="upload" multiple>
+				</label>
+			</div> 
+			<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
+
+			<pre v-if="!categorySelected">Select Category!</pre>
+			<pre v-if="categorySelected && !activitySelected">Fill in the rest!</pre>
+			<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
+		</form>
+	</div>
 </template>
 
 <script>

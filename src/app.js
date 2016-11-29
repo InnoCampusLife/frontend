@@ -3,6 +3,9 @@ var VueRouter = require('vue-router');
 var app       = require('./views/app.vue');
 var newRouter = require('./router-config.js');
 
+import gridlexVars from './styles/gridlex-vars.less'
+import gridlex from './styles/gridlex.less'
+
 Vue.use(VueRouter);
 
 var router = newRouter(new VueRouter({
