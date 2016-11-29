@@ -4,13 +4,15 @@
 
 		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
 
-		<application 
-			v-if="applications.length"
-			v-for="appl in applications | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"
-			:application="appl"
-			:user="user"
-			:success="action_success"
-		></application>
+		<template v-if="applications.length">
+			<application
+				v-for="appl in applications
+				 | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"
+				:application="appl"
+				:user="user"
+				:success="action_success"
+			></application>
+		</template>
 	</div>
 </template>
 
@@ -26,20 +28,6 @@
 			application : require('./application.vue')
 		},
 		methods : {
-		//  For vue 2.0
-		// 	filter_appls() {
-		// 		var query = this.query;
-		// 		console.log(query);
-		// 		if (query) {
-		// 			var _id = this.applications.find(x => x._id.includes(query));
-		// 			var type = this.applications.find(x => x.type.includes(query));
-		// 			var comment = this.applications.find(x => x.comment.includes(query));
-		// 			var creationDate = this.applications.find(x => x.creation_date.includes(query));
-		// 			return TODO
-		// 		}
-		// 		else return this.applications;
-		// 	}
-		// 	
 			action_success : function(id, new_status) {
 				if (this.$route.params.filter === 'all' || this.$route.params.filter == null)
 					this.applications.find(x => x.id == id).status = new_status;
@@ -71,14 +59,13 @@
 					});
 				};
 
-				user.innopoints.api.user.get({
-					successCallback: result => {
-						console.log("called user get");
-						user.innopoints.api.user.applications.get({
-							status: params.filter || null,
-							successCallback: request
-						});
-					}
+				user.innopoints.data.update(result => {
+					console.log(user.innopoints.data);
+					console.log(result);
+					user.innopoints.api.user.applications.get({
+						status: params.filter || null,
+						successCallback: request
+					});
 				});
 			}
 		}

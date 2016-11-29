@@ -427,8 +427,7 @@ var modules = {
 				applications : {
 					get url() { return modules.innopoints.api.user.url },
 
-					get : function (args, that) {
-						if (!that) that = this;
+					get : function (args) {
 						if (args.status == 'all')
 							args.status = null;
 
