@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/build/";
+/******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -25185,13 +25185,15 @@
 					// 	transition.next();
 					// 	return;
 					// }
-					console.log(result);
-					console.log("called appl get");
-					var _length = result.length;
-					result.forEach(function (res) {
-						res.creation_time = res.creation_date;
-						res.creation_date = new Date(res.creation_time * 1000).toDateString();
-					});
+					if (result.length) {
+						console.log(result);
+						console.log("called appl get");
+						var _length = result.length;
+						result.forEach(function (res) {
+							res.creation_time = res.creation_date;
+							res.creation_date = new Date(res.creation_time * 1000).toDateString();
+						});
+					}
 					transition.next({
 						applications: result
 					});
