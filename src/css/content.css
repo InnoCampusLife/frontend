@@ -1,0 +1,83 @@
+body {
+    font-family: "Roboto";
+    background-color: #f1f1f1;
+    overflow: hidden;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+}
+
+main[content] {
+    margin-left: 17rem;
+    height: 100%;
+    font-size: 1.1rem;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    color: #000;
+}
+
+@media screen and (max-width: 768px) {
+    main[content] {
+        margin-left: 0;
+    }
+}
+
+main[content] > div {
+    position: relative;
+    padding: 1rem;
+    /* border-top: 1px solid #fff; */
+}
+
+
+main[content] > header {
+    padding: 1rem 2rem;
+    color: hsla(210, 1%, 1%, 0.7);
+    width: 100%;
+    height: 4rem;
+    font-size: 1rem;
+    background-color: #fff;
+    text-transform: uppercase;
+    /* border-bottom: 1px solid rgba(0,0,0,0.15); */
+    overflow: hidden;
+    z-index: 1;
+    transition: height ease .2s;
+}
+
+main[content] > header[scrolled] {
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+main[content] > header > [content] {
+    height: 100%;
+}
+
+main[content] > header > [content] [item] {
+    border: 0;
+    padding: 0.5rem 1rem;
+    color: #000;
+    background: transparent;
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+main[content] > header > [content] [item]:focus,
+main[content] > header > [content] [item]:hover {
+    color: #fff;
+    background: hsl(226, 100%, 68%);
+}
+
+main[content] > header > [content] [item].v-link-active,
+main[content] > header > [content] [item]:active {
+    color: #fff;
+    background: hsl(226, 100%, 60%);
+}
+
+main[content] > [scroller-y] {
+    height: calc(100% - 4rem);
+}
