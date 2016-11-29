@@ -10,15 +10,14 @@ module.exports = {
             { test: /\.html$/, loader: "html" },
             { test: /\.css$/, loader: 'style!css' },
             { test: /\.vue$/, loader: 'vue' },
-            { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
+            { test: /\.js$/, loader: 'babel?presets[]=es2015', exclude: /node_modules/ }
         ]
     },
     vue: {
         loaders: {
-            js: 'babel'
+            js: 'babel?presets[]=es2015'
         }
     },
-
     historyApiFallback: {
         rewrites: [
             // shows views/landing.html as the landing page
