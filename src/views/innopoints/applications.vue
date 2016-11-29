@@ -57,17 +57,15 @@
 					params.filter = null;
 
 				var request = (result) => {
-					// if (!result.length) {
-					// 	transition.next();
-					// 	return;
-					// }
-					console.log(result);
-					console.log("called appl get");
-					var _length = result.length;
-					result.forEach(res => {
-						res.creation_time = res.creation_date;
-						res.creation_date = new Date(res.creation_time * 1000).toDateString();
-					});
+					if (result.length) {
+						console.log(result);
+						console.log("called appl get");
+						var _length = result.length;
+						result.forEach(function(res) {
+							res.creation_time = res.creation_date;
+							res.creation_date = new Date(res.creation_time * 1000).toDateString();
+						});
+					}
 					transition.next({
 						applications: result
 					});
