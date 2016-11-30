@@ -14,7 +14,7 @@
 		},
 		route: {
 			data : function (transition) {
-				this.user.account.update(transition.next);
+				// this.user.account.update(transition.next);
 				console.log("test route updated!");
 			}
 		}
