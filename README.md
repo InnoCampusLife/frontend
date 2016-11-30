@@ -1,4 +1,5 @@
-# Frontend of Unified Information System of Annapolis University
+# Unified Information System of Innopolis University
+## Frontend module
 
 Install:
 

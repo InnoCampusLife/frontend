@@ -8,8 +8,6 @@
 			console.log('App is awaiting your command!');
 		},
 		data : function () {
-			var Vue = require('Vue');
-			var bus = new Vue();
 			var modules = require('./../modules.js');
 			return {
 				user : {

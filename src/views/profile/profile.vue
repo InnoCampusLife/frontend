@@ -1,5 +1,5 @@
 <template>
-	<div block>
+<!-- 	<div block>
 		<pre>{{ user.username }}</pre>
 		<pre>{{ user.role }}</pre>
 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
@@ -9,43 +9,43 @@
 	</div>
 	<div block>
 		<router-view></router-view>
-	</div>
+	</div> -->
 </template>
 
 <script>
-	module.exports =  {
-		data : function () {
-			return {
-				user : {}
-			}
-		},
-		route: {
-			data  : function (transition) {
-				console.log("Called get in user");
+	// module.exports =  {
+	// 	data : function () {
+	// 		return {
+	// 			user : {}
+	// 		}
+	// 	},
+	// 	route: {
+	// 		data  : function (transition) {
+	// 			console.log("Called get in user");
 
-				var username = this.$route.params.username;
-				var user = this.$root.user.account;
+	// 			var username = this.$route.params.username;
+	// 			var user = this.$root.user.account;
 
-				if (user.username != username) {
-					console.log("called getBio: " + username);
-					user.getBio({username: username},
-						(result) => {
-							console.log(result);
-							transition.next({
-								user : result
-							});
-						}
-					);
-				}
-				else {
-					if (user.id)
-						transition.next({user: user});
-					else
-						user.exists(result => {
-							transition.next({user: user});
-						});
-				}		
-			}
-		}
-	}
+	// 			if (user.username != username) {
+	// 				console.log("called getBio: " + username);
+	// 				user.getBio({username: username},
+	// 					(result) => {
+	// 						console.log(result);
+	// 						transition.next({
+	// 							user : result
+	// 						});
+	// 					}
+	// 				);
+	// 			}
+	// 			else {
+	// 				if (user.id)
+	// 					transition.next({user: user});
+	// 				else
+	// 					user.exists(result => {
+	// 						transition.next({user: user});
+	// 					});
+	// 			}		
+	// 		}
+	// 	}
+	// }
 </script>

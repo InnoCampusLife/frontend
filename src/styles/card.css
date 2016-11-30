@@ -66,7 +66,7 @@
 
 [card] > [content] [block] > *:not(h4) {
     color: hsla(0, 0%, 0%, 0.86);
-    font-weight: 100;
+    font-weight: 300;
 }
 
 [card] > [content] [block] > h4 {
