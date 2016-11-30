@@ -2,9 +2,9 @@
 	<content>
 		<div content slot="header" flex align center>
 			<input item type="search" id="search" inline
-				placeholder="Search shop"
+				placeholder="Search store"
 				v-model="$router.app.query"
-				v-show="$route.path.endsWith('shop')"
+				v-show="$route.path.endsWith('store')"
 			/>
 		</div>
 	</content>

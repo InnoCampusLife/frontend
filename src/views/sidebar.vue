@@ -20,9 +20,9 @@
 				</button>
 			</li>
 			<li>
-				<button item v-link="{ name: 'shop' }">
+				<button item v-link="{ name: 'store' }">
 					<span icon class="pe-7s-shopbag"></span>
-					<p text>Shop</p>
+					<p text>Store</p>
 				</button>
 			</li>
 			<li v-if="user.account.isModerator">
