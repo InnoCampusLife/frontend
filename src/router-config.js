@@ -66,15 +66,15 @@ module.exports = router => {
 						}
 					}
 				},
-				'/shop' : {
-					component: require('./views/shop/main.vue'),
+				'/store' : {
+					component: require('./views/store/main.vue'),
 					subRoutes: {
 						'/' : {
-							component: require('./views/shop/shop.vue'), 
-							name: 'shop'
+							component: require('./views/store/store.vue'), 
+							name: 'store'
 						},
 						'/item/:item' : {
-							component: require('./views/shop/item.vue'),
+							component: require('./views/store/item.vue'),
 							name: 'item'
 						},
 					},
