@@ -14887,12 +14887,12 @@
 	// 	<aside sidebar>
 	// 		<div header v-link="'/'"><span>UIS</span></div header>
 	// 		<ul menu>
-	// 			<li>
+	// <!-- 			<li>
 	// 				<button item v-link="{ name: 'profile', params: { username: user.account.username } }">
 	// 					<span icon class="pe-7s-user"></span>
 	// 					<p text>Profile</p>
 	// 				</button>
-	// 			</li>
+	// 			</li> -->
 	// 			<li>
 	// 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }">
 	// 					<span icon class="pe-7s-medal"></span>
@@ -14947,7 +14947,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<aside sidebar>\n\t<div header v-link=\"'/'\"><span>UIS</span></div header>\n\t<ul menu>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'profile', params: { username: user.account.username } }\">\n\t\t\t\t<span icon class=\"pe-7s-user\"></span>\n\t\t\t\t<p text>Profile</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\">\n\t\t\t\t<span icon class=\"pe-7s-medal\"></span>\n\t\t\t\t<p text style=\"float: left;\">Innopoints</p>\n\t\t\t\t<span info right\n\t\t\t\t\tv-show=\"user.account.isStudent && !user.innopoints.isAdmin\"\n\t\t\t\t\tstyle=\"float: right;display: inline-table;margin: 0;\"\n\t\t\t\t\tv-text=\"user.innopoints.data.amount\"\n\t\t\t\t></span>\n\t\t\t</button>\n\t\t</li>\n\t\t<li>\n\t\t\t<button item v-link=\"{ name: 'store' }\">\n\t\t\t\t<span icon class=\"pe-7s-shopbag\"></span>\n\t\t\t\t<p text>Store</p>\n\t\t\t</button>\n\t\t</li>\n\t\t<li v-if=\"user.account.isModerator\">\n\t\t\t<button item v-link=\"{ name: 'accounts' }\">\n\t\t\t\t<span icon class=\"pe-7s-users\"></span>\n\t\t\t\t<p text>Accounts</p>\n\t\t\t</button>\n\t\t</li>\n\n\t\t<li>\n\t\t\t<button item bottom logout id=\"logout\" @click=\"logout\" block>\n\t\t\t\t<span icon class=\"pe-7s-upload pe-rotate-270\"></span>\n\t\t\t\t<p text>Log out</p>\n\t\t\t</button>\n\t\t</li>\n\t</ul>\n</aside>\n";
+	module.exports = "\n\t<aside sidebar>\n\t\t<div header v-link=\"'/'\"><span>UIS</span></div header>\n\t\t<ul menu>\n<!-- \t\t\t<li>\n\t\t\t\t<button item v-link=\"{ name: 'profile', params: { username: user.account.username } }\">\n\t\t\t\t\t<span icon class=\"pe-7s-user\"></span>\n\t\t\t\t\t<p text>Profile</p>\n\t\t\t\t</button>\n\t\t\t</li> -->\n\t\t\t<li>\n\t\t\t\t<button item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\">\n\t\t\t\t\t<span icon class=\"pe-7s-medal\"></span>\n\t\t\t\t\t<p text style=\"float: left;\">Innopoints</p>\n\t\t\t\t\t<span info right\n\t\t\t\t\t\tv-show=\"user.account.isStudent && !user.innopoints.isAdmin\"\n\t\t\t\t\t\tstyle=\"float: right;display: inline-table;margin: 0;\"\n\t\t\t\t\t\tv-text=\"user.innopoints.data.amount\"\n\t\t\t\t\t></span>\n\t\t\t\t</button>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<button item v-link=\"{ name: 'store' }\">\n\t\t\t\t\t<span icon class=\"pe-7s-shopbag\"></span>\n\t\t\t\t\t<p text>Store</p>\n\t\t\t\t</button>\n\t\t\t</li>\n\t\t\t<li v-if=\"user.account.isModerator\">\n\t\t\t\t<button item v-link=\"{ name: 'accounts' }\">\n\t\t\t\t\t<span icon class=\"pe-7s-users\"></span>\n\t\t\t\t\t<p text>Accounts</p>\n\t\t\t\t</button>\n\t\t\t</li>\n\n\t\t\t<li>\n\t\t\t\t<button item bottom logout id=\"logout\" @click=\"logout\" block>\n\t\t\t\t\t<span icon class=\"pe-7s-upload pe-rotate-270\"></span>\n\t\t\t\t\t<p text>Log out</p>\n\t\t\t\t</button>\n\t\t\t</li>\n\t\t</ul>\n\t</aside>\n";
 
 /***/ },
 /* 24 */
@@ -15205,12 +15205,12 @@
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	// <template>
 	// 	<content>
 	// 		<div slot="header">
-	//
+	// 			<div style="padding: 1rem;height: 4rem;display: block;font-size: 1.5rem;line-height: 2rem;">{{ user.username }}'s profile</div>
 	// 		</div>
 	// 	</content>
 	// </template>
@@ -15219,6 +15219,33 @@
 	var content = __webpack_require__(25);
 
 	module.exports = {
+		data: function data() {
+			return {
+				user: {}
+			};
+		},
+		route: {
+			data: function data(transition) {
+				console.log("Called get in user");
+
+				var username = this.$route.params.username;
+				var user = this.$root.user.account;
+
+				if (user.username != username) {
+					console.log("called getBio: " + username);
+					user.getBio({ username: username }, function (result) {
+						console.log(result);
+						transition.next({
+							user: result
+						});
+					});
+				} else {
+					if (user.id) transition.next({ user: user });else user.exists(function (result) {
+						transition.next({ user: user });
+					});
+				}
+			}
+		},
 		components: {
 			content: content
 		}
@@ -15229,7 +15256,7 @@
 /* 36 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t\n\t</div>\n</content>\n";
+	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t<div style=\"padding: 1rem;height: 4rem;display: block;font-size: 1.5rem;line-height: 2rem;\">{{ user.username }}'s profile</div>\n\t</div>\n</content>\n";
 
 /***/ },
 /* 37 */
@@ -15270,10 +15297,8 @@
 /* 38 */
 /***/ function(module, exports) {
 
-	"use strict";
-
 	// <template>
-	// 	<div block>
+	// <!-- 	<div block>
 	// 		<pre>{{ user.username }}</pre>
 	// 		<pre>{{ user.role }}</pre>
 	// 		<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
@@ -15283,46 +15308,53 @@
 	// 	</div>
 	// 	<div block>
 	// 		<router-view></router-view>
-	// 	</div>
+	// 	</div> -->
 	// </template>
 	//
 	// <script>
-	module.exports = {
-		data: function data() {
-			return {
-				user: {}
-			};
-		},
-		route: {
-			data: function data(transition) {
-				console.log("Called get in user");
+	// module.exports =  {
+	// 	data : function () {
+	// 		return {
+	// 			user : {}
+	// 		}
+	// 	},
+	// 	route: {
+	// 		data  : function (transition) {
+	// 			console.log("Called get in user");
 
-				var username = this.$route.params.username;
-				var user = this.$root.user.account;
+	// 			var username = this.$route.params.username;
+	// 			var user = this.$root.user.account;
 
-				if (user.username != username) {
-					console.log("called getBio: " + username);
-					user.getBio({ username: username }, function (result) {
-						console.log(result);
-						transition.next({
-							user: result
-						});
-					});
-				} else {
-					if (user.id) transition.next({ user: user });else user.exists(function (result) {
-						transition.next({ user: user });
-					});
-				}
-			}
-		}
-	};
+	// 			if (user.username != username) {
+	// 				console.log("called getBio: " + username);
+	// 				user.getBio({username: username},
+	// 					(result) => {
+	// 						console.log(result);
+	// 						transition.next({
+	// 							user : result
+	// 						});
+	// 					}
+	// 				);
+	// 			}
+	// 			else {
+	// 				if (user.id)
+	// 					transition.next({user: user});
+	// 				else
+	// 					user.exists(result => {
+	// 						transition.next({user: user});
+	// 					});
+	// 			}		
+	// 		}
+	// 	}
+	// }
 	// </script>
+	"use strict";
 
 /***/ },
 /* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div block>\n\t<pre>{{ user.username }}</pre>\n\t<pre>{{ user.role }}</pre>\n\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t<pre v-show=\"user.firstName\">{{ user.firstName + \" \" + user.lastName }}</pre>\n\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n</div>\n<div block>\n\t<router-view></router-view>\n</div>\n";
+	module.exports = "\r\n<!-- \t<div block>\r\n\t\t<pre>{{ user.username }}</pre>\r\n\t\t<pre>{{ user.role }}</pre>\r\n\t\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\r\n\t\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\r\n\t\t<pre v-show=\"user.firstName\">{{ user.firstName + \" \" + user.lastName }}</pre>\r\n\t\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\r\n\t</div>\r\n\t<div block>\r\n\t\t<router-view></router-view>\r\n\t</div> -->\r\n";
 
 /***/ },
 /* 40 */
