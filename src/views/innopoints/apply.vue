@@ -1,37 +1,20 @@
 <style lang="less" scoped>
-	.flex-container {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	#heading_activity_category {
-		flex-grow: 1;
-	}
-
-	#wrap_select_activity_category {
-		flex-grow: 1;
-	}
-
-	#activity_category {
-		display: block;
-		width: 100%;
-	}
 </style>
 
 <template>
 	<div card class="card">
 		<form id="ip_request">
-			<h1>New Application by {{ user.account.username }}</h1>
+			<h1>New Application</h1>
 
 			<hr>
 
-			<pre v-show="!$loadingRouteData">Loading…</pre>
+			<p v-show="!$loadingRouteData">Loading…</p>
 			
-			<div v-show="!!$loadingRouteData" id="wrap_activity_category" class="flex-container">
-				<div id="heading_activity_category">
+			<div v-show="!!$loadingRouteData" class="grid-12_xs-1">
+				<div class="col-4">
 					<label for="activity_category">Category</label>
 				</div>
-				<div id="wrap_select_activity_category">
+				<div class="col-8">
 					<select id="activity_category" v-model="current.category_id" @change="category_changed">
 						<option value="" selected>Select Category</option>
 						<option value="">All</option>
@@ -49,15 +32,9 @@
 						v-show="current.users.length > 1">-</button> -->
 				<div v-for="i of current.users.length">
 					<!-- <p>{{i}} : {{current.users.length}}</p> -->
-
-					<div>
-						<span>#</span>
-						<span>{{ i + 1 }}</span>
-					</div>
 					
 					<div>
-						<label for="username">Username</label>
-							<input id="username" data-index="{{ i }}" type="text" placeholder="username" @input="username_changed" value="{{ i ? '' : user.account.username }}">
+							<input data-index="{{ i }}" type="text" placeholder="username" @input="username_changed" value="{{i ? '' : user.account.username}}">
 					</div>
 					
 					<!-- Check is category is selected: v-show="!categorySelected" -->
@@ -65,16 +42,14 @@
 						<div>
 							<label for="activity">Activity</label>
 							<select id="activity" class="activity" v-model="current.users[i].activity_id" @change="activity_changed">
-								<option value="" selected>Choose Activity...</option>
+								<option value="" selected>Choose Activity</option>
 								<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
 							</select>
 						</div>
 						
 						<div v-show="!showAmount(current.users[i].activity_id)">
-							<label>
-								Time spent/quantity:
-								<input type="number" class="amount" min="1" max="365" value="0" v-model="current.users[i].amount">
-							</label>
+							<label for="amount">Time spent/quantity:</label>
+								<input id="amount" type="number" class="amount" min="1" max="365" value="0" v-model="current.users[i].amount">
 						</div>
 
 				</div>
