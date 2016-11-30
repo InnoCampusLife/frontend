@@ -1,11 +1,15 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    main:   './src/main.js',
+    vendor: './src/vendor.js'
+  },
   output: {
     path: './build/',
     // publicPath: 'build',
-    filename: 'bundle.js'
+    filename: 'js/[name].bundle.js',
+    chunkFilename: 'js/[id].chunk.js' 
   },
   module: {
     loaders: [
@@ -33,7 +37,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin("style.css")
+    new ExtractTextPlugin("css/[name].bundle.css")
   ],
   vue: {
     loaders: {

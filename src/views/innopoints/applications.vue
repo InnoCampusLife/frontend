@@ -4,7 +4,7 @@
 
 		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
 
-		<template v-if="applications.length">
+		<template v-if="!applications.length">
 			<application
 				v-for="appl in applications
 				 | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"

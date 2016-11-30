@@ -1,12 +1,15 @@
 module.exports = {
-	get : function (key) {
+	
+	get(key) {
 		return localStorage.getItem(key);
 	},
 
-	set : function (key, value) {
+	set(key, value) {
 		if (value) localStorage.setItem(key, value);
 		return localStorage.getItem(key);
 	},
 
-	clear : function () { localStorage.clear(); }
+	clear() { 
+		localStorage.clear(); 
+	}
 }

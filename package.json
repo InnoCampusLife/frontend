@@ -1,13 +1,13 @@
 {
   "name": "UIS",
   "version": "2.0.1",
-  "description": "Unified Information System's portal of Innopolis University.",
+  "description": "Unified Information System of Innopolis University.",
   "main": "frontend/app.js",
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --inline --content-base build/ --historyApiFallback"
   },
-  "author": "Alexey Iskhakov",
+  "author": "Alexey Iskhakov, @bulnab",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.10.4",
