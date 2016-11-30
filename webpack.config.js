@@ -1,3 +1,5 @@
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = {
   entry: './src/app.js',
   output: {
@@ -7,13 +9,32 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.html$/, loader: "html" },
-      { test: /\.css$/,  loader: 'style!css' },
-      { test: /\.vue$/,  loader: 'vue' },
-      { test: /\.js$/,   loader: 'babel?presets[]=es2015', exclude: /node_modules/ },
-      { test: /\.less$/, loader: "style!css!less" }
+      { 
+        test: /\.html$/, 
+        loader: "html" 
+      },
+      { 
+        test: /\.vue$/,  
+        loader: 'vue' 
+      },
+      { 
+        test: /\.js$/,   
+        loader: 'babel?presets[]=es2015', 
+        exclude: /node_modules/ 
+      },
+      { 
+        test: /\.css$/,  
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader") 
+      },
+      { 
+        test: /\.less$/, 
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader") 
+      }
     ]
   },
+  plugins: [
+    new ExtractTextPlugin("style.css")
+  ],
   vue: {
     loaders: {
       js: 'babel?presets[]=es2015'

@@ -1,10 +1,13 @@
+'use strict';
+
 var Vue       = require('vue');
 var VueRouter = require('vue-router');
 var app       = require('./views/app.vue');
 var newRouter = require('./router-config.js');
 
-import gridlexVars from './styles/gridlex-vars.less'
-import gridlex from './styles/gridlex.less'
+require('../node_modules/normalize.css/normalize.css')
+require('../node_modules/gridlex/src/gridlex-vars.less')
+require('../node_modules/gridlex/src/gridlex.less')
 
 Vue.use(VueRouter);
 
@@ -15,25 +18,19 @@ var router = newRouter(new VueRouter({
 
 router.start(app, 'app');
 
-
-
-//Polyfills
-//
+// Polyfills
 
 if (!String.prototype.includes) {
 	String.prototype.includes = () => {
-		'use strict';
 		return String.prototype.indexOf.apply(this, arguments) !== -1;
 	};
 }
 
 if (!Array.prototype.includes) {
 	Array.prototype.includes = (searchElement /*, fromIndex*/) => {
-		'use strict';
 		if (this == null) {
 			throw new TypeError('Array.prototype.includes called on null or undefined');
 		}
-		
 		var O = Object(this);
 		var len = parseInt(O.length, 10) || 0;
 		if (len === 0) {
