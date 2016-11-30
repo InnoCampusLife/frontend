@@ -2,12 +2,12 @@
 	<aside sidebar>
 		<div header v-link="'/'"><span>UIS</span></div header>
 		<ul menu>
-			<li>
+<!-- 			<li>
 				<button item v-link="{ name: 'profile', params: { username: user.account.username } }">
 					<span icon class="pe-7s-user"></span>
 					<p text>Profile</p>
 				</button>
-			</li>
+			</li> -->
 			<li>
 				<button item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }">
 					<span icon class="pe-7s-medal"></span>
