@@ -5,9 +5,7 @@ var VueRouter = require('vue-router');
 var app       = require('./views/app.vue');
 var newRouter = require('./router-config.js');
 
-require('../node_modules/normalize.css/normalize.css')
-require('../node_modules/gridlex/src/gridlex-vars.less')
-require('../node_modules/gridlex/src/gridlex.less')
+require('./styles/main.less')
 
 Vue.use(VueRouter);
 

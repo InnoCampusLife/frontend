@@ -53,8 +53,6 @@
 	var newRouter = __webpack_require__(12);
 
 	__webpack_require__(75);
-	__webpack_require__(78);
-	__webpack_require__(80);
 
 	Vue.use(VueRouter);
 
@@ -65,7 +63,7 @@
 
 	router.start(app, 'app');
 
-	//Polyfills
+	// Polyfills
 
 	if (!String.prototype.includes) {
 		String.prototype.includes = function () {
@@ -24070,12 +24068,10 @@
 		get: function get(key) {
 			return localStorage.getItem(key);
 		},
-
 		set: function set(key, value) {
 			if (value) localStorage.setItem(key, value);
 			return localStorage.getItem(key);
 		},
-
 		clear: function clear() {
 			localStorage.clear();
 		}
@@ -26298,7 +26294,7 @@
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, "input[_v-726f9d17],\nselect[_v-726f9d17] {\n  width: 100%;\n}\n", ""]);
 
 	// exports
 
@@ -26310,81 +26306,141 @@
 	'use strict';
 
 	// <style lang="less" scoped>
+	//
+	// 	input, select {
+	// 		width: 100%;
+	// 	}
+	//
 	// </style>
 	//
 	// <template>
-	// 	<div card class="card">
-	// 		<form id="ip_request">
-	// 			<h1>New Application</h1>
+	// 	<div>
 	//
-	// 			<hr>
+	// 		<!-- While loading -->
+	// 		<div>
+	// 			<p v-show="$loadingRouteData">Loading…</p>
+	// 		</div>
 	//
-	// 			<p v-show="!$loadingRouteData">Loading…</p>
+	// 		<!-- When loaded -->
+	// 		<div v-show="!$loadingRouteData" class="card" card>
+	// 			<form id="ip_request">
 	//
-	// 			<div v-show="!!$loadingRouteData" class="grid-12_xs-1">
-	// 				<div class="col-4">
-	// 					<label for="activity_category">Category</label>
+	// 				<h1>New Application</h1>
+	//
+	// 				<hr>
+	//
+	// 				<div  class="grid grid-middle">
+	// 					<div class="col">
+	// 						<label for="activity_category">
+	// 							<h2>Category</h2>
+	// 						</label>
+	// 					</div>
+	// 					<div class="col">
+	// 						<select id="activity_category" v-model="current.category_id" @change="category_changed">
+	// 							<option value="" selected>Select Category</option>
+	// 							<option value="">All</option>
+	// 							<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
+	// 						</select>
+	// 					</div>
 	// 				</div>
-	// 				<div class="col-8">
-	// 					<select id="activity_category" v-model="current.category_id" @change="category_changed">
-	// 						<option value="" selected>Select Category</option>
-	// 						<option value="">All</option>
-	// 						<option v-for="category in categories" value="{{category.id}}">{{ category.title }}</option>
-	// 					</select>
-	// 				</div>
-	// 			</div>
 	//
-	// 			<hr>
+	// 				<hr>
 	//
-	// 			<div>
-	// 				<h2>Participants</h2>
-	// 				<!-- <button type="button" @click="current_users_count_inc">+</button> -->
-	// 				<!-- <button type="button" @click="current_users_count_dec" 
-	// 						v-show="current.users.length > 1">-</button> -->
-	// 				<div v-for="i of current.users.length">
-	// 					<!-- <p>{{i}} : {{current.users.length}}</p> -->
+	// 				<div>
+	// 					<h2>Participants</h2>
+	// 					<!-- <button type="button" @click="current_users_count_inc">+</button> -->
+	// 					<!-- <button type="button" @click="current_users_count_dec" 
+	// 							v-show="current.users.length > 1">-</button> -->
+	// 					<div v-for="i of current.users.length">
+	// 						<!-- <p>{{i}} : {{current.users.length}}</p> -->
 	//
-	// 					<div>
-	// 							<input data-index="{{ i }}" type="text" placeholder="username" @input="username_changed" value="{{i ? '' : user.account.username}}">
+	// 						<div class="grid grid-middle">
+	// 								<div class="col">
+	// 									<span>№</span>
+	// 								</div>
+	// 								<div class="col">
+	// 									<span>{{ i }}</span>
+	// 								</div>
+	// 							</div>
+	//
+	// 						<div class="grid grid-middle">
+	// 							<div class="col">
+	// 								<label for="username_{{ i }}">Username</label>
+	// 							</div>
+	// 							<div class="col">
+	// 								<input id="username_{{ i }}" data-index="{{ i }}" type="text" placeholder="username" 
+	// 										@input="username_changed" value="{{ i ? '' : user.account.username }}">
+	// 							</div>
+	// 						</div>
+	//
+	// 						<!-- Check is category is selected: v-show="!categorySelected" -->
+	//
+	// 							<div class="grid grid-middle">
+	// 								<div class="col">
+	// 									<label for="activity_{{ i }}">Activity</label>
+	// 								</div>
+	// 								<div class="col">
+	// 									<select id="activity_{{ i }}" class="activity" 
+	// 											v-model="current.users[i].activity_id" @change="activity_changed">
+	// 										<option value="" selected>Choose Activity</option>
+	// 										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
+	// 									</select>
+	// 								</div>
+	// 							</div>
+	//
+	// 							<div class="grid grid-middle" v-show="!showAmount(current.users[i].activity_id)">
+	// 								<div class="col">
+	// 									<label for="amount_{{ i }}">Quantity</label>
+	// 								</div>
+	// 								<div class="col">
+	// 									<input id="amount_{{ i }}" type="number" class="amount" value="1" 
+	// 											min="1" max="365" value="0" v-model="current.users[i].amount">
+	// 								</div>
+	// 							</div>
+	//
+	// 							<div class="grid grid-middle">
+	// 								<div class="col">
+	// 									<span>Innopoints</span>
+	// 								</div>
+	// 								<div class="col">
+	// 									<span>9000</span>
+	// 								</div>
+	// 							</div>
+	//
 	// 					</div>
 	//
-	// 					<!-- Check is category is selected: v-show="!categorySelected" -->
-	//
-	// 						<div>
-	// 							<label for="activity">Activity</label>
-	// 							<select id="activity" class="activity" v-model="current.users[i].activity_id" @change="activity_changed">
-	// 								<option value="" selected>Choose Activity</option>
-	// 								<option v-for="activity in activities" value="{{activity.id}}">{{ activity.title }}</option>
-	// 							</select>
-	// 						</div>
-	//
-	// 						<div v-show="!showAmount(current.users[i].activity_id)">
-	// 							<label for="amount">Time spent/quantity:</label>
-	// 								<input id="amount" type="number" class="amount" min="1" max="365" value="0" v-model="current.users[i].amount">
-	// 						</div>
-	//
 	// 				</div>
 	//
-	// 			</div>
+	// 				<hr>
 	//
-	// 			<hr>
+	// 				<div>
+	// 					<label for="upload">
+	// 						<h2>Files</h2>
+	// 					</label>
+	// 					<input id="upload" type="file" @change="uploaded" multiple>
+	// 				</div> 
 	//
-	// 			<div>
-	// 				<label>
-	// 					Attached files:
-	// 					<input block type="file" id="upload" @change="uploaded" id="upload" multiple>
-	// 				</label>
-	// 			</div> 
-	// 			<textarea style="max-width: 100%; min-width: 100%; transition: height 0s" id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
+	// 				<hr>
 	//
-	// 			<pre v-if="!categorySelected">Select Category!</pre>
-	// 			<pre v-if="categorySelected && !activitySelected">Fill in the rest!</pre>
-	// 			<button v-if="activitySelected" block type="button" @click="accept" id="accept">accept</button>
-	// 		</form>
+	// 				<div>
+	// 					<label for="comment">
+	// 						<h2>Comment</h2>
+	// 					</label>
+	// 					<textarea id="comment" placeholder="Comment here..." v-model="current.comment"></textarea>
+	// 				</div>
+	//
+	// 				<hr>
+	//
+	// 				<pre v-if="!categorySelected">Select Category!</pre>
+	// 				<pre v-if="categorySelected && !activitySelected">Fill in the rest!</pre>
+	// 				<button v-if="activitySelected" type="button" @click="accept" id="accept">accept</button>
+	// 			</form>
+	// 		</div>
 	// 	</div>
 	// </template>
 	//
 	// <script>
+
 	module.exports = {
 		data: function data() {
 			var user = this.$root.user;
@@ -26526,7 +26582,7 @@
 /* 65 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n<div card=\"\" class=\"card\" _v-726f9d17=\"\">\n\t<form id=\"ip_request\" _v-726f9d17=\"\">\n\t\t<h1 _v-726f9d17=\"\">New Application</h1>\n\n\t\t<hr _v-726f9d17=\"\">\n\n\t\t<p v-show=\"!$loadingRouteData\" _v-726f9d17=\"\">Loading…</p>\n\t\t\n\t\t<div v-show=\"!!$loadingRouteData\" class=\"grid-12_xs-1\" _v-726f9d17=\"\">\n\t\t\t<div class=\"col-4\" _v-726f9d17=\"\">\n\t\t\t\t<label for=\"activity_category\" _v-726f9d17=\"\">Category</label>\n\t\t\t</div>\n\t\t\t<div class=\"col-8\" _v-726f9d17=\"\">\n\t\t\t\t<select id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Select Category</option>\n\t\t\t\t\t<option value=\"\" _v-726f9d17=\"\">All</option>\n\t\t\t\t\t<option v-for=\"category in categories\" value=\"{{category.id}}\" _v-726f9d17=\"\">{{ category.title }}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr _v-726f9d17=\"\">\n\n\t\t<div _v-726f9d17=\"\">\n\t\t\t<h2 _v-726f9d17=\"\">Participants</h2>\n\t\t\t<!-- <button type=\"button\" @click=\"current_users_count_inc\">+</button> -->\n\t\t\t<!-- <button type=\"button\" @click=\"current_users_count_dec\" \n\t\t\t\t\tv-show=\"current.users.length > 1\">-</button> -->\n\t\t\t<div v-for=\"i of current.users.length\" _v-726f9d17=\"\">\n\t\t\t\t<!-- <p>{{i}} : {{current.users.length}}</p> -->\n\t\t\t\t\n\t\t\t\t<div _v-726f9d17=\"\">\n\t\t\t\t\t\t<input data-index=\"{{ i }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{i ? '' : user.account.username}}\" _v-726f9d17=\"\">\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t<!-- Check is category is selected: v-show=\"!categorySelected\" -->\n\n\t\t\t\t\t<div _v-726f9d17=\"\">\n\t\t\t\t\t\t<label for=\"activity\" _v-726f9d17=\"\">Activity</label>\n\t\t\t\t\t\t<select id=\"activity\" class=\"activity\" v-model=\"current.users[i].activity_id\" @change=\"activity_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t<option v-for=\"activity in activities\" value=\"{{activity.id}}\" _v-726f9d17=\"\">{{ activity.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t\t<div v-show=\"!showAmount(current.users[i].activity_id)\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<label for=\"amount\" _v-726f9d17=\"\">Time spent/quantity:</label>\n\t\t\t\t\t\t\t<input id=\"amount\" type=\"number\" class=\"amount\" min=\"1\" max=\"365\" value=\"0\" v-model=\"current.users[i].amount\" _v-726f9d17=\"\">\n\t\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\n\t\t<hr _v-726f9d17=\"\">\n\n\t\t<div _v-726f9d17=\"\">\n\t\t\t<label _v-726f9d17=\"\">\n\t\t\t\tAttached files:\n\t\t\t\t<input block=\"\" type=\"file\" id=\"upload\" @change=\"uploaded\" multiple=\"\" _v-726f9d17=\"\">\n\t\t\t</label>\n\t\t</div> \n\t\t<textarea style=\"max-width: 100%; min-width: 100%; transition: height 0s\" id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\" _v-726f9d17=\"\"></textarea>\n\n\t\t<pre v-if=\"!categorySelected\" _v-726f9d17=\"\">Select Category!</pre>\n\t\t<pre v-if=\"categorySelected &amp;&amp; !activitySelected\" _v-726f9d17=\"\">Fill in the rest!</pre>\n\t\t<button v-if=\"activitySelected\" block=\"\" type=\"button\" @click=\"accept\" id=\"accept\" _v-726f9d17=\"\">accept</button>\n\t</form>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n<div _v-726f9d17=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-726f9d17=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-726f9d17=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" card=\"\" _v-726f9d17=\"\">\n\t\t<form id=\"ip_request\" _v-726f9d17=\"\">\n\n\t\t\t<h1 _v-726f9d17=\"\">New Application</h1>\n\n\t\t\t<hr _v-726f9d17=\"\">\n\t\t\t\n\t\t\t<div class=\"grid grid-middle\" _v-726f9d17=\"\">\n\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t<label for=\"activity_category\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<h2 _v-726f9d17=\"\">Category</h2>\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t<select id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Select Category</option>\n\t\t\t\t\t\t<option value=\"\" _v-726f9d17=\"\">All</option>\n\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-726f9d17=\"\">{{ c.title }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<hr _v-726f9d17=\"\">\n\n\t\t\t<div _v-726f9d17=\"\">\n\t\t\t\t<h2 _v-726f9d17=\"\">Participants</h2>\n\t\t\t\t<!-- <button type=\"button\" @click=\"current_users_count_inc\">+</button> -->\n\t\t\t\t<!-- <button type=\"button\" @click=\"current_users_count_dec\" \n\t\t\t\t\t\tv-show=\"current.users.length > 1\">-</button> -->\n\t\t\t\t<div v-for=\"i of current.users.length\" _v-726f9d17=\"\">\n\t\t\t\t\t<!-- <p>{{i}} : {{current.users.length}}</p> -->\n\n\t\t\t\t\t<div class=\"grid grid-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span _v-726f9d17=\"\">№</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span _v-726f9d17=\"\">{{ i }}</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t\t<div class=\"grid grid-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label for=\"username_{{ i }}\" _v-726f9d17=\"\">Username</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<input id=\"username_{{ i }}\" data-index=\"{{ i }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ i ? '' : user.account.username }}\" _v-726f9d17=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t\t<!-- Check is category is selected: v-show=\"!categorySelected\" -->\n\n\t\t\t\t\t\t<div class=\"grid grid-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<label for=\"activity_{{ i }}\" _v-726f9d17=\"\">Activity</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<select id=\"activity_{{ i }}\" class=\"activity\" v-model=\"current.users[i].activity_id\" @change=\"activity_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-726f9d17=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"grid grid-middle\" v-show=\"!showAmount(current.users[i].activity_id)\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<label for=\"amount_{{ i }}\" _v-726f9d17=\"\">Quantity</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<input id=\"amount_{{ i }}\" type=\"number\" class=\"amount\" value=\"1\" min=\"1\" max=\"365\" v-model=\"current.users[i].amount\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"grid grid-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span _v-726f9d17=\"\">Innopoints</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span _v-726f9d17=\"\">9000</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<hr _v-726f9d17=\"\">\n\n\t\t\t<div _v-726f9d17=\"\">\n\t\t\t\t<label for=\"upload\" _v-726f9d17=\"\">\n\t\t\t\t\t<h2 _v-726f9d17=\"\">Files</h2>\n\t\t\t\t</label>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-726f9d17=\"\">\n\t\t\t</div> \n\n\t\t\t<hr _v-726f9d17=\"\">\n\n\t\t\t<div _v-726f9d17=\"\">\n\t\t\t\t<label for=\"comment\" _v-726f9d17=\"\">\n\t\t\t\t\t<h2 _v-726f9d17=\"\">Comment</h2>\n\t\t\t\t</label>\n\t\t\t\t<textarea id=\"comment\" placeholder=\"Comment here...\" v-model=\"current.comment\" _v-726f9d17=\"\"></textarea>\n\t\t\t</div>\n\n\t\t\t<hr _v-726f9d17=\"\">\n\n\t\t\t<pre v-if=\"!categorySelected\" _v-726f9d17=\"\">Select Category!</pre>\n\t\t\t<pre v-if=\"categorySelected &amp;&amp; !activitySelected\" _v-726f9d17=\"\">Fill in the rest!</pre>\n\t\t\t<button v-if=\"activitySelected\" type=\"button\" @click=\"accept\" id=\"accept\" _v-726f9d17=\"\">accept</button>\n\t\t</form>\n\t</div>\n</div>\n";
 
 /***/ },
 /* 66 */
@@ -26783,21 +26839,6 @@
 
 /***/ },
 /* 75 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 76 */,
-/* 77 */,
-/* 78 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 79 */,
-/* 80 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
