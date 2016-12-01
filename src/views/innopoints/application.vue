@@ -24,7 +24,9 @@
 		<section content v-show="application.comment">
 			<div block>
 				<h4>Comment: </h4>
-				<p v-for="comment in application.comment.split('\n')" track-by="$index">{{comment}}</p>
+				<template v-if="application.comment && application.comment.length">
+					<p v-for="comment in application.comment.split('\n')" track-by="$index">{{comment}}</p>
+				</template>
 			</div>
 		</section>
 		<section content v-show="application.files.length > 0">

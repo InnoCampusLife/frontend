@@ -2,6 +2,7 @@ body {
     font-family: "Roboto";
     background-color: #f1f1f1;
     overflow: hidden;
+    height: 100%;
 }
 
 button {
@@ -79,6 +80,6 @@ main[content] > header > [content] [item]:active {
     background: hsl(270, 75%, 61%);
 }
 
-main[content] > [scroller-y] {
+main[content] > header + [scroller-y] {
     height: calc(100% - 4rem);
 }
