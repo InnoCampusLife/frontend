@@ -47,27 +47,28 @@
 
 	'use strict';
 
-	__webpack_require__(85);
-	__webpack_require__(87);
-	__webpack_require__(89);
+	// Styles
+	__webpack_require__(82);
+	__webpack_require__(84);
+	__webpack_require__(86);
 
 /***/ },
 
-/***/ 85:
+/***/ 82:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
 
-/***/ 87:
+/***/ 84:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
 
-/***/ 89:
+/***/ 86:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
