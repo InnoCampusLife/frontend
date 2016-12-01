@@ -4,7 +4,7 @@
 
 		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
 
-		<template v-if="!applications.length">
+		<template v-if="applications.length">
 			<application
 				v-for="appl in applications
 				 | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"
@@ -45,17 +45,17 @@
 					params.filter = null;
 
 				var request = (result) => {
-					if (result.length) {
+					if (result.applications.length) {
 						console.log(result);
 						console.log("called appl get");
-						var _length = result.length;
-						result.forEach(function(res) {
+						var _length = result.applications.length;
+						result.applications.forEach(function(res) {
 							res.creation_time = res.creation_date;
-							res.creation_date = new Date(res.creation_time * 1000).toDateString();
+							res.creation_date = new Date(res.creation_time * 1000).toLocaleString('ru');
 						});
 					}
 					transition.next({
-						applications: result
+						applications: result.applications
 					});
 				};
 

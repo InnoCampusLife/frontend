@@ -5,7 +5,7 @@
 		<h4 v-text="item.category.title"></h4>
 		<p v-show="item.possible_joint_purchase">This item can be bought by a group of {{ item.max_buyers }}!</p>
 		<div v-for="option in item.options" style="display: block">
-			<select name="option.title" :id="option.title" :data-index="$index" @change="onselect(item, $event)">
+			<select :name="option.title" :id="option.title" :data-index="$index" @change="onselect(item, $event)">
 				<option value="">Choose {{option.title}}</option>
 				<option v-for="value in option.values" :value="value">{{ value }}</option>
 			</select>
@@ -21,29 +21,16 @@
 		props: ['item', 'onselect'],
 		methods: {
 			onselect(item, e) {
-				var index = e.target.dataset.index;
-				item.options[index].selected = !!e.target.value;
+				if (!item.selected || !item.selected.options) item.selected = {options: {}};
 
-				var selectedItems = 0;
-				item.options.forEach(option => {
-					if (option.selected) selectedItems++;
-				});
+				if (e.target.value !== "")
+					item.selected.options[e.target.name] = e.target.value;
+				else delete item.selected.options[e.target.name];
 
-				if (selectedItems == item.options.length) {
-					item.selected = {
-						id: item.combinations
-						//TODO
-					}
-				} else {
-					item.selected = false;
-				}
-				console.log(item.selected);
-
-				if (item.selected) {
+				if (Object.keys(item.selected.options).length == item.options.length)
 					document.getElementById(item.title).style.display = "block";
-				} else {
+				else
 					document.getElementById(item.title).style.display = "none";
-				}
 			}
 		}
 	}
