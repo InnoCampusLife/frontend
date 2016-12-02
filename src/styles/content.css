@@ -60,6 +60,11 @@ main[content] > header > [content] [item] {
             user-select: none;
 }
 
+main[content] > header > [content] [search] {
+     border: 0;
+     margin-left: 2rem;
+}
+
 main[content] > header > [content] [item]:focus,
 main[content] > header > [content] [item]:hover {
     color: #fff;
