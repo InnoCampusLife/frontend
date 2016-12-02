@@ -57,7 +57,7 @@ main[content] > header > [content] {
 main[content] > header > [content] [item] {
     border: 0;
     padding: 0.5rem 1rem;
-    margin-left: 1.5rem;
+    /* margin: 1.5rem; */
     color: #000;
     background: transparent;
     cursor: pointer;
@@ -65,6 +65,11 @@ main[content] > header > [content] [item] {
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none;
+}
+
+main[content] > header > [content] [search] {
+     border: 0;
+     margin-left: 2rem;
 }
 
 main[content] > header > [content] [item]:focus,
