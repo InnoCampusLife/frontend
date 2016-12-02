@@ -1,51 +1,103 @@
+<style lang="less" scoped>
+
+	/* Gotta fix this */
+	.card {
+		text-align: left;
+	}
+
+	td {
+		vertical-align: middle;
+	}
+
+	select.form-control {
+		padding: .25rem .5rem;
+	}
+
+</style>
+
 <template>
-	<div block>
-		<h1>Registered users</h1>
+	<div>
+		<div class="card card-block">
+			
+			<h1 class="card-title">Registered users</h1>
 
-		<p v-if="$loadingRouteData">Loading users…</p>
+			<p class="text-xs-center" v-show="$loadingRouteData">Loading Users</p>
 
-		<ul>
-			<li v-for="user in users">
-				<user :user="user" :role-changed="roleChanged"></user>
-			</li>
-		</ul>
+			<div class="table-responsive" v-show="users.length">
+				<table class="table  table-striped table-bordered">
+					<thead>
+						<tr>
+							<th class="text-xs-center" @click="">#</th>
+							<th class="text-xs-center" @click="sortBy(username)">Username</th>
+							<th class="text-xs-center" @click="sortBy(firstName)">First Name</th>
+							<th class="text-xs-center" @click="sortBy(lastName)">Last Name</th>
+							<th class="text-xs-center" @click="sortBy(tgId)">Alias</th>
+							<th class="text-xs-center" @click="sortBy(role)">Role</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="u in users | orderBy $index order usernameOrder firstNameOrder lastNameOrder aliasOrder roleOrder">
+							<th scope="row">{{ $index + 1 }}</td>
+							<td >{{ u.username }}</td>
+							<td>{{ u.firstName | capitalize}}</td>
+							<td>{{ u.lastName | capitalize}}</td>
+							<td>@{{ u.tgId }}</td>
+							<td class="text-xs-center p-0">
+								<select class="form-control" name="role_select" id="user_{{ u.id }}" @change="selectChanged">
+									<option value="ghost" :selected="u.role == 'ghost'">Ghost</option>
+									<option value="student" :selected="u.role == 'student'">Student</option>
+								</select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-		<button padding style="border-width: 0px;width: 100%;height: 30px;"
-			id="acceptRoles"
-			v-show="roleChanged"
-			@click="sendRoles"
-			@keyup.enter="sendRoles"
-		>accept changes</button>
+			<!-- Fix disabling -->
+			<button :disabled="selectChanged" class="btn btn-primary btn-lg btn-block" id="acceptRoles" @click="sendRoles" @keyup.enter="sendRoles">Save Changes</button>
+		</div>
 	</div>
 </template>
 
-<style lang="less" scoped>
-	
-</style>
-
 <script>
 	module.exports = {
-		data : function () {
+		data() {
 			return {
+				order: 1,
+				usernameOrder: 1,
+				firstNameOrder: 1,
+				lastNameOrder: 1,
+				aliasOrder: 1,
+				roleOrder: 1,
 				users : [],
 				dirty: false
 			}
 		},
-		components : {
-			user : require('./user.vue')
-		},
+		props : ['user', 'roleChanged'],
 		methods: {
-			sendRoles : function (e) {
+			selectChanged(e) {
+				this.roleChanged(e);
+			},
+			sendRoles(e) {
 				var update = this.$router.app.user.account.updateRole;
 				this.users.forEach(user => {
-					var newRole = document.getElementById('a' + user.id).value;
+					var newRole = document.getElementById('user_' + user.id).value;
 					if (newRole != user.role) update(user.id, user.role = newRole);
 				});
-
-				e.target.textContent = "accepted ✓";
+				e.target.textContent = "Saved";
 			},
-			roleChanged : function(e) {
-				document.getElementById('acceptRoles').textContent = "accept changes";
+			roleChanged(e) {
+				acceptRoles.textContent = "Save Changes";
+			},
+			sortBy(key) {
+				this.users.sort(this.compareBy(key))
+			},
+			compareBy(key) {
+				return function(a, b) {
+					if (a[key] < b[key]) return -1
+					if (a[key] > b[key]) return 1
+					return 0
+				}
 			}
 		},
 		route: {

@@ -1,22 +1,37 @@
 <style lang="less" scoped>
 
-	input, select, textarea {
-		width: 100%;
-	}
-
+	/*
 	.card {
 		background: hsla(0, 0, 100, 1);
 		border-radius: 4px;
 		padding: 1rem 2rem;
-		text-align: left; /* should not be here */
+		text-align: left;
 	}
 
 	.card + .card {
 		margin-top: 1rem;
 	}
+	*/
+
+	/* Gotta fix this */
+	.card {
+		text-align: left;
+	}
 
 	#upload {
 		display: none;
+	}
+
+	select.form-control-lg {
+		padding: .5rem .75rem;
+	}
+
+	select.form-control {
+		padding: .25rem .5rem;
+	}
+
+	td {
+		vertical-align: middle;
 	}
 
 </style>
@@ -33,169 +48,145 @@
 		<div v-show="!$loadingRouteData" class="card">
 			<form id="ip_request">
 
-				<h1>New Application</h1>
+				<div class="card-block">
+					<h1 class="card-title mb-0">New Application</h1>
+				</div>
 
-				<hr>
-				
-				<div  class="grid grid-middle">
-					<div class="col">
-						<label for="activity_category">
-							<h2>Category</h2>
+				<ul class="list-group list-group-flush">
+
+					<li class="list-group-item">
+						<div class="form-group row flex-items-sm-middle mb-0">
+							<label class="col-sm col-form-label col-form-label-lg" for="activity_category">
+								<h4>Category</h4>
+							</label>
+							<div class="col-sm">
+								<select class="form-control form-control-lg" id="activity_category" v-model="current.category_id" @change="category_changed">
+									<option value="blank" selected>Choose Category</option>
+									<option value="">All</option>
+									<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
+								</select>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+
+						<h4 class="mb-1">
+							<template v-if="current.users.length > 1">Participants</template>
+							<template v-else>Participant</template>
+						</h4>
+
+							<div class="card card-block pt-1" v-for="u of current.users">
+
+								<div class="clearfix mb-1" v-show="current.users.length > 1">
+									<button type="button" class="close" aria-label="Close" @click="current_users_remove($index)" v-if="current.users.length > 1">
+										<span aria-hidden="true">&times;</span>
+									</button>
+
+									<span class="text-muted" v-show="current.users.length > 1">{{ $index + 1 }}</span>
+								</div>
+								
+								<div class="form-group row flex-items-sm-middle">
+									<label class="col-sm col-form-label" for="username_{{ $index }}">Username</label>
+									<div class="col-sm">
+										<input class="form-control" id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
+									</div>
+								</div>
+
+								<div class="form-group row flex-items-sm-middle">
+									<label class="col-sm col-form-label" for="activity_{{ $index }}">Activity</label>
+									<div class="col-sm">
+										<select class="form-control" :disabled="!categorySelected || !u.username" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
+											<option value="" selected>Choose Activity</option>
+											<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group row flex-items-sm-middle">
+									<label class="col-sm col-form-label" for="amount_{{ $index }}">Quantity</label>
+									<div class="col-sm">
+										<input class="form-control" :disabled="!(!showAmount(u.activity_id) && activitySelected)" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
+									</div>
+								</div>
+
+								<div class="form-group row flex-items-sm-middle mb-0">
+									<label class="col-sm col-form-label">Innopoints</label>
+										<div class="col-sm">
+											<input class="form-control" type="number" placeholder="0123456789" readonly>
+										</div>
+								</div>
+
+							</div>
+
+						<div class="clearfix my-1">
+							<button type="button" class="btn btn-success float-xs-left" @click="current_users_count_inc">&plus; Add a Participant</button>
+							<button type="button" class="btn btn-danger float-xs-right" @click="current_users_count_clear" v-if="current.users.length > 1">&times; Clear All</button>
+						</div>
+						
+					</li>
+
+					<li class="list-group-item">
+						<label for="upload">
+							<h4>Files</h4>
 						</label>
-					</div>
-					<div class="col">
-						<select id="activity_category" v-model="current.category_id" @change="category_changed">
-							<option value="blank" selected>Choose Category</option>
-							<option value="">All</option>
-							<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
-						</select>
-					</div>
-				</div>
-
-				<hr>
-
-				<div>
-					<h2>Participants</h2>
-
-					<div v-for="u of current.users">
-
-						<div class="grid grid-middle">
-								<div class="col">
-									<span>№</span>
-								</div>
-								<div class="col">
-									<span>{{ $index + 1 }}</span>
-								</div>
-							</div>
-						
-						<div class="grid grid-middle">
-							<div class="col">
-								<label for="username_{{ $index }}">Username</label>
-							</div>
-							<div class="col">
-								<input id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
-							</div>
+						<div class="table-responsive">
+							<table class="table  table-striped table-bordered" v-show="current.files.length">
+								<thead>
+									<tr>
+										<th class="text-xs-center">#</th>
+										<th class="text-xs-center">Name</th>
+										<th class="text-xs-center">Type</th>
+										<th class="text-xs-center">Size</th>
+										<th class="text-xs-center">Remove</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="f in current.files">
+										<th scope="row">{{ $index + 1 }}</td>
+										<td>{{ f.name }}</td>
+										<td>{{ f.type }}</td>
+										<td class="text-xs-right">{{ f.size }} KB</td>
+										<td class="text-xs-center p-0">
+											<button type="button" class="close float-xs-none btn-block" aria-label="Remove File" @click="removeFile($index)">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
-						
-						<!-- Check is category is selected: v-show="!categorySelected" -->
-
-							<div class="grid grid-middle">
-								<div class="col">
-									<label for="activity_{{ $index }}">Activity</label>
-								</div>
-								<div class="col">
-									<select v-if="categorySelected && u.username.length" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
-										<option value="" selected>Choose Activity</option>
-										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
-									</select>
-									<select v-else disabled id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
-										<option value="" selected>Choose Activity</option>
-										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="grid grid-middle">
-								<div class="col">
-									<label for="amount_{{ $index }}">Quantity</label>
-								</div>
-								<div class="col">
-									<input v-if="!showAmount(u.activity_id) && activitySelected" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
-									<input v-else disabled id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="1" v-model="u.amount">
-								</div>
-							</div>
-
-							<div class="grid grid-middle">
-								<div class="col">
-									<span>Innopoints</span>
-								</div>
-								<div class="col">
-									<span>0123456789</span>
-								</div>
-							</div>
-
-							<span class="pe-7s-close" @click="current_users_remove($index)" v-if="current.users.length > 1"></span>
-
-							<hr style="width: 50%; margin: 1rem auto;">
-
-					</div>
-
-					<span class="pe-7s-plus" @click="current_users_count_inc"></span>
-					<span class="pe-7s-close-circle" @click="current_users_count_clear" v-if="current.users.length > 1"></span>
-					
-				</div>
-
-				<hr>
-
-				<div>
-					<label for="upload">
-						<h2>Files</h2>
-					</label>
-					<div class="grid" v-for="f in current.files">
-						<div class="col">{{ $index + 1 }}</div>
-						<div class="col">{{ f.name }}</div>
-						<div class="col">{{ f.type }}</div>
-						<div class="col">{{ f.size }} KB</div>
-						<div class="col">
-							<span class="pe-7s-close" @click="removeFile($index)"></span>
+						<div class="clearfix mb-1">
+							<button type="button" class="btn btn-success float-xs-left" onClick="upload.click()">&plus; Add Files</button>
+							<button type="button" class="btn btn-danger float-xs-right" @click="current.files = []" v-show="current.files.length">&times; Clear All</button>
 						</div>
-					</div>
-					<span class="pe-7s-plus" onClick="upload.click()"></span>
-					<span v-show="current.files.length" class="pe-7s-close-circle" @click="current.files = []"></span>
-					<input id="upload" type="file" @change="uploaded" multiple>
-				</div> 
+						<input id="upload" type="file" @change="uploaded" multiple>
+					</li> 
 
-				<hr>
+					<li class="list-group-item">
+						<div class="form-group">
+							<label for="comment">
+								<h4>Comment</h4>
+							</label>
+							<textarea class="form-control" id="comment" placeholder="Write a comment" v-model="current.comment" rows="4"></textarea>
+					</li>
 
-				<div>
-					<label for="comment">
-						<h2>Comment</h2>
-					</label>
-					<textarea id="comment" placeholder="Write a comment" v-model="current.comment"></textarea>
-				</div>
+					<li class="list-group-item">
+							<button class="btn btn-primary btn-lg btn-block" :disabled="!activitySelected" type="button" @click="send" id="send">Send</button>
+							<p class="my-1 text-xs-center" v-show="!categorySelected">Select Category</p>
+							<p class="my-1 text-xs-center" v-show="categorySelected && !activitySelected">Select Activities</p>
+					</li>
 
-				<hr>
-
-				<pre v-if="!categorySelected">Select Category!</pre>
-				<pre v-if="categorySelected && !activitySelected">Fill in the rest!</pre>
-				<button v-if="activitySelected" type="button" @click="send" id="send">Send</button>
+				</ul>
 			</form>
 		</div>
 
-		<div class="card">
-			<h1>HTML Ipsum Presents</h1>
-
-			<p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-
-			<h2>Header Level 2</h2>
-
-			<ol>
-				<li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-				<li>Aliquam tincidunt mauris eu risus.</li>
-			</ol>
-
-			<blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
-
-			<h3>Header Level 3</h3>
-
-			<ul>
-				<li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-				<li>Aliquam tincidunt mauris eu risus.</li>
-			</ul>
-
-			<pre><code>
-#header h1 a {
-	display: block;
-	width: 300px;
-	height: 80px;
-}
-			</code></pre>
-		</div>
-
-	</div>
+	</div><!-- template wrap -->
 </template>
 
 <script>
+
+	import { tooltip } from 'vue-strap'
 
 	module.exports =  {
 		data() {
@@ -224,6 +215,13 @@
 				},
 			}
 		},
+
+		/*
+		components: {
+			tooltip
+		},
+		*/
+
 		methods : {
 			
 			current_users_count_inc() {

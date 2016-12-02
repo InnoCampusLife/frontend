@@ -2,14 +2,15 @@
 	<section shop>
 		<section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
 			<item :item="item">
-				<button @click="buy(item)">buy!</button>
+				<button @click="buy(item)">Buy</button>
 			</item>
 		</section>
 	</section>
 </template>
 
 <script>
-	var storage = require('./../../storage.js');
+	
+	import storage from './../../storage.js';
 
 	module.exports = {
 		data : function () {

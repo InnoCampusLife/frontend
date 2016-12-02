@@ -1,7 +1,7 @@
 [sidebar] {
     display: block;
     position: fixed;
-    width: 17rem;
+    width: 25%;
     height: 100vh;
     color: #FFF;
     font-weight: normal;
@@ -9,7 +9,6 @@
     background-position: center;
     top: 0;
     left: 0;
-    bottom: 0;
     z-index: 1;
     background: linear-gradient(to bottom, hsl(271, 74%, 63%) 0%, hsla(269, 100%, 44%, 0.75) 100%);
     background-size: 150% 150%;

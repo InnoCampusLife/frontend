@@ -28,9 +28,11 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "bootstrap": "^4.0.0-alpha.5",
     "gridlex": "^2.2.3",
     "normalize.css": "^5.0.0",
     "vue": "^1.0.26",
-    "vue-router": "^0.7.13"
+    "vue-router": "^0.7.13",
+    "vue-strap": "^1.1.33"
   }
 }
