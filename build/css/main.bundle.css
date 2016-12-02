@@ -1,4 +1,4 @@
-* {
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&subset=cyrillic);@import url(https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic);* {
 	/* transition: all .15s ease, border-width .1s linear;  */
 }
 
@@ -142,9 +142,9 @@
 	padding: 1rem;
 	text-transform: uppercase;
 }body {
-    font-family: "Roboto";
     background-color: #f1f1f1;
     overflow: hidden;
+    height: 100%;
 }
 
 button {
@@ -222,7 +222,7 @@ main[content] > header > [content] [item]:active {
     background: hsl(270, 75%, 61%);
 }
 
-main[content] > [scroller-y] {
+main[content] > header + [scroller-y] {
     height: calc(100% - 4rem);
 }[card] {
     margin: 1rem;
@@ -368,7 +368,7 @@ main[content] > [scroller-y] {
 
 [sidebar] > [header] {
     padding: 1rem;
-    /* height: 4rem; */
+    height: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
 }
@@ -557,57 +557,66 @@ html {
   box-sizing: border-box;
 }
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: inherit;
+  outline: 0;
 }
+/*
 .row > * + * {
-  margin-top: 1em;
+	margin-top: 1em;
 }
+
 .column > * + * {
-  margin-left: 1em;
+	margin-left: 1em;
 }
+*/
 /* ==========================================================================
    Typography
    ========================================================================== */
 html {
-  font-size: 1em;
-  line-height: 1.5;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-body {
-  font-family: 'Rubik' !important;
+code,
+kbd,
+pre,
+samp {
+  font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1;
+/*
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 400;
+	line-height: 1;	
 }
-h4,
-h5,
-h6 {
-  text-transform: uppercase;
+
+h4, h5, h6 {
+	text-transform: uppercase;
 }
+
 h1 {
-  font-size: 4rem;
+	font-size: 4 / 1rem;
 }
+
 h2 {
-  font-size: 2rem;
+	font-size: 4 / 2rem;
 }
+
 h3 {
-  font-size: 1.33333333rem;
+	font-size: 4 / 3rem;
 }
+
 h4 {
-  font-size: 1rem;
+	font-size: 4 / 4rem;
 }
+
 h5 {
-  font-size: 0.8rem;
+	font-size: 4 / 5rem;
 }
+
 h6 {
-  font-size: 0.66666667rem;
+	font-size: 4 / 6rem;
 }
+*/
 /* ==========================================================================
    Imports
    ========================================================================== */

@@ -10,16 +10,16 @@
 				<button item 
 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }"
 					v-if="!user.innopoints.data.isAdmin"
-				>All Applications</button>
+				>All</button>
 				<button item
 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }"
-				>In process</button>
+				>In&nbsp;process</button>
 				<button item
 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }"
 				>Rejected</button>
 				<button item
 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }"
-				>In rework</button>
+				>In&nbsp;rework</button>
 				<button item
 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }"
 				>Approved</button>
