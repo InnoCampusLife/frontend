@@ -57,7 +57,7 @@
 		methods: {
 			approve : function(e) {
 				var _appls = this.applications;
-				var appl_action_success = this.appl_action_success;
+				var success = this.success;
 				this.user.innopoints.api.user.application.approve(e.target.dataset.id, function(result) {
 					success(e.target.dataset.id, 'approved', _appls);
 				}, console.log);
