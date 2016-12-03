@@ -1,6 +1,6 @@
 <template>
 	<h1>Current path: {{ $route.path }}</h1>
-	<pre style="text-align:left">{{ user | json 4 }}</pre>
+	<pre style="text-align:left">{{ user | json 2 }}</pre>
 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
 </template>
 

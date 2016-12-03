@@ -1,7 +1,7 @@
 <template>
 	<header>
 		<slot></slot>
-	</header><!-- /header -->
+	</header>
 </template>
 
 <script>

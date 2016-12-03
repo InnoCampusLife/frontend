@@ -12,7 +12,7 @@
 		},
 		route: {
 			data(transition) {
-				console.log("called get in main");
+				console.log("Called GET in Main");
 				var router = this.$router;
 				var user = this.$root.user;
 				user.account.update(result => {
@@ -27,7 +27,7 @@
 							}
 						);
 					}, error => {
-						console.log("updating error");
+						console.log("Updating Error");
 						router.go('/login');
 					}
 				);

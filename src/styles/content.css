@@ -15,15 +15,8 @@ main[content] {
 	overflow: hidden;
 }
 
-@media screen and (max-width: 768px) {
-	main[content] {
-		margin-left: 0;
-	}
-}
-
 main[content] > div {
 	position: relative;
-	padding: 1rem;
 	/* border-top: 1px solid #fff; */
 }
 
@@ -58,11 +51,6 @@ main[content] > header > [content] [item] {
 	   -moz-user-select: none;
 		-ms-user-select: none;
 			user-select: none;
-}
-
-main[content] > header > [content] [search] {
-	 border: 0;
-	 margin-left: 2rem;
 }
 
 main[content] > header > [content] [item]:focus,

@@ -1,11 +1,36 @@
 <template>
-	<section shop>
-		<section product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-			<item :item="item">
-				<button @click="buy(item)">Buy</button>
-			</item>
+	<div class="container-fluid">
+		<section class="card-columns" shop>
+			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
+				<item :item="item">
+					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
+				</item>
+			</section>
+
+			<!-- For testing purposes-->
+			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
+				<item :item="item">
+					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
+				</item>
+			</section>
+			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
+				<item :item="item">
+					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
+				</item>
+			</section>
+			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
+				<item :item="item">
+					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
+				</item>
+			</section>
+			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
+				<item :item="item">
+					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
+				</item>
+			</section>
+
 		</section>
-	</section>
+	</div>
 </template>
 
 <script>
@@ -42,7 +67,7 @@
 			} 
 		},
 		methods : {
-			buy : function(item) {
+			buy(item) {
 				console.log(item.selected);
 				console.log(!!item.combinations.find(c => c.options.equals(item.selected.options)));
 				item.selected = {

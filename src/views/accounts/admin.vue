@@ -16,10 +16,10 @@
 </style>
 
 <template>
-	<div>
+	<div class="container">
 		<div class="card card-block">
 			
-			<h1 class="card-title">Registered users</h1>
+			<h1 class="card-title mb-1">Registered users</h1>
 
 			<p class="text-xs-center" v-show="$loadingRouteData">Loading Users</p>
 
@@ -27,16 +27,16 @@
 				<table class="table  table-striped table-bordered">
 					<thead>
 						<tr>
-							<th class="text-xs-center" @click="">#</th>
-							<th class="text-xs-center" @click="sortBy(username)">Username</th>
-							<th class="text-xs-center" @click="sortBy(firstName)">First Name</th>
-							<th class="text-xs-center" @click="sortBy(lastName)">Last Name</th>
-							<th class="text-xs-center" @click="sortBy(tgId)">Alias</th>
-							<th class="text-xs-center" @click="sortBy(role)">Role</th>							
+							<th class="text-xs-center" @click="sortBy('id')">#</th>
+							<th class="text-xs-center" @click="sortBy('username')">Username</th>
+							<th class="text-xs-center" @click="sortBy('firstName')">First Name</th>
+							<th class="text-xs-center" @click="sortBy('lastName')">Last Name</th>
+							<th class="text-xs-center" @click="sortBy('tgId')">Alias</th>
+							<th class="text-xs-center" @click="sortBy('role')">Role</th>							
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="u in users | orderBy $index order usernameOrder firstNameOrder lastNameOrder aliasOrder roleOrder">
+						<tr v-for="u in users">
 							<th scope="row">{{ $index + 1 }}</td>
 							<td >{{ u.username }}</td>
 							<td>{{ u.firstName | capitalize}}</td>
@@ -63,12 +63,7 @@
 	module.exports = {
 		data() {
 			return {
-				order: 1,
-				usernameOrder: 1,
-				firstNameOrder: 1,
-				lastNameOrder: 1,
-				aliasOrder: 1,
-				roleOrder: 1,
+				sortKey: 1,
 				users : [],
 				dirty: false
 			}
@@ -93,7 +88,8 @@
 				this.users.sort(this.compareBy(key))
 			},
 			compareBy(key) {
-				return function(a, b) {
+				return (a, b) => {
+					console.log(a, b, key)
 					if (a[key] < b[key]) return -1
 					if (a[key] > b[key]) return 1
 					return 0
@@ -105,7 +101,7 @@
 				var api = this.$root.user;
 				api.account.list(result => {
 						transition.next({
-							users : result
+							users: result.sort(this.compareBy('id'))
 						});
 					},
 				 	transition.abort //Don't let non-moder enter this 'page'.
