@@ -43,7 +43,7 @@
 
 <script>
 	module.exports = {
-		data  : function () {
+		data : function () {
 			return {
 				user : this.$router.app.user
 			}

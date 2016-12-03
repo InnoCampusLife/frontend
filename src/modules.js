@@ -1,6 +1,10 @@
 var config  = require('./config.js');
 var api_url = config.server.api_url;
 
+var testAccounts = require('dir!./modules/modules.config.js');
+
+console.log(testAccounts);
+
 var modules = {
 	accounts : {
 		roles : [
