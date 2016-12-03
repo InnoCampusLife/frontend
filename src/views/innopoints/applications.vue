@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container">
 		<pre v-show="$loadingRouteData">Loading...</pre>
 
 		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>

@@ -1,13 +1,14 @@
 <template>
 	<content>
 		<div slot="header">
-			<div style="padding: 1rem;height: 4rem;display: block;font-size: 1.5rem;line-height: 2rem;">{{ user.username }}'s profile</div>
+			<div>Profile</div>
 		</div>
 	</content>
 </template>
 
 <script>
-	var content = require('./../content.vue');
+	
+	import content from './../content.vue';
 
 	module.exports = {
 		data : function () {

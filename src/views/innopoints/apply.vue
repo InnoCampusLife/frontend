@@ -22,22 +22,24 @@
 		display: none;
 	}
 
-	select.form-control-lg {
-		padding: .5rem .75rem;
-	}
-
-	select.form-control {
-		padding: .25rem .5rem;
-	}
-
 	td {
 		vertical-align: middle;
+	}
+
+	td button {
+		min-width: 1em;
+	}
+
+	input[readonly] {
+		color: hsla(0, 0%, 0%, 0.8);
+		background: hsl(0, 0%, 100%);
+		border-color: hsl(0, 0%, 100%);
 	}
 
 </style>
 
 <template>
-	<div>
+	<div class="container">
 		
 		<!-- While loading -->
 		<div>
@@ -49,135 +51,137 @@
 			<form id="ip_request">
 
 				<div class="card-block">
-					<h1 class="card-title mb-0">New Application</h1>
+					<h1 class="card-title">New Application</h1>
+					<!--<h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>-->
 				</div>
 
-				<ul class="list-group list-group-flush">
-
-					<li class="list-group-item">
-						<div class="form-group row flex-items-sm-middle mb-0">
-							<label class="col-sm col-form-label col-form-label-lg" for="activity_category">
-								<h4>Category</h4>
-							</label>
-							<div class="col-sm">
-								<select class="form-control form-control-lg" id="activity_category" v-model="current.category_id" @change="category_changed">
-									<option value="blank" selected>Choose Category</option>
-									<option value="">All</option>
-									<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
-								</select>
-							</div>
-						</div>
-					</li>
-
-					<li class="list-group-item">
-
-						<h4 class="mb-1">
-							<template v-if="current.users.length > 1">Participants</template>
-							<template v-else>Participant</template>
-						</h4>
-
-							<div class="card card-block pt-1" v-for="u of current.users">
-
-								<div class="clearfix mb-1" v-show="current.users.length > 1">
-									<button type="button" class="close" aria-label="Close" @click="current_users_remove($index)" v-if="current.users.length > 1">
-										<span aria-hidden="true">&times;</span>
-									</button>
-
-									<span class="text-muted" v-show="current.users.length > 1">{{ $index + 1 }}</span>
-								</div>
-								
-								<div class="form-group row flex-items-sm-middle">
-									<label class="col-sm col-form-label" for="username_{{ $index }}">Username</label>
-									<div class="col-sm">
-										<input class="form-control" id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
-									</div>
-								</div>
-
-								<div class="form-group row flex-items-sm-middle">
-									<label class="col-sm col-form-label" for="activity_{{ $index }}">Activity</label>
-									<div class="col-sm">
-										<select class="form-control" :disabled="!categorySelected || !u.username" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
-											<option value="" selected>Choose Activity</option>
-											<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
-										</select>
-									</div>
-								</div>
-								
-								<div class="form-group row flex-items-sm-middle">
-									<label class="col-sm col-form-label" for="amount_{{ $index }}">Quantity</label>
-									<div class="col-sm">
-										<input class="form-control" :disabled="!(!showAmount(u.activity_id) && activitySelected)" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
-									</div>
-								</div>
-
-								<div class="form-group row flex-items-sm-middle mb-0">
-									<label class="col-sm col-form-label">Innopoints</label>
-										<div class="col-sm">
-											<input class="form-control" type="number" placeholder="0123456789" readonly>
-										</div>
-								</div>
-
-							</div>
-
-						<div class="clearfix my-1">
-							<button type="button" class="btn btn-success float-xs-left" @click="current_users_count_inc">&plus; Add a Participant</button>
-							<button type="button" class="btn btn-danger float-xs-right" @click="current_users_count_clear" v-if="current.users.length > 1">&times; Clear All</button>
-						</div>
-						
-					</li>
-
-					<li class="list-group-item">
-						<label for="upload">
-							<h4>Files</h4>
+				<div class="card-block">
+					<div class="form-group row flex-items-sm-middle mb-0">
+						<label class="col-sm col-form-label col-form-label-lg" for="activity_category">
+							<h4>Category</h4>
 						</label>
-						<div class="table-responsive">
-							<table class="table  table-striped table-bordered" v-show="current.files.length">
-								<thead>
-									<tr>
-										<th class="text-xs-center">#</th>
-										<th class="text-xs-center">Name</th>
-										<th class="text-xs-center">Type</th>
-										<th class="text-xs-center">Size</th>
-										<th class="text-xs-center">Remove</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="f in current.files">
-										<th scope="row">{{ $index + 1 }}</td>
-										<td>{{ f.name }}</td>
-										<td>{{ f.type }}</td>
-										<td class="text-xs-right">{{ f.size }} KB</td>
-										<td class="text-xs-center p-0">
-											<button type="button" class="close float-xs-none btn-block" aria-label="Remove File" @click="removeFile($index)">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+						<div class="col-sm">
+							<select class="form-control form-control-lg" id="activity_category" v-model="current.category_id" @change="category_changed">
+								<option value="blank" selected>Choose Category</option>
+								<option value="">All</option>
+								<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
+							</select>
 						</div>
-						<div class="clearfix mb-1">
-							<button type="button" class="btn btn-success float-xs-left" onClick="upload.click()">&plus; Add Files</button>
-							<button type="button" class="btn btn-danger float-xs-right" @click="current.files = []" v-show="current.files.length">&times; Clear All</button>
-						</div>
-						<input id="upload" type="file" @change="uploaded" multiple>
-					</li> 
+					</div>
+				</div>
 
-					<li class="list-group-item">
-						<div class="form-group">
-							<label for="comment">
-								<h4>Comment</h4>
-							</label>
-							<textarea class="form-control" id="comment" placeholder="Write a comment" v-model="current.comment" rows="4"></textarea>
-					</li>
+				<div class="card-block">
 
-					<li class="list-group-item">
-							<button class="btn btn-primary btn-lg btn-block" :disabled="!activitySelected" type="button" @click="send" id="send">Send</button>
-							<p class="my-1 text-xs-center" v-show="!categorySelected">Select Category</p>
-							<p class="my-1 text-xs-center" v-show="categorySelected && !activitySelected">Select Activities</p>
-					</li>
+					<h4 class="mb-1">
+						<template v-if="current.users.length > 1">Participants</template>
+						<template v-else>Participant</template>
+					</h4>
 
-				</ul>
+					<ul class="list-group">
+						
+						<li class="list-group-item py-1" v-for="u of current.users">
+
+							<div class="clearfix mb-1" v-show="current.users.length > 1">
+								<button type="button" class="close" aria-label="Close" @click="current_users_remove($index)" v-if="current.users.length > 1">
+									<span aria-hidden="true">&times;</span>
+								</button>
+
+								<span class="text-muted" v-show="current.users.length > 1">{{ $index + 1 }}</span>
+							</div>
+							
+							<div class="form-group row flex-items-sm-middle">
+								<label class="col-sm col-form-label" for="username_{{ $index }}">Username</label>
+								<div class="col-sm">
+									<input class="form-control" id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
+								</div>
+							</div>
+
+							<div class="form-group row flex-items-sm-middle">
+								<label class="col-sm col-form-label" for="activity_{{ $index }}">Activity</label>
+								<div class="col-sm">
+									<select class="form-control" :disabled="!categorySelected || !u.username" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
+										<option value="" selected>Choose Activity</option>
+										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group row flex-items-sm-middle">
+								<label class="col-sm col-form-label" for="amount_{{ $index }}">Quantity</label>
+								<div class="col-sm">
+									<input class="form-control" :disabled="!(!showAmount(u.activity_id) && activitySelected)" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
+								</div>
+							</div>
+
+							<div class="form-group row flex-items-sm-middle mb-0">
+								<label class="col-sm col-form-label">Innopoints</label>
+									<div class="col-sm">
+										<input class="form-control" type="number" value="0123456789" readonly>
+									</div>
+							</div>
+
+						</li>
+					</ul>
+
+					<div class="clearfix mt-1">
+						<button type="button" class="btn btn-success float-xs-left" @click="current_users_count_inc">&plus; Add</button>
+						<button type="button" class="btn btn-danger float-xs-right" @click="current_users_count_clear" v-if="current.users.length > 1">&times; Clear</button>
+					</div>
+					
+				</div>
+
+				<div class="card-block">
+					<label for="upload">
+						<h4>Files</h4>
+					</label>
+					<div class="table-responsive">
+						<table class="table  table-striped table-bordered" v-show="current.files.length">
+							<thead>
+								<tr>
+									<th class="text-xs-center">#</th>
+									<th class="text-xs-center">Name</th>
+									<th class="text-xs-center">Type</th>
+									<th class="text-xs-center">Size</th>
+									<th class="text-xs-center">Remove</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="f in current.files">
+									<th scope="row">{{ $index + 1 }}</td>
+									<td>{{ f.name }}</td>
+									<td>{{ f.type }}</td>
+									<td class="text-xs-right">{{ f.size }} KB</td>
+									<td class="text-xs-center py-0">
+										<button type="button" class="close float-xs-none" aria-label="Remove File" @click="removeFile($index)">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix">
+						<button type="button" class="btn btn-success float-xs-left" onClick="upload.click()">&plus; Add</button>
+						<button type="button" class="btn btn-danger float-xs-right" @click="current.files = []" v-show="current.files.length">&times; Clear</button>
+					</div>
+					<input id="upload" type="file" @change="uploaded" multiple>
+				</div> 
+
+				<div class="card-block">
+					<div class="form-group">
+						<label for="comment">
+							<h4>Comment</h4>
+						</label>
+						<textarea class="form-control" id="comment" placeholder="Write a comment" v-model="current.comment" rows="4"></textarea>
+					</div>
+				</div>
+
+				<div class="card-block">
+					<button class="btn btn-primary btn-lg btn-block" :disabled="!activitySelected" type="button" @click="send" id="send">Send</button>
+					<p class="mt-1 mb-0 text-xs-center" v-show="!categorySelected">Select Category</p>
+					<p class="mt-1 mb-0 text-xs-center" v-show="categorySelected && !activitySelected">Select Activities</p>
+				</div>
+
 			</form>
 		</div>
 
@@ -185,8 +189,6 @@
 </template>
 
 <script>
-
-	import { tooltip } from 'vue-strap'
 
 	module.exports =  {
 		data() {
@@ -211,16 +213,10 @@
 						}
 					],
 					files: [],
-					comment : ''
+					comment : '',
 				},
 			}
 		},
-
-		/*
-		components: {
-			tooltip
-		},
-		*/
 
 		methods : {
 			
@@ -302,7 +298,7 @@
 						amount = parseInt(cur_user.amount) || null;
 
 					that.current.application.work.push({
-						activity_id:activity_id,
+						activity_id: activity_id,
 						amount: amount,
 						actor: cur_user.user_id
 					});
@@ -329,7 +325,7 @@
 				send.textContent = "Failed to Send";
 			},
 
-			showAmount  : function (id) {
+			showAmount(id) {
 				var temp = this.activities.find(x => x.id == id);
 				return temp && temp.type != 'permanent';
 			}

@@ -1,17 +1,11 @@
-[shop] {
-	-moz-columns: 12rem;
-		 columns: 12rem;
-}
-
+/*
 [product] {
 	display: inline-block;
-	text-align: center;
 	margin: 0.5rem;
-	padding: 1rem;
 	background: #fff;
 	border: 1px solid hsla(210,38%,93%,1);
-	width: 12rem;
 }
+*/
 
 [product] img {
 	width: 100%;
