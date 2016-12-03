@@ -23,10 +23,10 @@
 }
 
 
-[card] > footer [controls] [item] {
+.card > footer .controls .item {
 	transition: all .2s ease;
 }
 
-[sidebar] > [menu] [item] {
+.sidebar > .menu .item {
 	transition: opacity .15s ease-in, background-color .15s ease-in;
 }

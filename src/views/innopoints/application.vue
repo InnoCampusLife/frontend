@@ -2,7 +2,7 @@
 	<div card class="card" :status="application.status" :id="'card' + application.id">
 		<header flex>
 			<section left>
-				<span>{{application.type | capitalize}}</span> <span misc style="font-size:inherit">{{(application._id = '#' + application.id)}} by {{application.author.username}}</span>
+				<span>{{application.type | capitalize}}</span> <span misc>{{(application._id = '#' + application.id)}} by {{application.author.username}}</span>
 				<span block misc>Status: <span :status="application.status">{{application.status.split('_').join(' ')}}</span></span>
 			</section>
 			<section right>

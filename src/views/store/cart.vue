@@ -1,7 +1,7 @@
 <template>
 	<div cart floating id="cart" :amount="cart.length">
 		<button open class="pe-7s-cart" @click="open"></button>
-		<div items style="overflow:hidden">
+		<div items>
 	    	<item v-for="item in cart | orderBy 'index' -1" :item="item"></item>
 	    </div>
     </div>
