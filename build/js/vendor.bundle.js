@@ -55,14 +55,14 @@
 	require('../node_modules/gridlex/src/gridlex.less')
 	*/
 
-	__webpack_require__(103);
+	__webpack_require__(80);
 	// require('../node_modules/bootstrap/dist/js/bootstrap.js')
 	// require('../node_modules/vue-strap/dist/vue-strap.js')
 	// require('../node_modules/vue-strap/dist/vue-strap-lang.js')
 
 /***/ },
 
-/***/ 103:
+/***/ 80:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

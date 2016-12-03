@@ -16,6 +16,8 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-runtime": "^6.9.2",
     "css-loader": "^0.23.1",
+    "dir-loader": "file:///E:\\Programming\\Projects\\Web\\dir-loader",
+    "entry-dir-loader": "^0.3.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
