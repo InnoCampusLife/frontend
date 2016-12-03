@@ -9,19 +9,19 @@ button {
 	border: none;
 }
 
-main[content] {
+main.content {
 	margin-left: 25%;
 	height: 100%;
 	overflow: hidden;
 }
 
-main[content] > div {
+main.content > div {
 	position: relative;
 	/* border-top: 1px solid #fff; */
 }
 
 
-main[content] > header {
+main.content > header {
 	/* padding: 1rem 2rem; */
 	width: 100%;
 	height: 4rem;
@@ -32,15 +32,15 @@ main[content] > header {
 	transition: height ease .2s;
 }
 
-main[content] > header[scrolled] {
+main.content > header.scrolled {
 	border-bottom: 1px solid rgba(0,0,0,0.15);
 }
 
-main[content] > header > [content] {
+main.content > header > .content {
 	height: 100%;
 }
 
-main[content] > header > [content] [item] {
+main.content > header > .content .item {
 	border: 0;
 	padding: 0.5rem 1rem;
 	margin-left: 1.5rem;
@@ -53,18 +53,18 @@ main[content] > header > [content] [item] {
 			user-select: none;
 }
 
-main[content] > header > [content] [item]:focus,
-main[content] > header > [content] [item]:hover {
+main.content > header > .content .item:focus,
+main.content > header > .content .item:hover {
 	color: #fff;
 	background: hsl(270, 75%, 68%);
 }
 
-main[content] > header > [content] [item].v-link-active,
-main[content] > header > [content] [item]:active {
+main.content > header > .content .item.v-link-active,
+main.content > header > .content .item:active {
 	color: #fff;
 	background: hsl(270, 75%, 61%);
 }
 
-main[content] > header + [scroller-y] {
+main.content > header + ._scroller-y {
 	height: calc(100% - 4rem);
 }

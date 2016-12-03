@@ -59,7 +59,7 @@ code, kbd, pre, samp {
 
 @sidebar-width: 15rem;
 
-main[content] {
+main.content {
 	margin-left: @sidebar-width;
 }
 
@@ -69,7 +69,7 @@ main[content] {
 }
 */
 
-[sidebar] {
+.sidebar {
 	width: @sidebar-width;
 }
 
@@ -124,10 +124,10 @@ select.form-control {
 
 // Small devices (landscape phones, less than 768px)
 @media (max-width: 767px) { 
-	main[content] {
+	main.content {
 		margin-left: 0;
 	}
-	[sidebar] {
+	.sidebar {
 		margin-left: -@sidebar-width;
 	}
 }
@@ -150,6 +150,5 @@ select.form-control {
 @import url('./transitions.css');
 @import url('./helpers.css');
 @import url('./content.css');
-@import url('./card.css');
 @import url('./sidebar.css');
 @import url('./store.css');

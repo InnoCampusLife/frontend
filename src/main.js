@@ -18,6 +18,10 @@ router.start(app, 'app');
 
 // Polyfills
 
+requireAllIn = (directory) => {
+    require.context(directory, true, /^.*(\.js|\.vue)$/);
+};
+
 if (!String.prototype.includes) {
 	String.prototype.includes = () => {
 		return String.prototype.indexOf.apply(this, arguments) !== -1;

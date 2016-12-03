@@ -31,7 +31,7 @@
 			</template>
 			
 			<button item right v-link="{ name: 'apply', params: { username: user.account.username } }">
-				<span text info style="font-size:1.5rem">+</span>
+				<span text info>Apply</span>
 			</button>
 		</div>
 	</content>

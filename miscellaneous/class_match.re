@@ -1,5 +1,7 @@
 ([ ]*[a-z]*[ ]*\(?)\.([a-z][a-z\-\_0-9]*)(\)?[\s]*[\,\[\{a-z\.\:\>])
 
+\[([a-z][a-z\-\_0-9]*)\]
+
 (?# Regex to find class and capture it.)
 (?# Used to replace .class with [class].)
 

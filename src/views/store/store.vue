@@ -2,9 +2,7 @@
 	<div class="container-fluid">
 		<section class="card-columns" shop>
 			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
-				</item>
+				<item :item="item" :buy="buy"></item>
 			</section>
 
 			<!-- For testing purposes-->
