@@ -46,13 +46,13 @@
 
 	'use strict';
 
-	var Vue = __webpack_require__(5);
-	var VueRouter = __webpack_require__(7);
-	var newRouter = __webpack_require__(8);
-	var app = __webpack_require__(81);
+	var Vue = __webpack_require__(4);
+	var VueRouter = __webpack_require__(6);
+	var newRouter = __webpack_require__(7);
+	var app = __webpack_require__(76);
 
-	var styles = __webpack_require__(84);
-	var polyfills = __webpack_require__(87);
+	var styles = __webpack_require__(79);
+	var polyfills = __webpack_require__(82);
 
 	Vue.use(VueRouter);
 
@@ -99,8 +99,7 @@
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/*!
@@ -10341,10 +10340,10 @@
 	}, 0);
 
 	module.exports = Vue;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -10530,7 +10529,7 @@
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -13244,12 +13243,12 @@
 	}));
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var user = __webpack_require__(9).accounts;
+	var user = __webpack_require__(8).accounts;
 
 	var adminZone = true,
 	    authorizedZone = true,
@@ -13260,40 +13259,40 @@
 	module.exports = function (router) {
 		router.map({
 			'/login': {
-				component: __webpack_require__(12),
+				component: __webpack_require__(11),
 				loginPage: loginPage
 			},
 			'/': {
-				component: __webpack_require__(15),
+				component: __webpack_require__(14),
 				subRoutes: {
 					'/': {
-						component: __webpack_require__(21),
+						component: __webpack_require__(20),
 						subRoutes: {
 							'/': {
-								component: __webpack_require__(35)
+								component: __webpack_require__(28)
 							}
 						}
 					},
 					'/profile': {
-						component: __webpack_require__(38),
+						component: __webpack_require__(31),
 						subRoutes: {
 							'/:username': {
 								name: 'profile',
-								component: __webpack_require__(41)
+								component: __webpack_require__(34)
 							}
 						}
 					},
 					'/accounts': {
-						component: __webpack_require__(44),
+						component: __webpack_require__(37),
 						subRoutes: {
 							'/': {
-								component: __webpack_require__(47),
+								component: __webpack_require__(40),
 								name: 'accounts'
 							}
 						}
 					},
 					'/innopoints': {
-						component: __webpack_require__(52),
+						component: __webpack_require__(47),
 						subRoutes: {
 							'/:username': {
 								component: router_view,
@@ -13306,13 +13305,13 @@
 										component: router_view,
 										subRoutes: {
 											'/:filter': {
-												component: __webpack_require__(55),
+												component: __webpack_require__(50),
 												name: 'applications'
 											}
 										}
 									},
 									'/apply': {
-										component: __webpack_require__(61),
+										component: __webpack_require__(56),
 										name: 'apply'
 									}
 								}
@@ -13320,14 +13319,14 @@
 						}
 					},
 					'/store': {
-						component: __webpack_require__(66),
+						component: __webpack_require__(61),
 						subRoutes: {
 							'/': {
-								component: __webpack_require__(71),
+								component: __webpack_require__(66),
 								name: 'store'
 							},
 							'/item/:item': {
-								component: __webpack_require__(75),
+								component: __webpack_require__(70),
 								name: 'item'
 							}
 						}
@@ -13352,16 +13351,16 @@
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _config = __webpack_require__(10);
+	var _config = __webpack_require__(9);
 
 	var config = _interopRequireWildcard(_config);
 
-	var _storage = __webpack_require__(11);
+	var _storage = __webpack_require__(10);
 
 	var storage = _interopRequireWildcard(_storage);
 
@@ -13841,7 +13840,7 @@
 	module.exports.token = modules.accounts.token;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13864,7 +13863,7 @@
 	exports.token_name = token_name;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13891,17 +13890,17 @@
 	exports.clear = clear;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(13)
+	__vue_script__ = __webpack_require__(12)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\login.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(14)
+	__vue_template__ = __webpack_require__(13)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -13917,7 +13916,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-4412f846/login.vue"
+	  var id = "_v-5f825324/login.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -13926,7 +13925,7 @@
 	})()}
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14386,23 +14385,23 @@
 	// </script>
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = "\r\n<style type=\"text/css\" media=\"screen\">\r\n\tmain[wrapper] * {\r\n\t\tbox-sizing: border-box;\r\n\t\tmargin: 0;\r\n\t\tpadding: 0;\r\n\t}\r\n\r\n\tmain[wrapper][login] [container] {\r\n\t\tfont-family: 'Roboto', sans-serif;\r\n\t\tcolor: white;\r\n\t\tfont-weight: 100 !important;\r\n\t}\r\n\r\n\tmain[wrapper][login] [container] ::-webkit-input-placeholder,\r\n\tmain[wrapper][login] [container] :-moz-placeholder,\r\n\tmain[wrapper][login] [container] :-ms-input-placeholder,\r\n\tmain[wrapper][login] [container] ::-moz-placeholder {\r\n\t\tfont-family: 'Roboto', sans-serif;\r\n\t\tcolor: white;\r\n\t\topacity: 1;\r\n\t\tfont-weight: 100 !important;\r\n\t}\r\n\tmain[wrapper][login] {\r\n\t\ttransition: none;\r\n\t\t/* background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */\r\n\t\tbackground: hsl(225, 14%, 22%);\r\n\t\tposition: absolute;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100vw;\r\n\t\theight: 100vh;\r\n\t\toverflow: hidden;\r\n\t}\r\n\tmain[wrapper][form-success] [container] h1 {\r\n\t\ttransform: translateY(85px);\r\n\t}\r\n\t[container] {\r\n\t\tz-index: 1;\r\n\t\tmax-width: 600px;\r\n\t\ttext-align: center;\r\n\t}\r\n\t[container] h1 {\r\n\t\tfont-size: 40px;\r\n\t\ttransition-duration: 1s;\r\n\t\ttransition-timing-function: ease-in-put;\r\n\t\tfont-weight: 200;\r\n\t}\r\n\r\n\tmain[wrapper] form {\r\n\t\theight: 25rem;\r\n\t\tpadding: 20px 0;\r\n\t\tposition: relative;\r\n\t\ttext-align: center;\r\n\t\tz-index: 2;\r\n\t}\r\n\r\n\tmain[wrapper] form input {\r\n\t\t-webkit-appearance: none;\r\n\t\t-moz-appearance: none;\r\n\t\tappearance: none;\r\n\t\toutline: 0;\r\n\t\tborder: 0;\r\n\t\tbackground-color: rgba(255, 255, 255, 0.2);\r\n\t\twidth: 250px;\r\n\t\tborder-radius: 5px;\r\n\t\tpadding: 10px 15px;\r\n\t\tmargin: 0 auto 10px auto;\r\n\t\tdisplay: block;\r\n\t\t/* text-align: center; */\r\n\t\tfont-size: 18px;\r\n\t\tcolor: white;\r\n\t\ttransition-duration: 0.25s;\r\n\t}\r\n\tmain[wrapper] form input::-webkit-input-placeholder {color:rgba(255,255,255,0.5);}\r\n\tmain[wrapper] form input::-moz-placeholder          {color:rgba(255,255,255,0.5);}/* Firefox 19+ */\r\n\tmain[wrapper] form input:-moz-placeholder           {color:rgba(255,255,255,0.5);}/* Firefox 18- */\r\n\tmain[wrapper] form input:-ms-input-placeholder      {color:rgba(255,255,255,0.5);}\r\n\r\n\tmain[wrapper] form input[error] {\r\n\t\tborder: 1px solid red;\r\n\t}\r\n\r\n\tmain[wrapper] form input:hover {\r\n\t\tbackground-color: rgba(255, 255, 255, 0.4);\r\n\t}\r\n\r\n\tmain[wrapper] form input:active,\r\n\tmain[wrapper] form input:focus {\r\n\t\tbackground-color: rgba(255,255,255,0.25);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place] {\r\n\t\t-webkit-appearance: none;\r\n\t\t-moz-appearance: none;\r\n\t\tappearance: none;\r\n\t\tposition: absolute;\r\n\t\tpadding: 10px 15px;\r\n\t\tcolor: #fff;\r\n\t\tfont-size: 1.2rem;\r\n\t\toutline: 0;\r\n\t\tborder: 0;\r\n\t\tborder-top: 1px solid transparent;\r\n\t\tcursor: pointer;\r\n\t\ttransform: translate3d(-50%,0,0);\r\n\t\ttransition: transform ease .5s, width ease .5s, background-color ease .2s, border-color ease .3s;\r\n\t\t-webkit-user-select: none;\r\n\t\t-moz-user-select: none;\r\n\t\t-ms-user-select: none;\r\n\t\tuser-select: none;\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"] {\r\n\t\tborder-radius: 5px;\r\n\t\twidth: 250px;\r\n\t\tbackground-color: rgba(255,255,255,0.3);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"bottom\"][purp=\"login\"] {\r\n\t\ttransform: translate3d(-50%,5rem,0);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"]:focus {\r\n\t\tbackground-color: rgba(255,255,255,0.2);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"form\"]:hover {\r\n\t\tbackground-color: rgba(255,255,255,0.4);\r\n\t\t/* transition: transform ease 0.5s, width ease .5s, background-color ease 0s, border-color ease .3s; */\r\n\r\n\t}\r\n\tmain[wrapper] form button[place=\"form\"]:active {\r\n\t\tbackground-color: rgba(255,255,255,.6);\r\n\t}\r\n\r\n\tmain[wrapper] form button[place=\"bottom\"] {\r\n\t\twidth: 7rem;\r\n\t\ttransform: translate3d(-50%,5rem,0);\r\n\t\tz-index: 99;\r\n\t\tborder-top: 1px solid #fff;\r\n\t}\r\n\r\n\tmain[wrapper] button[place=\"bottom\"]:active,\r\n\tmain[wrapper] button[place=\"bottom\"]:hover {\r\n\t\tborder-top: 1px solid transparent;\r\n\t}\r\n\r\n\tmain[wrapper] [background] {\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tz-index: 0;\r\n\t\topacity: 0.7;\r\n\t\tbackground: url('data:image/jpeg;base64,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');\r\n\t\t/* background: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg'); */\r\n\t\t/* background: -webkit-linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */\r\n\t\t/* background: -o-linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */\r\n\t\t/* background: linear-gradient(hsl(226, 100%, 68%) 0%, hsl(227, 81%, 57%) 100%); */\r\n\t\tbackground-repeat: no-repeat;\r\n\t\tbackground-position: center;\r\n\t\tbackground-size: cover;\r\n\t}\r\n\t/* main[wrapper] [background] li {\r\n\t\tposition: absolute;\r\n\t\tlist-style: none;\r\n\t\tdisplay: block;\r\n\t\twidth: 40px;\r\n\t\theight: 40px;\r\n\t\tbackground-color: #fff;\r\n\t\topacity: 0.5;\r\n\t\tbottom: -160px;\r\n\t\tanimation: square 25s infinite;\r\n\t\ttransition-timing-function: linear; Chrome, Safari, Opera\r\n\t\tanimation-delay: calc(12s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(1) {\r\n\t\tleft: 10%;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(2) {\r\n\t\tleft: 20%;\r\n\t\twidth: 80px;\r\n\t\theight: 80px;\r\n\t\tanimation-delay: calc(2s + 60s);\r\n\t\tanimation-duration: 17s;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(3) {\r\n\t\tleft: 25%;\r\n\t\tanimation-delay: calc(4s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(4) {\r\n\t\tleft: 40%;\r\n\t\twidth: 60px;\r\n\t\theight: 60px;\r\n\t\tanimation-duration: 22s;\r\n\t\topacity: 0.25;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(5) {\r\n\t\tleft: 70%;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(6) {\r\n\t\tleft: 80%;\r\n\t\twidth: 120px;\r\n\t\theight: 120px;\r\n\t\tanimation-delay: calc(3s + 60s);\r\n\t\topacity: 0.07;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(7) {\r\n\t\tleft: 32%;\r\n\t\twidth: 160px;\r\n\t\theight: 160px;\r\n\t\tanimation-delay: calc(7s + 60s);\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(8) {\r\n\t\tleft: 55%;\r\n\t\twidth: 20px;\r\n\t\theight: 20px;\r\n\t\tanimation-delay: calc(15s + 60s);\r\n\t\tanimation-duration: 40s;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(9) {\r\n\t\tleft: 25%;\r\n\t\twidth: 10px;\r\n\t\theight: 10px;\r\n\t\tanimation-delay: calc(2s + 60s);\r\n\t\tanimation-duration: 40s;\r\n\t\topacity: 0.05;\r\n\t}\r\n\tmain[wrapper] [background] li:nth-child(10) {\r\n\t\tleft: 90%;\r\n\t\twidth: 160px;\r\n\t\theight: 160px;\r\n\t\tanimation-delay: calc(11s + 60s);\r\n\t}\r\n\t@keyframes square {\r\n\t\t0% {\r\n\t\t\ttransform: translateY(0);\r\n\t\t}\r\n\t\t100% {\r\n\t\t\ttransform: translateY(-160vh) rotate(600deg);\r\n\t\t}\r\n\t} */\r\n</style>\r\n\r\n<main wrapper login flex center children scroller-y>\r\n\t<div container>\r\n\t\t<!-- <h1 style=\"font-family: 'Source Sans Pro', sans-serif;color: white;font-weight:lighter;\">Welcome</h1> -->\r\n\t\t<form login>\r\n\t\t\t<!-- TODO : rework oninput events -->\r\n\t\t\t<input\r\n\t\t\t\ttype=\"text\"\r\n\t\t\t\tname=\"username\"\r\n\t\t\t\tid=\"username\"\r\n\t\t\t\tplaceholder=\"Username\"\r\n\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\tmaxlength=\"32\"\r\n\t\t\t\tv-on:input=\"usernameInputEvent\"\r\n\t\t\t\tv-model=\"user.account.username\"\r\n\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t>\r\n\t\t\t<input\r\n\t\t\t\ttype=\"password\"\r\n\t\t\t\tname=\"password\"\r\n\t\t\t\tid=\"password\"\r\n\t\t\t\tplaceholder=\"Password\"\r\n\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\tmaxlength=\"64\"\r\n\t\t\t\tv-on:input=\"passwordInputEvent\"\r\n\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t>\r\n\t\t\t<div v-show=\"!isLogin\" transition=\"height\" transition-mode=\"out-in\" style=\"height:212px\"> \r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"email\"\r\n\t\t\t\t\tname=\"email\"\r\n\t\t\t\t\tid=\"email\"\r\n\t\t\t\t\tplaceholder=\"Email\"\r\n\t\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\t\tv-on:input=\"emailInputEvent\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"firstname\"\r\n\t\t\t\t\tid=\"firstname\"\r\n\t\t\t\t\tplaceholder=\"First Name\"\r\n\t\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.firstName\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"lastname\"\r\n\t\t\t\t\tid=\"lastname\"\r\n\t\t\t\t\tplaceholder=\"Last Name\"\r\n\t\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.lastName\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t\t<input\r\n\t\t\t\t\ttype=\"text\"\r\n\t\t\t\t\tname=\"group\"\r\n\t\t\t\t\tid=\"group\"\r\n\t\t\t\t\tplaceholder=\"Study Group (BS1-2, BS4-1)\"\r\n\t\t\t\t\tautocompvare=\"off\"\r\n\t\t\t\t\tv-on:input=\"/*usernameInputEvent*/\"\r\n\t\t\t\t\tv-model=\"user.account.studyGroup\"\r\n\t\t\t\t\t@keyup.enter=\"isLogin ? login($event) : register($event)\"\r\n\t\t\t\t>\r\n\t\t\t</div>\r\n\r\n\t\t\t<button :place=\"isLogin ? 'form' : 'bottom'\" style=\"color:#fff\" purp=\"login\"\r\n\t\t\t\ttype=\"button\"\r\n\t\t\t\t@click=\"login\"\r\n\t\t\t\t@keyup.enter=\"login\"\r\n\t\t\t>Log in</button>\r\n\t\t\t<button :place=\"isLogin ? 'bottom' : 'form'\" style=\"color:#fff\"\r\n\t\t\t\ttype=\"button\"\r\n\t\t\t\t@click=\"register\"\r\n\t\t\t\t@keyup.enter=\"register\"\r\n\t\t\t>Register</button>\r\n\t\t</form>\r\n\t</div>\r\n\t<ul background>\r\n<!-- \t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li>\r\n\t\t<li></li> -->\r\n\t</ul>\r\n</main>\r\n";
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(16)
+	__vue_script__ = __webpack_require__(15)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(20)
+	__vue_template__ = __webpack_require__(19)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -14418,7 +14417,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-b2658c16/main.vue"
+	  var id = "_v-d4505d78/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14427,7 +14426,7 @@
 	})()}
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -14438,7 +14437,7 @@
 	// </template>
 	//
 	// <script>
-	var sidebar = __webpack_require__(17);
+	var sidebar = __webpack_require__(16);
 
 	module.exports = {
 		components: {
@@ -14469,17 +14468,17 @@
 	// </script>
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(18)
+	__vue_script__ = __webpack_require__(17)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\sidebar.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(19)
+	__vue_template__ = __webpack_require__(18)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -14495,7 +14494,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-127f4750/sidebar.vue"
+	  var id = "_v-d8058cbe/sidebar.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14504,7 +14503,7 @@
 	})()}
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14555,30 +14554,29 @@
 	// </script>
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	module.exports = "<aside class=\"sidebar-main\"><header><button v-link=\"'/'\" type=\"button\" class=\"btn btn-block\"><h1>UIS</h1></button></header><ul class=\"menu\"><li><button v-link=\"{ name: 'profile', params: { username: user.account.username } }\" class=\"btn btn-block clearfix\"><span class=\"icon pe-7s-user\"></span><span class=\"title\">Profile</span></button></li><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-block clearfix\"><span class=\"icon pe-7s-medal\"></span><span class=\"title\">Innopoints</span><!-- span.info.right(v-show='user.account.isStudent && !user.innopoints.isAdmin', v-text='user.innopoints.data.amount')--></button></li><li><button v-link=\"{ name: 'store' }\" class=\"btn btn-block clearfix\"><span class=\"icon pe-7s-shopbag\"></span><span class=\"title\">Store</span></button></li><li v-if=\"user.account.isModerator\"><button v-link=\"{ name: 'accounts' }\" class=\"btn btn-block clearfix\"><span class=\"icon pe-7s-users\"></span><span class=\"title\">Accounts</span></button></li></ul><footer><button @click=\"logout\" block=\"\" class=\"btn btn-block clearfix\"><span class=\"icon pe-7s-upload pe-rotate-270\"></span><span class=\"title\">Log Out</span></button></footer></aside>";
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<sidebar></sidebar>\n<router-view></router-view>\n";
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(22)
-	__vue_script__ = __webpack_require__(26)
+	__vue_script__ = __webpack_require__(21)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\content.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(34)
+	__vue_template__ = __webpack_require__(27)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -14594,7 +14592,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-13c899ed/content.vue"
+	  var id = "_v-d572e784/content.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14603,23 +14601,540 @@
 	})()}
 
 /***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _header = __webpack_require__(22);
+
+	var _header2 = _interopRequireDefault(_header);
+
+	var _footer = __webpack_require__(25);
+
+	var _footer2 = _interopRequireDefault(_footer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// <template lang="jade">
+	// 	main
+	// 		main-header
+	// 			slot(name='header')
+	// 		.content-main
+	// 			.wrap
+	// 				router-view
+	// 			main-footer
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data: function data() {
+			return {
+				user: this.$root.user
+			};
+		},
+
+		components: {
+			mainHeader: _header2.default,
+			mainFooter: _footer2.default
+		}
+	};
+	// </script>
+
+/***/ },
 /* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_script__ = __webpack_require__(23)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\header.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(24)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-18459358/header.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// <template>
+	// 	<header>
+	// 		<slot></slot>
+	// 	</header>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data: function data() {
+			return {};
+		},
+		methods: {}
+	};
+	// </script>
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<header>\n\t<slot></slot>\n</header>\n";
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_template__ = __webpack_require__(26)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-11d9a134/footer.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = "<footer><p class=\"text-muted\">2016 © InnoDev</p></footer>";
+
+/***/ },
+/* 27 */
+/***/ function(module, exports) {
+
+	module.exports = "<main><main-header><slot name=\"header\"></slot></main-header><div class=\"content-main\"><div class=\"wrap\"><router-view></router-view></div><main-footer></main-footer></div></main>";
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_script__ = __webpack_require__(29)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\test.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(30)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-51fdfb9d/test.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// <template>
+	// 	<h1>Current path: {{ $route.path }}</h1>
+	// 	<pre>{{ user | json 2 }}</pre>
+	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data: function data() {
+			return {
+				user: this.$router.app.user
+			};
+		},
+		route: {
+			data: function data(transition) {
+				// this.user.account.update(transition.next);
+				console.log("test route updated!");
+				transition.next();
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 2 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_script__ = __webpack_require__(32)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\profile\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(33)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-071051d2/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _content = __webpack_require__(20);
+
+	var _content2 = _interopRequireDefault(_content);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = {
+		data: function data() {
+			return {
+				user: {}
+			};
+		},
+		route: {
+			data: function data(transition) {
+				console.log("Called get in user");
+
+				var username = this.$route.params.username;
+				var user = this.$root.user.account;
+
+				if (user.username != username) {
+					console.log("called getBio: " + username);
+					user.getBio({ username: username }, function (result) {
+						console.log(result);
+						transition.next({
+							user: result
+						});
+					});
+				} else {
+					if (user.id) transition.next({ user: user });else user.exists(function (result) {
+						transition.next({ user: user });
+					});
+				}
+			}
+		},
+		components: {
+			content: _content2.default
+		}
+	};
+	// </script>
+	// <template>
+	// 	<content>
+	// 		<div slot="header">
+	// 			<div>Profile</div>
+	// 		</div>
+	// 	</content>
+	// </template>
+	//
+	// <script>
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t<div>Profile</div>\n\t</div>\n</content>\n";
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_script__ = __webpack_require__(35)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\profile\\profile.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(36)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-4f158ebb/profile.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// <template>
+	// 	<div class="container">
+	// 		<div class="card card-block" block>
+	// 			<div class="row">
+	// 				<div class="col-sm text-sm-right">
+	// 					<p>Username</p>
+	// 				</div>
+	// 				<div class="col-sm">
+	// 					<p class="font-weight-bold">{{ user.username }}</p>
+	// 				</div>
+	// 			</div>
+	// 			<div class="row">
+	// 				<div class="col-sm text-sm-right">
+	// 					<p>Role</p>
+	// 				</div>
+	// 				<div class="col-sm">
+	// 					<p class="font-weight-bold">{{ user.role }}</p>
+	// 				</div>
+	// 			</div>
+	// 			<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
+	// 			<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
+	// 			<pre v-show="user.firstName">{{ user.firstName + " " + user.lastName }}</pre>
+	// 			<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+	// 		</div>
+	// 		<div block>
+	// 			<router-view></router-view>
+	// 		</div> 
+	// 	</div>
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		data: function data() {
+			return {
+				user: {}
+			};
+		},
+		route: {
+			data: function data(transition) {
+				console.log("Called get in user");
+
+				var username = this.$route.params.username;
+				var user = this.$root.user.account;
+
+				if (user.username != username) {
+					console.log("called getBio: " + username);
+					user.getBio({ username: username }, function (result) {
+						console.log(result);
+						transition.next({
+							user: result
+						});
+					});
+				} else {
+					if (user.id) transition.next({ user: user });else user.exists(function (result) {
+						transition.next({ user: user });
+					});
+				}
+			}
+		}
+	};
+	// </script>
+
+/***/ },
+/* 36 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"container\">\n\t<div class=\"card card-block\" block>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm text-sm-right\">\n\t\t\t\t<p>Username</p>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm\">\n\t\t\t\t<p class=\"font-weight-bold\">{{ user.username }}</p>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm text-sm-right\">\n\t\t\t\t<p>Role</p>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm\">\n\t\t\t\t<p class=\"font-weight-bold\">{{ user.role }}</p>\n\t\t\t</div>\n\t\t</div>\n\t\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t\t<pre v-show=\"user.firstName\">{{ user.firstName + \" \" + user.lastName }}</pre>\n\t\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n\t</div>\n\t<div block>\n\t\t<router-view></router-view>\n\t</div> \n</div>\n";
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__vue_script__ = __webpack_require__(38)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\accounts\\main.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(39)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-c2899a18/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// <template>
+	// 	<content></content>
+	// </template>
+	//
+	// <script>
+	var content = __webpack_require__(20);
+
+	module.exports = {
+		components: {
+			content: content
+		}
+	};
+	// </script>
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<content></content>\n";
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__webpack_require__(41)
+	__vue_script__ = __webpack_require__(45)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\accounts\\admin.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(46)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-4b8f5ba4/admin.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(23);
+	var content = __webpack_require__(42);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
+	var update = __webpack_require__(44)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./content.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./content.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-4b8f5ba4&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-4b8f5ba4&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -14629,21 +15144,21 @@
 	}
 
 /***/ },
-/* 23 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(24)();
+	exports = module.exports = __webpack_require__(43)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".content-main > .wrap {\n  min-height: 100%;\n  padding-top: 1rem;\n  padding-bottom: 4rem;\n  position: relative;\n}\n", ""]);
+	exports.push([module.id, "/* Gotta fix this */\n.card[_v-4b8f5ba4] {\n  text-align: left;\n}\ntd[_v-4b8f5ba4] {\n  vertical-align: middle;\n}\nselect.form-control[_v-4b8f5ba4] {\n  padding: .25rem .5rem;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 24 */
+/* 43 */
 /***/ function(module, exports) {
 
 	/*
@@ -14699,7 +15214,7 @@
 
 
 /***/ },
-/* 25 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -14921,616 +15436,7 @@
 
 
 /***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _header = __webpack_require__(27);
-
-	var _header2 = _interopRequireDefault(_header);
-
-	var _footer = __webpack_require__(30);
-
-	var _footer2 = _interopRequireDefault(_footer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// <style lang="less">
-	//
-	// 	.content-main > .wrap {
-	// 		min-height: 100%;
-	// 		padding-top: 1rem;
-	// 		padding-bottom: 4rem; // footer
-	// 		position: relative;
-	// 	}
-	//
-	// </style>
-	//
-	// <template lang="jade">
-	// 	main
-	// 		main-header
-	// 			slot(name='header')
-	// 		.content-main._scroller-x._scroller-y
-	// 			.wrap
-	// 				router-view
-	// 				main-footer
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data: function data() {
-			return {
-				user: this.$root.user
-			};
-		},
-
-		components: {
-			mainHeader: _header2.default,
-			mainFooter: _footer2.default
-		}
-	};
-	// </script>
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(28)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\header.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(29)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-7cf8d86e/header.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	// <template>
-	// 	<header>
-	// 		<slot></slot>
-	// 	</header>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data: function data() {
-			return {};
-		},
-		methods: {}
-	};
-	// </script>
-
-/***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<header>\n\t<slot></slot>\n</header>\n";
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__webpack_require__(31)
-	__vue_template__ = __webpack_require__(33)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-bf5da052/footer.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(32);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./footer.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./footer.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(24)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "footer {\n  bottom: 0;\n  height: 4rem;\n  position: absolute;\n  text-align: center;\n  width: 100%;\n}\nfooter > p {\n  margin: 0;\n  line-height: 4rem;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	module.exports = "<footer><p class=\"text-muted\">2016 © InnoDev</p></footer>";
-
-/***/ },
-/* 34 */
-/***/ function(module, exports) {
-
-	module.exports = "<main><main-header><slot name=\"header\"></slot></main-header><div class=\"content-main _scroller-x _scroller-y\"><div class=\"wrap\"><router-view></router-view><main-footer></main-footer></div></div></main>";
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(36)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\test.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(37)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-62f3644e/test.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 36 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	// <template>
-	// 	<h1>Current path: {{ $route.path }}</h1>
-	// 	<pre>{{ user | json 2 }}</pre>
-	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data: function data() {
-			return {
-				user: this.$router.app.user
-			};
-		},
-		route: {
-			data: function data(transition) {
-				// this.user.account.update(transition.next);
-				console.log("test route updated!");
-				transition.next();
-			}
-		}
-	};
-	// </script>
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 2 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(39)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\profile\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(40)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-ce540270/main.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _content = __webpack_require__(21);
-
-	var _content2 = _interopRequireDefault(_content);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	module.exports = {
-		data: function data() {
-			return {
-				user: {}
-			};
-		},
-		route: {
-			data: function data(transition) {
-				console.log("Called get in user");
-
-				var username = this.$route.params.username;
-				var user = this.$root.user.account;
-
-				if (user.username != username) {
-					console.log("called getBio: " + username);
-					user.getBio({ username: username }, function (result) {
-						console.log(result);
-						transition.next({
-							user: result
-						});
-					});
-				} else {
-					if (user.id) transition.next({ user: user });else user.exists(function (result) {
-						transition.next({ user: user });
-					});
-				}
-			}
-		},
-		components: {
-			content: _content2.default
-		}
-	};
-	// </script>
-	// <template>
-	// 	<content>
-	// 		<div slot="header">
-	// 			<div>Profile</div>
-	// 		</div>
-	// 	</content>
-	// </template>
-	//
-	// <script>
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<content>\n\t<div slot=\"header\">\n\t\t<div>Profile</div>\n\t</div>\n</content>\n";
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(42)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\profile\\profile.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(43)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-00027d6a/profile.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 42 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	// <template>
-	// 	<div class="container">
-	// 		<div class="card card-block" block>
-	// 			<div class="row">
-	// 				<div class="col-sm text-sm-right">
-	// 					<p>Username</p>
-	// 				</div>
-	// 				<div class="col-sm">
-	// 					<p class="font-weight-bold">{{ user.username }}</p>
-	// 				</div>
-	// 			</div>
-	// 			<div class="row">
-	// 				<div class="col-sm text-sm-right">
-	// 					<p>Role</p>
-	// 				</div>
-	// 				<div class="col-sm">
-	// 					<p class="font-weight-bold">{{ user.role }}</p>
-	// 				</div>
-	// 			</div>
-	// 			<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
-	// 			<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
-	// 			<pre v-show="user.firstName">{{ user.firstName + " " + user.lastName }}</pre>
-	// 			<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
-	// 		</div>
-	// 		<div block>
-	// 			<router-view></router-view>
-	// 		</div> 
-	// 	</div>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		data: function data() {
-			return {
-				user: {}
-			};
-		},
-		route: {
-			data: function data(transition) {
-				console.log("Called get in user");
-
-				var username = this.$route.params.username;
-				var user = this.$root.user.account;
-
-				if (user.username != username) {
-					console.log("called getBio: " + username);
-					user.getBio({ username: username }, function (result) {
-						console.log(result);
-						transition.next({
-							user: result
-						});
-					});
-				} else {
-					if (user.id) transition.next({ user: user });else user.exists(function (result) {
-						transition.next({ user: user });
-					});
-				}
-			}
-		}
-	};
-	// </script>
-
-/***/ },
-/* 43 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"container\">\n\t<div class=\"card card-block\" block>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm text-sm-right\">\n\t\t\t\t<p>Username</p>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm\">\n\t\t\t\t<p class=\"font-weight-bold\">{{ user.username }}</p>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm text-sm-right\">\n\t\t\t\t<p>Role</p>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm\">\n\t\t\t\t<p class=\"font-weight-bold\">{{ user.role }}</p>\n\t\t\t</div>\n\t\t</div>\n\t\t<pre v-show=\"user.studyGroup != null\">{{ user.studyGroup }}</pre>\n\t\t<pre v-show=\"user.tgId != null\">{{ user.tgId }}</pre>\n\t\t<pre v-show=\"user.firstName\">{{ user.firstName + \" \" + user.lastName }}</pre>\n\t\t<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n\t</div>\n\t<div block>\n\t\t<router-view></router-view>\n\t</div> \n</div>\n";
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(45)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\accounts\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(46)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-e3bbfd3a/main.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
 /* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// <template>
-	// 	<content></content>
-	// </template>
-	//
-	// <script>
-	var content = __webpack_require__(21);
-
-	module.exports = {
-		components: {
-			content: content
-		}
-	};
-	// </script>
-
-/***/ },
-/* 46 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<content></content>\n";
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__webpack_require__(48)
-	__vue_script__ = __webpack_require__(50)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\accounts\\admin.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(51)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-49025b15/admin.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(49);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-49025b15&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-49025b15&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(24)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "/* Gotta fix this */\n.card[_v-49025b15] {\n  text-align: left;\n}\ntd[_v-49025b15] {\n  vertical-align: middle;\n}\nselect.form-control[_v-49025b15] {\n  padding: .25rem .5rem;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 50 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15627,7 +15533,7 @@
 			},
 			compareBy: function compareBy(key) {
 				return function (a, b) {
-					console.log(a, b, key);
+					// console.log(a, b, key)
 					if (a[key] < b[key]) return -1;
 					if (a[key] > b[key]) return 1;
 					return 0;
@@ -15651,23 +15557,23 @@
 	// </script>
 
 /***/ },
-/* 51 */
+/* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-49025b15=\"\">\n\t<div class=\"card card-block\" _v-49025b15=\"\">\n\t\t\n\t\t<h1 class=\"card-title mb-1\" _v-49025b15=\"\">Registered users</h1>\n\n\t\t<p class=\"text-xs-center\" v-show=\"$loadingRouteData\" _v-49025b15=\"\">Loading Users</p>\n\n\t\t<div class=\"table-responsive\" v-show=\"users.length\" _v-49025b15=\"\">\n\t\t\t<table class=\"table  table-striped table-bordered\" _v-49025b15=\"\">\n\t\t\t\t<thead _v-49025b15=\"\">\n\t\t\t\t\t<tr _v-49025b15=\"\">\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('id')\" _v-49025b15=\"\">#</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('username')\" _v-49025b15=\"\">Username</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('firstName')\" _v-49025b15=\"\">First Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('lastName')\" _v-49025b15=\"\">Last Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('tgId')\" _v-49025b15=\"\">Alias</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('role')\" _v-49025b15=\"\">Role</th>\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody _v-49025b15=\"\">\n\t\t\t\t\t<tr v-for=\"u in users\" _v-49025b15=\"\">\n\t\t\t\t\t\t<th scope=\"row\" _v-49025b15=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t</th><td _v-49025b15=\"\">{{ u.username }}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">{{ u.firstName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">{{ u.lastName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">@{{ u.tgId }}</td>\n\t\t\t\t\t\t<td class=\"text-xs-center p-0\" _v-49025b15=\"\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"role_select\" id=\"user_{{ u.id }}\" @change=\"selectChanged\" _v-49025b15=\"\">\n\t\t\t\t\t\t\t\t<option value=\"ghost\" :selected=\"u.role == 'ghost'\" _v-49025b15=\"\">Ghost</option>\n\t\t\t\t\t\t\t\t<option value=\"student\" :selected=\"u.role == 'student'\" _v-49025b15=\"\">Student</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</div>\n\n\t\t<!-- Fix disabling -->\n\t\t<button :disabled=\"selectChanged\" class=\"btn btn-primary btn-lg btn-block\" id=\"acceptRoles\" @click=\"sendRoles\" @keyup.enter=\"sendRoles\" _v-49025b15=\"\">Save Changes</button>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-4b8f5ba4=\"\">\n\t<div class=\"card card-block\" _v-4b8f5ba4=\"\">\n\t\t\n\t\t<h1 class=\"card-title mb-1\" _v-4b8f5ba4=\"\">Registered users</h1>\n\n\t\t<p class=\"text-xs-center\" v-show=\"$loadingRouteData\" _v-4b8f5ba4=\"\">Loading Users</p>\n\n\t\t<div class=\"table-responsive\" v-show=\"users.length\" _v-4b8f5ba4=\"\">\n\t\t\t<table class=\"table  table-striped table-bordered\" _v-4b8f5ba4=\"\">\n\t\t\t\t<thead _v-4b8f5ba4=\"\">\n\t\t\t\t\t<tr _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('id')\" _v-4b8f5ba4=\"\">#</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('username')\" _v-4b8f5ba4=\"\">Username</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('firstName')\" _v-4b8f5ba4=\"\">First Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('lastName')\" _v-4b8f5ba4=\"\">Last Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('tgId')\" _v-4b8f5ba4=\"\">Alias</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('role')\" _v-4b8f5ba4=\"\">Role</th>\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody _v-4b8f5ba4=\"\">\n\t\t\t\t\t<tr v-for=\"u in users\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t<th scope=\"row\" _v-4b8f5ba4=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t</th><td _v-4b8f5ba4=\"\">{{ u.username }}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">{{ u.firstName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">{{ u.lastName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">@{{ u.tgId }}</td>\n\t\t\t\t\t\t<td class=\"text-xs-center p-0\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"role_select\" id=\"user_{{ u.id }}\" @change=\"selectChanged\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t\t\t<option value=\"ghost\" :selected=\"u.role == 'ghost'\" _v-4b8f5ba4=\"\">Ghost</option>\n\t\t\t\t\t\t\t\t<option value=\"student\" :selected=\"u.role == 'student'\" _v-4b8f5ba4=\"\">Student</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</div>\n\n\t\t<!-- Fix disabling -->\n\t\t<button :disabled=\"selectChanged\" class=\"btn btn-primary btn-lg btn-block\" id=\"acceptRoles\" @click=\"sendRoles\" @keyup.enter=\"sendRoles\" _v-4b8f5ba4=\"\">Save Changes</button>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 52 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(53)
+	__vue_script__ = __webpack_require__(48)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\innopoints\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(54)
+	__vue_template__ = __webpack_require__(49)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15683,7 +15589,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-866a40c0/main.vue"
+	  var id = "_v-0bddf0f1/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15692,52 +15598,39 @@
 	})()}
 
 /***/ },
-/* 53 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	// <template>
-	// 	<content>
-	// 		<div content slot="header" flex align center>
-	// 			<input item type="search" id="search" inline
-	// 				:placeholder="'Search ' + $route.name"
-	// 				v-model="$router.app.query"
-	// 				v-show="$route.path.includes('applications')"
-	// 			/>
-	// 			<template v-if="$route.path.includes('applications')">
-	// 				<button item 
-	// 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }"
-	// 					v-if="!user.innopoints.data.isAdmin"
-	// 				>All</button>
-	// 				<button item
-	// 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }"
-	// 				>In&nbsp;process</button>
-	// 				<button item
-	// 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }"
-	// 				>Rejected</button>
-	// 				<button item
-	// 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }"
-	// 				>In&nbsp;rework</button>
-	// 				<button item
-	// 					v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }"
-	// 				>Approved</button>
-	// 			</template>
-	// 			<template v-else>
-	// 				<button main item v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }" inline>
-	// 					Applications
-	// 				</button>
-	// 			</template>
-	//
-	// 			<button item right v-link="{ name: 'apply', params: { username: user.account.username } }">
-	// 				<span text info>Apply</span>
-	// 			</button>
-	// 		</div>
-	// 	</content>
+	// <template lang="jade">
+	// 	content
+	// 		div(slot='header')
+	// 			.search-group.input-group
+	// 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query", v-show="$route.path.includes('applications')")
+	// 				span.input-group-btn
+	// 					button.btn.btn-secondary(type='button') 🔍
+	// 			ul.header-nav
+	// 				template(v-if="$route.path.includes('applications')")
+	// 					li
+	// 						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }" v-if="!user.innopoints.data.isAdmin") 📑 All
+	// 					li
+	// 						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }") 📥 In&nbsp;process
+	// 					li
+	// 						button.btn.btn-outline-danger(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }") 👎 Rejected
+	// 					li
+	// 						button.btn.btn-outline-warning(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }") 🔃 In&nbsp;rework
+	// 					li
+	// 						button.btn.btn-outline-success(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }") 👍 Approved
+	// 				template(v-else)
+	// 					li
+	// 						button.btn.btn-outline-secondary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }") 📄 Applications
+	// 				li.float-xs-right
+	// 					button.btn.btn-outline-info(v-link="{ name: 'apply', params: { username: user.account.username } }") 📝 Apply
 	// </template>
 	//
 	// <script>
-	var content = __webpack_require__(21);
+	var content = __webpack_require__(20);
 
 	module.exports = {
 		data: function data() {
@@ -15765,23 +15658,23 @@
 	// </script>
 
 /***/ },
-/* 54 */
+/* 49 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<content>\n\t<div content slot=\"header\" flex align center>\n\t\t<input item type=\"search\" id=\"search\" inline\n\t\t\t:placeholder=\"'Search ' + $route.name\"\n\t\t\tv-model=\"$router.app.query\"\n\t\t\tv-show=\"$route.path.includes('applications')\"\n\t\t/>\n\t\t<template v-if=\"$route.path.includes('applications')\">\n\t\t\t<button item \n\t\t\t\tv-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\"\n\t\t\t\tv-if=\"!user.innopoints.data.isAdmin\"\n\t\t\t>All</button>\n\t\t\t<button item\n\t\t\t\tv-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\"\n\t\t\t>In&nbsp;process</button>\n\t\t\t<button item\n\t\t\t\tv-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\"\n\t\t\t>Rejected</button>\n\t\t\t<button item\n\t\t\t\tv-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\"\n\t\t\t>In&nbsp;rework</button>\n\t\t\t<button item\n\t\t\t\tv-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\"\n\t\t\t>Approved</button>\n\t\t</template>\n\t\t<template v-else>\n\t\t\t<button main item v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" inline>\n\t\t\t\tApplications\n\t\t\t</button>\n\t\t</template>\n\t\t\n\t\t<button item right v-link=\"{ name: 'apply', params: { username: user.account.username } }\">\n\t\t\t<span text info>Apply</span>\n\t\t</button>\n\t</div>\n</content>\n";
+	module.exports = "<content><div slot=\"header\"><div class=\"search-group input-group\"><input id=\"search\" type=\"search\" placeholder=\"Search {{ $route.name | capitalize }}\" v-model=\"$router.app.query\" v-show=\"$route.path.includes('applications')\" class=\"form-control\"/><span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-secondary\">🔍</button></span></div><ul class=\"header-nav\"><template v-if=\"$route.path.includes('applications')\"><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\" v-if=\"!user.innopoints.data.isAdmin\" class=\"btn btn-outline-primary\">📑 All</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-primary\">📥 In&nbsp;process</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\" class=\"btn btn-outline-danger\">👎 Rejected</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\" class=\"btn btn-outline-warning\">🔃 In&nbsp;rework</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\" class=\"btn btn-outline-success\">👍 Approved</button></li></template><template v-else=\"v-else\"><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-secondary\">📄 Applications</button></li></template><li class=\"float-xs-right\"><button v-link=\"{ name: 'apply', params: { username: user.account.username } }\" class=\"btn btn-outline-info\">📝 Apply</button></li></ul></div></content>";
 
 /***/ },
-/* 55 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(56)
+	__vue_script__ = __webpack_require__(51)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\innopoints\\applications.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(60)
+	__vue_template__ = __webpack_require__(55)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15797,7 +15690,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-3bdd7b0a/applications.vue"
+	  var id = "_v-3cf6ab5b/applications.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15806,27 +15699,19 @@
 	})()}
 
 /***/ },
-/* 56 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	// <template>
-	// 	<div class="container">
-	// 		<pre v-show="$loadingRouteData">Loading...</pre>
+	// <template lang="jade">
+	// 	.container
+	// 		p(v-show="$loadingRouteData") Loading...
 	//
-	// 		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
+	// 		p(v-show="!applications.length && !$loadingRouteData") Empty
 	//
-	// 		<template v-if="applications.length">
-	// 			<application
-	// 				v-for="appl in applications
-	// 				 | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"
-	// 				:application="appl"
-	// 				:user="user"
-	// 				:success="action_success"
-	// 			></application>
-	// 		</template>
-	// 	</div>
+	// 		template(v-if="applications.length")
+	// 			application(v-for="appl in applications | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1", :application="appl", :user="user", :success="action_success")
 	// </template>
 	//
 	// <script>
@@ -15838,7 +15723,7 @@
 			};
 		},
 		components: {
-			application: __webpack_require__(57)
+			application: __webpack_require__(52)
 		},
 		methods: {
 			action_success: function action_success(id, new_status) {
@@ -15884,17 +15769,17 @@
 	// </script>
 
 /***/ },
-/* 57 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(58)
+	__vue_script__ = __webpack_require__(53)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\innopoints\\application.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(59)
+	__vue_template__ = __webpack_require__(54)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15910,7 +15795,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-3e70658e/application.vue"
+	  var id = "_v-4ee26270/application.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15919,60 +15804,38 @@
 	})()}
 
 /***/ },
-/* 58 */
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	// <template>
-	// 	<div card class="card" :status="application.status" :id="'card' + application.id">
-	// 		<header flex>
-	// 			<section left>
-	// 				<span>{{application.type | capitalize}}</span> <span misc>{{(application._id = '#' + application.id)}} by {{application.author.username}}</span>
-	// 				<span block misc>Status: <span :status="application.status">{{application.status.split('_').join(' ')}}</span></span>
-	// 			</section>
-	// 			<section right>
-	// 				<span misc v-text="application.creation_date"></span>
-	// 			</section>
-	// 		</header><!-- header -->
-	// 		<section content v-show="application.work">
-	// 			<div block>
-	// 				<h4 v-show="application.type=='group'">Participants:</h4>
-	// 				<div>
-	// 					<div block v-for="work in application.work">
-	// 						<a :href="'http://uis.university.innopolis.ru:8770/profile/' + work.actor.username">{{work.actor.username}}</a> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span>
-	// 					</div>						
-	// 				</div>
-	// 			</div>
-	// 		</section>
-	// 		<section content v-show="application.comment">
-	// 			<div block>
-	// 				<h4>Comment: </h4>
-	// 				<template v-if="application.comment && application.comment.length">
-	// 					<p v-for="comment in application.comment.split('\n')" track-by="$index">{{comment}}</p>
-	// 				</template>
-	// 			</div>
-	// 		</section>
-	// 		<section content v-show="application.files.length > 0">
-	// 			<div block>
-	// 			<h4>files: </h4>
-	// 			<p v-for="file of application.files">{{file | json}}</p>
-	// 			</div>
-	// 		</section>	
-	// 		<footer v-if="user.innopoints.data.isAdmin && application.status=='in_process'">
-	// 			<div block controls>
-	// 				<button item success data-id="{{application.id}}" @click="approve">Approve</button>
-	// 				<button item error data-id="{{application.id}}" @click="reject">Reject</button>
-	// 				<button item warning data-id="{{application.id}}" @click="toRework">To rework</button>
-	// 			</div>
-	// 		</footer>
-	// 		<footer v-if="!user.innopoints.data.isAdmin">
-	// 			<div block controls>
-	// 				<button item error data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')">Delete</button>
-	// 				<button item success data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')">Resend</span></button>
-	// 			</div>
-	// 		</footer>
-	// 	</div>
+	// <template lang="jade">
+	// 	.card(status="{{ application.status }}" id="card-{{ application.id }}")
+	// 		.card-block
+	// 			span.float-xs-right {{ application.creation_date }}
+	// 			h2.card-title.clearfix
+	// 				span.tag.tag-default.tag-success.float-xs-left(status="{{ application.status }}") {{ application.status.split('_').join(' ') | capitalize }}
+	// 				span.float-xs-left.mx-1 {{ application.type | capitalize }}
+	// 			h5.card-subtitle {{(application._id = '#' + application.id)}} by {{application.author.username}}
+	// 		div.card-block(v-show="application.work && application.type == 'group'")
+	// 			div(v-for="work in application.work")
+	// 				a(href="http://uis.university.innopolis.ru:8770/profile/{{ work.actor.username }}") {{ work.actor.username }} -
+	// 					span
+	// 						{{ work.activity.title }}[{{ work.activity.price }}]
+	// 			div(v-show="application.comment")
+	// 				h4 Comment
+	// 				template(v-if="application.comment && application.comment.length")
+	// 					p(v-for="comment in application.comment.split('\n')" track-by="$index") {{ comment }}
+	// 		div(v-show="application.files.length > 0")
+	// 			h4 Files
+	// 			p(v-for="file of application.files") {{ file | json }}
+	// 		footer(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
+	// 			button(data-id="{{ application.id }}" @click="approve") Approve
+	// 			button(data-id="{{ application.id }}" @click="reject") Reject
+	// 			button(data-id="{{ application.id }}" @click="toRework") To rework
+	// 		footer(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
+	// 			button(data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')") Delete
+	// 			button(data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')") Resend
 	// </template>
 	//
 	// <script>
@@ -16019,30 +15882,30 @@
 	// </script>
 
 /***/ },
-/* 59 */
+/* 54 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div card class=\"card\" :status=\"application.status\" :id=\"'card' + application.id\">\n\t<header flex>\n\t\t<section left>\n\t\t\t<span>{{application.type | capitalize}}</span> <span misc>{{(application._id = '#' + application.id)}} by {{application.author.username}}</span>\n\t\t\t<span block misc>Status: <span :status=\"application.status\">{{application.status.split('_').join(' ')}}</span></span>\n\t\t</section>\n\t\t<section right>\n\t\t\t<span misc v-text=\"application.creation_date\"></span>\n\t\t</section>\n\t</header><!-- header -->\n\t<section content v-show=\"application.work\">\n\t\t<div block>\n\t\t\t<h4 v-show=\"application.type=='group'\">Participants:</h4>\n\t\t\t<div>\n\t\t\t\t<div block v-for=\"work in application.work\">\n\t\t\t\t\t<a :href=\"'http://uis.university.innopolis.ru:8770/profile/' + work.actor.username\">{{work.actor.username}}</a> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span>\n\t\t\t\t</div>\t\t\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t</section>\n\t<section content v-show=\"application.comment\">\n\t\t<div block>\n\t\t\t<h4>Comment: </h4>\n\t\t\t<template v-if=\"application.comment && application.comment.length\">\n\t\t\t\t<p v-for=\"comment in application.comment.split('\\n')\" track-by=\"$index\">{{comment}}</p>\n\t\t\t</template>\n\t\t</div>\n\t</section>\n\t<section content v-show=\"application.files.length > 0\">\n\t\t<div block>\n\t\t<h4>files: </h4>\n\t\t<p v-for=\"file of application.files\">{{file | json}}</p>\n\t\t</div>\n\t</section>\t\n\t<footer v-if=\"user.innopoints.data.isAdmin && application.status=='in_process'\">\n\t\t<div block controls>\n\t\t\t<button item success data-id=\"{{application.id}}\" @click=\"approve\">Approve</button>\n\t\t\t<button item error data-id=\"{{application.id}}\" @click=\"reject\">Reject</button>\n\t\t\t<button item warning data-id=\"{{application.id}}\" @click=\"toRework\">To rework</button>\n\t\t</div>\n\t</footer>\n\t<footer v-if=\"!user.innopoints.data.isAdmin\">\n\t\t<div block controls>\n\t\t\t<button item error data-id=\"{{application.id}}\" @click=\"_delete\" v-show=\"(application.status=='in_process' || application.status=='rework')\">Delete</button>\n\t\t\t<button item success data-id=\"{{application.id}}\" @click=\"resend\" v-show=\"(application.status=='rework')\">Resend</span></button>\n\t\t</div>\n\t</footer>\n</div>\n";
+	module.exports = "<div status=\"{{ application.status }}\" id=\"card-{{ application.id }}\" class=\"card\"><div class=\"card-block\"><span class=\"float-xs-right\">{{ application.creation_date }}</span><h2 class=\"card-title clearfix\"><span status=\"{{ application.status }}\" class=\"tag tag-default tag-success float-xs-left\">{{ application.status.split('_').join(' ') | capitalize }}</span><span class=\"float-xs-left mx-1\">{{ application.type | capitalize }}</span></h2><h5 class=\"card-subtitle\">{{(application._id = '#' + application.id)}} by {{application.author.username}}</h5></div><div v-show=\"application.work &amp;&amp; application.type == 'group'\" class=\"card-block\"><div v-for=\"work in application.work\"><a href=\"http://uis.university.innopolis.ru:8770/profile/{{ work.actor.username }}\">{{ work.actor.username }} -<span>{{ work.activity.title }}[{{ work.activity.price }}]</span></a></div><div v-show=\"application.comment\"><h4>Comment</h4><template v-if=\"application.comment &amp;&amp; application.comment.length\"><p v-for=\"comment in application.comment.split('\n')\" track-by=\"$index\">{{ comment }}</p></template></div></div><div v-show=\"application.files.length &gt; 0\"><h4>Files</h4><p v-for=\"file of application.files\">{{ file | json }}</p></div><footer v-if=\"user.innopoints.data.isAdmin &amp;&amp; application.status=='in_process'\"><button data-id=\"{{ application.id }}\" @click=\"approve\">Approve</button><button data-id=\"{{ application.id }}\" @click=\"reject\">Reject</button><button data-id=\"{{ application.id }}\" @click=\"toRework\">To rework</button></footer><footer v-if=\"!user.innopoints.data.isAdmin &amp;&amp; application.status!='approved'\"><button data-id=\"{{application.id}}\" @click=\"_delete\" v-show=\"(application.status=='in_process' || application.status=='rework')\">Delete</button><button data-id=\"{{application.id}}\" @click=\"resend\" v-show=\"(application.status=='rework')\">Resend</button></footer></div>";
 
 /***/ },
-/* 60 */
+/* 55 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"container\">\n\t<pre v-show=\"$loadingRouteData\">Loading...</pre>\n\n\t<pre v-show=\"!applications.length && !$loadingRouteData\">Empty</pre>\n\n\t<template v-if=\"applications.length\">\n\t\t<application\n\t\t\tv-for=\"appl in applications\n\t\t\t | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1\"\n\t\t\t:application=\"appl\"\n\t\t\t:user=\"user\"\n\t\t\t:success=\"action_success\"\n\t\t></application>\n\t</template>\n</div>\n";
+	module.exports = "<div class=\"container\"><p v-show=\"$loadingRouteData\">Loading...</p><p v-show=\"!applications.length &amp;&amp; !$loadingRouteData\">Empty</p><template v-if=\"applications.length\"><application v-for=\"appl in applications | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1\" :application=\"appl\" :user=\"user\" :success=\"action_success\"></application></template></div>";
 
 /***/ },
-/* 61 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(62)
-	__vue_script__ = __webpack_require__(64)
+	__webpack_require__(57)
+	__vue_script__ = __webpack_require__(59)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\innopoints\\apply.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(65)
+	__vue_template__ = __webpack_require__(60)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16058,7 +15921,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-726f9d17/apply.vue"
+	  var id = "_v-05beb5e6/apply.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16067,23 +15930,23 @@
 	})()}
 
 /***/ },
-/* 62 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(63);
+	var content = __webpack_require__(58);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
+	var update = __webpack_require__(44)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-726f9d17&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-726f9d17&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-05beb5e6&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-05beb5e6&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -16093,21 +15956,21 @@
 	}
 
 /***/ },
-/* 63 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(24)();
+	exports = module.exports = __webpack_require__(43)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "/*\n.card {\n\tbackground: hsla(0, 0, 100, 1);\n\tborder-radius: 4px;\n\tpadding: 1rem 2rem;\n\ttext-align: left;\n}\n\n.card + .card {\n\tmargin-top: 1rem;\n}\n*/\n/* Gotta fix this */\n.card[_v-726f9d17] {\n  text-align: left;\n}\n#upload[_v-726f9d17] {\n  display: none;\n}\ntd[_v-726f9d17] {\n  vertical-align: middle;\n}\ntd button[_v-726f9d17] {\n  min-width: 1em;\n}\ninput[readonly][_v-726f9d17] {\n  color: rgba(0, 0, 0, 0.8);\n  background: #ffffff;\n  border-color: #ffffff;\n}\n", ""]);
+	exports.push([module.id, "/*\n.card {\n\tbackground: hsla(0, 0, 100, 1);\n\tborder-radius: 4px;\n\tpadding: 1rem 2rem;\n\ttext-align: left;\n}\n\n.card + .card {\n\tmargin-top: 1rem;\n}\n*/\n/* Gotta fix this */\n.card[_v-05beb5e6] {\n  text-align: left;\n}\n#upload[_v-05beb5e6] {\n  display: none;\n}\ntd[_v-05beb5e6] {\n  vertical-align: middle;\n}\ntd button[_v-05beb5e6] {\n  min-width: 1em;\n}\ninput[readonly][_v-05beb5e6] {\n  color: rgba(0, 0, 0, 0.8);\n  background: #ffffff;\n  border-color: #ffffff;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 64 */
+/* 59 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16459,24 +16322,24 @@
 	// </script>
 
 /***/ },
-/* 65 */
+/* 60 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-726f9d17=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-726f9d17=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-726f9d17=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" _v-726f9d17=\"\">\n\t\t<form id=\"ip_request\" _v-726f9d17=\"\">\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<h1 class=\"card-title\" _v-726f9d17=\"\">New Application</h1>\n\t\t\t\t<!--<h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-726f9d17=\"\">\n\t\t\t\t\t<label class=\"col-sm col-form-label col-form-label-lg\" for=\"activity_category\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<h4 _v-726f9d17=\"\">Category</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<select class=\"form-control form-control-lg\" id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<option value=\"blank\" selected=\"\" _v-726f9d17=\"\">Choose Category</option>\n\t\t\t\t\t\t\t<option value=\"\" _v-726f9d17=\"\">All</option>\n\t\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-726f9d17=\"\">{{ c.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\n\t\t\t\t<h4 class=\"mb-1\" _v-726f9d17=\"\">\n\t\t\t\t\t<template v-if=\"current.users.length > 1\">Participants</template>\n\t\t\t\t\t<template v-else=\"\">Participant</template>\n\t\t\t\t</h4>\n\n\t\t\t\t<ul class=\"list-group\" _v-726f9d17=\"\">\n\t\t\t\t\t\n\t\t\t\t\t<li class=\"list-group-item py-1\" v-for=\"u of current.users\" _v-726f9d17=\"\">\n\n\t\t\t\t\t\t<div class=\"clearfix mb-1\" v-show=\"current.users.length > 1\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-726f9d17=\"\">×</span>\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t\t<span class=\"text-muted\" v-show=\"current.users.length > 1\" _v-726f9d17=\"\">{{ $index + 1 }}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"username_{{ $index }}\" _v-726f9d17=\"\">Username</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"u.username\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"activity_{{ $index }}\" _v-726f9d17=\"\">Activity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<select class=\"form-control\" :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-726f9d17=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"amount_{{ $index }}\" _v-726f9d17=\"\">Quantity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"365\" v-model=\"u.amount\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" _v-726f9d17=\"\">Innopoints</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<input class=\"form-control\" type=\"number\" value=\"0123456789\" readonly=\"\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<div class=\"clearfix mt-1\" _v-726f9d17=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" @click=\"current_users_count_inc\" _v-726f9d17=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" _v-726f9d17=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<label for=\"upload\" _v-726f9d17=\"\">\n\t\t\t\t\t<h4 _v-726f9d17=\"\">Files</h4>\n\t\t\t\t</label>\n\t\t\t\t<div class=\"table-responsive\" _v-726f9d17=\"\">\n\t\t\t\t\t<table class=\"table  table-striped table-bordered\" v-show=\"current.files.length\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<thead _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<tr _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">#</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Name</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Type</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Size</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Remove</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"f in current.files\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<th scope=\"row\" _v-726f9d17=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t\t\t</th><td _v-726f9d17=\"\">{{ f.name }}</td>\n\t\t\t\t\t\t\t\t<td _v-726f9d17=\"\">{{ f.type }}</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-right\" _v-726f9d17=\"\">{{ f.size }} KB</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-center py-0\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<button type=\"button\" class=\"close float-xs-none\" aria-label=\"Remove File\" @click=\"removeFile($index)\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-726f9d17=\"\">×</span>\n\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"clearfix\" _v-726f9d17=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" onclick=\"upload.click()\" _v-726f9d17=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current.files = []\" v-show=\"current.files.length\" _v-726f9d17=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-726f9d17=\"\">\n\t\t\t</div> \n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<div class=\"form-group\" _v-726f9d17=\"\">\n\t\t\t\t\t<label for=\"comment\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<h4 _v-726f9d17=\"\">Comment</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<textarea class=\"form-control\" id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"4\" _v-726f9d17=\"\"></textarea>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<button class=\"btn btn-primary btn-lg btn-block\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" id=\"send\" _v-726f9d17=\"\">Send</button>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"!categorySelected\" _v-726f9d17=\"\">Select Category</p>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"categorySelected &amp;&amp; !activitySelected\" _v-726f9d17=\"\">Select Activities</p>\n\t\t\t</div>\n\n\t\t</form>\n\t</div>\n\n</div><!-- template wrap -->\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-05beb5e6=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-05beb5e6=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-05beb5e6=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" _v-05beb5e6=\"\">\n\t\t<form id=\"ip_request\" _v-05beb5e6=\"\">\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<h1 class=\"card-title\" _v-05beb5e6=\"\">New Application</h1>\n\t\t\t\t<!--<h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label class=\"col-sm col-form-label col-form-label-lg\" for=\"activity_category\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Category</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<select class=\"form-control form-control-lg\" id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<option value=\"blank\" selected=\"\" _v-05beb5e6=\"\">Choose Category</option>\n\t\t\t\t\t\t\t<option value=\"\" _v-05beb5e6=\"\">All</option>\n\t\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-05beb5e6=\"\">{{ c.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\n\t\t\t\t<h4 class=\"mb-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<template v-if=\"current.users.length > 1\">Participants</template>\n\t\t\t\t\t<template v-else=\"\">Participant</template>\n\t\t\t\t</h4>\n\n\t\t\t\t<ul class=\"list-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t\n\t\t\t\t\t<li class=\"list-group-item py-1\" v-for=\"u of current.users\" _v-05beb5e6=\"\">\n\n\t\t\t\t\t\t<div class=\"clearfix mb-1\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t\t<span class=\"text-muted\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">{{ $index + 1 }}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"username_{{ $index }}\" _v-05beb5e6=\"\">Username</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"u.username\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"activity_{{ $index }}\" _v-05beb5e6=\"\">Activity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<select class=\"form-control\" :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-05beb5e6=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-05beb5e6=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"amount_{{ $index }}\" _v-05beb5e6=\"\">Quantity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"365\" v-model=\"u.amount\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Innopoints</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<input class=\"form-control\" type=\"number\" value=\"0123456789\" readonly=\"\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<div class=\"clearfix mt-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" @click=\"current_users_count_inc\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<label for=\"upload\" _v-05beb5e6=\"\">\n\t\t\t\t\t<h4 _v-05beb5e6=\"\">Files</h4>\n\t\t\t\t</label>\n\t\t\t\t<div class=\"table-responsive\" _v-05beb5e6=\"\">\n\t\t\t\t\t<table class=\"table  table-striped table-bordered\" v-show=\"current.files.length\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<thead _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">#</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Name</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Type</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Size</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Remove</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"f in current.files\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th scope=\"row\" _v-05beb5e6=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t\t\t</th><td _v-05beb5e6=\"\">{{ f.name }}</td>\n\t\t\t\t\t\t\t\t<td _v-05beb5e6=\"\">{{ f.type }}</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-right\" _v-05beb5e6=\"\">{{ f.size }} KB</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-center py-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<button type=\"button\" class=\"close float-xs-none\" aria-label=\"Remove File\" @click=\"removeFile($index)\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"clearfix\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" onclick=\"upload.click()\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current.files = []\" v-show=\"current.files.length\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-05beb5e6=\"\">\n\t\t\t</div> \n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label for=\"comment\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Comment</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<textarea class=\"form-control\" id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"4\" _v-05beb5e6=\"\"></textarea>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<button class=\"btn btn-primary btn-lg btn-block\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" id=\"send\" _v-05beb5e6=\"\">Send</button>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"!categorySelected\" _v-05beb5e6=\"\">Select Category</p>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"categorySelected &amp;&amp; !activitySelected\" _v-05beb5e6=\"\">Select Activities</p>\n\t\t\t</div>\n\n\t\t</form>\n\t</div>\n\n</div><!-- template wrap -->\n";
 
 /***/ },
-/* 66 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(67)
-	__vue_script__ = __webpack_require__(69)
+	__webpack_require__(62)
+	__vue_script__ = __webpack_require__(64)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\store\\main.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(70)
+	__vue_template__ = __webpack_require__(65)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16492,7 +16355,121 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-10c16790/main.vue"
+	  var id = "_v-304b079f/main.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(63);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(44)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-304b079f&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-304b079f&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(43)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".input-group[_v-304b079f] {\n  padding-top: 0.8125rem;\n  padding-bottom: 0.8125rem;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// <style lang="less" scoped>
+	//
+	// 	.input-group {
+	// 		padding-top: 13/16rem;
+	// 		padding-bottom: 13/16rem
+	// 	}
+	//
+	// </style>
+	//
+	// <template lang="jade">
+	// 	content
+	// 		div(slot='header')
+	// 				.search-group.input-group
+	// 					input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query', v-show="$route.path.endsWith('store')")
+	// 					span.input-group-btn
+	// 						button.btn.btn-secondary(type='button') 🔍
+	// </template>
+	//
+	// <script>
+	module.exports = {
+		components: {
+			content: __webpack_require__(20)
+		}
+	};
+	// </script>
+
+/***/ },
+/* 65 */
+/***/ function(module, exports) {
+
+	module.exports = "<content _v-304b079f=\"\"><div slot=\"header\" _v-304b079f=\"\"><div class=\"search-group input-group\" _v-304b079f=\"\"><input id=\"search\" type=\"search\" placeholder=\"Search Store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" class=\"form-control\" _v-304b079f=\"\"><span class=\"input-group-btn\" _v-304b079f=\"\"><button type=\"button\" class=\"btn btn-secondary\" _v-304b079f=\"\">🔍</button></span></div></div></content>";
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__webpack_require__(67)
+	__vue_script__ = __webpack_require__(69)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src\\views\\store\\store.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(75)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-4f85f8eb/store.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16510,127 +16487,7 @@
 	var content = __webpack_require__(68);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-10c16790&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-10c16790&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(24)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".input-group[_v-10c16790] {\n  padding-top: 0.8125rem;\n  padding-bottom: 0.8125rem;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// <style lang="less" scoped>
-	//
-	// 	.input-group {
-	// 		padding-top: 13/16rem;
-	// 		padding-bottom: 13/16rem
-	// 	}
-	//
-	// </style>
-	//
-	// <template>
-	// 	<content>
-	// 		<div slot="header">
-	// 			<div class="container-fluid">
-	// 				<div class="input-group">
-	// 					<input class="form-control" type="search" id="search" search inline placeholder="Search store" v-model="$router.app.query" v-show="$route.path.endsWith('store')">
-	// 					<span class="input-group-btn">
-	// 						<button class="btn btn-secondary" type="button">🔍</button>
-	// 					</span>
-	// 				</div>
-	// 			</div>
-	// 		</div>
-	// 	</content>
-	// </template>
-	//
-	// <script>
-	module.exports = {
-		components: {
-			content: __webpack_require__(21)
-		}
-	};
-	// </script>
-
-/***/ },
-/* 70 */
-/***/ function(module, exports) {
-
-	module.exports = "\n\n\n\n\n\n\n\n\n\n<content _v-10c16790=\"\">\n\t<div slot=\"header\" _v-10c16790=\"\">\n\t\t<div class=\"container-fluid\" _v-10c16790=\"\">\n\t\t\t<div class=\"input-group\" _v-10c16790=\"\">\n\t\t\t\t<input class=\"form-control\" type=\"search\" id=\"search\" search=\"\" inline=\"\" placeholder=\"Search store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" _v-10c16790=\"\">\n\t\t\t\t<span class=\"input-group-btn\" _v-10c16790=\"\">\n\t\t\t\t\t<button class=\"btn btn-secondary\" type=\"button\" _v-10c16790=\"\">🔍</button>\n\t\t\t\t</span>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</content>\n";
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	var __vue_styles__ = {}
-	__webpack_require__(72)
-	__vue_script__ = __webpack_require__(74)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src\\views\\store\\store.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(80)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
-	if (__vue_template__) {
-	__vue_options__.template = __vue_template__
-	}
-	if (!__vue_options__.computed) __vue_options__.computed = {}
-	Object.keys(__vue_styles__).forEach(function (key) {
-	var module = __vue_styles__[key]
-	__vue_options__.computed[key] = function () { return module }
-	})
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-7ddb971a/store.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 72 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(73);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
+	var update = __webpack_require__(44)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -16647,10 +16504,10 @@
 	}
 
 /***/ },
-/* 73 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(24)();
+	exports = module.exports = __webpack_require__(43)();
 	// imports
 
 
@@ -16661,7 +16518,7 @@
 
 
 /***/ },
-/* 74 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16683,7 +16540,7 @@
 	// </template>
 	//
 	// <script>
-	var storage = __webpack_require__(11);
+	var storage = __webpack_require__(10);
 
 	module.exports = {
 		data: function data() {
@@ -16693,7 +16550,7 @@
 			};
 		},
 		components: {
-			item: __webpack_require__(75)
+			item: __webpack_require__(70)
 		},
 		route: {
 			data: function data(transition) {
@@ -16731,18 +16588,18 @@
 	// </script>
 
 /***/ },
-/* 75 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(76)
-	__vue_script__ = __webpack_require__(78)
+	__webpack_require__(71)
+	__vue_script__ = __webpack_require__(73)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\store\\item.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(79)
+	__vue_template__ = __webpack_require__(74)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16758,7 +16615,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-57719fea/item.vue"
+	  var id = "_v-76fb3ff9/item.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16767,23 +16624,23 @@
 	})()}
 
 /***/ },
-/* 76 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(77);
+	var content = __webpack_require__(72);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(25)(content, {});
+	var update = __webpack_require__(44)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-57719fea&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-57719fea&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-76fb3ff9&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-76fb3ff9&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -16793,21 +16650,21 @@
 	}
 
 /***/ },
-/* 77 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(24)();
+	exports = module.exports = __webpack_require__(43)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "img[_v-57719fea] {\n  width: 100%;\n}\n", ""]);
+	exports.push([module.id, "img[_v-76fb3ff9] {\n  width: 100%;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 78 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16850,29 +16707,29 @@
 	// </script>
 
 /***/ },
-/* 79 */
+/* 74 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"card\" _v-57719fea=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-57719fea=\"\"><div class=\"card-block\" _v-57719fea=\"\"><h4 class=\"card-title\" _v-57719fea=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-57719fea=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-57719fea=\"\">{{ item.category.title }}</h6><p v-show=\"item.possible_joint_purchase\" class=\"card-text\" _v-57719fea=\"\">This item can be bought by a group of {{ item.max_buyers }}!</p><div v-for=\"option in item.options\" class=\"form-group\" _v-57719fea=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-57719fea=\"\"><option value=\"\" _v-57719fea=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-57719fea=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-57719fea=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-57719fea=\"\">Buy</button></div></div></div>";
+	module.exports = "<div class=\"card\" _v-76fb3ff9=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-76fb3ff9=\"\"><div class=\"card-block\" _v-76fb3ff9=\"\"><h4 class=\"card-title\" _v-76fb3ff9=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-76fb3ff9=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-76fb3ff9=\"\">{{ item.category.title }}</h6><p v-show=\"item.possible_joint_purchase\" class=\"card-text\" _v-76fb3ff9=\"\">This item can be bought by a group of {{ item.max_buyers }}!</p><div v-for=\"option in item.options\" class=\"form-group\" _v-76fb3ff9=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-76fb3ff9=\"\"><option value=\"\" _v-76fb3ff9=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-76fb3ff9=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-76fb3ff9=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-76fb3ff9=\"\">Buy</button></div></div></div>";
 
 /***/ },
-/* 80 */
+/* 75 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"container-fluid\"><div class=\"card-columns\"><item v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title'\" :item=\"item\" :buy=\"buy\"></item><!-- For testing purposes--><item v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title'\" :item=\"item\" :buy=\"buy\"></item><item v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title'\" :item=\"item\" :buy=\"buy\"></item><item v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title'\" :item=\"item\" :buy=\"buy\"></item><item v-for=\"item in items | filterBy $router.app.query in 'title' 'price' 'category.title'\" :item=\"item\" :buy=\"buy\"></item></div></div>";
 
 /***/ },
-/* 81 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__vue_script__ = __webpack_require__(82)
+	__vue_script__ = __webpack_require__(77)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src\\views\\app.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(83)
+	__vue_template__ = __webpack_require__(78)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16888,7 +16745,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-d81c4cd6/app.vue"
+	  var id = "_v-7a9f9c66/app.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16897,7 +16754,7 @@
 	})()}
 
 /***/ },
-/* 82 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16912,7 +16769,7 @@
 			console.log('App is awaiting your command!');
 		},
 		data: function data() {
-			var modules = __webpack_require__(9);
+			var modules = __webpack_require__(8);
 			return {
 				user: {
 					account: modules.accounts,
@@ -16925,21 +16782,21 @@
 	// </script>
 
 /***/ },
-/* 83 */
+/* 78 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<router-view></router-view>\n";
 
 /***/ },
-/* 84 */
+/* 79 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 85 */,
-/* 86 */,
-/* 87 */
+/* 80 */,
+/* 81 */,
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
