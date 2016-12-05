@@ -11,7 +11,10 @@
 			h4.card-title {{ item.title }}
 				span.tag.tag-default.float-xs-right {{ item.price }}
 			h6.card-subtitle.text-muted.mb-1 {{ item.category.title }}
-			p.card-text(v-show='item.possible_joint_purchase') This item can be bought by a group of {{ item.max_buyers }}!
+			div(v-show='item.possible_joint_purchase')
+				p.card-text You can buy it with {{item.max_buyers}} people:
+				.form-group(v-for="i in (item.max_buyers - 1)")
+					input.form-control(placeholder="Username")
 			.form-group(v-for='option in item.options')
 				select.form-control(:name='option.title', :id='option.title', :data-index='$index', @change='onselect(item, $event)')
 					option(value='') Choose {{ option.title }}

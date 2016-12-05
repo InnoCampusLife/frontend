@@ -14786,10 +14786,12 @@
 
 	"use strict";
 
-	// <template>
-	// 	<h1>Current path: {{ $route.path }}</h1>
-	// 	<pre>{{ user | json 2 }}</pre>
-	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+	// <template lang="jade">
+	// 	.container
+	// 		.card.card-block
+	// 			h1 Current path: {{ $route.path }}
+	// 			pre {{ user | json 2 }}
+	// 			pre(v-if="$loadingRouteData") Data is not updated yet!
 	// </template>
 	//
 	// <script>
@@ -14813,7 +14815,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 2 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
+	module.exports = "<div class=\"container\"><div class=\"card card-block\"><h1>Current path: {{ $route.path }}</h1><pre>{{ user | json 2 }}</pre><pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre></div></div>";
 
 /***/ },
 /* 31 */
@@ -15608,8 +15610,8 @@
 	// 		div(slot='header')
 	// 			.search-group.input-group
 	// 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query", v-show="$route.path.includes('applications')")
-	// 				span.input-group-btn
-	// 					button.btn.btn-secondary(type='button') 🔍
+	// 				// span.input-group-btn
+	// 				// 	button.btn.btn-secondary(type='button') 🔍
 	// 			ul.header-nav
 	// 				template(v-if="$route.path.includes('applications')")
 	// 					li
@@ -15661,7 +15663,7 @@
 /* 49 */
 /***/ function(module, exports) {
 
-	module.exports = "<content><div slot=\"header\"><div class=\"search-group input-group\"><input id=\"search\" type=\"search\" placeholder=\"Search {{ $route.name | capitalize }}\" v-model=\"$router.app.query\" v-show=\"$route.path.includes('applications')\" class=\"form-control\"/><span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-secondary\">🔍</button></span></div><ul class=\"header-nav\"><template v-if=\"$route.path.includes('applications')\"><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\" v-if=\"!user.innopoints.data.isAdmin\" class=\"btn btn-outline-primary\">📑 All</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-primary\">📥 In&nbsp;process</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\" class=\"btn btn-outline-danger\">👎 Rejected</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\" class=\"btn btn-outline-warning\">🔃 In&nbsp;rework</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\" class=\"btn btn-outline-success\">👍 Approved</button></li></template><template v-else=\"v-else\"><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-secondary\">📄 Applications</button></li></template><li class=\"float-xs-right\"><button v-link=\"{ name: 'apply', params: { username: user.account.username } }\" class=\"btn btn-outline-info\">📝 Apply</button></li></ul></div></content>";
+	module.exports = "<content><div slot=\"header\"><div class=\"search-group input-group\"><input id=\"search\" type=\"search\" placeholder=\"Search {{ $route.name | capitalize }}\" v-model=\"$router.app.query\" v-show=\"$route.path.includes('applications')\" class=\"form-control\"/><!-- span.input-group-btn--><!-- \tbutton.btn.btn-secondary(type='button') 🔍--></div><ul class=\"header-nav\"><template v-if=\"$route.path.includes('applications')\"><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\" v-if=\"!user.innopoints.data.isAdmin\" class=\"btn btn-outline-primary\">📑 All</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-primary\">📥 In&nbsp;process</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\" class=\"btn btn-outline-danger\">👎 Rejected</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\" class=\"btn btn-outline-warning\">🔃 In&nbsp;rework</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\" class=\"btn btn-outline-success\">👍 Approved</button></li></template><template v-else=\"v-else\"><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-secondary\">📄 Applications</button></li></template><li class=\"float-xs-right\"><button v-link=\"{ name: 'apply', params: { username: user.account.username } }\" class=\"btn btn-outline-info\">📝 Apply</button></li></ul></div></content>";
 
 /***/ },
 /* 50 */
@@ -15810,6 +15812,7 @@
 	'use strict';
 
 	// <template lang="jade">
+	//
 	// 	.card(status="{{ application.status }}" id="card-{{ application.id }}")
 	// 		.card-block
 	// 			span.float-xs-right {{ application.creation_date }}
@@ -15817,22 +15820,25 @@
 	// 				span.tag.tag-default.tag-success.float-xs-left(status="{{ application.status }}") {{ application.status.split('_').join(' ') | capitalize }}
 	// 				span.float-xs-left.mx-1 {{ application.type | capitalize }}
 	// 			h5.card-subtitle {{(application._id = '#' + application.id)}} by {{application.author.username}}
-	// 		div.card-block(v-show="application.work && application.type == 'group'")
+	//
+	// 		.card-block(v-show="application.work && application.type == 'group'")
 	// 			div(v-for="work in application.work")
 	// 				a(href="http://uis.university.innopolis.ru:8770/profile/{{ work.actor.username }}") {{ work.actor.username }} -
-	// 					span
-	// 						{{ work.activity.title }}[{{ work.activity.price }}]
+	// 					span {{ work.activity.title }}[{{ work.activity.price }}]
 	// 			div(v-show="application.comment")
 	// 				h4 Comment
 	// 				template(v-if="application.comment && application.comment.length")
 	// 					p(v-for="comment in application.comment.split('\n')" track-by="$index") {{ comment }}
+	//
 	// 		div(v-show="application.files.length > 0")
 	// 			h4 Files
 	// 			p(v-for="file of application.files") {{ file | json }}
+	//
 	// 		footer(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
 	// 			button(data-id="{{ application.id }}" @click="approve") Approve
 	// 			button(data-id="{{ application.id }}" @click="reject") Reject
 	// 			button(data-id="{{ application.id }}" @click="toRework") To rework
+	//
 	// 		footer(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
 	// 			button(data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')") Delete
 	// 			button(data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')") Resend
@@ -16423,8 +16429,8 @@
 	// 		div(slot='header')
 	// 				.search-group.input-group
 	// 					input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query', v-show="$route.path.endsWith('store')")
-	// 					span.input-group-btn
-	// 						button.btn.btn-secondary(type='button') 🔍
+	// 					// span.input-group-btn
+	// 					// 	button.btn.btn-secondary(type='button') 🔍
 	// </template>
 	//
 	// <script>
@@ -16439,7 +16445,7 @@
 /* 65 */
 /***/ function(module, exports) {
 
-	module.exports = "<content _v-304b079f=\"\"><div slot=\"header\" _v-304b079f=\"\"><div class=\"search-group input-group\" _v-304b079f=\"\"><input id=\"search\" type=\"search\" placeholder=\"Search Store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" class=\"form-control\" _v-304b079f=\"\"><span class=\"input-group-btn\" _v-304b079f=\"\"><button type=\"button\" class=\"btn btn-secondary\" _v-304b079f=\"\">🔍</button></span></div></div></content>";
+	module.exports = "<content _v-304b079f=\"\"><div slot=\"header\" _v-304b079f=\"\"><div class=\"search-group input-group\" _v-304b079f=\"\"><input id=\"search\" type=\"search\" placeholder=\"Search Store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" class=\"form-control\" _v-304b079f=\"\"><!-- span.input-group-btn--><!-- \tbutton.btn.btn-secondary(type='button') 🔍--></div></div></content>";
 
 /***/ },
 /* 66 */
@@ -16682,7 +16688,10 @@
 	// 			h4.card-title {{ item.title }}
 	// 				span.tag.tag-default.float-xs-right {{ item.price }}
 	// 			h6.card-subtitle.text-muted.mb-1 {{ item.category.title }}
-	// 			p.card-text(v-show='item.possible_joint_purchase') This item can be bought by a group of {{ item.max_buyers }}!
+	// 			div(v-show='item.possible_joint_purchase')
+	// 				p.card-text You can buy it with {{item.max_buyers}} people:
+	// 				.form-group(v-for="i in (item.max_buyers - 1)")
+	// 					input.form-control(placeholder="Username")
 	// 			.form-group(v-for='option in item.options')
 	// 				select.form-control(:name='option.title', :id='option.title', :data-index='$index', @change='onselect(item, $event)')
 	// 					option(value='') Choose {{ option.title }}
@@ -16710,7 +16719,7 @@
 /* 74 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"card\" _v-76fb3ff9=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-76fb3ff9=\"\"><div class=\"card-block\" _v-76fb3ff9=\"\"><h4 class=\"card-title\" _v-76fb3ff9=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-76fb3ff9=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-76fb3ff9=\"\">{{ item.category.title }}</h6><p v-show=\"item.possible_joint_purchase\" class=\"card-text\" _v-76fb3ff9=\"\">This item can be bought by a group of {{ item.max_buyers }}!</p><div v-for=\"option in item.options\" class=\"form-group\" _v-76fb3ff9=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-76fb3ff9=\"\"><option value=\"\" _v-76fb3ff9=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-76fb3ff9=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-76fb3ff9=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-76fb3ff9=\"\">Buy</button></div></div></div>";
+	module.exports = "<div class=\"card\" _v-76fb3ff9=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-76fb3ff9=\"\"><div class=\"card-block\" _v-76fb3ff9=\"\"><h4 class=\"card-title\" _v-76fb3ff9=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-76fb3ff9=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-76fb3ff9=\"\">{{ item.category.title }}</h6><div v-show=\"item.possible_joint_purchase\" _v-76fb3ff9=\"\"><p class=\"card-text\" _v-76fb3ff9=\"\">You can buy it with {{item.max_buyers}} people:</p><div v-for=\"i in (item.max_buyers - 1)\" class=\"form-group\" _v-76fb3ff9=\"\"><input placeholder=\"Username\" class=\"form-control\" _v-76fb3ff9=\"\"></div></div><div v-for=\"option in item.options\" class=\"form-group\" _v-76fb3ff9=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-76fb3ff9=\"\"><option value=\"\" _v-76fb3ff9=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-76fb3ff9=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-76fb3ff9=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-76fb3ff9=\"\">Buy</button></div></div></div>";
 
 /***/ },
 /* 75 */
