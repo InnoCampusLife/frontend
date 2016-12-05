@@ -97,7 +97,7 @@
 			}
 		},
 		route: {
-			data  : function (transition) {
+			data(transition) {
 				var api = this.$root.user;
 				api.account.list(result => {
 						transition.next({
