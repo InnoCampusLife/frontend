@@ -1,7 +1,9 @@
-<template>
-	<h1>Current path: {{ $route.path }}</h1>
-	<pre>{{ user | json 2 }}</pre>
-	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+<template lang="jade">
+	.container
+		.card.card-block
+			h1 Current path: {{ $route.path }}
+			pre {{ user | json 2 }}
+			pre(v-if="$loadingRouteData") Data is not updated yet!
 </template>
 
 <script>
