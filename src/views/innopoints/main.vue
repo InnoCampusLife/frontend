@@ -1,8 +1,8 @@
 <template lang="jade">
 	content
 		div(slot='header')
-			.search-group.input-group
-				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query", v-show="$route.path.includes('applications')")
+			.search-group.input-group(v-show="$route.path.includes('applications')")
+				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
 				span.input-group-btn
 					button.btn.btn-secondary(type='button') 🔍
 			ul.header-nav

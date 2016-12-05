@@ -27,14 +27,17 @@
 			onselect(item, e) {
 				if (!item.selected || !item.selected.options) item.selected = { options: {} };
  
-				if (e.target.value !== "")
-					item.selected.options[e.target.name] = e.target.value;
-				else delete item.selected.options[e.target.name];
+				if (e.target.value !== "") {
+					item.selected.options[e.target.name] = e.target.value
+				} else {
+					delete item.selected.options[e.target.name]
+				}
 
-				if (Object.keys(item.selected.options).length == item.options.length)
-					document.getElementById(item.title).style.display = "block";
-				else
-					document.getElementById(item.title).style.display = "none";
+				if (Object.keys(item.selected.options).length == item.options.length) {
+					document.getElementById(item.title).style.display = "block"
+				} else {
+					document.getElementById(item.title).style.display = "none"
+				}
 			}
 		}
 	}

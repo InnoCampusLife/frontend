@@ -6,7 +6,7 @@ const adminZone = true,
 
 var router_view = { template: '<router-view></router-view>' }
 
-module.exports = router => {
+export default router => {
 	router.map({
 		'/login': {
 			component: require('./views/login.vue'),

@@ -45,55 +45,40 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
 	var Vue = __webpack_require__(4);
 	var VueRouter = __webpack_require__(6);
 	var newRouter = __webpack_require__(7);
 	var app = __webpack_require__(76);
-
 	var styles = __webpack_require__(79);
 	var polyfills = __webpack_require__(82);
-
 	Vue.use(VueRouter);
-
 	var router = newRouter(new VueRouter({
-		hashbang: false,
-		history: true
+	    hashbang: false,
+	    history: true
 	}));
-
 	// // function requireAll(requireContext) {
 	// //   return requireContext.keys().map(requireContext);
 	// // }
 	// // // requires and returns all modules that match
-
 	// // var modules = requireAll(require.context("./", true, /^\.\/.*\.js$/));
 	// // // is an array containing all the matching modules
-
 	// // console.log(modules)
-
 	// var req = require.context("./modules", true, /^\.\/.*\.js$/);
-
 	// // var config = req("./config.js");
 	// // tableTemplate === require("./templates/table.jade");
-
 	// // var modules = req("./modules.js");
 	// // tableTemplateId === require.resolve("./templates/table.jade");
-
 	// req.keys();
 	// // is ["./table.jade", "./table-row.jade", "./directory/folder.jade"]
-
 	// // console.log(req, req.keys(), req.id, config, 'Modules: ', modules)
-
 	// const modules = {}
-
 	// req.keys().map(key => {
 	//     console.log(key.slice(2, key.length - 3).split(/^(\/)|(\.)$/))
 	//     modules[key] = req(key)
 	// })
-
 	// console.log(modules)
-
 	router.start(app, 'app');
+
 
 /***/ },
 /* 1 */,
@@ -13246,648 +13231,478 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
+	"use strict";
 	var user = __webpack_require__(8).accounts;
-
-	var adminZone = true,
-	    authorizedZone = true,
-	    loginPage = true;
-
+	var adminZone = true, authorizedZone = true, loginPage = true;
 	var router_view = { template: '<router-view></router-view>' };
-
 	module.exports = function (router) {
-		router.map({
-			'/login': {
-				component: __webpack_require__(11),
-				loginPage: loginPage
-			},
-			'/': {
-				component: __webpack_require__(14),
-				subRoutes: {
-					'/': {
-						component: __webpack_require__(20),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(28)
-							}
-						}
-					},
-					'/profile': {
-						component: __webpack_require__(31),
-						subRoutes: {
-							'/:username': {
-								name: 'profile',
-								component: __webpack_require__(34)
-							}
-						}
-					},
-					'/accounts': {
-						component: __webpack_require__(37),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(40),
-								name: 'accounts'
-							}
-						}
-					},
-					'/innopoints': {
-						component: __webpack_require__(47),
-						subRoutes: {
-							'/:username': {
-								component: router_view,
-								subRoutes: {
-									'/': {
-										component: { template: '' },
-										name: 'innopoints'
-									},
-									'/applications': {
-										component: router_view,
-										subRoutes: {
-											'/:filter': {
-												component: __webpack_require__(50),
-												name: 'applications'
-											}
-										}
-									},
-									'/apply': {
-										component: __webpack_require__(56),
-										name: 'apply'
-									}
-								}
-							}
-						}
-					},
-					'/store': {
-						component: __webpack_require__(61),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(66),
-								name: 'store'
-							},
-							'/item/:item': {
-								component: __webpack_require__(70),
-								name: 'item'
-							}
-						}
-					}
-				},
-				authorizedZone: authorizedZone
-			}
-		});
-
-		router.beforeEach(function (transition) {
-			if (!user.loggedIn) {
-				if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
-			} else {
-				if (transition.to.loginPage) transition.redirect('/');else transition.next();
-			}
-		}).redirect({
-			'*': '/',
-			'/innopoints/:username/': '/innopoints/:username/applications/'
-		});
-
-		return router;
+	    router.map({
+	        '/login': {
+	            component: __webpack_require__(11),
+	            loginPage: loginPage
+	        },
+	        '/': {
+	            component: __webpack_require__(14),
+	            subRoutes: {
+	                '/': {
+	                    component: __webpack_require__(20),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(28)
+	                        }
+	                    }
+	                },
+	                '/profile': {
+	                    component: __webpack_require__(31),
+	                    subRoutes: {
+	                        '/:username': {
+	                            name: 'profile',
+	                            component: __webpack_require__(34)
+	                        }
+	                    }
+	                },
+	                '/accounts': {
+	                    component: __webpack_require__(37),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(40),
+	                            name: 'accounts'
+	                        }
+	                    }
+	                },
+	                '/innopoints': {
+	                    component: __webpack_require__(47),
+	                    subRoutes: {
+	                        '/:username': {
+	                            component: router_view,
+	                            subRoutes: {
+	                                '/': {
+	                                    component: { template: '' },
+	                                    name: 'innopoints'
+	                                },
+	                                '/applications': {
+	                                    component: router_view,
+	                                    subRoutes: {
+	                                        '/:filter': {
+	                                            component: __webpack_require__(50),
+	                                            name: 'applications'
+	                                        },
+	                                    }
+	                                },
+	                                '/apply': {
+	                                    component: __webpack_require__(56),
+	                                    name: 'apply'
+	                                },
+	                            }
+	                        }
+	                    }
+	                },
+	                '/store': {
+	                    component: __webpack_require__(61),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(66),
+	                            name: 'store'
+	                        },
+	                        '/item/:item': {
+	                            component: __webpack_require__(70),
+	                            name: 'item'
+	                        },
+	                    },
+	                },
+	            },
+	            authorizedZone: authorizedZone
+	        }
+	    });
+	    router.beforeEach(function (transition) {
+	        if (!user.loggedIn) {
+	            if (transition.to.authorizedZone)
+	                transition.redirect('/login');
+	            else
+	                transition.next();
+	        }
+	        else {
+	            if (transition.to.loginPage)
+	                transition.redirect('/');
+	            else
+	                transition.next();
+	        }
+	    }).redirect({
+	        '*': '/',
+	        '/innopoints/:username/': '/innopoints/:username/applications/'
+	    });
+	    return router;
 	};
+
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _config = __webpack_require__(9);
-
-	var config = _interopRequireWildcard(_config);
-
-	var _storage = __webpack_require__(10);
-
-	var storage = _interopRequireWildcard(_storage);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
+	"use strict";
+	var config = __webpack_require__(9);
+	var storage = __webpack_require__(10);
 	var api_url = config.server.api_url;
-
 	var modules = {
-		accounts: {
-			roles: ['ghost', 'student', 'moderator'],
-
-			have: function have(role) {
-				return !!(this.roles.indexOf(role.toLowerCase()) > -1);
-			},
-
-
-			//data
-
-			id: null,
-			username: null,
-			role: null,
-			firstName: null,
-			lastName: null,
-			patronymic: null,
-			studyGroup: null,
-			tgId: null,
-
-			get token() {
-				return this.storage.get(config.token_name);
-			},
-
-			set token(value) {
-				this.storage.set(config.token_name, value);
-			},
-
-			get fullName() {
-				var ln = !!this.lastName ? this.lastName + ' ' : '';
-				var fn = !!this.firstName ? this.firstName : '';
-				var pn = !!this.patronymic ? ' ' + this.patronymic : '';
-				return fn + ln + pn;
-			},
-
-			get loggedIn() {
-				return this.storage.get(config.token_name) ? true : false;
-			},
-
-			get isGhost() {
-				return !!this.is('ghost');
-			},
-
-			get isStudent() {
-				return !!this.is('student');
-			},
-
-			get isModerator() {
-				return !!this.is('moderator');
-			},
-
-			is: function is(ofType) {
-				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-			},
-
-			clear: function clear() {
-				this.id = null;
-				this.role = null;
-				this.firstName = null;
-				this.lastName = null;
-				this.patronymic = null;
-				this.studyGroup = null;
-				this.token = null;
-				this.storage.clear();
-			},
-
-			set: function set(data) {
-				if (data.id) this.id = data.id;
-				if (data.username) this.username = data.username;
-				if (data.role) this.role = data.role;
-				if (data.firstName) this.firstName = data.firstName;
-				if (data.lastName) this.lastName = data.lastName;
-				if (data.patronymic) this.patronymic = data.patronymic;
-				if (data.studyGroup) this.studyGroup = data.studyGroup;
-				if (data.token) this.token = data.token;
-			},
-
-			update: function update(successCallback, errorCallback) {
-				var that = this;
-				this.get(function (result) {
-					that.set(result);
-					if (successCallback) successCallback(result);
-				}, errorCallback);
-			},
-
-			storage: storage,
-
-			preferences: {
-				save: function save(successCallback, errorCallback) {
-					var that = this;
-					var type = "PUT",
-					    url = this.url + modules.accounts.token + '/updatePreferences',
-					    data = {
-						preferences: that
-					};
-
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-				get: function get(successCallback, errorCallback) {
-					var type = "GET",
-					    url = this.url + modules.accounts.token + '/getPreferences',
-					    data = '';
-
-					ajax(type, url, data, successCallback, errorCallback);
-				}
-			},
-
-			//
-
-			//api
-
-			version: 1,
-			name: "accounts",
-			get url() {
-				return api_url + "v" + this.version + "/" + this.name + "/";
-			},
-
-			create: function create(password, email, successCallback, errorCallback) {
-				var type = "POST",
-				    url = this.url,
-				    data = {
-					username: this.username,
-					password: password,
-					email: email,
-					firstName: this.firstName,
-					lastName: this.lastName,
-					studyGroup: this.studyGroup
-				};
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			authorize: function authorize(password, successCallback, errorCallback) {
-				var type = "POST",
-				    url = this.url + "auth",
-				    data = {
-					username: this.username,
-					password: password
-				};
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			get: function get(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token,
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			///MODER METHODS
-			//
-			list: function list(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/listAccounts",
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			updateRole: function updateRole(account_id, new_role, successCallback, errorCallback) {
-				var type = "PUT",
-				    url = this.url + this.token + "/updateRole",
-				    data = { accountId: account_id, newRole: new_role };
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-			//
-			///
-
-			exists: function exists(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/exists",
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			getBio: function getBio(args, successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			}
-		},
-		innopoints: {
-			roles: ['student', 'admin'],
-			have: function have(role) {
-				return !!(this.roles.indexOf(role) > -1);
-			},
-			data: {
-				id: null,
-				amount: null,
-				role: null,
-
-				// cart : [],
-
-				get isStudent() {
-					return !!this.is('student');
-				},
-
-				get isAdmin() {
-					return !!this.is('admin');
-				},
-
-				is: function is(ofType) {
-					return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-				},
-
-				update: function update(_successCallback, errorCallback) {
-					var that = this;
-					modules.innopoints.api.user.get({
-						successCallback: function successCallback(result) {
-							that.id = result.id;
-							that.amount = result.points_amount || 0;
-							that.role = result.type;
-
-							if (_successCallback) _successCallback(result);
-						},
-						errorCallback: errorCallback
-					});
-				}
-			},
-
-			api: {
-				version: 1,
-				name: "points",
-				get url() {
-					return api_url + "v" + this.version + "/" + this.name + "/";
-				},
-
-				getActivities: function getActivities(args) {
-					var type = "GET",
-					    url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
-					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-					ajax(type, url, data, args.successCallback, args.errorCallback);
-				},
-
-				getCategories: function getCategories(args) {
-					var type = "GET",
-					    url = this.url + "categories",
-					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-					ajax(type, url, data, args.successCallback, args.errorCallback);
-				},
-
-				shop: {
-					get url() {
-						return modules.innopoints.api.url + "shop/";
-					},
-
-					getItems: function getItems(args) {
-						var type = "GET",
-						    url = this.url + "items",
-						    data = {
-							skip: args.skip_count || null,
-							limit: args.limit_count || null,
-							fields: args.fields || 'title',
-							order: args.order || 'ASC',
-							category_id: args.category_id || null
-						};
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					getItem: function getItem(id, successCallback, errorCallback) {
-						var type = "GET",
-						    url = this.url + "items/" + id,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					order: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						create: function create(args) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + '/orders',
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						},
-
-						update: function update(args) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						},
-
-						delete: function _delete(args) {
-							var type = "DELETE",
-							    url = this.url + modules.accounts.token + '/orders/' + args.id,
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						}
-					}
-				},
-
-				user: {
-					get isAdmin() {
-						return modules.innopoints.data.isAdmin;
-					},
-					get url() {
-						return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/");
-					},
-
-					get: function get(args) {
-						var type = "GET",
-						    url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
-						    data = '';
-
-						if (this.isAdmin) if (args.id) url += "/accounts/" + args.id;
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					create: function create(successCallback, errorCallback) {
-						var type = "POST",
-						    url = this.url + modules.accounts.token,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					getFile: function getFile(appl_id, file_id, successCallback, errorCallback) {
-						var type = "GET",
-						    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					getAccounts: function getAccounts(args) {
-						var type = "GET",
-						    url = this.url + modules.accounts.token,
-						    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					updateAccount: function updateAccount(args) {
-						var type = "PUT",
-						    url = this.url + modules.accounts.token + "/accounts/" + args.id,
-						    data = { points_amount: args.points };
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					application: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						create: function create(application, successCallback, errorCallback) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + "/applications",
-							    data = { application: application };
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						update: function update(appl_id, new_params, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = new_params;
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						send: function send(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						get: function get(appl_id, successCallback, errorCallback) {
-							var type = "GET",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						delete: function _delete(appl_id, successCallback, errorCallback) {
-							var type = "DELETE",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						approve: function approve(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						reject: function reject(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						dismiss: function dismiss(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						}
-					},
-
-					applications: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						get: function get(args) {
-							if (args.status == 'all') args.status = null;
-
-							var type = "GET",
-							    url = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
-							    data = { skip: args.skip_count, limit: args.limit_count };
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						}
-					}
-				}
-			}
-		}
+	    accounts: {
+	        roles: [
+	            'ghost',
+	            'student',
+	            'moderator'
+	        ],
+	        have: function (role) {
+	            return !!(this.roles.indexOf(role.toLowerCase()) > -1);
+	        },
+	        //data
+	        id: null,
+	        username: null,
+	        role: null,
+	        firstName: null,
+	        lastName: null,
+	        patronymic: null,
+	        studyGroup: null,
+	        tgId: null,
+	        get token() {
+	            return this.storage.get(config.token_name);
+	        },
+	        set token(value) {
+	            this.storage.set(config.token_name, value);
+	        },
+	        get fullName() {
+	            var ln = (!!this.lastName ? this.lastName + ' ' : '');
+	            var fn = (!!this.firstName ? this.firstName : '');
+	            var pn = (!!this.patronymic ? ' ' + this.patronymic : '');
+	            return fn + ln + pn;
+	        },
+	        get loggedIn() {
+	            return this.storage.get(config.token_name) ? true : false;
+	        },
+	        get isGhost() {
+	            return !!this.is('ghost');
+	        },
+	        get isStudent() {
+	            return !!this.is('student');
+	        },
+	        get isModerator() {
+	            return !!this.is('moderator');
+	        },
+	        is: function (ofType) {
+	            return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+	        },
+	        clear: function () {
+	            this.id = null;
+	            this.role = null;
+	            this.firstName = null;
+	            this.lastName = null;
+	            this.patronymic = null;
+	            this.studyGroup = null;
+	            this.token = null;
+	            this.storage.clear();
+	        },
+	        set: function (data) {
+	            if (data.id)
+	                this.id = data.id;
+	            if (data.username)
+	                this.username = data.username;
+	            if (data.role)
+	                this.role = data.role;
+	            if (data.firstName)
+	                this.firstName = data.firstName;
+	            if (data.lastName)
+	                this.lastName = data.lastName;
+	            if (data.patronymic)
+	                this.patronymic = data.patronymic;
+	            if (data.studyGroup)
+	                this.studyGroup = data.studyGroup;
+	            if (data.token)
+	                this.token = data.token;
+	        },
+	        update: function (successCallback, errorCallback) {
+	            var that = this;
+	            this.get(function (result) {
+	                that.set(result);
+	                if (successCallback)
+	                    successCallback(result);
+	            }, errorCallback);
+	        },
+	        storage: storage,
+	        preferences: {
+	            save: function (successCallback, errorCallback) {
+	                var that = this;
+	                var type = "PUT", url = this.url + modules.accounts.token + '/updatePreferences', data = {
+	                    preferences: that
+	                };
+	                ajax(type, url, data, successCallback, errorCallback);
+	            },
+	            get: function (successCallback, errorCallback) {
+	                var type = "GET", url = this.url + modules.accounts.token + '/getPreferences', data = '';
+	                ajax(type, url, data, successCallback, errorCallback);
+	            }
+	        },
+	        //
+	        //api
+	        version: 1,
+	        name: "accounts",
+	        get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
+	        create: function (password, email, successCallback, errorCallback) {
+	            var type = "POST", url = this.url, data = {
+	                username: this.username,
+	                password: password,
+	                email: email,
+	                firstName: this.firstName,
+	                lastName: this.lastName,
+	                studyGroup: this.studyGroup
+	            };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        authorize: function (password, successCallback, errorCallback) {
+	            var type = "POST", url = this.url + "auth", data = {
+	                username: this.username,
+	                password: password
+	            };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        get: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token, data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        ///MODER METHODS
+	        //
+	        list: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/listAccounts", data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        updateRole: function (account_id, new_role, successCallback, errorCallback) {
+	            var type = "PUT", url = this.url + this.token + "/updateRole", data = { accountId: account_id, newRole: new_role };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        //
+	        ///
+	        exists: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/exists", data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        getBio: function (args, successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username), data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	    },
+	    innopoints: {
+	        roles: [
+	            'student',
+	            'admin'
+	        ],
+	        have: function (role) {
+	            return !!(this.roles.indexOf(role) > -1);
+	        },
+	        data: {
+	            id: null,
+	            amount: null,
+	            role: null,
+	            // cart : [],
+	            get isStudent() {
+	                return !!this.is('student');
+	            },
+	            get isAdmin() {
+	                return !!this.is('admin');
+	            },
+	            is: function (ofType) {
+	                return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+	            },
+	            update: function (successCallback, errorCallback) {
+	                var that = this;
+	                modules.innopoints.api.user.get({
+	                    successCallback: function (result) {
+	                        that.id = result.id;
+	                        that.amount = result.points_amount || 0;
+	                        that.role = result.type;
+	                        if (successCallback)
+	                            successCallback(result);
+	                    },
+	                    errorCallback: errorCallback
+	                });
+	            }
+	        },
+	        api: {
+	            version: 1,
+	            name: "points",
+	            get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
+	            getActivities: function (args) {
+	                var type = "GET", url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''), data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                ajax(type, url, data, args.successCallback, args.errorCallback);
+	            },
+	            getCategories: function (args) {
+	                var type = "GET", url = this.url + "categories", data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                ajax(type, url, data, args.successCallback, args.errorCallback);
+	            },
+	            shop: {
+	                get url() { return modules.innopoints.api.url + "shop/"; },
+	                getItems: function (args) {
+	                    var type = "GET", url = this.url + "items", data = {
+	                        skip: args.skip_count || null,
+	                        limit: args.limit_count || null,
+	                        fields: args.fields || 'title',
+	                        order: args.order || 'ASC',
+	                        category_id: args.category_id || null
+	                    };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                getItem: function (id, successCallback, errorCallback) {
+	                    var type = "GET", url = this.url + "items/" + id, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                order: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    create: function (args) {
+	                        var type = "POST", url = this.url + modules.accounts.token + '/orders', data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    },
+	                    update: function (args) {
+	                        var type = "POST", url = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action, data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    },
+	                    delete: function (args) {
+	                        var type = "DELETE", url = this.url + modules.accounts.token + '/orders/' + args.id, data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    }
+	                }
+	            },
+	            user: {
+	                get isAdmin() { return modules.innopoints.data.isAdmin; },
+	                get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/"); },
+	                get: function (args) {
+	                    var type = "GET", url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token, data = '';
+	                    if (this.isAdmin)
+	                        if (args.id)
+	                            url += "/accounts/" + args.id;
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                create: function (successCallback, errorCallback) {
+	                    var type = "POST", url = this.url + modules.accounts.token, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                getFile: function (appl_id, file_id, successCallback, errorCallback) {
+	                    var type = "GET", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                getAccounts: function (args) {
+	                    var type = "GET", url = this.url + modules.accounts.token, data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                updateAccount: function (args) {
+	                    var type = "PUT", url = this.url + modules.accounts.token + "/accounts/" + args.id, data = { points_amount: args.points };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                application: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    create: function (application, successCallback, errorCallback) {
+	                        var type = "POST", url = this.url + modules.accounts.token + "/applications", data = { application: application };
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    update: function (appl_id, new_params, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = new_params;
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    send: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve', data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    get: function (appl_id, successCallback, errorCallback) {
+	                        var type = "GET", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    delete: function (appl_id, successCallback, errorCallback) {
+	                        var type = "DELETE", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    approve: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    reject: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    dismiss: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    }
+	                },
+	                applications: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    get: function (args) {
+	                        if (args.status == 'all')
+	                            args.status = null;
+	                        var type = "GET", url = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''), data = { skip: args.skip_count, limit: args.limit_count };
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    }
+	                }
+	            }
+	        }
+	    }
 	};
-
 	function ajax(type, url, data, successCallback, errorCallback) {
-		var xhr = new XMLHttpRequest();
-		xhr.open(type, url, true);
-		xhr.onload = function () {
-			if (xhr.response.result) {
-				console.log(xhr.response.status);
-
-				if (successCallback) successCallback(xhr.response.result);
-			} else if (xhr.response.error) {
-				console.log(xhr.response.error);
-
-				if (errorCallback) errorCallback(xhr.response.error);
-			}
-		};
-
-		// TypeScript thingy
-		// // FIXME: Shouldn't need to cast to any
-		// (xhr as any).dataType = "json";
-		// (xhr as any).contentType = 'json';
-
-		xhr.dataType = "json";
-		xhr.contentType = 'json';
-
-		xhr.responseType = 'json';
-		if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send(JSON.stringify(data));
+	    var xhr = new XMLHttpRequest();
+	    xhr.open(type, url, true);
+	    xhr.onload = function () {
+	        if (xhr.response.result) {
+	            console.log(xhr.response.status);
+	            if (successCallback)
+	                successCallback(xhr.response.result);
+	        }
+	        else if (xhr.response.error) {
+	            console.log(xhr.response.error);
+	            if (errorCallback)
+	                errorCallback(xhr.response.error);
+	        }
+	    };
+	    // // FIXME: Shouldn't need to cast to any
+	    // (xhr as any).dataType = "json";
+	    // (xhr as any).contentType = 'json';
+	    xhr.responseType = 'json';
+	    if (!(url.indexOf("getBio") > -1))
+	        xhr.setRequestHeader('Content-Type', 'application/json');
+	    xhr.send(JSON.stringify(data));
 	}
-
 	module.exports = modules;
 	module.exports.token = modules.accounts.token;
+
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
 	var server = {
-		ip: "uis.university.innopolis.ru",
-		port: 8770,
-		get api_url() {
-			return "http://" + this.ip + ":" + (this.port || 21) + "/api/";
-		}
+	    ip: "uis.university.innopolis.ru",
+	    port: 8770,
+	    get api_url() { return "http://" + this.ip + ":" + (this.port || 21) + "/api/"; }
 	};
-
-	var token_name = "usertoken";
-
 	exports.server = server;
+	var token_name = "usertoken";
 	exports.token_name = token_name;
+
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
 	function get(key) {
-		return localStorage.getItem(key);
+	    return localStorage.getItem(key);
 	}
-
-	function set(key, value) {
-		if (value) localStorage.setItem(key, value);
-		return localStorage.getItem(key);
-	}
-
-	function clear() {
-		localStorage.clear();
-	}
-
 	exports.get = get;
+	function set(key, value) {
+	    if (value)
+	        localStorage.setItem(key, value);
+	    return localStorage.getItem(key);
+	}
 	exports.set = set;
+	function clear() {
+	    localStorage.clear();
+	}
 	exports.clear = clear;
+
 
 /***/ },
 /* 11 */
@@ -13916,7 +13731,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-5f825324/login.vue"
+	  var id = "_v-4412f846/login.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14417,7 +14232,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-d4505d78/main.vue"
+	  var id = "_v-b2658c16/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14494,7 +14309,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-d8058cbe/sidebar.vue"
+	  var id = "_v-127f4750/sidebar.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14592,7 +14407,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-d572e784/content.vue"
+	  var id = "_v-13c899ed/content.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14668,7 +14483,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-18459358/header.vue"
+	  var id = "_v-7cf8d86e/header.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14725,7 +14540,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-11d9a134/footer.vue"
+	  var id = "_v-bf5da052/footer.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14772,7 +14587,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-51fdfb9d/test.vue"
+	  var id = "_v-62f3644e/test.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14786,10 +14601,12 @@
 
 	"use strict";
 
-	// <template>
-	// 	<h1>Current path: {{ $route.path }}</h1>
-	// 	<pre>{{ user | json 2 }}</pre>
-	// 	<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
+	// <template lang="jade">
+	// 	.container
+	// 		.card.card-block
+	// 			h1 Current path: {{ $route.path }}
+	// 			pre {{ user | json 2 }}
+	// 			pre(v-if="$loadingRouteData") Data is not updated yet!
 	// </template>
 	//
 	// <script>
@@ -14813,7 +14630,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1>Current path: {{ $route.path }}</h1>\n<pre>{{ user | json 2 }}</pre>\n<pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre>\n";
+	module.exports = "<div class=\"container\"><div class=\"card card-block\"><h1>Current path: {{ $route.path }}</h1><pre>{{ user | json 2 }}</pre><pre v-if=\"$loadingRouteData\">Data is not updated yet!</pre></div></div>";
 
 /***/ },
 /* 31 */
@@ -14842,7 +14659,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-071051d2/main.vue"
+	  var id = "_v-ce540270/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14938,7 +14755,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-4f158ebb/profile.vue"
+	  var id = "_v-00027d6a/profile.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15047,7 +14864,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-c2899a18/main.vue"
+	  var id = "_v-e3bbfd3a/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15109,7 +14926,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-4b8f5ba4/admin.vue"
+	  var id = "_v-49025b15/admin.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15133,8 +14950,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-4b8f5ba4&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-4b8f5ba4&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-49025b15&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-49025b15&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15152,7 +14969,7 @@
 
 
 	// module
-	exports.push([module.id, "/* Gotta fix this */\n.card[_v-4b8f5ba4] {\n  text-align: left;\n}\ntd[_v-4b8f5ba4] {\n  vertical-align: middle;\n}\nselect.form-control[_v-4b8f5ba4] {\n  padding: .25rem .5rem;\n}\n", ""]);
+	exports.push([module.id, "/* Gotta fix this */\n.card[_v-49025b15] {\n  text-align: left;\n}\ntd[_v-49025b15] {\n  vertical-align: middle;\n}\nselect.form-control[_v-49025b15] {\n  padding: .25rem .5rem;\n}\n", ""]);
 
 	// exports
 
@@ -15560,7 +15377,7 @@
 /* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-4b8f5ba4=\"\">\n\t<div class=\"card card-block\" _v-4b8f5ba4=\"\">\n\t\t\n\t\t<h1 class=\"card-title mb-1\" _v-4b8f5ba4=\"\">Registered users</h1>\n\n\t\t<p class=\"text-xs-center\" v-show=\"$loadingRouteData\" _v-4b8f5ba4=\"\">Loading Users</p>\n\n\t\t<div class=\"table-responsive\" v-show=\"users.length\" _v-4b8f5ba4=\"\">\n\t\t\t<table class=\"table  table-striped table-bordered\" _v-4b8f5ba4=\"\">\n\t\t\t\t<thead _v-4b8f5ba4=\"\">\n\t\t\t\t\t<tr _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('id')\" _v-4b8f5ba4=\"\">#</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('username')\" _v-4b8f5ba4=\"\">Username</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('firstName')\" _v-4b8f5ba4=\"\">First Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('lastName')\" _v-4b8f5ba4=\"\">Last Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('tgId')\" _v-4b8f5ba4=\"\">Alias</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('role')\" _v-4b8f5ba4=\"\">Role</th>\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody _v-4b8f5ba4=\"\">\n\t\t\t\t\t<tr v-for=\"u in users\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t<th scope=\"row\" _v-4b8f5ba4=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t</th><td _v-4b8f5ba4=\"\">{{ u.username }}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">{{ u.firstName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">{{ u.lastName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-4b8f5ba4=\"\">@{{ u.tgId }}</td>\n\t\t\t\t\t\t<td class=\"text-xs-center p-0\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"role_select\" id=\"user_{{ u.id }}\" @change=\"selectChanged\" _v-4b8f5ba4=\"\">\n\t\t\t\t\t\t\t\t<option value=\"ghost\" :selected=\"u.role == 'ghost'\" _v-4b8f5ba4=\"\">Ghost</option>\n\t\t\t\t\t\t\t\t<option value=\"student\" :selected=\"u.role == 'student'\" _v-4b8f5ba4=\"\">Student</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</div>\n\n\t\t<!-- Fix disabling -->\n\t\t<button :disabled=\"selectChanged\" class=\"btn btn-primary btn-lg btn-block\" id=\"acceptRoles\" @click=\"sendRoles\" @keyup.enter=\"sendRoles\" _v-4b8f5ba4=\"\">Save Changes</button>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-49025b15=\"\">\n\t<div class=\"card card-block\" _v-49025b15=\"\">\n\t\t\n\t\t<h1 class=\"card-title mb-1\" _v-49025b15=\"\">Registered users</h1>\n\n\t\t<p class=\"text-xs-center\" v-show=\"$loadingRouteData\" _v-49025b15=\"\">Loading Users</p>\n\n\t\t<div class=\"table-responsive\" v-show=\"users.length\" _v-49025b15=\"\">\n\t\t\t<table class=\"table  table-striped table-bordered\" _v-49025b15=\"\">\n\t\t\t\t<thead _v-49025b15=\"\">\n\t\t\t\t\t<tr _v-49025b15=\"\">\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('id')\" _v-49025b15=\"\">#</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('username')\" _v-49025b15=\"\">Username</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('firstName')\" _v-49025b15=\"\">First Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('lastName')\" _v-49025b15=\"\">Last Name</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('tgId')\" _v-49025b15=\"\">Alias</th>\n\t\t\t\t\t\t<th class=\"text-xs-center\" @click=\"sortBy('role')\" _v-49025b15=\"\">Role</th>\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody _v-49025b15=\"\">\n\t\t\t\t\t<tr v-for=\"u in users\" _v-49025b15=\"\">\n\t\t\t\t\t\t<th scope=\"row\" _v-49025b15=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t</th><td _v-49025b15=\"\">{{ u.username }}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">{{ u.firstName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">{{ u.lastName | capitalize}}</td>\n\t\t\t\t\t\t<td _v-49025b15=\"\">@{{ u.tgId }}</td>\n\t\t\t\t\t\t<td class=\"text-xs-center p-0\" _v-49025b15=\"\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"role_select\" id=\"user_{{ u.id }}\" @change=\"selectChanged\" _v-49025b15=\"\">\n\t\t\t\t\t\t\t\t<option value=\"ghost\" :selected=\"u.role == 'ghost'\" _v-49025b15=\"\">Ghost</option>\n\t\t\t\t\t\t\t\t<option value=\"student\" :selected=\"u.role == 'student'\" _v-49025b15=\"\">Student</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</div>\n\n\t\t<!-- Fix disabling -->\n\t\t<button :disabled=\"selectChanged\" class=\"btn btn-primary btn-lg btn-block\" id=\"acceptRoles\" @click=\"sendRoles\" @keyup.enter=\"sendRoles\" _v-49025b15=\"\">Save Changes</button>\n\t</div>\n</div>\n";
 
 /***/ },
 /* 47 */
@@ -15589,7 +15406,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-0bddf0f1/main.vue"
+	  var id = "_v-866a40c0/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15690,7 +15507,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-3cf6ab5b/applications.vue"
+	  var id = "_v-3bdd7b0a/applications.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15795,7 +15612,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-4ee26270/application.vue"
+	  var id = "_v-3e70658e/application.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15810,6 +15627,7 @@
 	'use strict';
 
 	// <template lang="jade">
+	//
 	// 	.card(status="{{ application.status }}" id="card-{{ application.id }}")
 	// 		.card-block
 	// 			span.float-xs-right {{ application.creation_date }}
@@ -15817,22 +15635,25 @@
 	// 				span.tag.tag-default.tag-success.float-xs-left(status="{{ application.status }}") {{ application.status.split('_').join(' ') | capitalize }}
 	// 				span.float-xs-left.mx-1 {{ application.type | capitalize }}
 	// 			h5.card-subtitle {{(application._id = '#' + application.id)}} by {{application.author.username}}
-	// 		div.card-block(v-show="application.work && application.type == 'group'")
+	//
+	// 		.card-block(v-show="application.work && application.type == 'group'")
 	// 			div(v-for="work in application.work")
 	// 				a(href="http://uis.university.innopolis.ru:8770/profile/{{ work.actor.username }}") {{ work.actor.username }} -
-	// 					span
-	// 						{{ work.activity.title }}[{{ work.activity.price }}]
+	// 					span {{ work.activity.title }}[{{ work.activity.price }}]
 	// 			div(v-show="application.comment")
 	// 				h4 Comment
 	// 				template(v-if="application.comment && application.comment.length")
 	// 					p(v-for="comment in application.comment.split('\n')" track-by="$index") {{ comment }}
+	//
 	// 		div(v-show="application.files.length > 0")
 	// 			h4 Files
 	// 			p(v-for="file of application.files") {{ file | json }}
+	//
 	// 		footer(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
 	// 			button(data-id="{{ application.id }}" @click="approve") Approve
 	// 			button(data-id="{{ application.id }}" @click="reject") Reject
 	// 			button(data-id="{{ application.id }}" @click="toRework") To rework
+	//
 	// 		footer(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
 	// 			button(data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')") Delete
 	// 			button(data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')") Resend
@@ -15921,7 +15742,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-05beb5e6/apply.vue"
+	  var id = "_v-726f9d17/apply.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15945,8 +15766,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-05beb5e6&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-05beb5e6&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-726f9d17&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-726f9d17&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15964,7 +15785,7 @@
 
 
 	// module
-	exports.push([module.id, "/*\n.card {\n\tbackground: hsla(0, 0, 100, 1);\n\tborder-radius: 4px;\n\tpadding: 1rem 2rem;\n\ttext-align: left;\n}\n\n.card + .card {\n\tmargin-top: 1rem;\n}\n*/\n/* Gotta fix this */\n.card[_v-05beb5e6] {\n  text-align: left;\n}\n#upload[_v-05beb5e6] {\n  display: none;\n}\ntd[_v-05beb5e6] {\n  vertical-align: middle;\n}\ntd button[_v-05beb5e6] {\n  min-width: 1em;\n}\ninput[readonly][_v-05beb5e6] {\n  color: rgba(0, 0, 0, 0.8);\n  background: #ffffff;\n  border-color: #ffffff;\n}\n", ""]);
+	exports.push([module.id, "/*\n.card {\n\tbackground: hsla(0, 0, 100, 1);\n\tborder-radius: 4px;\n\tpadding: 1rem 2rem;\n\ttext-align: left;\n}\n\n.card + .card {\n\tmargin-top: 1rem;\n}\n*/\n/* Gotta fix this */\n.card[_v-726f9d17] {\n  text-align: left;\n}\n#upload[_v-726f9d17] {\n  display: none;\n}\ntd[_v-726f9d17] {\n  vertical-align: middle;\n}\ntd button[_v-726f9d17] {\n  min-width: 1em;\n}\ninput[readonly][_v-726f9d17] {\n  color: rgba(0, 0, 0, 0.8);\n  background: #ffffff;\n  border-color: #ffffff;\n}\n", ""]);
 
 	// exports
 
@@ -16325,7 +16146,7 @@
 /* 60 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-05beb5e6=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-05beb5e6=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-05beb5e6=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" _v-05beb5e6=\"\">\n\t\t<form id=\"ip_request\" _v-05beb5e6=\"\">\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<h1 class=\"card-title\" _v-05beb5e6=\"\">New Application</h1>\n\t\t\t\t<!--<h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label class=\"col-sm col-form-label col-form-label-lg\" for=\"activity_category\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Category</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<select class=\"form-control form-control-lg\" id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<option value=\"blank\" selected=\"\" _v-05beb5e6=\"\">Choose Category</option>\n\t\t\t\t\t\t\t<option value=\"\" _v-05beb5e6=\"\">All</option>\n\t\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-05beb5e6=\"\">{{ c.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\n\t\t\t\t<h4 class=\"mb-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<template v-if=\"current.users.length > 1\">Participants</template>\n\t\t\t\t\t<template v-else=\"\">Participant</template>\n\t\t\t\t</h4>\n\n\t\t\t\t<ul class=\"list-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t\n\t\t\t\t\t<li class=\"list-group-item py-1\" v-for=\"u of current.users\" _v-05beb5e6=\"\">\n\n\t\t\t\t\t\t<div class=\"clearfix mb-1\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t\t<span class=\"text-muted\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">{{ $index + 1 }}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"username_{{ $index }}\" _v-05beb5e6=\"\">Username</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"u.username\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"activity_{{ $index }}\" _v-05beb5e6=\"\">Activity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<select class=\"form-control\" :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-05beb5e6=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-05beb5e6=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"amount_{{ $index }}\" _v-05beb5e6=\"\">Quantity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"365\" v-model=\"u.amount\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Innopoints</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<input class=\"form-control\" type=\"number\" value=\"0123456789\" readonly=\"\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<div class=\"clearfix mt-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" @click=\"current_users_count_inc\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<label for=\"upload\" _v-05beb5e6=\"\">\n\t\t\t\t\t<h4 _v-05beb5e6=\"\">Files</h4>\n\t\t\t\t</label>\n\t\t\t\t<div class=\"table-responsive\" _v-05beb5e6=\"\">\n\t\t\t\t\t<table class=\"table  table-striped table-bordered\" v-show=\"current.files.length\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<thead _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">#</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Name</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Type</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Size</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Remove</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"f in current.files\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th scope=\"row\" _v-05beb5e6=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t\t\t</th><td _v-05beb5e6=\"\">{{ f.name }}</td>\n\t\t\t\t\t\t\t\t<td _v-05beb5e6=\"\">{{ f.type }}</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-right\" _v-05beb5e6=\"\">{{ f.size }} KB</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-center py-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<button type=\"button\" class=\"close float-xs-none\" aria-label=\"Remove File\" @click=\"removeFile($index)\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"clearfix\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" onclick=\"upload.click()\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current.files = []\" v-show=\"current.files.length\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-05beb5e6=\"\">\n\t\t\t</div> \n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label for=\"comment\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Comment</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<textarea class=\"form-control\" id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"4\" _v-05beb5e6=\"\"></textarea>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<button class=\"btn btn-primary btn-lg btn-block\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" id=\"send\" _v-05beb5e6=\"\">Send</button>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"!categorySelected\" _v-05beb5e6=\"\">Select Category</p>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"categorySelected &amp;&amp; !activitySelected\" _v-05beb5e6=\"\">Select Activities</p>\n\t\t\t</div>\n\n\t\t</form>\n\t</div>\n\n</div><!-- template wrap -->\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-726f9d17=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-726f9d17=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-726f9d17=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" _v-726f9d17=\"\">\n\t\t<form id=\"ip_request\" _v-726f9d17=\"\">\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<h1 class=\"card-title\" _v-726f9d17=\"\">New Application</h1>\n\t\t\t\t<!--<h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-726f9d17=\"\">\n\t\t\t\t\t<label class=\"col-sm col-form-label col-form-label-lg\" for=\"activity_category\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<h4 _v-726f9d17=\"\">Category</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<select class=\"form-control form-control-lg\" id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<option value=\"blank\" selected=\"\" _v-726f9d17=\"\">Choose Category</option>\n\t\t\t\t\t\t\t<option value=\"\" _v-726f9d17=\"\">All</option>\n\t\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-726f9d17=\"\">{{ c.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\n\t\t\t\t<h4 class=\"mb-1\" _v-726f9d17=\"\">\n\t\t\t\t\t<template v-if=\"current.users.length > 1\">Participants</template>\n\t\t\t\t\t<template v-else=\"\">Participant</template>\n\t\t\t\t</h4>\n\n\t\t\t\t<ul class=\"list-group\" _v-726f9d17=\"\">\n\t\t\t\t\t\n\t\t\t\t\t<li class=\"list-group-item py-1\" v-for=\"u of current.users\" _v-726f9d17=\"\">\n\n\t\t\t\t\t\t<div class=\"clearfix mb-1\" v-show=\"current.users.length > 1\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-726f9d17=\"\">×</span>\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t\t<span class=\"text-muted\" v-show=\"current.users.length > 1\" _v-726f9d17=\"\">{{ $index + 1 }}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"username_{{ $index }}\" _v-726f9d17=\"\">Username</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"u.username\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"activity_{{ $index }}\" _v-726f9d17=\"\">Activity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<select class=\"form-control\" :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-726f9d17=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-726f9d17=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"amount_{{ $index }}\" _v-726f9d17=\"\">Quantity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"365\" v-model=\"u.amount\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" _v-726f9d17=\"\">Innopoints</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<input class=\"form-control\" type=\"number\" value=\"0123456789\" readonly=\"\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<div class=\"clearfix mt-1\" _v-726f9d17=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" @click=\"current_users_count_inc\" _v-726f9d17=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" _v-726f9d17=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<label for=\"upload\" _v-726f9d17=\"\">\n\t\t\t\t\t<h4 _v-726f9d17=\"\">Files</h4>\n\t\t\t\t</label>\n\t\t\t\t<div class=\"table-responsive\" _v-726f9d17=\"\">\n\t\t\t\t\t<table class=\"table  table-striped table-bordered\" v-show=\"current.files.length\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<thead _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<tr _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">#</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Name</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Type</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Size</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-726f9d17=\"\">Remove</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-726f9d17=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"f in current.files\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t<th scope=\"row\" _v-726f9d17=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t\t\t</th><td _v-726f9d17=\"\">{{ f.name }}</td>\n\t\t\t\t\t\t\t\t<td _v-726f9d17=\"\">{{ f.type }}</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-right\" _v-726f9d17=\"\">{{ f.size }} KB</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-center py-0\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t<button type=\"button\" class=\"close float-xs-none\" aria-label=\"Remove File\" @click=\"removeFile($index)\" _v-726f9d17=\"\">\n\t\t\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-726f9d17=\"\">×</span>\n\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"clearfix\" _v-726f9d17=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" onclick=\"upload.click()\" _v-726f9d17=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current.files = []\" v-show=\"current.files.length\" _v-726f9d17=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-726f9d17=\"\">\n\t\t\t</div> \n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<div class=\"form-group\" _v-726f9d17=\"\">\n\t\t\t\t\t<label for=\"comment\" _v-726f9d17=\"\">\n\t\t\t\t\t\t<h4 _v-726f9d17=\"\">Comment</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<textarea class=\"form-control\" id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"4\" _v-726f9d17=\"\"></textarea>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-726f9d17=\"\">\n\t\t\t\t<button class=\"btn btn-primary btn-lg btn-block\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" id=\"send\" _v-726f9d17=\"\">Send</button>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"!categorySelected\" _v-726f9d17=\"\">Select Category</p>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"categorySelected &amp;&amp; !activitySelected\" _v-726f9d17=\"\">Select Activities</p>\n\t\t\t</div>\n\n\t\t</form>\n\t</div>\n\n</div><!-- template wrap -->\n";
 
 /***/ },
 /* 61 */
@@ -16355,7 +16176,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-304b079f/main.vue"
+	  var id = "_v-10c16790/main.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16379,8 +16200,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-304b079f&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-304b079f&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-10c16790&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-10c16790&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./main.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -16398,7 +16219,7 @@
 
 
 	// module
-	exports.push([module.id, ".input-group[_v-304b079f] {\n  padding-top: 0.8125rem;\n  padding-bottom: 0.8125rem;\n}\n", ""]);
+	exports.push([module.id, ".input-group[_v-10c16790] {\n  padding-top: 0.8125rem;\n  padding-bottom: 0.8125rem;\n}\n", ""]);
 
 	// exports
 
@@ -16439,7 +16260,7 @@
 /* 65 */
 /***/ function(module, exports) {
 
-	module.exports = "<content _v-304b079f=\"\"><div slot=\"header\" _v-304b079f=\"\"><div class=\"search-group input-group\" _v-304b079f=\"\"><input id=\"search\" type=\"search\" placeholder=\"Search Store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" class=\"form-control\" _v-304b079f=\"\"><span class=\"input-group-btn\" _v-304b079f=\"\"><button type=\"button\" class=\"btn btn-secondary\" _v-304b079f=\"\">🔍</button></span></div></div></content>";
+	module.exports = "<content _v-10c16790=\"\"><div slot=\"header\" _v-10c16790=\"\"><div class=\"search-group input-group\" _v-10c16790=\"\"><input id=\"search\" type=\"search\" placeholder=\"Search Store\" v-model=\"$router.app.query\" v-show=\"$route.path.endsWith('store')\" class=\"form-control\" _v-10c16790=\"\"><span class=\"input-group-btn\" _v-10c16790=\"\"><button type=\"button\" class=\"btn btn-secondary\" _v-10c16790=\"\">🔍</button></span></div></div></content>";
 
 /***/ },
 /* 66 */
@@ -16469,7 +16290,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-4f85f8eb/store.vue"
+	  var id = "_v-7ddb971a/store.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16615,7 +16436,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-76fb3ff9/item.vue"
+	  var id = "_v-57719fea/item.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -16639,8 +16460,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-76fb3ff9&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-76fb3ff9&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-57719fea&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-57719fea&scoped=true!./../../../node_modules/less-loader/index.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./item.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -16658,7 +16479,7 @@
 
 
 	// module
-	exports.push([module.id, "img[_v-76fb3ff9] {\n  width: 100%;\n}\n", ""]);
+	exports.push([module.id, "img[_v-57719fea] {\n  width: 100%;\n}\n", ""]);
 
 	// exports
 
@@ -16710,7 +16531,7 @@
 /* 74 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"card\" _v-76fb3ff9=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-76fb3ff9=\"\"><div class=\"card-block\" _v-76fb3ff9=\"\"><h4 class=\"card-title\" _v-76fb3ff9=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-76fb3ff9=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-76fb3ff9=\"\">{{ item.category.title }}</h6><p v-show=\"item.possible_joint_purchase\" class=\"card-text\" _v-76fb3ff9=\"\">This item can be bought by a group of {{ item.max_buyers }}!</p><div v-for=\"option in item.options\" class=\"form-group\" _v-76fb3ff9=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-76fb3ff9=\"\"><option value=\"\" _v-76fb3ff9=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-76fb3ff9=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-76fb3ff9=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-76fb3ff9=\"\">Buy</button></div></div></div>";
+	module.exports = "<div class=\"card\" _v-57719fea=\"\"><img :src=\"`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`\" alt=\"\" class=\"card-img-top\" _v-57719fea=\"\"><div class=\"card-block\" _v-57719fea=\"\"><h4 class=\"card-title\" _v-57719fea=\"\">{{ item.title }}<span class=\"tag tag-default float-xs-right\" _v-57719fea=\"\">{{ item.price }}</span></h4><h6 class=\"card-subtitle text-muted mb-1\" _v-57719fea=\"\">{{ item.category.title }}</h6><p v-show=\"item.possible_joint_purchase\" class=\"card-text\" _v-57719fea=\"\">This item can be bought by a group of {{ item.max_buyers }}!</p><div v-for=\"option in item.options\" class=\"form-group\" _v-57719fea=\"\"><select :name=\"option.title\" :id=\"option.title\" :data-index=\"$index\" @change=\"onselect(item, $event)\" class=\"form-control\" _v-57719fea=\"\"><option value=\"\" _v-57719fea=\"\">Choose {{ option.title }}</option><option v-for=\"value in option.values\" :value=\"value\" _v-57719fea=\"\">{{ value }}</option></select></div><div :id=\"item.title\" _v-57719fea=\"\"><button type=\"button\" @click=\"buy(item)\" class=\"btn btn-outline-primary btn-block\" _v-57719fea=\"\">Buy</button></div></div></div>";
 
 /***/ },
 /* 75 */
@@ -16745,7 +16566,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-7a9f9c66/app.vue"
+	  var id = "_v-d81c4cd6/app.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {

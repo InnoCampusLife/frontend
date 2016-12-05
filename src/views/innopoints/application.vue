@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 	module.exports = {
 		props: ['application', 'user', 'success'],
 		methods: {
