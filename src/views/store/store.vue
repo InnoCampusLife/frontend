@@ -1,39 +1,21 @@
-<template>
-	<div class="container-fluid">
-		<section class="card-columns" shop>
-			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item" :buy="buy"></item>
-			</section>
+<style lang="less">
 
-			<!-- For testing purposes-->
-			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
-				</item>
-			</section>
-			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
-				</item>
-			</section>
-			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
-				</item>
-			</section>
-			<section class="card" product v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title' ">
-				<item :item="item">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="buy(item)">Buy</button>
-				</item>
-			</section>
+</style>
 
-		</section>
-	</div>
+<template lang="jade">
+	.container-fluid
+		.card-columns
+			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
+
+			// For testing purposes
+			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
+			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
+			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
+			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
 </template>
 
 <script>
-	
-	import storage from './../../storage.js';
+	const storage = require('./../../storage');
 
 	module.exports = {
 		data : function () {
@@ -46,8 +28,7 @@
 			item: require('./item.vue'),
 		},
 		route : {
-			data : function (transition) {
-				var _cart = JSON.parse(storage.get('cart'));
+			data(transition) {
 				this.$router.app.user.innopoints.api.shop.getItems({
 					successCallback: result => {
 						result.forEach(item => {

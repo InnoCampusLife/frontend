@@ -1,34 +1,37 @@
-var config  = require('./config.js');
-var api_url = config.server.api_url;
+import * as config from './config'
+import * as storage from './storage'
 
-var modules = {
+const api_url = config.server.api_url;
+
+const modules = {
 	accounts : {
 		roles : [
 			'ghost',
 			'student',
 			'moderator'
 		],
-		have : function (role) {
+		
+		have(role) {
 			return !!(this.roles.indexOf(role.toLowerCase()) > -1);
 		},
 
 		//data
 
-		id			: null,
-		username	: null,
-		role		: null,
-		firstName	: null,
-		lastName	: null,
-		patronymic	: null,
-		studyGroup	: null,
-		tgId		: null,
+		id: null,
+		username: null,
+		role: null,
+		firstName: null,
+		lastName: null,
+		patronymic: null,
+		studyGroup: null,
+		tgId: null,
 
 		get token() {
 			return this.storage.get(config.token_name);
 		},
 
 		set token(value) {
-			return this.storage.set(config.token_name, value);
+			this.storage.set(config.token_name, value);
 		},
 
 		get fullName () {
@@ -90,13 +93,11 @@ var modules = {
 			);
 		},
 
-		storage : require('./storage.js'),
+		storage,
 
 		preferences : {
-			//TODO
-			fixHeader: true,
 
-			save : function(successCallback, errorCallback) {
+			save(successCallback, errorCallback) {
 				var that = this;
 				var 
 				type = "PUT",
@@ -108,7 +109,7 @@ var modules = {
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			get : function(successCallback, errorCallback) {
+			get(successCallback, errorCallback) {
 				var 
 				type = "GET",
 				url  = this.url + modules.accounts.token + '/getPreferences',
@@ -382,7 +383,7 @@ var modules = {
 				application : {
 					get url() { return modules.innopoints.api.user.url },
 
-					create : function (application, successCallback, errorCallback) {
+					create(application, successCallback, errorCallback) {
 						var 
 						type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
@@ -391,7 +392,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					update : function (appl_id, new_params, successCallback, errorCallback) {
+					update(appl_id, new_params, successCallback, errorCallback) {
 						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -400,7 +401,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					send : function (appl_id, successCallback, errorCallback) {
+					send(appl_id, successCallback, errorCallback) {
 						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
@@ -409,7 +410,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					get : function (appl_id, successCallback, errorCallback) {
+					get(appl_id, successCallback, errorCallback) {
 						var 
 						type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -418,7 +419,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					delete : function (appl_id, successCallback, errorCallback) {
+					delete(appl_id, successCallback, errorCallback) {
 						var 
 						type = "DELETE",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -427,7 +428,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					approve : function (appl_id, successCallback, errorCallback) {
+					approve(appl_id, successCallback, errorCallback) {
 						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
@@ -436,7 +437,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					reject : function (appl_id, successCallback, errorCallback) {
+					reject(appl_id, successCallback, errorCallback) {
 						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
@@ -445,7 +446,7 @@ var modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					},
 					
-					dismiss : function (appl_id, successCallback, errorCallback) {
+					dismiss(appl_id, successCallback, errorCallback) {
 						var 
 						type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
@@ -458,7 +459,7 @@ var modules = {
 				applications : {
 					get url() { return modules.innopoints.api.user.url },
 
-					get : function (args) {
+					get(args) {
 						if (args.status == 'all')
 							args.status = null;
 
@@ -491,14 +492,15 @@ function ajax (type, url, data, successCallback, errorCallback) {
 	  			errorCallback(xhr.response.error);
 		}
 	};
-	xhr.dataType = "json";
-	xhr.contentType = 'json';
+	
+	// FIXME: Shouldn't need to cast to any
+	(xhr as any).dataType = "json";
+	(xhr as any).contentType = 'json';
+	
 	xhr.responseType = 'json';
-	if (!(url.indexOf("getBio") > -1))
-		xhr.setRequestHeader('Content-Type', 'application/json');
-
+	if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(JSON.stringify(data));
 }
 
-module.exports = modules;
+module.exports =  modules
 module.exports.token = modules.accounts.token;

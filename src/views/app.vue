@@ -8,7 +8,7 @@
 			console.log('App is awaiting your command!');
 		},
 		data : function () {
-			var modules = require('./../modules.js');
+			var modules = require('./../modules.ts');
 			return {
 				user : {
 					account: modules.accounts,

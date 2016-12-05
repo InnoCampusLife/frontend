@@ -1,26 +1,4 @@
-'use strict';
-
-var Vue       = require('vue');
-var VueRouter = require('vue-router');
-var app       = require('./views/app.vue');
-var newRouter = require('./router-config.js');
-
-require('./styles/main.less')
-
-Vue.use(VueRouter);
-
-var router = newRouter(new VueRouter({
-	hashbang: false,
-	history:  true
-}));
-
-router.start(app, 'app');
-
-// Polyfills
-
-requireAllIn = (directory) => {
-    require.context(directory, true, /^.*(\.js|\.vue)$/);
-};
+'use strict'
 
 if (!String.prototype.includes) {
 	String.prototype.includes = () => {
