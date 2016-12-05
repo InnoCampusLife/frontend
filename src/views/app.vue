@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	module.exports = {
-		ready : function () {
+	export default {
+		ready() {
 			console.log('App is awaiting your command!');
 		},
-		data : function () {
-			var modules = require('./../modules');
+		data() {
+			const modules = require('./../modules');
 			return {
 				user : {
 					account: modules.accounts,

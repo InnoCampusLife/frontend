@@ -38,159 +38,111 @@
 
 </style>
 
-<template>
-	<div class="container">
-		
-		<!-- While loading -->
-		<div>
-			<p v-show="$loadingRouteData">Loading…</p>
-		</div>
-		
-		<!-- When loaded -->
-		<div v-show="!$loadingRouteData" class="card">
-			<form id="ip_request">
+<template lang="jade">
 
-				<div class="card-block">
-					<h1 class="card-title">New Application</h1>
-					<!--<h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>-->
-				</div>
+	.container
+		// While loading
+		p(v-show='$loadingRouteData') Loading&mldr;
+		// When loaded
+		.card(v-show='!$loadingRouteData')
+			form#ip_request
+				.card-block
+					h1.card-title New Application
+					// <h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>
+				.card-block
+					.form-group.row.flex-items-sm-middle.mb-0
+						label.col-sm.col-form-label.col-form-label-lg(for='activity_category')
+							h4 Category
+						.col-sm
+							select#activity_category.form-control.form-control-lg(v-model='current.category_id', @change='category_changed')
+								option(value='blank', selected='') Choose Category
+								option(value='') All
+								option(v-for='c in categories', value='{{ c.id }}') {{ c.title }}
+				.card-block
+					h4.mb-1
+						template(v-if='current.users.length > 1') Participants
+						template(v-else='') Participant
+					ul.list-group
+						li.list-group-item.py-1(v-for='u of current.users')
+							.clearfix.mb-1(v-show='current.users.length > 1')
+								button.close(type='button', aria-label='Close', @click='current_users_remove($index)', v-if='current.users.length > 1')
+									span(aria-hidden='true') &times;
+								span.text-muted(v-show='current.users.length > 1') {{ $index + 1 }}
+							.form-group.row.flex-items-sm-middle
+								label.col-sm.col-form-label(for='username_{{ $index }}') Username
+								.col-sm
+									input(
+										class="form-control",
+										id="username_{{ $index }}",
+										data-index="{{ $index }}",
+										type="text",
+										placeholder="username",
+										@input="username_changed",
+										value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}",
+										v-model="query",
+									)
+							.form-group.row.flex-items-sm-middle
+								label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
+								.col-sm
+									select(class="form-control", :disabled="!categorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
+										option(value='', selected='') Choose Activity
+										option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
+							.form-group.row.flex-items-sm-middle
+								label.col-sm.col-form-label(for='amount_{{ $index }}') Hours
+								.col-sm
+									input.form-control(:disabled='!(!showAmount(u.activity_id) && activitySelected)', id='amount_{{ $index }}', type='number', value='1', min='1', max='1000', v-model='u.amount')
+							.form-group.row.flex-items-sm-middle.mb-0
+								label.col-sm.col-form-label Innopoints
+								.col-sm
+									input.form-control(type='number', value='0123456789', readonly='')
+					.clearfix.mt-1
+						button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
+						button.btn.btn-danger.float-xs-right(type='button', @click='current_users_count_clear', v-if='current.users.length > 1') &times; Clear
+				.card-block
+					label(for='upload')
+						h4 Files
+					.table-responsive
+						table.table.table-striped.table-bordered(v-show='current.files.length')
+							thead
+								tr
+									th.text-xs-center #
+									th.text-xs-center Name
+									th.text-xs-center Type
+									th.text-xs-center Size
+									th.text-xs-center Remove
+							tbody
+								tr(v-for='f in current.files')
+									th(scope='row') {{ $index + 1 }}
+									td {{ f.name }}
+									td {{ f.type }}
+									td.text-xs-right {{ f.size }} KB
+									td.text-xs-center.py-0
+										button.close.float-xs-none(type='button', aria-label='Remove File', @click='removeFile($index)')
+											span(aria-hidden='true') &times;
+					.clearfix
+						button.btn.btn-success.float-xs-left(type='button', onclick='upload.click()') &plus; Add Files
+						button.btn.btn-danger.float-xs-right(type='button', @click='current.files = []', v-show='current.files.length') &times; Clear
+					input#upload(type='file', @change='uploaded', multiple='')
+				.card-block
+					.form-group
+						label(for='comment')
+							h4 Comment
+						textarea#comment.form-control(placeholder='Write a comment', v-model='current.comment', rows='6')
+				.card-block
+					button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!activitySelected', type='button', @click='send') Send
+					p.mt-1.mb-0.text-xs-center(v-show='!categorySelected') Select Category
+					p.mt-1.mb-0.text-xs-center(v-show='categorySelected && !activitySelected') Select Activities
 
-				<div class="card-block">
-					<div class="form-group row flex-items-sm-middle mb-0">
-						<label class="col-sm col-form-label col-form-label-lg" for="activity_category">
-							<h4>Category</h4>
-						</label>
-						<div class="col-sm">
-							<select class="form-control form-control-lg" id="activity_category" v-model="current.category_id" @change="category_changed">
-								<option value="blank" selected>Choose Category</option>
-								<option value="">All</option>
-								<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
-							</select>
-						</div>
-					</div>
-				</div>
-
-				<div class="card-block">
-
-					<h4 class="mb-1">
-						<template v-if="current.users.length > 1">Participants</template>
-						<template v-else>Participant</template>
-					</h4>
-
-					<ul class="list-group">
-						
-						<li class="list-group-item py-1" v-for="u of current.users">
-
-							<div class="clearfix mb-1" v-show="current.users.length > 1">
-								<button type="button" class="close" aria-label="Close" @click="current_users_remove($index)" v-if="current.users.length > 1">
-									<span aria-hidden="true">&times;</span>
-								</button>
-
-								<span class="text-muted" v-show="current.users.length > 1">{{ $index + 1 }}</span>
-							</div>
-							
-							<div class="form-group row flex-items-sm-middle">
-								<label class="col-sm col-form-label" for="username_{{ $index }}">Username</label>
-								<div class="col-sm">
-									<input class="form-control" id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
-								</div>
-							</div>
-
-							<div class="form-group row flex-items-sm-middle">
-								<label class="col-sm col-form-label" for="activity_{{ $index }}">Activity</label>
-								<div class="col-sm">
-									<select class="form-control" :disabled="!categorySelected || !u.username" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
-										<option value="" selected>Choose Activity</option>
-										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="form-group row flex-items-sm-middle">
-								<label class="col-sm col-form-label" for="amount_{{ $index }}">Quantity</label>
-								<div class="col-sm">
-									<input class="form-control" :disabled="!(!showAmount(u.activity_id) && activitySelected)" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
-								</div>
-							</div>
-
-							<div class="form-group row flex-items-sm-middle mb-0">
-								<label class="col-sm col-form-label">Innopoints</label>
-									<div class="col-sm">
-										<input class="form-control" type="number" value="0123456789" readonly>
-									</div>
-							</div>
-
-						</li>
-					</ul>
-
-					<div class="clearfix mt-1">
-						<button type="button" class="btn btn-success float-xs-left" @click="current_users_count_inc">&plus; Add</button>
-						<button type="button" class="btn btn-danger float-xs-right" @click="current_users_count_clear" v-if="current.users.length > 1">&times; Clear</button>
-					</div>
-					
-				</div>
-
-				<div class="card-block">
-					<label for="upload">
-						<h4>Files</h4>
-					</label>
-					<div class="table-responsive">
-						<table class="table  table-striped table-bordered" v-show="current.files.length">
-							<thead>
-								<tr>
-									<th class="text-xs-center">#</th>
-									<th class="text-xs-center">Name</th>
-									<th class="text-xs-center">Type</th>
-									<th class="text-xs-center">Size</th>
-									<th class="text-xs-center">Remove</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr v-for="f in current.files">
-									<th scope="row">{{ $index + 1 }}</td>
-									<td>{{ f.name }}</td>
-									<td>{{ f.type }}</td>
-									<td class="text-xs-right">{{ f.size }} KB</td>
-									<td class="text-xs-center py-0">
-										<button type="button" class="close float-xs-none" aria-label="Remove File" @click="removeFile($index)">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="clearfix">
-						<button type="button" class="btn btn-success float-xs-left" onClick="upload.click()">&plus; Add</button>
-						<button type="button" class="btn btn-danger float-xs-right" @click="current.files = []" v-show="current.files.length">&times; Clear</button>
-					</div>
-					<input id="upload" type="file" @change="uploaded" multiple>
-				</div> 
-
-				<div class="card-block">
-					<div class="form-group">
-						<label for="comment">
-							<h4>Comment</h4>
-						</label>
-						<textarea class="form-control" id="comment" placeholder="Write a comment" v-model="current.comment" rows="4"></textarea>
-					</div>
-				</div>
-
-				<div class="card-block">
-					<button class="btn btn-primary btn-lg btn-block" :disabled="!activitySelected" type="button" @click="send" id="send">Send</button>
-					<p class="mt-1 mb-0 text-xs-center" v-show="!categorySelected">Select Category</p>
-					<p class="mt-1 mb-0 text-xs-center" v-show="categorySelected && !activitySelected">Select Activities</p>
-				</div>
-
-			</form>
-		</div>
-
-	</div><!-- template wrap -->
 </template>
 
 <script>
 
-	module.exports =  {
+	// import VueTypeahead from 'vue-typeahead'
+
+	export default {
+
+		// extends: VueTypeahead,
+
 		data() {
 			var user = this.$root.user
 			return {
@@ -215,6 +167,13 @@
 					files: [],
 					comment : '',
 				},
+
+				// // vue-typeahead
+				// src: '',
+				// minChars: 3,
+				// limit: 5,
+				// selectFirst: true,
+				// usernames: [],
 			}
 		},
 
@@ -257,7 +216,7 @@
 			
 			category_changed(e) {
 				this.categorySelected = this.activitySelected = false;
-				const self = this
+				let self = this
 				this.user.innopoints.api.getActivities({
 					cat_id: self.current.category_id,
 					successCallback: self.setActivities
@@ -328,13 +287,24 @@
 			showAmount(id) {
 				var temp = this.activities.find(x => x.id == id);
 				return temp && temp.type != 'permanent';
-			}
+			},
+
+			// getAllUsers() {
+			// 	if (this.usernames.length > 0) return
+			// 	let api = this.$root.user
+			// 	api.account.list(result => {
+			// 		transition.next({
+			// 			usernames: result.map(user => user.username)
+			// 		})
+			// 	})
+			// 	console.log(usernames)
+			// }
 		},
 
 		route : {
 			data(transition) {
-		    console.log('calling get for innopoints');
-		    var user = this.$router.app.user;
+		    console.log('Сalling GET for Innopoints');
+		    let user = this.$router.app.user;
 		    this.$router.app.user.account.update(result => {
 					user.innopoints.api.getCategories({
 						successCallback: result => {
