@@ -44,16 +44,12 @@ body {
 
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
 
-html {
-	font-size: 1em;
-}
-
 body {
 	background-color: hsl(0, 0%, 94.5%);	
 	color: hsla(0, 0%, 0%, 0.8);
-	height: 100%;	
 	font-family: @main-font-family;
-	height: 100vh;
+	font-size: 1em;
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -71,7 +67,6 @@ code, kbd, pre, samp {
 main {
 	height: 100vh;
 	margin-left: @sidebar-width;
-	
 	overflow: hidden;
 }
 
@@ -101,9 +96,104 @@ main > header {
 	height: @header-height;
 }
 
+header .search-group {
+	float: right;
+	padding: 13/16rem;
+	width: @sidebar-width;
+}
+
+header button {
+	outline: 0 !important;
+}
+ul.header-nav {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.header-nav li {
+	float: left;
+}
+
+.header-nav button {
+	background: white;
+	height: 4rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	border-radius: 0;
+	border: 0;
+	border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
 .sidebar-main > header {
 	height: @header-height;
 }
+
+.content-main {
+	height: ~'calc(100% - ' @header-height ~')';
+	margin-bottom: -@header-height;
+	overflow: auto;
+}
+
+.content-main > .wrap {
+	margin-bottom: -@header-height;	
+	min-height: 100%;
+	padding-top: 1rem;
+}
+
+.content-main > .wrap:after {
+	content: '';
+	display: block;
+}
+
+.content-main > .wrap:after, footer {
+	height: @header-height;
+}
+
+footer {
+	text-align: center;
+	width: 100%;
+
+	> p {
+		margin: 0;
+		line-height: @header-height;
+	}
+}
+
+main > header {
+	width: 100%;
+	background: hsla(0, 0%, 100%, 1);
+	border-bottom: 1px solid rgba(0,0,0,.125);
+	z-index: 100;
+}
+
+/*
+main > header > .content .item {
+	border: 0;
+	padding: 0.5rem 1rem;
+	margin-left: 1.5rem;
+	color: #000;
+	background: transparent;
+	cursor: pointer;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+		-ms-user-select: none;
+			user-select: none;
+}
+*/
+
+main > header > .content .item:focus,
+main > header > .content .item:hover {
+	color: #fff;
+	background: hsl(270, 75%, 68%);
+}
+
+main > header > .content .item.v-link-active,
+main > header > .content .item:active {
+	color: #fff;
+	background: hsl(270, 75%, 61%);
+}
+
 
 /* ==========================================================================
 	 Media Queries

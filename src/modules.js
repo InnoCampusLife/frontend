@@ -493,9 +493,13 @@ function ajax (type, url, data, successCallback, errorCallback) {
 		}
 	};
 	
-	// FIXME: Shouldn't need to cast to any
-	(xhr as any).dataType = "json";
-	(xhr as any).contentType = 'json';
+	// TypeScript thingy
+	// // FIXME: Shouldn't need to cast to any
+	// (xhr as any).dataType = "json";
+	// (xhr as any).contentType = 'json';
+
+	xhr.dataType = "json";
+	xhr.contentType = 'json';
 	
 	xhr.responseType = 'json';
 	if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');

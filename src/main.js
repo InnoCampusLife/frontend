@@ -1,8 +1,8 @@
 'use strict'
 
-import Vue       = require('vue')
-import VueRouter = require('vue-router')
-import newRouter = require('./router-config')
+const Vue       = require('vue')
+const VueRouter = require('vue-router')
+const newRouter = require('./router-config')
 const app        = require('./views/app.vue')
 
 const styles     = require('./styles/main.less')
