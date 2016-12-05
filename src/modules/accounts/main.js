@@ -1,6 +1,10 @@
-var config  = require('./config.ts');
+import ajax from './../web'
 
-module.exports = {
+var config  = require('./config.js');
+var api_url = require("./../../config.ts").default.server.api_url;
+
+const accounts = {
+	name : "accounts",
 	roles : [
 		'ghost',
 		'student',
@@ -11,7 +15,7 @@ module.exports = {
 		return !!this.roles.includes(role.toLowerCase());
 	},
 
-	// data : {
+	data : {
 		id			: null,
 		username	: null,
 		role		: null,
@@ -29,7 +33,7 @@ module.exports = {
 			return this.storage.set(config.token_name, value);
 		},
 
-		get fullName() {
+		get fullName () {
 			var ln = (!!this.lastName 	? 		this.lastName + ' ' : '');
 			var fn = (!!this.firstName 	? 		this.firstName 	 	: '');
 			var pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
@@ -88,7 +92,7 @@ module.exports = {
 			);
 		},
 
-		storage : require('./../../storage.js'),
+		storage : require('./../../storage.ts'),
 
 		preferences : {
 
@@ -112,9 +116,10 @@ module.exports = {
 				ajax(type, url, data, successCallback, errorCallback);
 			}
 		},
-	// },
+	},
+	//
 	
-	// api : {
+	api : {
 		version : 1,
 		name : "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
@@ -192,5 +197,7 @@ module.exports = {
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
-	// }
+	}
 };
+
+module.exports = accounts;
