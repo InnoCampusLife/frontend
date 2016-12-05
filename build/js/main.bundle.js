@@ -45,55 +45,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
 	var Vue = __webpack_require__(4);
 	var VueRouter = __webpack_require__(6);
-	var newRouter = __webpack_require__(7);
+	var router_config_1 = __webpack_require__(7);
 	var app = __webpack_require__(76);
-
 	var styles = __webpack_require__(79);
 	var polyfills = __webpack_require__(82);
-
 	Vue.use(VueRouter);
-
-	var router = newRouter(new VueRouter({
-		hashbang: false,
-		history: true
+	var router = router_config_1.default(new VueRouter({
+	    hashbang: false,
+	    history: true
 	}));
-
-	// // function requireAll(requireContext) {
-	// //   return requireContext.keys().map(requireContext);
-	// // }
-	// // // requires and returns all modules that match
-
-	// // var modules = requireAll(require.context("./", true, /^\.\/.*\.js$/));
-	// // // is an array containing all the matching modules
-
-	// // console.log(modules)
-
-	// var req = require.context("./modules", true, /^\.\/.*\.js$/);
-
-	// // var config = req("./config.js");
-	// // tableTemplate === require("./templates/table.jade");
-
-	// // var modules = req("./modules.js");
-	// // tableTemplateId === require.resolve("./templates/table.jade");
-
-	// req.keys();
-	// // is ["./table.jade", "./table-row.jade", "./directory/folder.jade"]
-
-	// // console.log(req, req.keys(), req.id, config, 'Modules: ', modules)
-
-	// const modules = {}
-
-	// req.keys().map(key => {
-	//     console.log(key.slice(2, key.length - 3).split(/^(\/)|(\.)$/))
-	//     modules[key] = req(key)
-	// })
-
-	// console.log(modules)
-
 	router.start(app, 'app');
+
 
 /***/ },
 /* 1 */,
@@ -13246,648 +13210,480 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
+	"use strict";
 	var user = __webpack_require__(8).accounts;
-
-	var adminZone = true,
-	    authorizedZone = true,
-	    loginPage = true;
-
+	var adminZone = true, authorizedZone = true, loginPage = true;
 	var router_view = { template: '<router-view></router-view>' };
-
-	module.exports = function (router) {
-		router.map({
-			'/login': {
-				component: __webpack_require__(11),
-				loginPage: loginPage
-			},
-			'/': {
-				component: __webpack_require__(14),
-				subRoutes: {
-					'/': {
-						component: __webpack_require__(20),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(28)
-							}
-						}
-					},
-					'/profile': {
-						component: __webpack_require__(31),
-						subRoutes: {
-							'/:username': {
-								name: 'profile',
-								component: __webpack_require__(34)
-							}
-						}
-					},
-					'/accounts': {
-						component: __webpack_require__(37),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(40),
-								name: 'accounts'
-							}
-						}
-					},
-					'/innopoints': {
-						component: __webpack_require__(47),
-						subRoutes: {
-							'/:username': {
-								component: router_view,
-								subRoutes: {
-									'/': {
-										component: { template: '' },
-										name: 'innopoints'
-									},
-									'/applications': {
-										component: router_view,
-										subRoutes: {
-											'/:filter': {
-												component: __webpack_require__(50),
-												name: 'applications'
-											}
-										}
-									},
-									'/apply': {
-										component: __webpack_require__(56),
-										name: 'apply'
-									}
-								}
-							}
-						}
-					},
-					'/store': {
-						component: __webpack_require__(61),
-						subRoutes: {
-							'/': {
-								component: __webpack_require__(66),
-								name: 'store'
-							},
-							'/item/:item': {
-								component: __webpack_require__(70),
-								name: 'item'
-							}
-						}
-					}
-				},
-				authorizedZone: authorizedZone
-			}
-		});
-
-		router.beforeEach(function (transition) {
-			if (!user.loggedIn) {
-				if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
-			} else {
-				if (transition.to.loginPage) transition.redirect('/');else transition.next();
-			}
-		}).redirect({
-			'*': '/',
-			'/innopoints/:username/': '/innopoints/:username/applications/'
-		});
-
-		return router;
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = function (router) {
+	    router.map({
+	        '/login': {
+	            component: __webpack_require__(11),
+	            loginPage: loginPage
+	        },
+	        '/': {
+	            component: __webpack_require__(14),
+	            subRoutes: {
+	                '/': {
+	                    component: __webpack_require__(20),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(28)
+	                        }
+	                    }
+	                },
+	                '/profile': {
+	                    component: __webpack_require__(31),
+	                    subRoutes: {
+	                        '/:username': {
+	                            name: 'profile',
+	                            component: __webpack_require__(34)
+	                        }
+	                    }
+	                },
+	                '/accounts': {
+	                    component: __webpack_require__(37),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(40),
+	                            name: 'accounts'
+	                        }
+	                    }
+	                },
+	                '/innopoints': {
+	                    component: __webpack_require__(47),
+	                    subRoutes: {
+	                        '/:username': {
+	                            component: router_view,
+	                            subRoutes: {
+	                                '/': {
+	                                    component: { template: '' },
+	                                    name: 'innopoints'
+	                                },
+	                                '/applications': {
+	                                    component: router_view,
+	                                    subRoutes: {
+	                                        '/:filter': {
+	                                            component: __webpack_require__(50),
+	                                            name: 'applications'
+	                                        },
+	                                    }
+	                                },
+	                                '/apply': {
+	                                    component: __webpack_require__(56),
+	                                    name: 'apply'
+	                                },
+	                            }
+	                        }
+	                    }
+	                },
+	                '/store': {
+	                    component: __webpack_require__(61),
+	                    subRoutes: {
+	                        '/': {
+	                            component: __webpack_require__(66),
+	                            name: 'store'
+	                        },
+	                        '/item/:item': {
+	                            component: __webpack_require__(70),
+	                            name: 'item'
+	                        },
+	                    },
+	                },
+	            },
+	            authorizedZone: authorizedZone
+	        }
+	    });
+	    router.beforeEach(function (transition) {
+	        if (!user.loggedIn) {
+	            if (transition.to.authorizedZone)
+	                transition.redirect('/login');
+	            else
+	                transition.next();
+	        }
+	        else {
+	            if (transition.to.loginPage)
+	                transition.redirect('/');
+	            else
+	                transition.next();
+	        }
+	    }).redirect({
+	        '*': '/',
+	        '/innopoints/:username/': '/innopoints/:username/applications/'
+	    });
+	    return router;
 	};
+
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _config = __webpack_require__(9);
-
-	var config = _interopRequireWildcard(_config);
-
-	var _storage = __webpack_require__(10);
-
-	var storage = _interopRequireWildcard(_storage);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var api_url = config.server.api_url;
-
+	"use strict";
+	var config_1 = __webpack_require__(9);
+	var storage_1 = __webpack_require__(10);
+	var api_url = config_1.default.server.api_url;
 	var modules = {
-		accounts: {
-			roles: ['ghost', 'student', 'moderator'],
-
-			have: function have(role) {
-				return !!(this.roles.indexOf(role.toLowerCase()) > -1);
-			},
-
-
-			//data
-
-			id: null,
-			username: null,
-			role: null,
-			firstName: null,
-			lastName: null,
-			patronymic: null,
-			studyGroup: null,
-			tgId: null,
-
-			get token() {
-				return this.storage.get(config.token_name);
-			},
-
-			set token(value) {
-				this.storage.set(config.token_name, value);
-			},
-
-			get fullName() {
-				var ln = !!this.lastName ? this.lastName + ' ' : '';
-				var fn = !!this.firstName ? this.firstName : '';
-				var pn = !!this.patronymic ? ' ' + this.patronymic : '';
-				return fn + ln + pn;
-			},
-
-			get loggedIn() {
-				return this.storage.get(config.token_name) ? true : false;
-			},
-
-			get isGhost() {
-				return !!this.is('ghost');
-			},
-
-			get isStudent() {
-				return !!this.is('student');
-			},
-
-			get isModerator() {
-				return !!this.is('moderator');
-			},
-
-			is: function is(ofType) {
-				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-			},
-
-			clear: function clear() {
-				this.id = null;
-				this.role = null;
-				this.firstName = null;
-				this.lastName = null;
-				this.patronymic = null;
-				this.studyGroup = null;
-				this.token = null;
-				this.storage.clear();
-			},
-
-			set: function set(data) {
-				if (data.id) this.id = data.id;
-				if (data.username) this.username = data.username;
-				if (data.role) this.role = data.role;
-				if (data.firstName) this.firstName = data.firstName;
-				if (data.lastName) this.lastName = data.lastName;
-				if (data.patronymic) this.patronymic = data.patronymic;
-				if (data.studyGroup) this.studyGroup = data.studyGroup;
-				if (data.token) this.token = data.token;
-			},
-
-			update: function update(successCallback, errorCallback) {
-				var that = this;
-				this.get(function (result) {
-					that.set(result);
-					if (successCallback) successCallback(result);
-				}, errorCallback);
-			},
-
-			storage: storage,
-
-			preferences: {
-				save: function save(successCallback, errorCallback) {
-					var that = this;
-					var type = "PUT",
-					    url = this.url + modules.accounts.token + '/updatePreferences',
-					    data = {
-						preferences: that
-					};
-
-					ajax(type, url, data, successCallback, errorCallback);
-				},
-				get: function get(successCallback, errorCallback) {
-					var type = "GET",
-					    url = this.url + modules.accounts.token + '/getPreferences',
-					    data = '';
-
-					ajax(type, url, data, successCallback, errorCallback);
-				}
-			},
-
-			//
-
-			//api
-
-			version: 1,
-			name: "accounts",
-			get url() {
-				return api_url + "v" + this.version + "/" + this.name + "/";
-			},
-
-			create: function create(password, email, successCallback, errorCallback) {
-				var type = "POST",
-				    url = this.url,
-				    data = {
-					username: this.username,
-					password: password,
-					email: email,
-					firstName: this.firstName,
-					lastName: this.lastName,
-					studyGroup: this.studyGroup
-				};
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			authorize: function authorize(password, successCallback, errorCallback) {
-				var type = "POST",
-				    url = this.url + "auth",
-				    data = {
-					username: this.username,
-					password: password
-				};
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			get: function get(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token,
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			///MODER METHODS
-			//
-			list: function list(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/listAccounts",
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			updateRole: function updateRole(account_id, new_role, successCallback, errorCallback) {
-				var type = "PUT",
-				    url = this.url + this.token + "/updateRole",
-				    data = { accountId: account_id, newRole: new_role };
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-			//
-			///
-
-			exists: function exists(successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/exists",
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			},
-
-			getBio: function getBio(args, successCallback, errorCallback) {
-				var type = "GET",
-				    url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
-				    data = '';
-
-				ajax(type, url, data, successCallback, errorCallback);
-			}
-		},
-		innopoints: {
-			roles: ['student', 'admin'],
-			have: function have(role) {
-				return !!(this.roles.indexOf(role) > -1);
-			},
-			data: {
-				id: null,
-				amount: null,
-				role: null,
-
-				// cart : [],
-
-				get isStudent() {
-					return !!this.is('student');
-				},
-
-				get isAdmin() {
-					return !!this.is('admin');
-				},
-
-				is: function is(ofType) {
-					return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-				},
-
-				update: function update(_successCallback, errorCallback) {
-					var that = this;
-					modules.innopoints.api.user.get({
-						successCallback: function successCallback(result) {
-							that.id = result.id;
-							that.amount = result.points_amount || 0;
-							that.role = result.type;
-
-							if (_successCallback) _successCallback(result);
-						},
-						errorCallback: errorCallback
-					});
-				}
-			},
-
-			api: {
-				version: 1,
-				name: "points",
-				get url() {
-					return api_url + "v" + this.version + "/" + this.name + "/";
-				},
-
-				getActivities: function getActivities(args) {
-					var type = "GET",
-					    url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
-					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-					ajax(type, url, data, args.successCallback, args.errorCallback);
-				},
-
-				getCategories: function getCategories(args) {
-					var type = "GET",
-					    url = this.url + "categories",
-					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-					ajax(type, url, data, args.successCallback, args.errorCallback);
-				},
-
-				shop: {
-					get url() {
-						return modules.innopoints.api.url + "shop/";
-					},
-
-					getItems: function getItems(args) {
-						var type = "GET",
-						    url = this.url + "items",
-						    data = {
-							skip: args.skip_count || null,
-							limit: args.limit_count || null,
-							fields: args.fields || 'title',
-							order: args.order || 'ASC',
-							category_id: args.category_id || null
-						};
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					getItem: function getItem(id, successCallback, errorCallback) {
-						var type = "GET",
-						    url = this.url + "items/" + id,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					order: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						create: function create(args) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + '/orders',
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						},
-
-						update: function update(args) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						},
-
-						delete: function _delete(args) {
-							var type = "DELETE",
-							    url = this.url + modules.accounts.token + '/orders/' + args.id,
-							    data = '';
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						}
-					}
-				},
-
-				user: {
-					get isAdmin() {
-						return modules.innopoints.data.isAdmin;
-					},
-					get url() {
-						return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/");
-					},
-
-					get: function get(args) {
-						var type = "GET",
-						    url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
-						    data = '';
-
-						if (this.isAdmin) if (args.id) url += "/accounts/" + args.id;
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					create: function create(successCallback, errorCallback) {
-						var type = "POST",
-						    url = this.url + modules.accounts.token,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					getFile: function getFile(appl_id, file_id, successCallback, errorCallback) {
-						var type = "GET",
-						    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
-						    data = '';
-
-						ajax(type, url, data, successCallback, errorCallback);
-					},
-
-					getAccounts: function getAccounts(args) {
-						var type = "GET",
-						    url = this.url + modules.accounts.token,
-						    data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					updateAccount: function updateAccount(args) {
-						var type = "PUT",
-						    url = this.url + modules.accounts.token + "/accounts/" + args.id,
-						    data = { points_amount: args.points };
-
-						ajax(type, url, data, args.successCallback, args.errorCallback);
-					},
-
-					application: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						create: function create(application, successCallback, errorCallback) {
-							var type = "POST",
-							    url = this.url + modules.accounts.token + "/applications",
-							    data = { application: application };
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						update: function update(appl_id, new_params, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = new_params;
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						send: function send(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						get: function get(appl_id, successCallback, errorCallback) {
-							var type = "GET",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						delete: function _delete(appl_id, successCallback, errorCallback) {
-							var type = "DELETE",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						approve: function approve(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						reject: function reject(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						},
-						dismiss: function dismiss(appl_id, successCallback, errorCallback) {
-							var type = "PUT",
-							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
-							    data = '';
-
-							ajax(type, url, data, successCallback, errorCallback);
-						}
-					},
-
-					applications: {
-						get url() {
-							return modules.innopoints.api.user.url;
-						},
-
-						get: function get(args) {
-							if (args.status == 'all') args.status = null;
-
-							var type = "GET",
-							    url = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
-							    data = { skip: args.skip_count, limit: args.limit_count };
-
-							ajax(type, url, data, args.successCallback, args.errorCallback);
-						}
-					}
-				}
-			}
-		}
+	    accounts: {
+	        roles: [
+	            'ghost',
+	            'student',
+	            'moderator'
+	        ],
+	        have: function (role) {
+	            return !!(this.roles.indexOf(role.toLowerCase()) > -1);
+	        },
+	        // Data
+	        id: null,
+	        username: null,
+	        role: null,
+	        firstName: null,
+	        lastName: null,
+	        patronymic: null,
+	        studyGroup: null,
+	        tgId: null,
+	        get token() {
+	            return this.storage.get(config_1.default.token_name);
+	        },
+	        set token(value) {
+	            this.storage.set(config_1.default.token_name, value);
+	        },
+	        get fullName() {
+	            var ln = (!!this.lastName ? this.lastName + ' ' : '');
+	            var fn = (!!this.firstName ? this.firstName : '');
+	            var pn = (!!this.patronymic ? ' ' + this.patronymic : '');
+	            return fn + ln + pn;
+	        },
+	        get loggedIn() {
+	            return this.storage.get(config_1.default.token_name) ? true : false;
+	        },
+	        get isGhost() {
+	            return !!this.is('ghost');
+	        },
+	        get isStudent() {
+	            return !!this.is('student');
+	        },
+	        get isModerator() {
+	            return !!this.is('moderator');
+	        },
+	        is: function (ofType) {
+	            return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+	        },
+	        clear: function () {
+	            this.id = null;
+	            this.role = null;
+	            this.firstName = null;
+	            this.lastName = null;
+	            this.patronymic = null;
+	            this.studyGroup = null;
+	            this.token = null;
+	            this.storage.clear();
+	        },
+	        set: function (data) {
+	            if (data.id)
+	                this.id = data.id;
+	            if (data.username)
+	                this.username = data.username;
+	            if (data.role)
+	                this.role = data.role;
+	            if (data.firstName)
+	                this.firstName = data.firstName;
+	            if (data.lastName)
+	                this.lastName = data.lastName;
+	            if (data.patronymic)
+	                this.patronymic = data.patronymic;
+	            if (data.studyGroup)
+	                this.studyGroup = data.studyGroup;
+	            if (data.token)
+	                this.token = data.token;
+	        },
+	        update: function (successCallback, errorCallback) {
+	            var that = this;
+	            this.get(function (result) {
+	                that.set(result);
+	                if (successCallback)
+	                    successCallback(result);
+	            }, errorCallback);
+	        },
+	        storage: storage_1.default,
+	        preferences: {
+	            save: function (successCallback, errorCallback) {
+	                var that = this;
+	                var type = "PUT", url = this.url + modules.accounts.token + '/updatePreferences', data = {
+	                    preferences: that
+	                };
+	                ajax(type, url, data, successCallback, errorCallback);
+	            },
+	            get: function (successCallback, errorCallback) {
+	                var type = "GET", url = this.url + modules.accounts.token + '/getPreferences', data = '';
+	                ajax(type, url, data, successCallback, errorCallback);
+	            }
+	        },
+	        //
+	        //api
+	        version: 1,
+	        name: "accounts",
+	        get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
+	        create: function (password, email, successCallback, errorCallback) {
+	            var type = "POST", url = this.url, data = {
+	                username: this.username,
+	                password: password,
+	                email: email,
+	                firstName: this.firstName,
+	                lastName: this.lastName,
+	                studyGroup: this.studyGroup
+	            };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        authorize: function (password, successCallback, errorCallback) {
+	            var type = "POST", url = this.url + "auth", data = {
+	                username: this.username,
+	                password: password
+	            };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        get: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token, data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        ///MODER METHODS
+	        //
+	        list: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/listAccounts", data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        updateRole: function (account_id, new_role, successCallback, errorCallback) {
+	            var type = "PUT", url = this.url + this.token + "/updateRole", data = { accountId: account_id, newRole: new_role };
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        //
+	        ///
+	        exists: function (successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/exists", data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	        getBio: function (args, successCallback, errorCallback) {
+	            var type = "GET", url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username), data = '';
+	            ajax(type, url, data, successCallback, errorCallback);
+	        },
+	    },
+	    innopoints: {
+	        roles: [
+	            'student',
+	            'admin'
+	        ],
+	        have: function (role) {
+	            return !!(this.roles.indexOf(role) > -1);
+	        },
+	        data: {
+	            id: null,
+	            amount: null,
+	            role: null,
+	            // cart : [],
+	            get isStudent() {
+	                return !!this.is('student');
+	            },
+	            get isAdmin() {
+	                return !!this.is('admin');
+	            },
+	            is: function (ofType) {
+	                return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+	            },
+	            update: function (successCallback, errorCallback) {
+	                var that = this;
+	                modules.innopoints.api.user.get({
+	                    successCallback: function (result) {
+	                        that.id = result.id;
+	                        that.amount = result.points_amount || 0;
+	                        that.role = result.type;
+	                        if (successCallback)
+	                            successCallback(result);
+	                    },
+	                    errorCallback: errorCallback
+	                });
+	            }
+	        },
+	        api: {
+	            version: 1,
+	            name: "points",
+	            get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
+	            getActivities: function (args) {
+	                var type = "GET", url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''), data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                ajax(type, url, data, args.successCallback, args.errorCallback);
+	            },
+	            getCategories: function (args) {
+	                var type = "GET", url = this.url + "categories", data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                ajax(type, url, data, args.successCallback, args.errorCallback);
+	            },
+	            shop: {
+	                get url() { return modules.innopoints.api.url + "shop/"; },
+	                getItems: function (args) {
+	                    var type = "GET", url = this.url + "items", data = {
+	                        skip: args.skip_count || null,
+	                        limit: args.limit_count || null,
+	                        fields: args.fields || 'title',
+	                        order: args.order || 'ASC',
+	                        category_id: args.category_id || null
+	                    };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                getItem: function (id, successCallback, errorCallback) {
+	                    var type = "GET", url = this.url + "items/" + id, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                order: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    create: function (args) {
+	                        var type = "POST", url = this.url + modules.accounts.token + '/orders', data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    },
+	                    update: function (args) {
+	                        var type = "POST", url = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action, data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    },
+	                    delete: function (args) {
+	                        var type = "DELETE", url = this.url + modules.accounts.token + '/orders/' + args.id, data = '';
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    }
+	                }
+	            },
+	            user: {
+	                get isAdmin() { return modules.innopoints.data.isAdmin; },
+	                get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/"); },
+	                get: function (args) {
+	                    var type = "GET", url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token, data = '';
+	                    if (this.isAdmin)
+	                        if (args.id)
+	                            url += "/accounts/" + args.id;
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                create: function (successCallback, errorCallback) {
+	                    var type = "POST", url = this.url + modules.accounts.token, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                getFile: function (appl_id, file_id, successCallback, errorCallback) {
+	                    var type = "GET", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id, data = '';
+	                    ajax(type, url, data, successCallback, errorCallback);
+	                },
+	                getAccounts: function (args) {
+	                    var type = "GET", url = this.url + modules.accounts.token, data = { skip: args.skip_count || null, limit: args.limit_count || null };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                updateAccount: function (args) {
+	                    var type = "PUT", url = this.url + modules.accounts.token + "/accounts/" + args.id, data = { points_amount: args.points };
+	                    ajax(type, url, data, args.successCallback, args.errorCallback);
+	                },
+	                application: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    create: function (application, successCallback, errorCallback) {
+	                        var type = "POST", url = this.url + modules.accounts.token + "/applications", data = { application: application };
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    update: function (appl_id, new_params, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = new_params;
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    send: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve', data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    get: function (appl_id, successCallback, errorCallback) {
+	                        var type = "GET", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    delete: function (appl_id, successCallback, errorCallback) {
+	                        var type = "DELETE", url = this.url + modules.accounts.token + "/applications/" + appl_id, data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    approve: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    reject: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    },
+	                    dismiss: function (appl_id, successCallback, errorCallback) {
+	                        var type = "PUT", url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework", data = '';
+	                        ajax(type, url, data, successCallback, errorCallback);
+	                    }
+	                },
+	                applications: {
+	                    get url() { return modules.innopoints.api.user.url; },
+	                    get: function (args) {
+	                        if (args.status == 'all')
+	                            args.status = null;
+	                        var type = "GET", url = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''), data = { skip: args.skip_count, limit: args.limit_count };
+	                        ajax(type, url, data, args.successCallback, args.errorCallback);
+	                    }
+	                }
+	            }
+	        }
+	    }
 	};
-
 	function ajax(type, url, data, successCallback, errorCallback) {
-		var xhr = new XMLHttpRequest();
-		xhr.open(type, url, true);
-		xhr.onload = function () {
-			if (xhr.response.result) {
-				console.log(xhr.response.status);
-
-				if (successCallback) successCallback(xhr.response.result);
-			} else if (xhr.response.error) {
-				console.log(xhr.response.error);
-
-				if (errorCallback) errorCallback(xhr.response.error);
-			}
-		};
-
-		// TypeScript thingy
-		// // FIXME: Shouldn't need to cast to any
-		// (xhr as any).dataType = "json";
-		// (xhr as any).contentType = 'json';
-
-		xhr.dataType = "json";
-		xhr.contentType = 'json';
-
-		xhr.responseType = 'json';
-		if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send(JSON.stringify(data));
+	    var xhr = new XMLHttpRequest();
+	    xhr.open(type, url, true);
+	    xhr.onload = function () {
+	        if (xhr.response.result) {
+	            console.log(xhr.response.status);
+	            if (successCallback)
+	                successCallback(xhr.response.result);
+	        }
+	        else if (xhr.response.error) {
+	            console.log(xhr.response.error);
+	            if (errorCallback)
+	                errorCallback(xhr.response.error);
+	        }
+	    };
+	    // // FIXME: Shouldn't need to cast to any
+	    // (xhr as any).dataType = "json";
+	    // (xhr as any).contentType = 'json';
+	    xhr.responseType = 'json';
+	    if (!(url.indexOf("getBio") > -1))
+	        xhr.setRequestHeader('Content-Type', 'application/json');
+	    xhr.send(JSON.stringify(data));
 	}
-
 	module.exports = modules;
 	module.exports.token = modules.accounts.token;
+
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var server = {
-		ip: "uis.university.innopolis.ru",
-		port: 8770,
-		get api_url() {
-			return "http://" + this.ip + ":" + (this.port || 21) + "/api/";
-		}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    server: {
+	        ip: "uis.university.innopolis.ru",
+	        port: 8770,
+	        get api_url() { return "http://" + this.ip + ":" + (this.port || 21) + "/api/"; }
+	    },
+	    token_name: "usertoken",
 	};
 
-	var token_name = "usertoken";
-
-	exports.server = server;
-	exports.token_name = token_name;
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    get: function (key) {
+	        return localStorage.getItem(key);
+	    },
+	    set: function (key, value) {
+	        if (value)
+	            localStorage.setItem(key, value);
+	        return localStorage.getItem(key);
+	    },
+	    clear: function () {
+	        localStorage.clear();
+	    },
+	};
 
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	function get(key) {
-		return localStorage.getItem(key);
-	}
-
-	function set(key, value) {
-		if (value) localStorage.setItem(key, value);
-		return localStorage.getItem(key);
-	}
-
-	function clear() {
-		localStorage.clear();
-	}
-
-	exports.get = get;
-	exports.set = set;
-	exports.clear = clear;
 
 /***/ },
 /* 11 */
@@ -15608,8 +15404,8 @@
 	// <template lang="jade">
 	// 	content
 	// 		div(slot='header')
-	// 			.search-group.input-group
-	// 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query", v-show="$route.path.includes('applications')")
+	// 			.search-group.input-group(v-show="$route.path.includes('applications')")
+	// 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
 	// 				// span.input-group-btn
 	// 				// 	button.btn.btn-secondary(type='button') 🔍
 	// 			ul.header-nav
@@ -15663,7 +15459,7 @@
 /* 49 */
 /***/ function(module, exports) {
 
-	module.exports = "<content><div slot=\"header\"><div class=\"search-group input-group\"><input id=\"search\" type=\"search\" placeholder=\"Search {{ $route.name | capitalize }}\" v-model=\"$router.app.query\" v-show=\"$route.path.includes('applications')\" class=\"form-control\"/><!-- span.input-group-btn--><!-- \tbutton.btn.btn-secondary(type='button') 🔍--></div><ul class=\"header-nav\"><template v-if=\"$route.path.includes('applications')\"><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\" v-if=\"!user.innopoints.data.isAdmin\" class=\"btn btn-outline-primary\">📑 All</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-primary\">📥 In&nbsp;process</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\" class=\"btn btn-outline-danger\">👎 Rejected</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\" class=\"btn btn-outline-warning\">🔃 In&nbsp;rework</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\" class=\"btn btn-outline-success\">👍 Approved</button></li></template><template v-else=\"v-else\"><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-secondary\">📄 Applications</button></li></template><li class=\"float-xs-right\"><button v-link=\"{ name: 'apply', params: { username: user.account.username } }\" class=\"btn btn-outline-info\">📝 Apply</button></li></ul></div></content>";
+	module.exports = "<content><div slot=\"header\"><div v-show=\"$route.path.includes('applications')\" class=\"search-group input-group\"><input id=\"search\" type=\"search\" placeholder=\"Search {{ $route.name | capitalize }}\" v-model=\"$router.app.query\" class=\"form-control\"/><!-- span.input-group-btn--><!-- \tbutton.btn.btn-secondary(type='button') 🔍--></div><ul class=\"header-nav\"><template v-if=\"$route.path.includes('applications')\"><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'all' } }\" v-if=\"!user.innopoints.data.isAdmin\" class=\"btn btn-outline-primary\">📑 All</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-primary\">📥 In&nbsp;process</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rejected' } }\" class=\"btn btn-outline-danger\">👎 Rejected</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'rework' } }\" class=\"btn btn-outline-warning\">🔃 In&nbsp;rework</button></li><li><button v-link=\"{name: 'applications',\tparams: { username: user.account.username, filter: 'approved' } }\" class=\"btn btn-outline-success\">👍 Approved</button></li></template><template v-else=\"v-else\"><li><button v-link=\"{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }\" class=\"btn btn-outline-secondary\">📄 Applications</button></li></template><li class=\"float-xs-right\"><button v-link=\"{ name: 'apply', params: { username: user.account.username } }\" class=\"btn btn-outline-info\">📝 Apply</button></li></ul></div></content>";
 
 /***/ },
 /* 50 */
@@ -15845,6 +15641,7 @@
 	// </template>
 	//
 	// <script>
+
 	module.exports = {
 		props: ['application', 'user', 'success'],
 		methods: {
@@ -15981,6 +15778,9 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	// <style lang="less" scoped>
 	//
 	// 	/*
@@ -16021,159 +15821,111 @@
 	//
 	// </style>
 	//
-	// <template>
-	// 	<div class="container">
+	// <template lang="jade">
 	//
-	// 		<!-- While loading -->
-	// 		<div>
-	// 			<p v-show="$loadingRouteData">Loading…</p>
-	// 		</div>
+	// 	.container
+	// 		// While loading
+	// 		p(v-show='$loadingRouteData') Loading&mldr;
+	// 		// When loaded
+	// 		.card(v-show='!$loadingRouteData')
+	// 			form#ip_request
+	// 				.card-block
+	// 					h1.card-title New Application
+	// 					// <h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>
+	// 				.card-block
+	// 					.form-group.row.flex-items-sm-middle.mb-0
+	// 						label.col-sm.col-form-label.col-form-label-lg(for='activity_category')
+	// 							h4 Category
+	// 						.col-sm
+	// 							select#activity_category.form-control.form-control-lg(v-model='current.category_id', @change='category_changed')
+	// 								option(value='blank', selected='') Choose Category
+	// 								option(value='') All
+	// 								option(v-for='c in categories', value='{{ c.id }}') {{ c.title }}
+	// 				.card-block
+	// 					h4.mb-1
+	// 						template(v-if='current.users.length > 1') Participants
+	// 						template(v-else='') Participant
+	// 					ul.list-group
+	// 						li.list-group-item.py-1(v-for='u of current.users')
+	// 							.clearfix.mb-1(v-show='current.users.length > 1')
+	// 								button.close(type='button', aria-label='Close', @click='current_users_remove($index)', v-if='current.users.length > 1')
+	// 									span(aria-hidden='true') &times;
+	// 								span.text-muted(v-show='current.users.length > 1') {{ $index + 1 }}
+	// 							.form-group.row.flex-items-sm-middle
+	// 								label.col-sm.col-form-label(for='username_{{ $index }}') Username
+	// 								.col-sm
+	// 									input(
+	// 										class="form-control",
+	// 										id="username_{{ $index }}",
+	// 										data-index="{{ $index }}",
+	// 										type="text",
+	// 										placeholder="username",
+	// 										@input="username_changed",
+	// 										value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}",
+	// 										v-model="query",
+	// 									)
+	// 							.form-group.row.flex-items-sm-middle
+	// 								label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
+	// 								.col-sm
+	// 									select(class="form-control", :disabled="!categorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
+	// 										option(value='', selected='') Choose Activity
+	// 										option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
+	// 							.form-group.row.flex-items-sm-middle
+	// 								label.col-sm.col-form-label(for='amount_{{ $index }}') Hours
+	// 								.col-sm
+	// 									input.form-control(:disabled='!(!showAmount(u.activity_id) && activitySelected)', id='amount_{{ $index }}', type='number', value='1', min='1', max='1000', v-model='u.amount')
+	// 							.form-group.row.flex-items-sm-middle.mb-0
+	// 								label.col-sm.col-form-label Innopoints
+	// 								.col-sm
+	// 									input.form-control(type='number', value='0123456789', readonly='')
+	// 					.clearfix.mt-1
+	// 						button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
+	// 						button.btn.btn-danger.float-xs-right(type='button', @click='current_users_count_clear', v-if='current.users.length > 1') &times; Clear
+	// 				.card-block
+	// 					label(for='upload')
+	// 						h4 Files
+	// 					.table-responsive
+	// 						table.table.table-striped.table-bordered(v-show='current.files.length')
+	// 							thead
+	// 								tr
+	// 									th.text-xs-center #
+	// 									th.text-xs-center Name
+	// 									th.text-xs-center Type
+	// 									th.text-xs-center Size
+	// 									th.text-xs-center Remove
+	// 							tbody
+	// 								tr(v-for='f in current.files')
+	// 									th(scope='row') {{ $index + 1 }}
+	// 									td {{ f.name }}
+	// 									td {{ f.type }}
+	// 									td.text-xs-right {{ f.size }} KB
+	// 									td.text-xs-center.py-0
+	// 										button.close.float-xs-none(type='button', aria-label='Remove File', @click='removeFile($index)')
+	// 											span(aria-hidden='true') &times;
+	// 					.clearfix
+	// 						button.btn.btn-success.float-xs-left(type='button', onclick='upload.click()') &plus; Add Files
+	// 						button.btn.btn-danger.float-xs-right(type='button', @click='current.files = []', v-show='current.files.length') &times; Clear
+	// 					input#upload(type='file', @change='uploaded', multiple='')
+	// 				.card-block
+	// 					.form-group
+	// 						label(for='comment')
+	// 							h4 Comment
+	// 						textarea#comment.form-control(placeholder='Write a comment', v-model='current.comment', rows='6')
+	// 				.card-block
+	// 					button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!activitySelected', type='button', @click='send') Send
+	// 					p.mt-1.mb-0.text-xs-center(v-show='!categorySelected') Select Category
+	// 					p.mt-1.mb-0.text-xs-center(v-show='categorySelected && !activitySelected') Select Activities
 	//
-	// 		<!-- When loaded -->
-	// 		<div v-show="!$loadingRouteData" class="card">
-	// 			<form id="ip_request">
-	//
-	// 				<div class="card-block">
-	// 					<h1 class="card-title">New Application</h1>
-	// 					<!--<h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>-->
-	// 				</div>
-	//
-	// 				<div class="card-block">
-	// 					<div class="form-group row flex-items-sm-middle mb-0">
-	// 						<label class="col-sm col-form-label col-form-label-lg" for="activity_category">
-	// 							<h4>Category</h4>
-	// 						</label>
-	// 						<div class="col-sm">
-	// 							<select class="form-control form-control-lg" id="activity_category" v-model="current.category_id" @change="category_changed">
-	// 								<option value="blank" selected>Choose Category</option>
-	// 								<option value="">All</option>
-	// 								<option v-for="c in categories" value="{{ c.id }}">{{ c.title }}</option>
-	// 							</select>
-	// 						</div>
-	// 					</div>
-	// 				</div>
-	//
-	// 				<div class="card-block">
-	//
-	// 					<h4 class="mb-1">
-	// 						<template v-if="current.users.length > 1">Participants</template>
-	// 						<template v-else>Participant</template>
-	// 					</h4>
-	//
-	// 					<ul class="list-group">
-	//
-	// 						<li class="list-group-item py-1" v-for="u of current.users">
-	//
-	// 							<div class="clearfix mb-1" v-show="current.users.length > 1">
-	// 								<button type="button" class="close" aria-label="Close" @click="current_users_remove($index)" v-if="current.users.length > 1">
-	// 									<span aria-hidden="true">&times;</span>
-	// 								</button>
-	//
-	// 								<span class="text-muted" v-show="current.users.length > 1">{{ $index + 1 }}</span>
-	// 							</div>
-	//
-	// 							<div class="form-group row flex-items-sm-middle">
-	// 								<label class="col-sm col-form-label" for="username_{{ $index }}">Username</label>
-	// 								<div class="col-sm">
-	// 									<input class="form-control" id="username_{{ $index }}" data-index="{{ $index }}" type="text" placeholder="username" @input="username_changed" value="{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}" v-model="u.username">
-	// 								</div>
-	// 							</div>
-	//
-	// 							<div class="form-group row flex-items-sm-middle">
-	// 								<label class="col-sm col-form-label" for="activity_{{ $index }}">Activity</label>
-	// 								<div class="col-sm">
-	// 									<select class="form-control" :disabled="!categorySelected || !u.username" id="activity_{{ $index }}" class="activity" v-model="u.activity_id" @change="activity_changed">
-	// 										<option value="" selected>Choose Activity</option>
-	// 										<option v-for="a in activities" value="{{ a.id }}">{{ a.title }}</option>
-	// 									</select>
-	// 								</div>
-	// 							</div>
-	//
-	// 							<div class="form-group row flex-items-sm-middle">
-	// 								<label class="col-sm col-form-label" for="amount_{{ $index }}">Quantity</label>
-	// 								<div class="col-sm">
-	// 									<input class="form-control" :disabled="!(!showAmount(u.activity_id) && activitySelected)" id="amount_{{ $index }}" type="number" class="amount" value="1" min="1" max="365" v-model="u.amount">
-	// 								</div>
-	// 							</div>
-	//
-	// 							<div class="form-group row flex-items-sm-middle mb-0">
-	// 								<label class="col-sm col-form-label">Innopoints</label>
-	// 									<div class="col-sm">
-	// 										<input class="form-control" type="number" value="0123456789" readonly>
-	// 									</div>
-	// 							</div>
-	//
-	// 						</li>
-	// 					</ul>
-	//
-	// 					<div class="clearfix mt-1">
-	// 						<button type="button" class="btn btn-success float-xs-left" @click="current_users_count_inc">&plus; Add</button>
-	// 						<button type="button" class="btn btn-danger float-xs-right" @click="current_users_count_clear" v-if="current.users.length > 1">&times; Clear</button>
-	// 					</div>
-	//
-	// 				</div>
-	//
-	// 				<div class="card-block">
-	// 					<label for="upload">
-	// 						<h4>Files</h4>
-	// 					</label>
-	// 					<div class="table-responsive">
-	// 						<table class="table  table-striped table-bordered" v-show="current.files.length">
-	// 							<thead>
-	// 								<tr>
-	// 									<th class="text-xs-center">#</th>
-	// 									<th class="text-xs-center">Name</th>
-	// 									<th class="text-xs-center">Type</th>
-	// 									<th class="text-xs-center">Size</th>
-	// 									<th class="text-xs-center">Remove</th>
-	// 								</tr>
-	// 							</thead>
-	// 							<tbody>
-	// 								<tr v-for="f in current.files">
-	// 									<th scope="row">{{ $index + 1 }}</td>
-	// 									<td>{{ f.name }}</td>
-	// 									<td>{{ f.type }}</td>
-	// 									<td class="text-xs-right">{{ f.size }} KB</td>
-	// 									<td class="text-xs-center py-0">
-	// 										<button type="button" class="close float-xs-none" aria-label="Remove File" @click="removeFile($index)">
-	// 											<span aria-hidden="true">&times;</span>
-	// 										</button>
-	// 									</td>
-	// 								</tr>
-	// 							</tbody>
-	// 						</table>
-	// 					</div>
-	// 					<div class="clearfix">
-	// 						<button type="button" class="btn btn-success float-xs-left" onClick="upload.click()">&plus; Add</button>
-	// 						<button type="button" class="btn btn-danger float-xs-right" @click="current.files = []" v-show="current.files.length">&times; Clear</button>
-	// 					</div>
-	// 					<input id="upload" type="file" @change="uploaded" multiple>
-	// 				</div> 
-	//
-	// 				<div class="card-block">
-	// 					<div class="form-group">
-	// 						<label for="comment">
-	// 							<h4>Comment</h4>
-	// 						</label>
-	// 						<textarea class="form-control" id="comment" placeholder="Write a comment" v-model="current.comment" rows="4"></textarea>
-	// 					</div>
-	// 				</div>
-	//
-	// 				<div class="card-block">
-	// 					<button class="btn btn-primary btn-lg btn-block" :disabled="!activitySelected" type="button" @click="send" id="send">Send</button>
-	// 					<p class="mt-1 mb-0 text-xs-center" v-show="!categorySelected">Select Category</p>
-	// 					<p class="mt-1 mb-0 text-xs-center" v-show="categorySelected && !activitySelected">Select Activities</p>
-	// 				</div>
-	//
-	// 			</form>
-	// 		</div>
-	//
-	// 	</div><!-- template wrap -->
 	// </template>
 	//
 	// <script>
 
-	module.exports = {
+	// import VueTypeahead from 'vue-typeahead'
+
+	exports.default = {
+
+		// extends: VueTypeahead,
+
 		data: function data() {
 			var user = this.$root.user;
 			return {
@@ -16196,6 +15948,7 @@
 					files: [],
 					comment: ''
 				}
+
 			};
 		},
 
@@ -16311,7 +16064,7 @@
 
 		route: {
 			data: function data(transition) {
-				console.log('calling get for innopoints');
+				console.log('Сalling GET for Innopoints');
 				var user = this.$router.app.user;
 				this.$router.app.user.account.update(function (result) {
 					user.innopoints.api.getCategories({
@@ -16331,7 +16084,7 @@
 /* 60 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"container\" _v-05beb5e6=\"\">\n\t\n\t<!-- While loading -->\n\t<div _v-05beb5e6=\"\">\n\t\t<p v-show=\"$loadingRouteData\" _v-05beb5e6=\"\">Loading…</p>\n\t</div>\n\t\n\t<!-- When loaded -->\n\t<div v-show=\"!$loadingRouteData\" class=\"card\" _v-05beb5e6=\"\">\n\t\t<form id=\"ip_request\" _v-05beb5e6=\"\">\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<h1 class=\"card-title\" _v-05beb5e6=\"\">New Application</h1>\n\t\t\t\t<!--<h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label class=\"col-sm col-form-label col-form-label-lg\" for=\"activity_category\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Category</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<select class=\"form-control form-control-lg\" id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<option value=\"blank\" selected=\"\" _v-05beb5e6=\"\">Choose Category</option>\n\t\t\t\t\t\t\t<option value=\"\" _v-05beb5e6=\"\">All</option>\n\t\t\t\t\t\t\t<option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-05beb5e6=\"\">{{ c.title }}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\n\t\t\t\t<h4 class=\"mb-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<template v-if=\"current.users.length > 1\">Participants</template>\n\t\t\t\t\t<template v-else=\"\">Participant</template>\n\t\t\t\t</h4>\n\n\t\t\t\t<ul class=\"list-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t\n\t\t\t\t\t<li class=\"list-group-item py-1\" v-for=\"u of current.users\" _v-05beb5e6=\"\">\n\n\t\t\t\t\t\t<div class=\"clearfix mb-1\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t\t<span class=\"text-muted\" v-show=\"current.users.length > 1\" _v-05beb5e6=\"\">{{ $index + 1 }}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"username_{{ $index }}\" _v-05beb5e6=\"\">Username</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"u.username\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"activity_{{ $index }}\" _v-05beb5e6=\"\">Activity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<select class=\"form-control\" :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<option value=\"\" selected=\"\" _v-05beb5e6=\"\">Choose Activity</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-05beb5e6=\"\">{{ a.title }}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" for=\"amount_{{ $index }}\" _v-05beb5e6=\"\">Quantity</label>\n\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<input class=\"form-control\" :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"365\" v-model=\"u.amount\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<label class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Innopoints</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<input class=\"form-control\" type=\"number\" value=\"0123456789\" readonly=\"\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<div class=\"clearfix mt-1\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" @click=\"current_users_count_inc\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<label for=\"upload\" _v-05beb5e6=\"\">\n\t\t\t\t\t<h4 _v-05beb5e6=\"\">Files</h4>\n\t\t\t\t</label>\n\t\t\t\t<div class=\"table-responsive\" _v-05beb5e6=\"\">\n\t\t\t\t\t<table class=\"table  table-striped table-bordered\" v-show=\"current.files.length\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<thead _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">#</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Name</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Type</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Size</th>\n\t\t\t\t\t\t\t\t<th class=\"text-xs-center\" _v-05beb5e6=\"\">Remove</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"f in current.files\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t<th scope=\"row\" _v-05beb5e6=\"\">{{ $index + 1 }}\n\t\t\t\t\t\t\t\t</th><td _v-05beb5e6=\"\">{{ f.name }}</td>\n\t\t\t\t\t\t\t\t<td _v-05beb5e6=\"\">{{ f.type }}</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-right\" _v-05beb5e6=\"\">{{ f.size }} KB</td>\n\t\t\t\t\t\t\t\t<td class=\"text-xs-center py-0\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t<button type=\"button\" class=\"close float-xs-none\" aria-label=\"Remove File\" @click=\"removeFile($index)\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t\t\t\t\t<span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span>\n\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"clearfix\" _v-05beb5e6=\"\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-success float-xs-left\" onclick=\"upload.click()\" _v-05beb5e6=\"\">+ Add</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger float-xs-right\" @click=\"current.files = []\" v-show=\"current.files.length\" _v-05beb5e6=\"\">× Clear</button>\n\t\t\t\t</div>\n\t\t\t\t<input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-05beb5e6=\"\">\n\t\t\t</div> \n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<div class=\"form-group\" _v-05beb5e6=\"\">\n\t\t\t\t\t<label for=\"comment\" _v-05beb5e6=\"\">\n\t\t\t\t\t\t<h4 _v-05beb5e6=\"\">Comment</h4>\n\t\t\t\t\t</label>\n\t\t\t\t\t<textarea class=\"form-control\" id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"4\" _v-05beb5e6=\"\"></textarea>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"card-block\" _v-05beb5e6=\"\">\n\t\t\t\t<button class=\"btn btn-primary btn-lg btn-block\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" id=\"send\" _v-05beb5e6=\"\">Send</button>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"!categorySelected\" _v-05beb5e6=\"\">Select Category</p>\n\t\t\t\t<p class=\"mt-1 mb-0 text-xs-center\" v-show=\"categorySelected &amp;&amp; !activitySelected\" _v-05beb5e6=\"\">Select Activities</p>\n\t\t\t</div>\n\n\t\t</form>\n\t</div>\n\n</div><!-- template wrap -->\n";
+	module.exports = "<div class=\"container\" _v-05beb5e6=\"\"><!-- While loading--><p v-show=\"$loadingRouteData\" _v-05beb5e6=\"\">Loading…</p><!-- When loaded--><div v-show=\"!$loadingRouteData\" class=\"card\" _v-05beb5e6=\"\"><form id=\"ip_request\" _v-05beb5e6=\"\"><div class=\"card-block\" _v-05beb5e6=\"\"><h1 class=\"card-title\" _v-05beb5e6=\"\">New Application</h1><!-- <h6 class=\"card-subtitle text-muted\">by {{ user.account.username }}</h6>--></div><div class=\"card-block\" _v-05beb5e6=\"\"><div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\"><label for=\"activity_category\" class=\"col-sm col-form-label col-form-label-lg\" _v-05beb5e6=\"\"><h4 _v-05beb5e6=\"\">Category</h4></label><div class=\"col-sm\" _v-05beb5e6=\"\"><select id=\"activity_category\" v-model=\"current.category_id\" @change=\"category_changed\" class=\"form-control form-control-lg\" _v-05beb5e6=\"\"><option value=\"blank\" selected=\"\" _v-05beb5e6=\"\">Choose Category</option><option value=\"\" _v-05beb5e6=\"\">All</option><option v-for=\"c in categories\" value=\"{{ c.id }}\" _v-05beb5e6=\"\">{{ c.title }}</option></select></div></div></div><div class=\"card-block\" _v-05beb5e6=\"\"><h4 class=\"mb-1\" _v-05beb5e6=\"\"><template v-if=\"current.users.length > 1\">Participants</template><template v-else=\"\">Participant</template></h4><ul class=\"list-group\" _v-05beb5e6=\"\"><li v-for=\"u of current.users\" class=\"list-group-item py-1\" _v-05beb5e6=\"\"><div v-show=\"current.users.length > 1\" class=\"clearfix mb-1\" _v-05beb5e6=\"\"><button type=\"button\" aria-label=\"Close\" @click=\"current_users_remove($index)\" v-if=\"current.users.length > 1\" class=\"close\" _v-05beb5e6=\"\"><span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span></button><span v-show=\"current.users.length > 1\" class=\"text-muted\" _v-05beb5e6=\"\">{{ $index + 1 }}</span></div><div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\"><label for=\"username_{{ $index }}\" class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Username</label><div class=\"col-sm\" _v-05beb5e6=\"\"><input id=\"username_{{ $index }}\" data-index=\"{{ $index }}\" type=\"text\" placeholder=\"username\" @input=\"username_changed\" value=\"{{ $index || user.innopoints.data.isAdmin ? '' : user.account.username }}\" v-model=\"query\" class=\"form-control\" _v-05beb5e6=\"\"></div></div><div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\"><label for=\"activity_{{ $index }}\" class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Activity</label><div class=\"col-sm\" _v-05beb5e6=\"\"><select :disabled=\"!categorySelected || !u.username\" id=\"activity_{{ $index }}\" v-model=\"u.activity_id\" @change=\"activity_changed\" class=\"form-control activity\" _v-05beb5e6=\"\"><option value=\"\" selected=\"\" _v-05beb5e6=\"\">Choose Activity</option><option v-for=\"a in activities\" value=\"{{ a.id }}\" _v-05beb5e6=\"\">{{ a.title }}</option></select></div></div><div class=\"form-group row flex-items-sm-middle\" _v-05beb5e6=\"\"><label for=\"amount_{{ $index }}\" class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Hours</label><div class=\"col-sm\" _v-05beb5e6=\"\"><input :disabled=\"!(!showAmount(u.activity_id) &amp;&amp; activitySelected)\" id=\"amount_{{ $index }}\" type=\"number\" value=\"1\" min=\"1\" max=\"1000\" v-model=\"u.amount\" class=\"form-control\" _v-05beb5e6=\"\"></div></div><div class=\"form-group row flex-items-sm-middle mb-0\" _v-05beb5e6=\"\"><label class=\"col-sm col-form-label\" _v-05beb5e6=\"\">Innopoints</label><div class=\"col-sm\" _v-05beb5e6=\"\"><input type=\"number\" value=\"0123456789\" readonly=\"\" class=\"form-control\" _v-05beb5e6=\"\"></div></div></li></ul><div class=\"clearfix mt-1\" _v-05beb5e6=\"\"><button type=\"button\" @click=\"current_users_count_inc\" class=\"btn btn-success float-xs-left\" _v-05beb5e6=\"\">+ Add a Participant</button><button type=\"button\" @click=\"current_users_count_clear\" v-if=\"current.users.length > 1\" class=\"btn btn-danger float-xs-right\" _v-05beb5e6=\"\">× Clear</button></div></div><div class=\"card-block\" _v-05beb5e6=\"\"><label for=\"upload\" _v-05beb5e6=\"\"><h4 _v-05beb5e6=\"\">Files</h4></label><div class=\"table-responsive\" _v-05beb5e6=\"\"><table v-show=\"current.files.length\" class=\"table table-striped table-bordered\" _v-05beb5e6=\"\"><thead _v-05beb5e6=\"\"><tr _v-05beb5e6=\"\"><th class=\"text-xs-center\" _v-05beb5e6=\"\">#</th><th class=\"text-xs-center\" _v-05beb5e6=\"\">Name</th><th class=\"text-xs-center\" _v-05beb5e6=\"\">Type</th><th class=\"text-xs-center\" _v-05beb5e6=\"\">Size</th><th class=\"text-xs-center\" _v-05beb5e6=\"\">Remove</th></tr></thead><tbody _v-05beb5e6=\"\"><tr v-for=\"f in current.files\" _v-05beb5e6=\"\"><th scope=\"row\" _v-05beb5e6=\"\">{{ $index + 1 }}</th><td _v-05beb5e6=\"\">{{ f.name }}</td><td _v-05beb5e6=\"\">{{ f.type }}</td><td class=\"text-xs-right\" _v-05beb5e6=\"\">{{ f.size }} KB</td><td class=\"text-xs-center py-0\" _v-05beb5e6=\"\"><button type=\"button\" aria-label=\"Remove File\" @click=\"removeFile($index)\" class=\"close float-xs-none\" _v-05beb5e6=\"\"><span aria-hidden=\"true\" _v-05beb5e6=\"\">×</span></button></td></tr></tbody></table></div><div class=\"clearfix\" _v-05beb5e6=\"\"><button type=\"button\" onclick=\"upload.click()\" class=\"btn btn-success float-xs-left\" _v-05beb5e6=\"\">+ Add Files</button><button type=\"button\" @click=\"current.files = []\" v-show=\"current.files.length\" class=\"btn btn-danger float-xs-right\" _v-05beb5e6=\"\">× Clear</button></div><input id=\"upload\" type=\"file\" @change=\"uploaded\" multiple=\"\" _v-05beb5e6=\"\"></div><div class=\"card-block\" _v-05beb5e6=\"\"><div class=\"form-group\" _v-05beb5e6=\"\"><label for=\"comment\" _v-05beb5e6=\"\"><h4 _v-05beb5e6=\"\">Comment</h4></label><textarea id=\"comment\" placeholder=\"Write a comment\" v-model=\"current.comment\" rows=\"6\" class=\"form-control\" _v-05beb5e6=\"\"></textarea></div></div><div class=\"card-block\" _v-05beb5e6=\"\"><button id=\"send\" :disabled=\"!activitySelected\" type=\"button\" @click=\"send\" class=\"btn btn-primary btn-lg btn-block\" _v-05beb5e6=\"\">Send</button><p v-show=\"!categorySelected\" class=\"mt-1 mb-0 text-xs-center\" _v-05beb5e6=\"\">Select Category</p><p v-show=\"categorySelected &amp;&amp; !activitySelected\" class=\"mt-1 mb-0 text-xs-center\" _v-05beb5e6=\"\">Select Activities</p></div></form></div></div>";
 
 /***/ },
 /* 61 */
@@ -16707,9 +16460,17 @@
 			onselect: function onselect(item, e) {
 				if (!item.selected || !item.selected.options) item.selected = { options: {} };
 
-				if (e.target.value !== "") item.selected.options[e.target.name] = e.target.value;else delete item.selected.options[e.target.name];
+				if (e.target.value !== "") {
+					item.selected.options[e.target.name] = e.target.value;
+				} else {
+					delete item.selected.options[e.target.name];
+				}
 
-				if (Object.keys(item.selected.options).length == item.options.length) document.getElementById(item.title).style.display = "block";else document.getElementById(item.title).style.display = "none";
+				if (Object.keys(item.selected.options).length == item.options.length) {
+					document.getElementById(item.title).style.display = "block";
+				} else {
+					document.getElementById(item.title).style.display = "none";
+				}
 			}
 		}
 	};
@@ -16768,12 +16529,15 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	// <template>
 	// 	<router-view></router-view>
 	// </template>
 	//
 	// <script>
-	module.exports = {
+	exports.default = {
 		ready: function ready() {
 			console.log('App is awaiting your command!');
 		},
