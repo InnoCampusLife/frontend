@@ -1,5 +1,5 @@
-import * as config from './config'
-import * as storage from './storage'
+import config from './config'
+import storage from './storage'
 
 const api_url = config.server.api_url;
 
@@ -15,7 +15,7 @@ const modules = {
 			return !!(this.roles.indexOf(role.toLowerCase()) > -1);
 		},
 
-		//data
+		// Data
 
 		id: null,
 		username: null,
@@ -57,11 +57,11 @@ const modules = {
 			return !!this.is('moderator');
 		},
 
-		is : function (ofType) {
+		is(ofType) {
 			return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 		},
 
-		clear : function () {
+		clear() {
 			this.id         = null;
 			this.role       = null;
 			this.firstName  = null;
@@ -72,18 +72,18 @@ const modules = {
 			this.storage.clear();
 		},
 
-		set : function (data) {
-			if (data.id) 		 this.id         = data.id;
-			if (data.username) 	 this.username   = data.username;
-			if (data.role) 		 this.role       = data.role;
+		set(data) {
+			if (data.id)         this.id         = data.id;
+			if (data.username)   this.username   = data.username;
+			if (data.role)       this.role       = data.role;
 			if (data.firstName)  this.firstName  = data.firstName;
 			if (data.lastName) 	 this.lastName   = data.lastName;
 			if (data.patronymic) this.patronymic = data.patronymic;
 			if (data.studyGroup) this.studyGroup = data.studyGroup;
-			if (data.token) 	 this.token      = data.token;
+			if (data.token)      this.token      = data.token;
 		},
 
-		update : function (successCallback, errorCallback) {
+		update(successCallback, errorCallback) {
 			var that = this;
 			this.get(result => {
 					that.set(result);
@@ -99,8 +99,7 @@ const modules = {
 
 			save(successCallback, errorCallback) {
 				var that = this;
-				var 
-				type = "PUT",
+				var type = "PUT",
 				url  = this.url + modules.accounts.token + '/updatePreferences',
 				data = { 
 					preferences : that
@@ -110,8 +109,7 @@ const modules = {
 			},
 
 			get(successCallback, errorCallback) {
-				var 
-				type = "GET",
+				var type = "GET",
 				url  = this.url + modules.accounts.token + '/getPreferences',
 				data = '';
 
@@ -127,7 +125,7 @@ const modules = {
 		name : "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-		create : function (password, email, successCallback, errorCallback) {
+		create(password, email, successCallback, errorCallback) {
 			var 
 			type = "POST",
 			url  = this.url,
@@ -143,7 +141,7 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		authorize : function (password, successCallback, errorCallback) {
+		authorize(password, successCallback, errorCallback) {
 			var 
 			type = "POST",
 			url  = this.url + "auth",
@@ -155,7 +153,7 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		get : function (successCallback, errorCallback) {
+		get(successCallback, errorCallback) {
 			var 
 			type = "GET",
 			url  = this.url + this.token,
@@ -166,7 +164,7 @@ const modules = {
 
 		///MODER METHODS
 		//
-		list : function (successCallback, errorCallback) {
+		list(successCallback, errorCallback) {
 			var
 			type = "GET",
 			url  = this.url + this.token + "/listAccounts",
@@ -175,7 +173,7 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		updateRole : function (account_id, new_role, successCallback, errorCallback) {
+		updateRole(account_id, new_role, successCallback, errorCallback) {
 			var
 			type = "PUT",
 			url  = this.url + this.token + "/updateRole",
@@ -186,7 +184,7 @@ const modules = {
 		//
 		///
 
-		exists : function (successCallback, errorCallback) {
+		exists(successCallback, errorCallback) {
 			var 
 			type = "GET",
 			url  = this.url + this.token + "/exists",
@@ -195,7 +193,7 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		getBio : function (args, successCallback, errorCallback) {
+		getBio(args, successCallback, errorCallback) {
 			var 
 			type = "GET",
 			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
@@ -209,7 +207,7 @@ const modules = {
 			'student',
 			'admin'
 		],
-		have  : function (role) {
+		have (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
 		data : {
@@ -227,11 +225,11 @@ const modules = {
 				return !!this.is('admin');
 			},
 
-			is : function (ofType) {
+			is(ofType) {
 				return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
 			},
 
-			update : function (successCallback, errorCallback)	{
+			update(successCallback, errorCallback)	{
 				var that = this;
 				modules.innopoints.api.user.get({
 					successCallback: result => {
@@ -251,30 +249,25 @@ const modules = {
 			name : "points",
 			get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
 
-			getActivities : function (args) {
-				var
-				type = "GET",
+			getActivities(args) {
+				var type = "GET",
 				url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
 				data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
 				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
-			getCategories : function (args) {
-				var
-				type = "GET",
+			getCategories(args) {
+				var type = "GET",
 				url = this.url + "categories",
 				data = { skip: args.skip_count || null, limit: args.limit_count || null };
-
 				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
 			shop : {
 				get url() { return modules.innopoints.api.url + "shop/" },
 
-				getItems : function (args) {
-					var
-					type = "GET",
+				getItems(args) {
+					var type = "GET",
 					url = this.url + "items",
 					data = {
 						skip: args.skip_count || null,
@@ -283,43 +276,37 @@ const modules = {
 						order: args.order || 'ASC',
 						category_id: args.category_id || null
 					};
-
 					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
-				getItem : function (id, successCallback, errorCallback) {
-					var
-					type = "GET",
+				getItem(id, successCallback, errorCallback) {
+					var type = "GET",
 					url = this.url + "items/" + id,
 					data = '';
-
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
 				order : {
 					get url() { return modules.innopoints.api.user.url },
 
-					create : function(args) {
-						var
-						type = "POST",
+					create(args) {
+						var type = "POST",
 						url  = this.url + modules.accounts.token + '/orders',
 						data = '';
 
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
 
-					update : function(args) {
-						var
-						type = "POST",
+					update(args) {
+						var type = "POST",
 						url  = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
 						data = '';
 
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
 
-					delete : function(args) {
-						var
-						type = "DELETE",
+					delete(args) {
+						var type = "DELETE",
 						url  = this.url + modules.accounts.token + '/orders/' + args.id,
 						data = '';
 
@@ -332,9 +319,8 @@ const modules = {
 				get isAdmin() { return modules.innopoints.data.isAdmin; },
 				get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/") },
 
-				get : function (args) {
-					var 
-					type = "GET",
+				get(args) {
+					var type = "GET",
 					url  = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
 					data = '';
 
@@ -344,36 +330,32 @@ const modules = {
 					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
-				create : function (successCallback, errorCallback) {
-					var 
-					type = "POST",
+				create(successCallback, errorCallback) {
+					var type = "POST",
 					url  = this.url + modules.accounts.token,
 					data = '';
 
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 				
-				getFile : function (appl_id, file_id, successCallback, errorCallback) {
-					var 
-					type = "GET",
+				getFile(appl_id, file_id, successCallback, errorCallback) {
+					var type = "GET",
 					url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
 					data = '';
 
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
-				getAccounts : function (args) {
-					var 
-					type = "GET",
+				getAccounts(args) {
+					var type = "GET",
 					url  = this.url + modules.accounts.token,
 					data = { skip: args.skip_count || null, limit: args.limit_count || null };
 
 					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
-				updateAccount : function (args) {
-					var 
-					type = "PUT",
+				updateAccount(args) {
+					var type = "PUT",
 					url  = this.url + modules.accounts.token + "/accounts/" + args.id,
 					data = { points_amount : args.points };
 
@@ -384,8 +366,7 @@ const modules = {
 					get url() { return modules.innopoints.api.user.url },
 
 					create(application, successCallback, errorCallback) {
-						var 
-						type = "POST",
+						var type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
 						data = { application:application };
 
@@ -393,8 +374,7 @@ const modules = {
 					},
 					
 					update(appl_id, new_params, successCallback, errorCallback) {
-						var 
-						type = "PUT",
+						var type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = new_params;
 
@@ -402,8 +382,7 @@ const modules = {
 					},
 					
 					send(appl_id, successCallback, errorCallback) {
-						var 
-						type = "PUT",
+						var type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 						data = '';
 
@@ -411,8 +390,7 @@ const modules = {
 					},
 					
 					get(appl_id, successCallback, errorCallback) {
-						var 
-						type = "GET",
+						var type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
 
@@ -420,8 +398,7 @@ const modules = {
 					},
 					
 					delete(appl_id, successCallback, errorCallback) {
-						var 
-						type = "DELETE",
+						var type = "DELETE",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
 
@@ -429,8 +406,7 @@ const modules = {
 					},
 					
 					approve(appl_id, successCallback, errorCallback) {
-						var 
-						type = "PUT",
+						var type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
 						data = '';
 
@@ -438,8 +414,7 @@ const modules = {
 					},
 					
 					reject(appl_id, successCallback, errorCallback) {
-						var 
-						type = "PUT",
+						var type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
 						data = '';
 
@@ -447,8 +422,7 @@ const modules = {
 					},
 					
 					dismiss(appl_id, successCallback, errorCallback) {
-						var 
-						type = "PUT",
+						var type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
 						data = '';
 
@@ -460,14 +434,10 @@ const modules = {
 					get url() { return modules.innopoints.api.user.url },
 
 					get(args) {
-						if (args.status == 'all')
-							args.status = null;
-
-						var 
-						type = "GET",
+						if (args.status == 'all') args.status = null;
+						var type = "GET",
 						url  = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
 						data = { skip: args.skip_count, limit: args.limit_count };
-
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					}
 				}
@@ -493,13 +463,9 @@ function ajax (type, url, data, successCallback, errorCallback) {
 		}
 	};
 	
-	// TypeScript thingy
 	// // FIXME: Shouldn't need to cast to any
 	// (xhr as any).dataType = "json";
 	// (xhr as any).contentType = 'json';
-
-	xhr.dataType = "json";
-	xhr.contentType = 'json';
 	
 	xhr.responseType = 'json';
 	if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
