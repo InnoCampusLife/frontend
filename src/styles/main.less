@@ -61,7 +61,7 @@ code, kbd, pre, samp {
 	 Layout
 	 ========================================================================== */
 
-@sidebar-width: 15rem;
+@sidebar-width: 18.75rem;
 @header-height: 4rem;
 
 main {
@@ -118,8 +118,8 @@ ul.header-nav {
 .header-nav button {
 	background: white;
 	height: 4rem;
-	padding-left: 2rem;
-	padding-right: 2rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
 	border-radius: 0;
 	border: 0;
 	border-bottom: 1px solid rgba(0,0,0,.125);
@@ -139,6 +139,11 @@ ul.header-nav {
 	margin-bottom: -@header-height;	
 	min-height: 100%;
 	padding-top: 1rem;
+	text-align: center;
+}
+
+.card {
+	text-align: left;
 }
 
 .content-main > .wrap:after {
@@ -166,21 +171,6 @@ main > header {
 	border-bottom: 1px solid rgba(0,0,0,.125);
 	z-index: 100;
 }
-
-/*
-main > header > .content .item {
-	border: 0;
-	padding: 0.5rem 1rem;
-	margin-left: 1.5rem;
-	color: #000;
-	background: transparent;
-	cursor: pointer;
-	-webkit-user-select: none;
-	   -moz-user-select: none;
-		-ms-user-select: none;
-			user-select: none;
-}
-*/
 
 main > header > .content .item:focus,
 main > header > .content .item:hover {
@@ -259,5 +249,4 @@ main > header > .content .item:active {
 // @import url('./icons.css'); Moved to index.html
 @import url('./transitions.less');
 @import url('./helpers.less');
-@import url('./content.less');
 @import url('./sidebar.less');

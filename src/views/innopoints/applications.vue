@@ -1,19 +1,11 @@
-<template>
-	<div class="container">
-		<pre v-show="$loadingRouteData">Loading...</pre>
+<template lang="jade">
+	.container
+		p(v-show="$loadingRouteData") Loading...
 
-		<pre v-show="!applications.length && !$loadingRouteData">Empty</pre>
+		p(v-show="!applications.length && !$loadingRouteData") Empty
 
-		<template v-if="applications.length">
-			<application
-				v-for="appl in applications
-				 | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1"
-				:application="appl"
-				:user="user"
-				:success="action_success"
-			></application>
-		</template>
-	</div>
+		template(v-if="applications.length")
+			application(v-for="appl in applications | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1", :application="appl", :user="user", :success="action_success")
 </template>
 
 <script>

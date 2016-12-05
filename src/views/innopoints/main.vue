@@ -5,25 +5,23 @@
 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query", v-show="$route.path.includes('applications')")
 				span.input-group-btn
 					button.btn.btn-secondary(type='button') 🔍
-			template(v-if="$route.path.includes('applications')")
-				ul.header-nav
+			ul.header-nav
+				template(v-if="$route.path.includes('applications')")
 					li
-						button.btn.btn-secondary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }" v-if="!user.innopoints.data.isAdmin") All
+						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }" v-if="!user.innopoints.data.isAdmin") 📑 All
 					li
-						button.btn.btn-secondary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }") In&nbsp;process
+						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }") 📥 In&nbsp;process
 					li
-						button.btn.btn-secondary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }") Rejected
+						button.btn.btn-outline-danger(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }") 👎 Rejected
 					li
-						button.btn.btn-secondary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }") In&nbsp;rework
+						button.btn.btn-outline-warning(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }") 🔃 In&nbsp;rework
 					li
-						button.btn.btn-secondary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }") Approved
+						button.btn.btn-outline-success(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }") 👍 Approved
+				template(v-else)
 					li
-						button.btn.btn-secondary(v-link="{ name: 'apply', params: { username: user.account.username } }")
-							span Apply
-			template(v-else)
-				ul.header-nav
-					li
-						button.btn.btn-secondary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }") Applications
+						button.btn.btn-outline-secondary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }") 📄 Applications
+				li.float-xs-right
+					button.btn.btn-outline-info(v-link="{ name: 'apply', params: { username: user.account.username } }") 📝 Apply
 </template>
 
 <script>
