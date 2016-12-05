@@ -1,17 +1,27 @@
-<template>
-	<main class="content">
-		<main-header>
-			<slot name="header"></slot>
-		</main-header>
-		<div class="content-main py-1" scroller-x scroller-y>
-			<router-view></router-view>
-			<!--TODO place footer here-->
-		</div>
-	</main>
+<style lang="less">
+
+	.content-main > .wrap {
+		min-height: 100%;
+		padding-top: 1rem;
+		padding-bottom: 4rem; // footer
+		position: relative;
+	}
+
+</style>
+
+<template lang="jade">
+	main
+		main-header
+			slot(name='header')
+		.content-main._scroller-x._scroller-y
+			.wrap
+				router-view
+				main-footer
 </template>
 
 <script>
 	import mainHeader from './header.vue';
+	import mainFooter from './footer.vue';
 
 	module.exports = {
 		data() {
@@ -20,7 +30,8 @@
 			}
 		},
 		components: {
-			mainHeader
+			mainHeader,
+			mainFooter,
 		}
 	}
 </script>

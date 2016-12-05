@@ -1,0 +1,33 @@
+main > header {
+	width: 100%;
+	background: hsla(0, 0%, 100%, 1);
+	border-bottom: 1px solid rgba(0,0,0,.125);
+	z-index: 100;
+}
+
+/*
+main > header > .content .item {
+	border: 0;
+	padding: 0.5rem 1rem;
+	margin-left: 1.5rem;
+	color: #000;
+	background: transparent;
+	cursor: pointer;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+		-ms-user-select: none;
+			user-select: none;
+}
+*/
+
+main > header > .content .item:focus,
+main > header > .content .item:hover {
+	color: #fff;
+	background: hsl(270, 75%, 68%);
+}
+
+main > header > .content .item.v-link-active,
+main > header > .content .item:active {
+	color: #fff;
+	background: hsl(270, 75%, 61%);
+}

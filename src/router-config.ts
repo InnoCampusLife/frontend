@@ -1,14 +1,16 @@
-var user = require('./modules.js').accounts;
+const user = require('./modules').accounts;
 
-var adminZone = true, authorizedZone = true, loginPage = true;
+const adminZone = true, 
+      authorizedZone = true, 
+      loginPage = true;
 
-var router_view = { template: '<router-view></router-view>' };
+var router_view = { template: '<router-view></router-view>' }
 
-module.exports = router => {
+export = router => {
 	router.map({
 		'/login': {
 			component: require('./views/login.vue'),
-			loginPage:loginPage
+			loginPage
 		},
 		'/': {
 			component: require('./views/main.vue'),

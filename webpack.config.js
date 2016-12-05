@@ -2,7 +2,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 	entry: {
-		main:   './src/main.js',
+		main:   './src/main.ts',
 		vendor: './src/vendor.js'
 	},
 	output: {
@@ -10,6 +10,9 @@ module.exports = {
 		// publicPath: 'build',
 		filename: 'js/[name].bundle.js',
 		chunkFilename: 'js/[id].chunk.js' 
+	},
+	resolve: {
+		extensions: ["", ".ts", ".js"]
 	},
 	module: {
 		loaders: [
@@ -33,7 +36,14 @@ module.exports = {
 			{ 
 				test: /\.less$/, 
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader") 
-			}
+			},
+			{ test: /\.ts$/, 
+				loader: "ts-loader" 
+			},
+			// {
+			// 	test: /\.vue$/,
+      //   loader: 'vue-loader',
+			// }
 		]
 	},
 	plugins: [
