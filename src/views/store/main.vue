@@ -7,19 +7,13 @@
 
 </style>
 
-<template>
-	<content>
-		<div slot="header">
-			<div class="container-fluid">
-				<div class="input-group">
-					<input class="form-control" type="search" id="search" search inline placeholder="Search store" v-model="$router.app.query" v-show="$route.path.endsWith('store')">
-					<span class="input-group-btn">
-						<button class="btn btn-secondary" type="button">🔍</button>
-					</span>
-				</div>
-			</div>
-		</div>
-	</content>
+<template lang="jade">
+	content
+		div(slot='header')
+				.search-group.input-group
+					input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query', v-show="$route.path.endsWith('store')")
+					span.input-group-btn
+						button.btn.btn-secondary(type='button') 🔍
 </template>
 
 <script>

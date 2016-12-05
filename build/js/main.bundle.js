@@ -45,39 +45,55 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
 	var Vue = __webpack_require__(5);
 	var VueRouter = __webpack_require__(7);
 	var newRouter = __webpack_require__(8);
 	var app = __webpack_require__(81);
+
 	var styles = __webpack_require__(84);
+	var polyfills = __webpack_require__(87);
+
 	Vue.use(VueRouter);
+
 	var router = newRouter(new VueRouter({
-	    hashbang: false,
-	    history: true
+		hashbang: false,
+		history: true
 	}));
+
 	// // function requireAll(requireContext) {
 	// //   return requireContext.keys().map(requireContext);
 	// // }
 	// // // requires and returns all modules that match
+
 	// // var modules = requireAll(require.context("./", true, /^\.\/.*\.js$/));
 	// // // is an array containing all the matching modules
+
 	// // console.log(modules)
+
 	// var req = require.context("./modules", true, /^\.\/.*\.js$/);
+
 	// // var config = req("./config.js");
 	// // tableTemplate === require("./templates/table.jade");
+
 	// // var modules = req("./modules.js");
 	// // tableTemplateId === require.resolve("./templates/table.jade");
+
 	// req.keys();
 	// // is ["./table.jade", "./table-row.jade", "./directory/folder.jade"]
+
 	// // console.log(req, req.keys(), req.id, config, 'Modules: ', modules)
+
 	// const modules = {}
+
 	// req.keys().map(key => {
 	//     console.log(key.slice(2, key.length - 3).split(/^(\/)|(\.)$/))
 	//     modules[key] = req(key)
 	// })
-	// console.log(modules)
-	router.start(app, 'app');
 
+	// console.log(modules)
+
+	router.start(app, 'app');
 
 /***/ },
 /* 1 */,
@@ -13231,478 +13247,648 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	var modules_1 = __webpack_require__(9);
-	var user = modules_1.modules.accounts;
-	var adminZone = true, authorizedZone = true, loginPage = true;
-	var router_view = { template: '<router-view></router-view>' };
-	module.exports = function (router) {
-	    router.map({
-	        '/login': {
-	            component: __webpack_require__(12),
-	            loginPage: loginPage
-	        },
-	        '/': {
-	            component: __webpack_require__(15),
-	            subRoutes: {
-	                '/': {
-	                    component: __webpack_require__(21),
-	                    subRoutes: {
-	                        '/': {
-	                            component: __webpack_require__(35)
-	                        }
-	                    }
-	                },
-	                '/profile': {
-	                    component: __webpack_require__(38),
-	                    subRoutes: {
-	                        '/:username': {
-	                            name: 'profile',
-	                            component: __webpack_require__(41)
-	                        }
-	                    }
-	                },
-	                '/accounts': {
-	                    component: __webpack_require__(44),
-	                    subRoutes: {
-	                        '/': {
-	                            component: __webpack_require__(47),
-	                            name: 'accounts'
-	                        }
-	                    }
-	                },
-	                '/innopoints': {
-	                    component: __webpack_require__(52),
-	                    subRoutes: {
-	                        '/:username': {
-	                            component: router_view,
-	                            subRoutes: {
-	                                '/': {
-	                                    component: { template: '' },
-	                                    name: 'innopoints'
-	                                },
-	                                '/applications': {
-	                                    component: router_view,
-	                                    subRoutes: {
-	                                        '/:filter': {
-	                                            component: __webpack_require__(55),
-	                                            name: 'applications'
-	                                        },
-	                                    }
-	                                },
-	                                '/apply': {
-	                                    component: __webpack_require__(61),
-	                                    name: 'apply'
-	                                },
-	                            }
-	                        }
-	                    }
-	                },
-	                '/store': {
-	                    component: __webpack_require__(66),
-	                    subRoutes: {
-	                        '/': {
-	                            component: __webpack_require__(71),
-	                            name: 'store'
-	                        },
-	                        '/item/:item': {
-	                            component: __webpack_require__(75),
-	                            name: 'item'
-	                        },
-	                    },
-	                },
-	            },
-	            authorizedZone: authorizedZone
-	        }
-	    });
-	    router.beforeEach(function (transition) {
-	        if (!user.loggedIn) {
-	            if (transition.to.authorizedZone)
-	                transition.redirect('/login');
-	            else
-	                transition.next();
-	        }
-	        else {
-	            if (transition.to.loginPage)
-	                transition.redirect('/');
-	            else
-	                transition.next();
-	        }
-	    }).redirect({
-	        '*': '/',
-	        '/innopoints/:username/': '/innopoints/:username/applications/'
-	    });
-	    return router;
-	};
+	'use strict';
 
+	var user = __webpack_require__(9).accounts;
+
+	var adminZone = true,
+	    authorizedZone = true,
+	    loginPage = true;
+
+	var router_view = { template: '<router-view></router-view>' };
+
+	module.exports = function (router) {
+		router.map({
+			'/login': {
+				component: __webpack_require__(12),
+				loginPage: loginPage
+			},
+			'/': {
+				component: __webpack_require__(15),
+				subRoutes: {
+					'/': {
+						component: __webpack_require__(21),
+						subRoutes: {
+							'/': {
+								component: __webpack_require__(35)
+							}
+						}
+					},
+					'/profile': {
+						component: __webpack_require__(38),
+						subRoutes: {
+							'/:username': {
+								name: 'profile',
+								component: __webpack_require__(41)
+							}
+						}
+					},
+					'/accounts': {
+						component: __webpack_require__(44),
+						subRoutes: {
+							'/': {
+								component: __webpack_require__(47),
+								name: 'accounts'
+							}
+						}
+					},
+					'/innopoints': {
+						component: __webpack_require__(52),
+						subRoutes: {
+							'/:username': {
+								component: router_view,
+								subRoutes: {
+									'/': {
+										component: { template: '' },
+										name: 'innopoints'
+									},
+									'/applications': {
+										component: router_view,
+										subRoutes: {
+											'/:filter': {
+												component: __webpack_require__(55),
+												name: 'applications'
+											}
+										}
+									},
+									'/apply': {
+										component: __webpack_require__(61),
+										name: 'apply'
+									}
+								}
+							}
+						}
+					},
+					'/store': {
+						component: __webpack_require__(66),
+						subRoutes: {
+							'/': {
+								component: __webpack_require__(71),
+								name: 'store'
+							},
+							'/item/:item': {
+								component: __webpack_require__(75),
+								name: 'item'
+							}
+						}
+					}
+				},
+				authorizedZone: authorizedZone
+			}
+		});
+
+		router.beforeEach(function (transition) {
+			if (!user.loggedIn) {
+				if (transition.to.authorizedZone) transition.redirect('/login');else transition.next();
+			} else {
+				if (transition.to.loginPage) transition.redirect('/');else transition.next();
+			}
+		}).redirect({
+			'*': '/',
+			'/innopoints/:username/': '/innopoints/:username/applications/'
+		});
+
+		return router;
+	};
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	var config = __webpack_require__(10);
-	var storage = __webpack_require__(11);
-	var api_url = config.server.api_url;
-	exports.modules = {
-	    accounts: {
-	        roles: [
-	            'ghost',
-	            'student',
-	            'moderator'
-	        ],
-	        have: function (role) {
-	            return !!(this.roles.indexOf(role.toLowerCase()) > -1);
-	        },
-	        //data
-	        id: null,
-	        username: null,
-	        role: null,
-	        firstName: null,
-	        lastName: null,
-	        patronymic: null,
-	        studyGroup: null,
-	        tgId: null,
-	        get token() {
-	            return this.storage.get(config.token_name);
-	        },
-	        set token(value) {
-	            this.storage.set(config.token_name, value);
-	        },
-	        get fullName() {
-	            var ln = (!!this.lastName ? this.lastName + ' ' : '');
-	            var fn = (!!this.firstName ? this.firstName : '');
-	            var pn = (!!this.patronymic ? ' ' + this.patronymic : '');
-	            return fn + ln + pn;
-	        },
-	        get loggedIn() {
-	            return this.storage.get(config.token_name) ? true : false;
-	        },
-	        get isGhost() {
-	            return !!this.is('ghost');
-	        },
-	        get isStudent() {
-	            return !!this.is('student');
-	        },
-	        get isModerator() {
-	            return !!this.is('moderator');
-	        },
-	        is: function (ofType) {
-	            return !!this.role && !!exports.modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-	        },
-	        clear: function () {
-	            this.id = null;
-	            this.role = null;
-	            this.firstName = null;
-	            this.lastName = null;
-	            this.patronymic = null;
-	            this.studyGroup = null;
-	            this.token = null;
-	            this.storage.clear();
-	        },
-	        set: function (data) {
-	            if (data.id)
-	                this.id = data.id;
-	            if (data.username)
-	                this.username = data.username;
-	            if (data.role)
-	                this.role = data.role;
-	            if (data.firstName)
-	                this.firstName = data.firstName;
-	            if (data.lastName)
-	                this.lastName = data.lastName;
-	            if (data.patronymic)
-	                this.patronymic = data.patronymic;
-	            if (data.studyGroup)
-	                this.studyGroup = data.studyGroup;
-	            if (data.token)
-	                this.token = data.token;
-	        },
-	        update: function (successCallback, errorCallback) {
-	            var that = this;
-	            this.get(function (result) {
-	                that.set(result);
-	                if (successCallback)
-	                    successCallback(result);
-	            }, errorCallback);
-	        },
-	        storage: storage,
-	        preferences: {
-	            save: function (successCallback, errorCallback) {
-	                var that = this;
-	                var type = "PUT", url = this.url + exports.modules.accounts.token + '/updatePreferences', data = {
-	                    preferences: that
-	                };
-	                ajax(type, url, data, successCallback, errorCallback);
-	            },
-	            get: function (successCallback, errorCallback) {
-	                var type = "GET", url = this.url + exports.modules.accounts.token + '/getPreferences', data = '';
-	                ajax(type, url, data, successCallback, errorCallback);
-	            }
-	        },
-	        //
-	        //api
-	        version: 1,
-	        name: "accounts",
-	        get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
-	        create: function (password, email, successCallback, errorCallback) {
-	            var type = "POST", url = this.url, data = {
-	                username: this.username,
-	                password: password,
-	                email: email,
-	                firstName: this.firstName,
-	                lastName: this.lastName,
-	                studyGroup: this.studyGroup
-	            };
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        authorize: function (password, successCallback, errorCallback) {
-	            var type = "POST", url = this.url + "auth", data = {
-	                username: this.username,
-	                password: password
-	            };
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        get: function (successCallback, errorCallback) {
-	            var type = "GET", url = this.url + this.token, data = '';
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        ///MODER METHODS
-	        //
-	        list: function (successCallback, errorCallback) {
-	            var type = "GET", url = this.url + this.token + "/listAccounts", data = '';
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        updateRole: function (account_id, new_role, successCallback, errorCallback) {
-	            var type = "PUT", url = this.url + this.token + "/updateRole", data = { accountId: account_id, newRole: new_role };
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        //
-	        ///
-	        exists: function (successCallback, errorCallback) {
-	            var type = "GET", url = this.url + this.token + "/exists", data = '';
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	        getBio: function (args, successCallback, errorCallback) {
-	            var type = "GET", url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username), data = '';
-	            ajax(type, url, data, successCallback, errorCallback);
-	        },
-	    },
-	    innopoints: {
-	        roles: [
-	            'student',
-	            'admin'
-	        ],
-	        have: function (role) {
-	            return !!(this.roles.indexOf(role) > -1);
-	        },
-	        data: {
-	            id: null,
-	            amount: null,
-	            role: null,
-	            // cart : [],
-	            get isStudent() {
-	                return !!this.is('student');
-	            },
-	            get isAdmin() {
-	                return !!this.is('admin');
-	            },
-	            is: function (ofType) {
-	                return !!this.role && !!exports.modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
-	            },
-	            update: function (successCallback, errorCallback) {
-	                var that = this;
-	                exports.modules.innopoints.api.user.get({
-	                    successCallback: function (result) {
-	                        that.id = result.id;
-	                        that.amount = result.points_amount || 0;
-	                        that.role = result.type;
-	                        if (successCallback)
-	                            successCallback(result);
-	                    },
-	                    errorCallback: errorCallback
-	                });
-	            }
-	        },
-	        api: {
-	            version: 1,
-	            name: "points",
-	            get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
-	            getActivities: function (args) {
-	                var type = "GET", url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''), data = { skip: args.skip_count || null, limit: args.limit_count || null };
-	                ajax(type, url, data, args.successCallback, args.errorCallback);
-	            },
-	            getCategories: function (args) {
-	                var type = "GET", url = this.url + "categories", data = { skip: args.skip_count || null, limit: args.limit_count || null };
-	                ajax(type, url, data, args.successCallback, args.errorCallback);
-	            },
-	            shop: {
-	                get url() { return exports.modules.innopoints.api.url + "shop/"; },
-	                getItems: function (args) {
-	                    var type = "GET", url = this.url + "items", data = {
-	                        skip: args.skip_count || null,
-	                        limit: args.limit_count || null,
-	                        fields: args.fields || 'title',
-	                        order: args.order || 'ASC',
-	                        category_id: args.category_id || null
-	                    };
-	                    ajax(type, url, data, args.successCallback, args.errorCallback);
-	                },
-	                getItem: function (id, successCallback, errorCallback) {
-	                    var type = "GET", url = this.url + "items/" + id, data = '';
-	                    ajax(type, url, data, successCallback, errorCallback);
-	                },
-	                order: {
-	                    get url() { return exports.modules.innopoints.api.user.url; },
-	                    create: function (args) {
-	                        var type = "POST", url = this.url + exports.modules.accounts.token + '/orders', data = '';
-	                        ajax(type, url, data, args.successCallback, args.errorCallback);
-	                    },
-	                    update: function (args) {
-	                        var type = "POST", url = this.url + exports.modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action, data = '';
-	                        ajax(type, url, data, args.successCallback, args.errorCallback);
-	                    },
-	                    delete: function (args) {
-	                        var type = "DELETE", url = this.url + exports.modules.accounts.token + '/orders/' + args.id, data = '';
-	                        ajax(type, url, data, args.successCallback, args.errorCallback);
-	                    }
-	                }
-	            },
-	            user: {
-	                get isAdmin() { return exports.modules.innopoints.data.isAdmin; },
-	                get url() { return exports.modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/"); },
-	                get: function (args) {
-	                    var type = "GET", url = exports.modules.innopoints.api.url + 'accounts/' + exports.modules.accounts.token, data = '';
-	                    if (this.isAdmin)
-	                        if (args.id)
-	                            url += "/accounts/" + args.id;
-	                    ajax(type, url, data, args.successCallback, args.errorCallback);
-	                },
-	                create: function (successCallback, errorCallback) {
-	                    var type = "POST", url = this.url + exports.modules.accounts.token, data = '';
-	                    ajax(type, url, data, successCallback, errorCallback);
-	                },
-	                getFile: function (appl_id, file_id, successCallback, errorCallback) {
-	                    var type = "GET", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id, data = '';
-	                    ajax(type, url, data, successCallback, errorCallback);
-	                },
-	                getAccounts: function (args) {
-	                    var type = "GET", url = this.url + exports.modules.accounts.token, data = { skip: args.skip_count || null, limit: args.limit_count || null };
-	                    ajax(type, url, data, args.successCallback, args.errorCallback);
-	                },
-	                updateAccount: function (args) {
-	                    var type = "PUT", url = this.url + exports.modules.accounts.token + "/accounts/" + args.id, data = { points_amount: args.points };
-	                    ajax(type, url, data, args.successCallback, args.errorCallback);
-	                },
-	                application: {
-	                    get url() { return exports.modules.innopoints.api.user.url; },
-	                    create: function (application, successCallback, errorCallback) {
-	                        var type = "POST", url = this.url + exports.modules.accounts.token + "/applications", data = { application: application };
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    update: function (appl_id, new_params, successCallback, errorCallback) {
-	                        var type = "PUT", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id, data = new_params;
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    send: function (appl_id, successCallback, errorCallback) {
-	                        var type = "PUT", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id + '/approve', data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    get: function (appl_id, successCallback, errorCallback) {
-	                        var type = "GET", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id, data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    delete: function (appl_id, successCallback, errorCallback) {
-	                        var type = "DELETE", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id, data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    approve: function (appl_id, successCallback, errorCallback) {
-	                        var type = "PUT", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id + "/approve", data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    reject: function (appl_id, successCallback, errorCallback) {
-	                        var type = "PUT", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id + "/reject", data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    },
-	                    dismiss: function (appl_id, successCallback, errorCallback) {
-	                        var type = "PUT", url = this.url + exports.modules.accounts.token + "/applications/" + appl_id + "/to_rework", data = '';
-	                        ajax(type, url, data, successCallback, errorCallback);
-	                    }
-	                },
-	                applications: {
-	                    get url() { return exports.modules.innopoints.api.user.url; },
-	                    get: function (args) {
-	                        if (args.status == 'all')
-	                            args.status = null;
-	                        var type = "GET", url = this.url + exports.modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''), data = { skip: args.skip_count, limit: args.limit_count };
-	                        ajax(type, url, data, args.successCallback, args.errorCallback);
-	                    }
-	                }
-	            }
-	        }
-	    }
-	};
-	function ajax(type, url, data, successCallback, errorCallback) {
-	    var xhr = new XMLHttpRequest();
-	    xhr.open(type, url, true);
-	    xhr.onload = function () {
-	        if (xhr.response.result) {
-	            console.log(xhr.response.status);
-	            if (successCallback)
-	                successCallback(xhr.response.result);
-	        }
-	        else if (xhr.response.error) {
-	            console.log(xhr.response.error);
-	            if (errorCallback)
-	                errorCallback(xhr.response.error);
-	        }
-	    };
-	    // FIXME: Shouldn't need to cast to any
-	    xhr.dataType = "json";
-	    xhr.contentType = 'json';
-	    xhr.responseType = 'json';
-	    if (!(url.indexOf("getBio") > -1))
-	        xhr.setRequestHeader('Content-Type', 'application/json');
-	    xhr.send(JSON.stringify(data));
-	}
-	exports.token = exports.modules.accounts.token;
+	'use strict';
 
+	var _config = __webpack_require__(10);
+
+	var config = _interopRequireWildcard(_config);
+
+	var _storage = __webpack_require__(11);
+
+	var storage = _interopRequireWildcard(_storage);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var api_url = config.server.api_url;
+
+	var modules = {
+		accounts: {
+			roles: ['ghost', 'student', 'moderator'],
+
+			have: function have(role) {
+				return !!(this.roles.indexOf(role.toLowerCase()) > -1);
+			},
+
+
+			//data
+
+			id: null,
+			username: null,
+			role: null,
+			firstName: null,
+			lastName: null,
+			patronymic: null,
+			studyGroup: null,
+			tgId: null,
+
+			get token() {
+				return this.storage.get(config.token_name);
+			},
+
+			set token(value) {
+				this.storage.set(config.token_name, value);
+			},
+
+			get fullName() {
+				var ln = !!this.lastName ? this.lastName + ' ' : '';
+				var fn = !!this.firstName ? this.firstName : '';
+				var pn = !!this.patronymic ? ' ' + this.patronymic : '';
+				return fn + ln + pn;
+			},
+
+			get loggedIn() {
+				return this.storage.get(config.token_name) ? true : false;
+			},
+
+			get isGhost() {
+				return !!this.is('ghost');
+			},
+
+			get isStudent() {
+				return !!this.is('student');
+			},
+
+			get isModerator() {
+				return !!this.is('moderator');
+			},
+
+			is: function is(ofType) {
+				return !!this.role && !!modules.accounts.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+			},
+
+			clear: function clear() {
+				this.id = null;
+				this.role = null;
+				this.firstName = null;
+				this.lastName = null;
+				this.patronymic = null;
+				this.studyGroup = null;
+				this.token = null;
+				this.storage.clear();
+			},
+
+			set: function set(data) {
+				if (data.id) this.id = data.id;
+				if (data.username) this.username = data.username;
+				if (data.role) this.role = data.role;
+				if (data.firstName) this.firstName = data.firstName;
+				if (data.lastName) this.lastName = data.lastName;
+				if (data.patronymic) this.patronymic = data.patronymic;
+				if (data.studyGroup) this.studyGroup = data.studyGroup;
+				if (data.token) this.token = data.token;
+			},
+
+			update: function update(successCallback, errorCallback) {
+				var that = this;
+				this.get(function (result) {
+					that.set(result);
+					if (successCallback) successCallback(result);
+				}, errorCallback);
+			},
+
+			storage: storage,
+
+			preferences: {
+				save: function save(successCallback, errorCallback) {
+					var that = this;
+					var type = "PUT",
+					    url = this.url + modules.accounts.token + '/updatePreferences',
+					    data = {
+						preferences: that
+					};
+
+					ajax(type, url, data, successCallback, errorCallback);
+				},
+				get: function get(successCallback, errorCallback) {
+					var type = "GET",
+					    url = this.url + modules.accounts.token + '/getPreferences',
+					    data = '';
+
+					ajax(type, url, data, successCallback, errorCallback);
+				}
+			},
+
+			//
+
+			//api
+
+			version: 1,
+			name: "accounts",
+			get url() {
+				return api_url + "v" + this.version + "/" + this.name + "/";
+			},
+
+			create: function create(password, email, successCallback, errorCallback) {
+				var type = "POST",
+				    url = this.url,
+				    data = {
+					username: this.username,
+					password: password,
+					email: email,
+					firstName: this.firstName,
+					lastName: this.lastName,
+					studyGroup: this.studyGroup
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			authorize: function authorize(password, successCallback, errorCallback) {
+				var type = "POST",
+				    url = this.url + "auth",
+				    data = {
+					username: this.username,
+					password: password
+				};
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			get: function get(successCallback, errorCallback) {
+				var type = "GET",
+				    url = this.url + this.token,
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			///MODER METHODS
+			//
+			list: function list(successCallback, errorCallback) {
+				var type = "GET",
+				    url = this.url + this.token + "/listAccounts",
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			updateRole: function updateRole(account_id, new_role, successCallback, errorCallback) {
+				var type = "PUT",
+				    url = this.url + this.token + "/updateRole",
+				    data = { accountId: account_id, newRole: new_role };
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+			//
+			///
+
+			exists: function exists(successCallback, errorCallback) {
+				var type = "GET",
+				    url = this.url + this.token + "/exists",
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			},
+
+			getBio: function getBio(args, successCallback, errorCallback) {
+				var type = "GET",
+				    url = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
+				    data = '';
+
+				ajax(type, url, data, successCallback, errorCallback);
+			}
+		},
+		innopoints: {
+			roles: ['student', 'admin'],
+			have: function have(role) {
+				return !!(this.roles.indexOf(role) > -1);
+			},
+			data: {
+				id: null,
+				amount: null,
+				role: null,
+
+				// cart : [],
+
+				get isStudent() {
+					return !!this.is('student');
+				},
+
+				get isAdmin() {
+					return !!this.is('admin');
+				},
+
+				is: function is(ofType) {
+					return !!this.role && !!modules.innopoints.have(ofType) && !!(this.role.toLowerCase() === ofType.toLowerCase());
+				},
+
+				update: function update(_successCallback, errorCallback) {
+					var that = this;
+					modules.innopoints.api.user.get({
+						successCallback: function successCallback(result) {
+							that.id = result.id;
+							that.amount = result.points_amount || 0;
+							that.role = result.type;
+
+							if (_successCallback) _successCallback(result);
+						},
+						errorCallback: errorCallback
+					});
+				}
+			},
+
+			api: {
+				version: 1,
+				name: "points",
+				get url() {
+					return api_url + "v" + this.version + "/" + this.name + "/";
+				},
+
+				getActivities: function getActivities(args) {
+					var type = "GET",
+					    url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
+					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
+
+					ajax(type, url, data, args.successCallback, args.errorCallback);
+				},
+
+				getCategories: function getCategories(args) {
+					var type = "GET",
+					    url = this.url + "categories",
+					    data = { skip: args.skip_count || null, limit: args.limit_count || null };
+
+					ajax(type, url, data, args.successCallback, args.errorCallback);
+				},
+
+				shop: {
+					get url() {
+						return modules.innopoints.api.url + "shop/";
+					},
+
+					getItems: function getItems(args) {
+						var type = "GET",
+						    url = this.url + "items",
+						    data = {
+							skip: args.skip_count || null,
+							limit: args.limit_count || null,
+							fields: args.fields || 'title',
+							order: args.order || 'ASC',
+							category_id: args.category_id || null
+						};
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					getItem: function getItem(id, successCallback, errorCallback) {
+						var type = "GET",
+						    url = this.url + "items/" + id,
+						    data = '';
+
+						ajax(type, url, data, successCallback, errorCallback);
+					},
+
+					order: {
+						get url() {
+							return modules.innopoints.api.user.url;
+						},
+
+						create: function create(args) {
+							var type = "POST",
+							    url = this.url + modules.accounts.token + '/orders',
+							    data = '';
+
+							ajax(type, url, data, args.successCallback, args.errorCallback);
+						},
+
+						update: function update(args) {
+							var type = "POST",
+							    url = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
+							    data = '';
+
+							ajax(type, url, data, args.successCallback, args.errorCallback);
+						},
+
+						delete: function _delete(args) {
+							var type = "DELETE",
+							    url = this.url + modules.accounts.token + '/orders/' + args.id,
+							    data = '';
+
+							ajax(type, url, data, args.successCallback, args.errorCallback);
+						}
+					}
+				},
+
+				user: {
+					get isAdmin() {
+						return modules.innopoints.data.isAdmin;
+					},
+					get url() {
+						return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/");
+					},
+
+					get: function get(args) {
+						var type = "GET",
+						    url = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
+						    data = '';
+
+						if (this.isAdmin) if (args.id) url += "/accounts/" + args.id;
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					create: function create(successCallback, errorCallback) {
+						var type = "POST",
+						    url = this.url + modules.accounts.token,
+						    data = '';
+
+						ajax(type, url, data, successCallback, errorCallback);
+					},
+
+					getFile: function getFile(appl_id, file_id, successCallback, errorCallback) {
+						var type = "GET",
+						    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
+						    data = '';
+
+						ajax(type, url, data, successCallback, errorCallback);
+					},
+
+					getAccounts: function getAccounts(args) {
+						var type = "GET",
+						    url = this.url + modules.accounts.token,
+						    data = { skip: args.skip_count || null, limit: args.limit_count || null };
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					updateAccount: function updateAccount(args) {
+						var type = "PUT",
+						    url = this.url + modules.accounts.token + "/accounts/" + args.id,
+						    data = { points_amount: args.points };
+
+						ajax(type, url, data, args.successCallback, args.errorCallback);
+					},
+
+					application: {
+						get url() {
+							return modules.innopoints.api.user.url;
+						},
+
+						create: function create(application, successCallback, errorCallback) {
+							var type = "POST",
+							    url = this.url + modules.accounts.token + "/applications",
+							    data = { application: application };
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						update: function update(appl_id, new_params, successCallback, errorCallback) {
+							var type = "PUT",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
+							    data = new_params;
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						send: function send(appl_id, successCallback, errorCallback) {
+							var type = "PUT",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						get: function get(appl_id, successCallback, errorCallback) {
+							var type = "GET",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						delete: function _delete(appl_id, successCallback, errorCallback) {
+							var type = "DELETE",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id,
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						approve: function approve(appl_id, successCallback, errorCallback) {
+							var type = "PUT",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						reject: function reject(appl_id, successCallback, errorCallback) {
+							var type = "PUT",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						},
+						dismiss: function dismiss(appl_id, successCallback, errorCallback) {
+							var type = "PUT",
+							    url = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
+							    data = '';
+
+							ajax(type, url, data, successCallback, errorCallback);
+						}
+					},
+
+					applications: {
+						get url() {
+							return modules.innopoints.api.user.url;
+						},
+
+						get: function get(args) {
+							if (args.status == 'all') args.status = null;
+
+							var type = "GET",
+							    url = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
+							    data = { skip: args.skip_count, limit: args.limit_count };
+
+							ajax(type, url, data, args.successCallback, args.errorCallback);
+						}
+					}
+				}
+			}
+		}
+	};
+
+	function ajax(type, url, data, successCallback, errorCallback) {
+		var xhr = new XMLHttpRequest();
+		xhr.open(type, url, true);
+		xhr.onload = function () {
+			if (xhr.response.result) {
+				console.log(xhr.response.status);
+
+				if (successCallback) successCallback(xhr.response.result);
+			} else if (xhr.response.error) {
+				console.log(xhr.response.error);
+
+				if (errorCallback) errorCallback(xhr.response.error);
+			}
+		};
+
+		// TypeScript thingy
+		// // FIXME: Shouldn't need to cast to any
+		// (xhr as any).dataType = "json";
+		// (xhr as any).contentType = 'json';
+
+		xhr.dataType = "json";
+		xhr.contentType = 'json';
+
+		xhr.responseType = 'json';
+		if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.send(JSON.stringify(data));
+	}
+
+	module.exports = modules;
+	module.exports.token = modules.accounts.token;
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
-	var server = {
-	    ip: "uis.university.innopolis.ru",
-	    port: 8770,
-	    get api_url() { return "http://" + this.ip + ":" + (this.port || 21) + "/api/"; }
-	};
-	exports.server = server;
-	var token_name = "usertoken";
-	exports.token_name = token_name;
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var server = {
+		ip: "uis.university.innopolis.ru",
+		port: 8770,
+		get api_url() {
+			return "http://" + this.ip + ":" + (this.port || 21) + "/api/";
+		}
+	};
+
+	var token_name = "usertoken";
+
+	exports.server = server;
+	exports.token_name = token_name;
 
 /***/ },
 /* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
-	function get(key) {
-	    return localStorage.getItem(key);
-	}
-	exports.get = get;
-	function set(key, value) {
-	    if (value)
-	        localStorage.setItem(key, value);
-	    return localStorage.getItem(key);
-	}
-	exports.set = set;
-	function clear() {
-	    localStorage.clear();
-	}
-	exports.clear = clear;
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	function get(key) {
+		return localStorage.getItem(key);
+	}
+
+	function set(key, value) {
+		if (value) localStorage.setItem(key, value);
+		return localStorage.getItem(key);
+	}
+
+	function clear() {
+		localStorage.clear();
+	}
+
+	exports.get = get;
+	exports.set = set;
+	exports.clear = clear;
 
 /***/ },
 /* 12 */
@@ -16749,6 +16935,142 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 85 */,
+/* 86 */,
+/* 87 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _arguments = arguments;
+	if (!String.prototype.includes) {
+	    String.prototype.includes = function () {
+	        return String.prototype.indexOf.apply(undefined, _arguments) !== -1;
+	    };
+	}
+
+	if (!Array.prototype.includes) {
+	    Array.prototype.includes = function (searchElement /*, fromIndex*/) {
+	        if (undefined == null) {
+	            throw new TypeError('Array.prototype.includes called on null or undefined');
+	        }
+	        var O = Object(undefined);
+	        var len = parseInt(O.length, 10) || 0;
+	        if (len === 0) {
+	            return false;
+	        }
+	        var n = parseInt(_arguments[1], 10) || 0;
+	        var k;
+	        if (n >= 0) {
+	            k = n;
+	        } else {
+	            k = len + n;
+	            if (k < 0) {
+	                k = 0;
+	            }
+	        }
+	        var currentElement;
+	        while (k < len) {
+	            currentElement = O[k];
+	            if (searchElement === currentElement || searchElement !== searchElement && currentElement !== currentElement) {
+	                // NaN !== NaN
+	                return true;
+	            }
+	            k++;
+	        }
+	        return false;
+	    };
+	}
+
+	if (!Object.prototype.equals) Object.defineProperty(Object.prototype, "equals", {
+	    enumerable: false,
+	    value: function value(obj) {
+	        var p;
+	        if (this === obj) {
+	            return true;
+	        }
+
+	        // some checks for native types first
+
+	        // function and sring
+	        if (typeof this === "function" || typeof this === "string" || this instanceof String) {
+	            return this.toString() === obj.toString();
+	        }
+
+	        // number
+	        if (this instanceof Number || typeof this === "number") {
+	            if (obj instanceof Number || typeof obj === "number") {
+	                return this.valueOf() === obj.valueOf();
+	            }
+	            return false;
+	        }
+
+	        // null.equals(null) and undefined.equals(undefined) do not inherit from the 
+	        // Object.prototype so we can return false when they are passed as obj
+	        if (_typeof(this) !== (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) || obj === null || typeof obj === "undefined") {
+	            return false;
+	        }
+
+	        function sort(o) {
+	            var result = {};
+
+	            if ((typeof o === 'undefined' ? 'undefined' : _typeof(o)) !== "object") {
+	                return o;
+	            }
+
+	            Object.keys(o).sort().forEach(function (key) {
+	                result[key] = sort(o[key]);
+	            });
+
+	            return result;
+	        }
+
+	        if (_typeof(this) === "object") {
+	            if (Array.isArray(this)) {
+	                // check on arrays
+	                return JSON.stringify(this) === JSON.stringify(obj);
+	            } else {
+	                // anyway objects
+	                for (p in this) {
+	                    if (_typeof(this[p]) !== _typeof(obj[p])) {
+	                        return false;
+	                    }
+	                    if (this[p] === null !== (obj[p] === null)) {
+	                        return false;
+	                    }
+	                    switch (_typeof(this[p])) {
+	                        case 'undefined':
+	                            if (typeof obj[p] !== 'undefined') {
+	                                return false;
+	                            }
+	                            break;
+	                        case 'object':
+	                            if (this[p] !== null && obj[p] !== null && (this[p].constructor.toString() !== obj[p].constructor.toString() || !this[p].equals(obj[p]))) {
+	                                return false;
+	                            }
+	                            break;
+	                        case 'function':
+	                            if (this[p].toString() !== obj[p].toString()) {
+	                                return false;
+	                            }
+	                            break;
+	                        default:
+	                            if (this[p] !== obj[p]) {
+	                                return false;
+	                            }
+	                    }
+	                };
+	            }
+	        }
+
+	        // at least check them with JSON
+	        return JSON.stringify(sort(this)) === JSON.stringify(sort(obj));
+	    }
+	});
 
 /***/ }
 /******/ ]);
