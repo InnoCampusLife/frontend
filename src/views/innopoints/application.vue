@@ -1,52 +1,31 @@
-<template>
-	<div card class="card" :status="application.status" :id="'card' + application.id">
-		<header flex>
-			<section left>
-				<span>{{application.type | capitalize}}</span> <span misc>{{(application._id = '#' + application.id)}} by {{application.author.username}}</span>
-				<span block misc>Status: <span :status="application.status">{{application.status.split('_').join(' ')}}</span></span>
-			</section>
-			<section right>
-				<span misc v-text="application.creation_date"></span>
-			</section>
-		</header><!-- header -->
-		<section content v-show="application.work">
-			<div block>
-				<h4 v-show="application.type=='group'">Participants:</h4>
-				<div>
-					<div block v-for="work in application.work">
-						<a :href="'http://uis.university.innopolis.ru:8770/profile/' + work.actor.username">{{work.actor.username}}</a> - <span>{{ work.activity.title }}[{{ work.activity.price }}]</span>
-					</div>						
-				</div>
-			</div>
-		</section>
-		<section content v-show="application.comment">
-			<div block>
-				<h4>Comment: </h4>
-				<template v-if="application.comment && application.comment.length">
-					<p v-for="comment in application.comment.split('\n')" track-by="$index">{{comment}}</p>
-				</template>
-			</div>
-		</section>
-		<section content v-show="application.files.length > 0">
-			<div block>
-			<h4>files: </h4>
-			<p v-for="file of application.files">{{file | json}}</p>
-			</div>
-		</section>	
-		<footer v-if="user.innopoints.data.isAdmin && application.status=='in_process'">
-			<div block controls>
-				<button item success data-id="{{application.id}}" @click="approve">Approve</button>
-				<button item error data-id="{{application.id}}" @click="reject">Reject</button>
-				<button item warning data-id="{{application.id}}" @click="toRework">To rework</button>
-			</div>
-		</footer>
-		<footer v-if="!user.innopoints.data.isAdmin">
-			<div block controls>
-				<button item error data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')">Delete</button>
-				<button item success data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')">Resend</span></button>
-			</div>
-		</footer>
-	</div>
+<template lang="jade">
+	.card(status="{{ application.status }}" id="card-{{ application.id }}")
+		.card-block
+			span.float-xs-right {{ application.creation_date }}
+			h2.card-title.clearfix
+				span.tag.tag-default.tag-success.float-xs-left(status="{{ application.status }}") {{ application.status.split('_').join(' ') | capitalize }}
+				span.float-xs-left.mx-1 {{ application.type | capitalize }}
+			h5.card-subtitle {{(application._id = '#' + application.id)}} by {{application.author.username}}
+		div.card-block(v-show="application.work")
+			h4(v-show="application.type == 'group'") Participants:
+				div(v-for="work in application.work")
+					a(href="http://uis.university.innopolis.ru:8770/profile/{{ work.actor.username }}") {{ work.actor.username }} -
+						span
+							{{ work.activity.title }}[{{ work.activity.price }}]
+				div(v-show="application.comment")
+				h4 Comment
+				template(v-if="application.comment && application.comment.length")
+					p(v-for="comment in application.comment.split('\n')" track-by="$index") {{ comment }}
+		div(v-show="application.files.length > 0")
+			h4 Files
+			p(v-for="file of application.files") {{ file | json }}
+		footer(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
+			button(data-id="{{ application.id }}" @click="approve") Approve
+			button(data-id="{{ application.id }}" @click="reject") Reject
+			button(data-id="{{ application.id }}" @click="toRework") To rework
+		footer(v-if="!user.innopoints.data.isAdmin")
+			button(data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')") Delete
+			button(data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')") Resend
 </template>
 
 <script>
