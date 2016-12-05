@@ -1,7 +1,11 @@
+import ajax from './modules/web'
 import config from './config'
 import storage from './storage'
 
 const api_url = config.server.api_url;
+
+var testAccounts = require('dir!./modules/modules.config.js');
+console.log(testAccounts);
 
 const modules = {
 	accounts : {
@@ -446,31 +450,5 @@ const modules = {
 	}
 };
 
-function ajax (type, url, data, successCallback, errorCallback) {
-	var xhr = new XMLHttpRequest();
-	xhr.open(type, url, true);
-	xhr.onload = function() {
-	  	if (xhr.response.result) {
-			console.log(xhr.response.status);
-
-			if (successCallback)
-				successCallback(xhr.response.result);
-	  	} else if (xhr.response.error) {
-			console.log(xhr.response.error);
-
-	  		if (errorCallback)
-	  			errorCallback(xhr.response.error);
-		}
-	};
-	
-	// // FIXME: Shouldn't need to cast to any
-	// (xhr as any).dataType = "json";
-	// (xhr as any).contentType = 'json';
-	
-	xhr.responseType = 'json';
-	if (!(url.indexOf("getBio") > -1)) xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.send(JSON.stringify(data));
-}
-
-module.exports =  modules
+module.exports = modules;
 module.exports.token = modules.accounts.token;
