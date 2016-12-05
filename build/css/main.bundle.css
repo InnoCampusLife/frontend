@@ -30,15 +30,12 @@ body {
 /* ==========================================================================
 	 Typography
 	 ========================================================================== */
-html {
-  font-size: 1em;
-}
 body {
   background-color: #f1f1f1;
   color: rgba(0, 0, 0, 0.8);
-  height: 100%;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  height: 100vh;
+  font-size: 1em;
+  height: 100%;
   overflow: hidden;
 }
 code,
@@ -52,7 +49,7 @@ samp {
 	 ========================================================================== */
 main {
   height: 100vh;
-  margin-left: 15rem;
+  margin-left: 18.75rem;
   overflow: hidden;
 }
 /*
@@ -61,7 +58,7 @@ main {
 }
 */
 .sidebar-main {
-  width: 15rem;
+  width: 18.75rem;
 }
 .card-columns {
   column-count: 1;
@@ -75,8 +72,79 @@ select.form-control {
 main > header {
   height: 4rem;
 }
+header .search-group {
+  float: right;
+  padding: 0.8125rem;
+  width: 18.75rem;
+}
+header button {
+  outline: 0 !important;
+}
+ul.header-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.header-nav li {
+  float: left;
+}
+.header-nav button {
+  background: white;
+  height: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
 .sidebar-main > header {
   height: 4rem;
+}
+.content-main {
+  height: calc(100% -  4rem );
+  margin-bottom: -4rem;
+  overflow: auto;
+}
+.content-main > .wrap {
+  margin-bottom: -4rem;
+  min-height: 100%;
+  padding-top: 1rem;
+  text-align: center;
+}
+.card {
+  text-align: left;
+}
+.content-main > .wrap:after {
+  content: '';
+  display: block;
+}
+.content-main > .wrap:after,
+footer {
+  height: 4rem;
+}
+footer {
+  text-align: center;
+  width: 100%;
+}
+footer > p {
+  margin: 0;
+  line-height: 4rem;
+}
+main > header {
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  z-index: 100;
+}
+main > header > .content .item:focus,
+main > header > .content .item:hover {
+  color: #fff;
+  background: #ad70eb;
+}
+main > header > .content .item.v-link-active,
+main > header > .content .item:active {
+  color: #fff;
+  background: #9c51e6;
 }
 /* ==========================================================================
 	 Media Queries
@@ -101,7 +169,7 @@ main > header {
     margin-left: 0;
   }
   .sidebar-main {
-    margin-left: -15rem;
+    margin-left: -18.75rem;
   }
 }
 /* ==========================================================================
@@ -331,36 +399,6 @@ main > header {
 ._default {
   all: initial !important;
 }
-main > header {
-  width: 100%;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-  z-index: 100;
-}
-/*
-main > header > .content .item {
-	border: 0;
-	padding: 0.5rem 1rem;
-	margin-left: 1.5rem;
-	color: #000;
-	background: transparent;
-	cursor: pointer;
-	-webkit-user-select: none;
-	   -moz-user-select: none;
-		-ms-user-select: none;
-			user-select: none;
-}
-*/
-main > header > .content .item:focus,
-main > header > .content .item:hover {
-  color: #fff;
-  background: #ad70eb;
-}
-main > header > .content .item.v-link-active,
-main > header > .content .item:active {
-  color: #fff;
-  background: #9c51e6;
-}
 .sidebar-main {
   position: fixed;
   color: #ffffff;
@@ -368,7 +406,7 @@ main > header > .content .item:active {
   top: 0;
   left: 0;
   z-index: 100;
-  background: linear-gradient(to bottom, #9b59b6 0%, #8e44ad);
+  background: linear-gradient(to bottom, #2ecc71 0%, #1abc9c);
 }
 .sidebar-main > header {
   height: 4rem;
@@ -399,18 +437,21 @@ main > header > .content .item:active {
   text-align: left;
   text-transform: uppercase;
 }
-.sidebar-main > ul button:hover,
-.sidebar-main > ul button:focus,
-.sidebar-main > footer button:hover,
-.sidebar-main > footer button:focus {
-  background: rgba(255, 255, 255, 0.2);
+.sidebar-main button {
+  outline: 0 !important;
 }
-.sidebar-main > ul button.v-link-active:hover,
-.sidebar-main > ul button.v-link-active:focus {
-  background: rgba(255, 255, 255, 0.2);
+.sidebar-main > ul button:hover,
+.sidebar-main > footer button:hover,
+.sidebar-main > ul button.v-link-active:hover {
+  background: rgba(0, 0, 0, 0.1);
 }
 .sidebar-main > ul button.v-link-active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+}
+.sidebar-main > ul button:active,
+.sidebar-main > footer button:active,
+.sidebar-main > ul button.v-link-active:active {
+  background: rgba(0, 0, 0, 0.2);
 }
 .sidebar-main > ul .icon,
 .sidebar-main > footer .icon {
