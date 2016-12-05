@@ -56,6 +56,7 @@
 	*/
 
 	__webpack_require__(83);
+
 	// require('../node_modules/bootstrap/dist/js/bootstrap.js')
 	// require('../node_modules/vue-strap/dist/vue-strap.js')
 	// require('../node_modules/vue-strap/dist/vue-strap-lang.js')
