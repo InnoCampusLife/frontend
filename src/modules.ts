@@ -4,7 +4,7 @@ import storage from './storage'
 
 const api_url = config.server.api_url;
 
-var testAccounts = require('dir!./modules/modules.config.js');
+var testAccounts = require('entry-dir!./modules/modules.config.js');
 console.log(testAccounts);
 
 const modules = {
