@@ -5,9 +5,12 @@ import * as VueRouter from 'vue-router'
 import newRouter from './router-config'
 const  app = require('./views/app.vue')
 
+const filter = require('vue-bulma-emoji').filter
+
 const styles    = require('./styles/main.less')
 const polyfills = require('./polyfills')
 
+Vue.use(filter)
 Vue.use(VueRouter)
 
 var router = newRouter(new VueRouter({
