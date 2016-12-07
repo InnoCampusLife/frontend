@@ -247,7 +247,7 @@
 	<div container>
 		<!-- <h1 style="font-family: 'Source Sans Pro', sans-serif;color: white;font-weight:lighter;">Welcome</h1> -->
 		<form login>
-			<!-- TODO : rework oninput events -->
+			<!-- TODO: rework oninput events -->
 			<input
 				type="text"
 				name="username"
@@ -257,7 +257,7 @@
 				maxlength="32"
 				v-on:input="usernameInputEvent"
 				v-model="user.account.username"
-				@keyup.enter="isLogin ? login($event) : register($event)"
+				@keyup.enter="isLogin ? login($event): register($event)"
 			>
 			<input
 				type="password"
@@ -267,7 +267,7 @@
 				autocompvare="off"
 				maxlength="64"
 				v-on:input="passwordInputEvent"
-				@keyup.enter="isLogin ? login($event) : register($event)"
+				@keyup.enter="isLogin ? login($event): register($event)"
 			>
 			<div v-show="!isLogin" transition="height" transition-mode="out-in" style="height:212px"> 
 				<input
@@ -277,7 +277,7 @@
 					placeholder="Email"
 					autocompvare="off"
 					v-on:input="emailInputEvent"
-					@keyup.enter="isLogin ? login($event) : register($event)"
+					@keyup.enter="isLogin ? login($event): register($event)"
 				>
 				<input
 					type="text"
@@ -287,7 +287,7 @@
 					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.firstName"
-					@keyup.enter="isLogin ? login($event) : register($event)"
+					@keyup.enter="isLogin ? login($event): register($event)"
 				>
 				<input
 					type="text"
@@ -297,7 +297,7 @@
 					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.lastName"
-					@keyup.enter="isLogin ? login($event) : register($event)"
+					@keyup.enter="isLogin ? login($event): register($event)"
 				>
 				<input
 					type="text"
@@ -307,16 +307,16 @@
 					autocompvare="off"
 					v-on:input="/*usernameInputEvent*/"
 					v-model="user.account.studyGroup"
-					@keyup.enter="isLogin ? login($event) : register($event)"
+					@keyup.enter="isLogin ? login($event): register($event)"
 				>
 			</div>
 
-			<button :place="isLogin ? 'form' : 'bottom'" style="color:#fff" purp="login"
+			<button :place="isLogin ? 'form': 'bottom'" style="color:#fff" purp="login"
 				type="button"
 				@click="login"
 				@keyup.enter="login"
 			>Log in</button>
-			<button :place="isLogin ? 'bottom' : 'form'" style="color:#fff"
+			<button :place="isLogin ? 'bottom': 'form'" style="color:#fff"
 				type="button"
 				@click="register"
 				@keyup.enter="register"
@@ -340,14 +340,14 @@
 
 <script>
 	module.exports =  {
-		data  : function () {
+		data : function () {
 			return {
-				user : this.$router.app.user,
-				isLogin : true
+				user: this.$router.app.user,
+				isLogin: true
 			}
 		},
-		methods : {
-			login  : function (e) {
+		methods: {
+			login : function (e) {
 				e.preventDefault();
 				if (this.isLogin)
 					this.user.account.authorize(
@@ -360,7 +360,7 @@
 					e.target.blur();
 				}
 			},
-			register  : function (e) {
+			register : function (e) {
 				e.preventDefault();
 				if (!this.isLogin) {
 					if (this.checkUsernameInput('strict')
@@ -382,11 +382,11 @@
 
 			/// Form Callbacks
 			//
-			formSuccessCallback  : function (result) {
+			formSuccessCallback : function (result) {
 				this.user.account.set(result);
 				this.$router.go("/");
 			},
-			formErrorCallback  : function (result) {
+			formErrorCallback : function (result) {
 				//this.setError(result, 'username');
 			},
 			//
@@ -394,10 +394,10 @@
 
 			///Reusable LoginData checkers
 			//
-			usernameInputEvent  : function (e) { this.checkUsernameInput(); },
+			usernameInputEvent : function (e) { this.checkUsernameInput(); },
 
-			checkUsernameInput : function (strict) {
-				var regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/ : /^([0-9]|[a-z]|[A-Z]|[_])*$/;
+			checkUsernameInput: function (strict) {
+				var regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/: /^([0-9]|[a-z]|[A-Z]|[_])*$/;
 				var ufe = !regex.test(this.user.account.username);
 
 				if (ufe)
@@ -408,10 +408,10 @@
 				return !ufe;
 			},
 
-			passwordInputEvent : function (e) { this.checkPasswordInput(); },
+			passwordInputEvent: function (e) { this.checkPasswordInput(); },
 
-			checkPasswordInput : function (strict) {
-				var regex = strict ? /^.{5,64}$/ : /^.*$/;
+			checkPasswordInput: function (strict) {
+				var regex = strict ? /^.{5,64}$/: /^.*$/;
 				var pfe = !regex.test(password.value);
 
 				if (pfe)
@@ -422,9 +422,9 @@
 				return !pfe;
 			},
 
-			emailInputEvent  : function (e) { this.checkEmailInput(); },
+			emailInputEvent : function (e) { this.checkEmailInput(); },
 
-			checkEmailInput  : function () {
+			checkEmailInput : function () {
 				var regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 				var pfe = !regex.test(email.value);
 
@@ -436,9 +436,9 @@
 				return !pfe;
 			},
 
-			nameInputEvent  : function (e) { this.checkNameInput(); },
+			nameInputEvent : function (e) { this.checkNameInput(); },
 
-			checkNameInput  : function () {
+			checkNameInput : function () {
 				//([BS]|[MS])[1-4]-[0-9]+
 				var regex = /^.+$/
 				var pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
@@ -456,13 +456,13 @@
 			},
 
 			//TODO
-			setError  : function (toWhat) {
+			setError : function (toWhat) {
 				var elem = document.getElementById(toWhat);
 				elem.setAttribute('error', '');
 			},
 
 			//TODO
-			removeError  : function (fromWhat) {
+			removeError : function (fromWhat) {
 				var elem = document.getElementById(fromWhat);
 				elem.removeAttribute('error');
 			},

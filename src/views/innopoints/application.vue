@@ -36,35 +36,35 @@
 	module.exports = {
 		props: ['application', 'user', 'success'],
 		methods: {
-			approve : function(e) {
+			approve: function(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.approve(e.target.dataset.id, function(result) {
 					success(e.target.dataset.id, 'approved', _appls);
 				}, console.log);
 			},
-			reject : function(e) {
+			reject: function(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.reject(e.target.dataset.id, function(result) {
 					success(e.target.dataset.id, 'rejected', _appls);
 				}, console.log);
 			},
-			toRework : function(e) {
+			toRework: function(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.dismiss(e.target.dataset.id, function(result) {
 					success(e.target.dataset.id, 'rework', _appls);
 				}, console.log);
 			},
-			_delete : function(e) {
+			_delete: function(e) {
 				var _appls = this.applications;
 				this.user.innopoints.api.user.application.delete(e.target.dataset.id, function(result) {
 					console.log(result);
 					document.getElementById('card'+e.target.dataset.id).remove();
 				}, console.log);
 			},
-			resend : function(e) {
+			resend: function(e) {
 				var _appls = this.applications;
 				var success = this.success;
 				this.user.innopoints.api.user.application.send(e.target.dataset.id, function(result) {

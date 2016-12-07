@@ -6,7 +6,7 @@
 	var content = require('./../content.vue');
 
 	module.exports = {
-		components : {
+		components: {
 			content:content
 		}
 	}
