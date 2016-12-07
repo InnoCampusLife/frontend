@@ -1,6 +1,4 @@
-
 export default {
-
 	get(key) {
 		return localStorage.getItem(key);
 	},
