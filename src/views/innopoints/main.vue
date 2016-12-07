@@ -28,18 +28,18 @@
 	var content = require('./../content.vue');
 
 	module.exports = {
-		data : function () {
+		data: function () {
 			// var route = this.$route;
 			return {
 				route: this.$route,
-				user : this.$root.user,
+				user: this.$root.user,
 			}
 		},
-		components : {
+		components: {
 			content:content
 		},
-		methods : {
-			filter_changed : function(e) {
+		methods: {
+			filter_changed: function(e) {
 				this.$router.go(
 					{
 						name: 'applications',

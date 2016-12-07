@@ -4,18 +4,18 @@ var config  = require('./config.js');
 var api_url = require("./../../config.ts").default.server.api_url;
 
 const accounts = {
-	name : "accounts",
-	roles : [
+	name: "accounts",
+	roles: [
 		'ghost',
 		'student',
 		'moderator'
 	],
 
-	have : function (role) {
+	have: function (role) {
 		return !!this.roles.includes(role.toLowerCase());
 	},
 
-	data : {
+	data: {
 		id			: null,
 		username	: null,
 		role		: null,
@@ -34,14 +34,14 @@ const accounts = {
 		},
 
 		get fullName () {
-			var ln = (!!this.lastName 	? 		this.lastName + ' ' : '');
+			var ln = (!!this.lastName 	? 		this.lastName + ' ': '');
 			var fn = (!!this.firstName 	? 		this.firstName 	 	: '');
 			var pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
 			return fn + ln + pn;
 		},
 		
 		get loggedIn () {
-			return this.storage.get(config.token_name) ? true : false;
+			return this.storage.get(config.token_name) ? true: false;
 		},
 
 		get isGhost () {
@@ -82,7 +82,7 @@ const accounts = {
 			if (data.token)      this.token      = data.token;
 		},
 
-		update : function (successCallback, errorCallback) {
+		update: function (successCallback, errorCallback) {
 			var that = this;
 			this.get(result => {
 					that.set(result);
@@ -92,22 +92,22 @@ const accounts = {
 			);
 		},
 
-		storage : require('./../../storage.ts'),
+		storage: require('./../../storage.ts'),
 
-		preferences : {
+		preferences: {
 
 			save(successCallback, errorCallback) {
 				let that = this;
 				let type = "PUT",
 				url  = this.url + modules.accounts.token + '/updatePreferences',
 				data = { 
-					preferences : that
+					preferences: that
 				};
 
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
-			get : function(successCallback, errorCallback) {
+			get: function(successCallback, errorCallback) {
 				var 
 				type = "GET",
 				url  = this.url + modules.accounts.token + '/getPreferences',
@@ -119,9 +119,9 @@ const accounts = {
 	},
 	//
 	
-	api : {
-		version : 1,
-		name : "accounts",
+	api: {
+		version: 1,
+		name: "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
 		create(password, email, successCallback, errorCallback) {
@@ -192,7 +192,7 @@ const accounts = {
 		getBio(args, successCallback, errorCallback) {
 			var 
 			type = "GET",
-			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
+			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id: "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);

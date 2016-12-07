@@ -64,11 +64,11 @@
 		data() {
 			return {
 				sortKey: 1,
-				users : [],
+				users: [],
 				dirty: false
 			}
 		},
-		props : ['user', 'roleChanged'],
+		props: ['user', 'roleChanged'],
 		methods: {
 			selectChanged(e) {
 				this.roleChanged(e);

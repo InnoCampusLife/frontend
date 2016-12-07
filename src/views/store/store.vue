@@ -18,7 +18,7 @@
 	const storage = require('./../../storage');
 
 	module.exports = {
-		data : function () {
+		data: function () {
 			return {
 				items: [],
 				storage: storage
@@ -27,7 +27,7 @@
 		components: {
 			item: require('./item.vue'),
 		},
-		route : {
+		route: {
 			data(transition) {
 				this.$router.app.user.innopoints.api.shop.getItems({
 					successCallback: result => {
@@ -45,7 +45,7 @@
 				});
 			} 
 		},
-		methods : {
+		methods: {
 			buy(item) {
 				console.log(item.selected);
 				console.log(!!item.combinations.find(c => c.options.equals(item.selected.options)));

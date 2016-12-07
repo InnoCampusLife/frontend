@@ -8,7 +8,7 @@
     "dev": "webpack-dev-server --inline --content-base build/ --historyApiFallback"
   },
   "author": "Alexey Iskhakov, @bulnab",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
     "@types/node": "0.0.2",
     "@types/vue": "^1.0.31",
@@ -44,6 +44,7 @@
     "vue": "^1.0.26",
     "vue-bulma-emoji": "0.0.1",
     "vue-router": "^0.7.13",
-    "vue-typeahead": "^2.3.0"
+    "vue-typeahead": "^2.3.0",
+    "vue-validator": "^2.1.7"
   }
 }

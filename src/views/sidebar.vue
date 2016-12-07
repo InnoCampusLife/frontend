@@ -29,13 +29,13 @@
 
 <script>
 	module.exports = {
-		data : function () {
+		data: function () {
 			return {
-				user : this.$router.app.user
+				user: this.$router.app.user
 			}
 		},
 		methods: {
-			logout : function (e) {
+			logout: function (e) {
 				this.user.account.clear();
 				this.$router.go('/login');
 			}
