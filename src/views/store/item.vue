@@ -1,5 +1,5 @@
-<style lang="less" scoped>
-	img {
+<style lang="less">
+	div.card > img.card-img-top {
 		width: 100%;
 	}
 </style>
