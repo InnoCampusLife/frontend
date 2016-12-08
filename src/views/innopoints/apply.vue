@@ -195,7 +195,7 @@
 			},
 			
 			username_changed(e) {
-				let users = this.current.users;
+				const users = this.current.users;
 				this.user.account.getBio({ 
 						username: e.target.value 
 					},
@@ -204,7 +204,22 @@
 					},
 					(error) => {
 						console.log("Incorrect Username");
-						//TODO
+						// TODO
+					}
+				)
+			},
+
+			validateUsername(e) {
+				const users = this.current.users;
+				this.user.account.getBio({ 
+						username: e.target.value 
+					},
+					(result) => {
+						users[e.target.dataset.index].user_id = result.id;
+					},
+					(error) => {
+						console.log("Incorrect Username");
+						// TODO
 					}
 				)
 			},
