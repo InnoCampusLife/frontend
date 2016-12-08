@@ -12,7 +12,7 @@
 				button.btn.btn-block.clearfix(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
 					span.icon.pe-7s-medal
 					span.title Innopoints
-					// span.info.right(v-show='user.account.isStudent && !user.innopoints.isAdmin', v-text='user.innopoints.data.amount')
+					span.title.info.right.float-xs-right(v-show='user.account.isStudent && !user.innopoints.isAdmin', v-text='user.innopoints.data.amount')
 			li
 				button.btn.btn-block.clearfix(v-link="{ name: 'store' }")
 					span.icon.pe-7s-shopbag
