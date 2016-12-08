@@ -3,8 +3,8 @@
 		div(slot='header')
 			.search-group.input-group(v-show="$route.path.includes('applications')")
 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
-				span.input-group-btn
-					button.btn.btn-secondary(type='button') 🔍
+				// span.input-group-btn
+				// 	button.btn.btn-secondary(type='button') 🔍
 			ul.header-nav
 				template(v-if="$route.path.includes('applications')")
 					li
