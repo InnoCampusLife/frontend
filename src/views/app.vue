@@ -10,11 +10,11 @@
 		data() {
 			const modules = require('./../modules');
 			return {
-				user : {
+				user: {
 					account: modules.accounts,
 					innopoints: modules.innopoints
 				},
-				query : null
+				query: null
 			}
 		}
 	}

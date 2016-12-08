@@ -7,7 +7,7 @@
 	var sidebar = require('./sidebar.vue');
 
 	module.exports = {
-		components : {
+		components: {
 			sidebar:sidebar
 		},
 		route: {

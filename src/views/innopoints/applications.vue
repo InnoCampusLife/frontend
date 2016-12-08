@@ -10,24 +10,24 @@
 
 <script>
 	module.exports =  {
-		data : function () {
+		data: function () {
 			return {
-				user : this.$root.user,
+				user: this.$root.user,
 				applications: []
 			}
 		},
-		components : {
-			application : require('./application.vue')
+		components: {
+			application: require('./application.vue')
 		},
-		methods : {
-			action_success : function(id, new_status) {
+		methods: {
+			action_success: function(id, new_status) {
 				if (this.$route.params.filter === 'all' || this.$route.params.filter == null)
 					this.applications.find(x => x.id == id).status = new_status;
 				else
 					document.getElementById('card'+id).remove();
 			}
 		},
-		route : {
+		route: {
 			data (transition) {
 				this.applications = [];
 				var params = this.$route.params;

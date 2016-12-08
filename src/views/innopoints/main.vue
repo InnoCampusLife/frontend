@@ -3,8 +3,8 @@
 		div(slot='header')
 			.search-group.input-group(v-show="$route.path.includes('applications')")
 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
-				// span.input-group-btn
-				// 	button.btn.btn-secondary(type='button') 🔍
+				span.input-group-btn
+					button.btn.btn-secondary(type='button') 🔍
 			ul.header-nav
 				template(v-if="$route.path.includes('applications')")
 					li
@@ -28,18 +28,18 @@
 	var content = require('./../content.vue');
 
 	module.exports = {
-		data : function () {
+		data: function () {
 			// var route = this.$route;
 			return {
 				route: this.$route,
-				user : this.$root.user,
+				user: this.$root.user,
 			}
 		},
-		components : {
+		components: {
 			content:content
 		},
-		methods : {
-			filter_changed : function(e) {
+		methods: {
+			filter_changed: function(e) {
 				this.$router.go(
 					{
 						name: 'applications',
