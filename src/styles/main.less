@@ -93,13 +93,13 @@ select.form-control {
 }
 
 main > header {
-	height: @header-height;
+	min-height: @header-height;
 }
 
 header .search-group {
 	float: right;
-	padding: 13/16rem;
-	width: @sidebar-width;
+	padding: 13/16rem 1rem;
+	width: 18.75rem;
 }
 
 header button {
@@ -116,13 +116,12 @@ ul.header-nav {
 }
 
 .header-nav button {
-	background: white;
+	background: hsla(0, 0%, 0%, 0);
 	height: 4rem;
 	padding-left: 1rem;
 	padding-right: 1rem;
 	border-radius: 0;
 	border: 0;
-	border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
 .sidebar-main > header {
@@ -182,6 +181,12 @@ main > header > .content .item.v-link-active,
 main > header > .content .item:active {
 	color: #fff;
 	background: hsl(270, 75%, 61%);
+}
+
+main > header .header-title {
+	line-height: 4rem;
+	margin: 0 1rem;
+	float: left;
 }
 
 

@@ -15,48 +15,33 @@
 
 </style>
 
-<template>
-	<div class="container">
-		<div class="card card-block">
-			
-			<h1 class="card-title mb-1">Registered users</h1>
-
-			<p class="text-xs-center" v-show="$loadingRouteData">Loading Users</p>
-
-			<div class="table-responsive" v-show="users.length">
-				<table class="table  table-striped table-bordered">
-					<thead>
-						<tr>
-							<th class="text-xs-center" @click="sortBy('id')">#</th>
-							<th class="text-xs-center" @click="sortBy('username')">Username</th>
-							<th class="text-xs-center" @click="sortBy('firstName')">First Name</th>
-							<th class="text-xs-center" @click="sortBy('lastName')">Last Name</th>
-							<th class="text-xs-center" @click="sortBy('tgId')">Alias</th>
-							<th class="text-xs-center" @click="sortBy('role')">Role</th>							
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="u in users">
-							<th scope="row">{{ $index + 1 }}</td>
-							<td >{{ u.username }}</td>
-							<td>{{ u.firstName | capitalize}}</td>
-							<td>{{ u.lastName | capitalize}}</td>
-							<td>@{{ u.tgId }}</td>
-							<td class="text-xs-center p-0">
-								<select class="form-control" name="role_select" id="user_{{ u.id }}" @change="selectChanged">
-									<option value="ghost" :selected="u.role == 'ghost'">Ghost</option>
-									<option value="student" :selected="u.role == 'student'">Student</option>
-								</select>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Fix disabling -->
-			<button :disabled="selectChanged" class="btn btn-primary btn-lg btn-block" id="acceptRoles" @click="sendRoles" @keyup.enter="sendRoles">Save Changes</button>
-		</div>
-	</div>
+<template lang="jade">
+	.container
+		p.text-xs-center(v-show='$loadingRouteData') Loading&mldr;
+		.card.card-block(v-show="!$loadingRouteData")
+			.table-responsive(v-show='users.length')
+				table.table.table-striped.table-bordered
+					thead
+						tr
+							th.text-xs-center(@click="sortBy('id')") #
+							th.text-xs-center(@click="sortBy('username')") Username
+							th.text-xs-center(@click="sortBy('firstName')") First Name
+							th.text-xs-center(@click="sortBy('lastName')") Last Name
+							th.text-xs-center(@click="sortBy('tgId')") Alias
+							th.text-xs-center(@click="sortBy('role')") Role
+					tbody
+						tr(v-for='u in users')
+							th(scope='row') {{$index + 1}}
+							td {{u.username}}
+							td {{u.firstName}}
+							td {{u.lastName}}
+							td @{{u.tgId}}
+							td.text-xs-center.p-0
+								select.form-control(name='role_select', id='user_{{ u.id }}', @change='selectChanged')
+									option(value='ghost', :selected="u.role == 'ghost'") Ghost
+									option(value='student', :selected="u.role == 'student'") Student
+			// Fix disabling
+			button#acceptRoles.btn.btn-primary.btn-lg.btn-block(:disabled='selectChanged', @click='sendRoles', @keyup.enter='sendRoles') Save Changes
 </template>
 
 <script>

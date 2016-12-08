@@ -1,5 +1,5 @@
 <template>
-	<header>
+	<header class="clearfix">
 		<slot></slot>
 	</header>
 </template>

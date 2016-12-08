@@ -1,9 +1,8 @@
-<template>
-	<content>
-		<div slot="header">
-			<div>Profile</div>
-		</div>
-	</content>
+<template lang="jade">
+	content
+		div(slot='header')
+			div
+				h1.header-title Profile
 </template>
 
 <script>
