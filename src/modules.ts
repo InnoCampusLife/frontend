@@ -197,7 +197,7 @@ const modules = {
 
 		getBio(args, successCallback, errorCallback) {
 			const type = "GET",
-			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id: "username=" + args.username),
+			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
@@ -293,7 +293,7 @@ const modules = {
 					create(args) {
 						const type = "POST",
 						url  = this.url + modules.accounts.token + '/orders',
-						data = '';
+						data = args.order;
 
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					},
