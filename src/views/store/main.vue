@@ -10,10 +10,11 @@
 <template lang="jade">
 	content
 		div(slot='header')
-				.search-group.input-group
-					input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query', v-show="$route.path.endsWith('store')")
-					// span.input-group-btn
-					// 	button.btn.btn-secondary(type='button') 🔍
+			h1.header-title Store
+			.search-group.input-group
+				input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query', v-show="$route.path.endsWith('store')")
+				span.input-group-btn
+					button.btn.btn-secondary(type='button') 🔍
 </template>
 
 <script>

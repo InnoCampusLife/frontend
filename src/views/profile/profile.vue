@@ -1,31 +1,38 @@
-<template>
-	<div class="container">
-		<div class="card card-block" block>
-			<div class="row">
-				<div class="col-sm text-sm-right">
-					<p>Username</p>
-				</div>
-				<div class="col-sm">
-					<p class="font-weight-bold">{{ user.username }}</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm text-sm-right">
-					<p>Role</p>
-				</div>
-				<div class="col-sm">
-					<p class="font-weight-bold">{{ user.role }}</p>
-				</div>
-			</div>
-			<pre v-show="user.studyGroup != null">{{ user.studyGroup }}</pre>
-			<pre v-show="user.tgId != null">{{ user.tgId }}</pre>
-			<pre v-show="user.firstName">{{ user.firstName + " " + user.lastName }}</pre>
-			<pre v-if="$loadingRouteData">Data is not updated yet!</pre>
-		</div>
-		<div block>
-			<router-view></router-view>
-		</div> 
-	</div>
+<template lang="jade">
+	.container
+		p.text-xs-center(v-show='$loadingRouteData') Loading&mldr;
+		.card.card-block(v-show='!$loadingRouteData')
+			.row
+				.col-sm.text-sm-right
+					p Username
+				.col-sm
+					p.font-weight-bold {{ user.username }}
+			.row
+				.col-sm.text-sm-right
+					p Role
+				.col-sm
+					p.font-weight-bold {{ user.role }}
+			.row
+				.col-sm.text-sm-right
+					p First Name
+				.col-sm
+					p.font-weight-bold {{ user.firstName }}
+			.row
+				.col-sm.text-sm-right
+					p Last Name
+				.col-sm
+					p.font-weight-bold {{ user.lastName }}
+			.row
+				.col-sm.text-sm-right
+					p Alias
+				.col-sm
+					p.font-weight-bold {{ user.tgId }}
+			.row
+				.col-sm.text-sm-right
+					p Study Group
+				.col-sm
+					p.font-weight-bold {{ user.studyGroup }}
+	router-view
 </template>
 
 <script>

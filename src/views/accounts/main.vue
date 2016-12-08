@@ -1,5 +1,8 @@
-<template>
-	<content></content>
+<template lang="jade">
+	content
+		div(slot='header')
+			div
+				h1.header-title Accounts
 </template>
 
 <script>
