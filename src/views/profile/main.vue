@@ -1,7 +1,6 @@
 <template>
 	<content>
 		<div slot="header">
-			<div>Profile</div>
 		</div>
 	</content>
 </template>
