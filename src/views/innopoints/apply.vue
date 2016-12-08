@@ -85,6 +85,7 @@
 											placeholder="username",
 											@input="username_changed",
 											value="{{ $index || user.innopoints.data.isAdmin ? '': user.account.username }}",
+											v-model="u.username",
 											v-validate:username="{ minlength: 1, maxlength: 30 }",
 										)
 								.form-group.row.flex-items-sm-middle
