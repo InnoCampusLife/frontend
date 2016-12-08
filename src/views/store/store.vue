@@ -31,13 +31,6 @@
 			data(transition) {
 				this.$router.app.user.innopoints.api.shop.getItems({
 					successCallback: result => {
-						result.forEach(item => {
-							var arr = [];
-							for (var option in item.options)
-								arr.push({title: option, values: item.options[option]});
-							item.options = arr;
-							console.log(item.options);
-						});
 						transition.next({
 							items: result
 						});

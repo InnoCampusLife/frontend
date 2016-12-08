@@ -9,12 +9,12 @@
 		img.card-img-top(:src='`http://lorempixel.com/${Math.floor(Math.random() * 4 + 2) * 100 }/${ Math.floor(Math.random() * 4 + 2) * 100 }/food`', alt='')
 		.card-block
 			h4.card-title {{ item.title }}
-				span.tag.tag-default.float-xs-right {{ item.price }}
+				span.float-xs-right {{ item.price }} ip.
 			h6.card-subtitle.text-muted.mb-1 {{ item.category.title }}
-			div(v-show='item.possible_joint_purchase')
-				p.card-text You can buy it with {{item.max_buyers}} people:
-				.form-group(v-for="i in (item.max_buyers - 1)")
-					input.form-control(placeholder="Username")
+			// div(v-show='item.possible_joint_purchase')
+			// 	p.card-text You can buy it with {{item.max_buyers}} people:
+			// 	.form-group(v-for="i in (item.max_buyers - 1)")
+			// 		input.form-control(placeholder="Username")
 			.form-group(v-for='option in item.options')
 				select.form-control(:name='option.title', :id='option.title', :data-index='$index', @change='onselect(item, $event)')
 					option(value='') Choose {{ option.title }}
