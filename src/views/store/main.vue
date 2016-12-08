@@ -18,7 +18,7 @@
 
 <script>
 	module.exports = {
-		components : {
+		components: {
 			content: require('./../content.vue')
 		}
 	}

@@ -4,12 +4,12 @@ import storage from './storage'
 
 const api_url = config.server.api_url;
 
-var testAccounts = require('entry-dir!./modules/modules.config.js');
+const testAccounts = require('entry-dir!!./modules/modules.config.js');
 console.log(testAccounts);
 
 const modules = {
-	accounts : {
-		roles : [
+	accounts: {
+		roles: [
 			'ghost',
 			'student',
 			'moderator'
@@ -39,14 +39,14 @@ const modules = {
 		},
 
 		get fullName () {
-			var ln = (!!this.lastName 	? 		this.lastName + ' ' : '');
-			var fn = (!!this.firstName 	? 		this.firstName 	 	: '');
-			var pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
+			const ln = (!!this.lastName 	? 		this.lastName + ' ': '');
+			const fn = (!!this.firstName 	? 		this.firstName 	 	: '');
+			const pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
 			return fn + ln + pn;
 		},
 		
 		get loggedIn () {
-			return this.storage.get(config.token_name) ? true : false;
+			return this.storage.get(config.token_name) ? true: false;
 		},
 
 		get isGhost () {
@@ -88,7 +88,7 @@ const modules = {
 		},
 
 		update(successCallback, errorCallback) {
-			var that = this;
+			const that = this;
 			this.get(result => {
 					that.set(result);
 					if (successCallback) successCallback(result);
@@ -99,21 +99,21 @@ const modules = {
 
 		storage,
 
-		preferences : {
+		preferences: {
 
 			save(successCallback, errorCallback) {
-				var that = this;
-				var type = "PUT",
+				const that = this;
+				const type = "PUT",
 				url  = this.url + modules.accounts.token + '/updatePreferences',
 				data = { 
-					preferences : that
+					preferences: that
 				};
 
 				ajax(type, url, data, successCallback, errorCallback);
 			},
 
 			get(successCallback, errorCallback) {
-				var type = "GET",
+				const type = "GET",
 				url  = this.url + modules.accounts.token + '/getPreferences',
 				data = '';
 
@@ -125,12 +125,12 @@ const modules = {
 		
 		//api
 
-		version : 1,
-		name : "accounts",
+		version: 1,
+		name: "accounts",
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
 		create(password, email, successCallback, errorCallback) {
-			var 
+			const 
 			type = "POST",
 			url  = this.url,
 			data = {
@@ -146,7 +146,7 @@ const modules = {
 		},
 
 		authorize(password, successCallback, errorCallback) {
-			var 
+			const 
 			type = "POST",
 			url  = this.url + "auth",
 			data = {
@@ -158,7 +158,7 @@ const modules = {
 		},
 
 		get(successCallback, errorCallback) {
-			var 
+			const 
 			type = "GET",
 			url  = this.url + this.token,
 			data = '';
@@ -167,10 +167,9 @@ const modules = {
 		},
 
 		///MODER METHODS
-		//
+
 		list(successCallback, errorCallback) {
-			var
-			type = "GET",
+			const type = "GET",
 			url  = this.url + this.token + "/listAccounts",
 			data = '';
 			
@@ -178,48 +177,46 @@ const modules = {
 		},
 
 		updateRole(account_id, new_role, successCallback, errorCallback) {
-			var
-			type = "PUT",
+			const type = "PUT",
 			url  = this.url + this.token + "/updateRole",
 			data = { accountId: account_id, newRole: new_role };
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
-		//
-		///
 
-		exists(successCallback, errorCallback) {
-			var 
-			type = "GET",
-			url  = this.url + this.token + "/exists",
+		exists(args, successCallback, errorCallback) {
+			if (args.id && args.username) {
+				errorCallback('Username and ID parameters are mutually exclusive!')
+			}
+			const type = "GET",
+			url  = this.url + this.token + "/exists?" + (args.id ? "id=" + args.id : "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
 		getBio(args, successCallback, errorCallback) {
-			var 
-			type = "GET",
-			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id : "username=" + args.username),
+			const type = "GET",
+			url  = this.url + this.token + "/getBio?" + (args.id ? "id=" + args.id: "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 	},
-	innopoints : {
-		roles : [
+	innopoints: {
+		roles: [
 			'student',
 			'admin'
 		],
 		have (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
-		data : {
+		data: {
 			id		: null,
 			amount	: null,
 			role 	: null,
 
-			// cart : [],
+			// cart: [],
 
 			get isStudent () {
 				return !!this.is('student');
@@ -234,7 +231,7 @@ const modules = {
 			},
 
 			update(successCallback, errorCallback)	{
-				var that = this;
+				const that = this;
 				modules.innopoints.api.user.get({
 					successCallback: result => {
 						that.id = result.id;
@@ -248,30 +245,30 @@ const modules = {
 			}
 		},
 
-		api : {
-			version : 1,
-			name : "points",
+		api: {
+			version: 1,
+			name: "points",
 			get url() { return api_url + "v" + this.version + "/" + this.name + "/"; },
 
 			getActivities(args) {
-				var type = "GET",
-				url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id : ''),
+				const type = "GET",
+				url = this.url + "activities" + (args.cat_id ? '/' + args.cat_id: ''),
 				data = { skip: args.skip_count || null, limit: args.limit_count || null };
 				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
 			getCategories(args) {
-				var type = "GET",
+				const type = "GET",
 				url = this.url + "categories",
 				data = { skip: args.skip_count || null, limit: args.limit_count || null };
 				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
-			shop : {
+			shop: {
 				get url() { return modules.innopoints.api.url + "shop/" },
 
 				getItems(args) {
-					var type = "GET",
+					const type = "GET",
 					url = this.url + "items",
 					data = {
 						skip: args.skip_count || null,
@@ -284,17 +281,17 @@ const modules = {
 				},
 
 				getItem(id, successCallback, errorCallback) {
-					var type = "GET",
+					const type = "GET",
 					url = this.url + "items/" + id,
 					data = '';
 					ajax(type, url, data, successCallback, errorCallback);
 				},
 
-				order : {
+				order: {
 					get url() { return modules.innopoints.api.user.url },
 
 					create(args) {
-						var type = "POST",
+						const type = "POST",
 						url  = this.url + modules.accounts.token + '/orders',
 						data = '';
 
@@ -302,7 +299,7 @@ const modules = {
 					},
 
 					update(args) {
-						var type = "POST",
+						const type = "POST",
 						url  = this.url + modules.accounts.token + '/orders/' + args.id + '/contributors/' + args.action,
 						data = '';
 
@@ -310,7 +307,7 @@ const modules = {
 					},
 
 					delete(args) {
-						var type = "DELETE",
+						const type = "DELETE",
 						url  = this.url + modules.accounts.token + '/orders/' + args.id,
 						data = '';
 
@@ -319,12 +316,12 @@ const modules = {
 				}
 			},
 
-			user : {
+			user: {
 				get isAdmin() { return modules.innopoints.data.isAdmin; },
-				get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/" : "accounts/") },
+				get url() { return modules.innopoints.api.url + (this.isAdmin ? "admin/": "accounts/") },
 
 				get(args) {
-					var type = "GET",
+					let type = "GET",
 					url  = modules.innopoints.api.url + 'accounts/' + modules.accounts.token,
 					data = '';
 
@@ -335,7 +332,7 @@ const modules = {
 				},
 
 				create(successCallback, errorCallback) {
-					var type = "POST",
+					const type = "POST",
 					url  = this.url + modules.accounts.token,
 					data = '';
 
@@ -343,7 +340,7 @@ const modules = {
 				},
 				
 				getFile(appl_id, file_id, successCallback, errorCallback) {
-					var type = "GET",
+					const type = "GET",
 					url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
 					data = '';
 
@@ -351,7 +348,7 @@ const modules = {
 				},
 
 				getAccounts(args) {
-					var type = "GET",
+					const type = "GET",
 					url  = this.url + modules.accounts.token,
 					data = { skip: args.skip_count || null, limit: args.limit_count || null };
 
@@ -359,18 +356,18 @@ const modules = {
 				},
 
 				updateAccount(args) {
-					var type = "PUT",
+					const type = "PUT",
 					url  = this.url + modules.accounts.token + "/accounts/" + args.id,
-					data = { points_amount : args.points };
+					data = { points_amount: args.points };
 
 					ajax(type, url, data, args.successCallback, args.errorCallback);
 				},
 
-				application : {
+				application: {
 					get url() { return modules.innopoints.api.user.url },
 
 					create(application, successCallback, errorCallback) {
-						var type = "POST",
+						const type = "POST",
 						url  = this.url + modules.accounts.token + "/applications",
 						data = { application:application };
 
@@ -378,7 +375,7 @@ const modules = {
 					},
 					
 					update(appl_id, new_params, successCallback, errorCallback) {
-						var type = "PUT",
+						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = new_params;
 
@@ -386,7 +383,7 @@ const modules = {
 					},
 					
 					send(appl_id, successCallback, errorCallback) {
-						var type = "PUT",
+						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
 						data = '';
 
@@ -394,7 +391,7 @@ const modules = {
 					},
 					
 					get(appl_id, successCallback, errorCallback) {
-						var type = "GET",
+						const type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
 
@@ -402,7 +399,7 @@ const modules = {
 					},
 					
 					delete(appl_id, successCallback, errorCallback) {
-						var type = "DELETE",
+						const type = "DELETE",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
 						data = '';
 
@@ -410,7 +407,7 @@ const modules = {
 					},
 					
 					approve(appl_id, successCallback, errorCallback) {
-						var type = "PUT",
+						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
 						data = '';
 
@@ -418,7 +415,7 @@ const modules = {
 					},
 					
 					reject(appl_id, successCallback, errorCallback) {
-						var type = "PUT",
+						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
 						data = '';
 
@@ -426,7 +423,7 @@ const modules = {
 					},
 					
 					dismiss(appl_id, successCallback, errorCallback) {
-						var type = "PUT",
+						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
 						data = '';
 
@@ -434,13 +431,13 @@ const modules = {
 					}
 				},
 				
-				applications : {
+				applications: {
 					get url() { return modules.innopoints.api.user.url },
 
 					get(args) {
 						if (args.status == 'all') args.status = null;
-						var type = "GET",
-						url  = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status : ''),
+						const type = "GET",
+						url  = this.url + modules.accounts.token + "/applications" + (args.status ? '/' + args.status: ''),
 						data = { skip: args.skip_count, limit: args.limit_count };
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					}

@@ -1,5 +1,5 @@
 <template>
-	<span block>{{ item.title }} : {{ item.option }} : {{ item.price }} x {{ item.amount }}</span>
+	<span block>{{ item.title }}: {{ item.option }}: {{ item.price }} x {{ item.amount }}</span>
 </template>
 
 <script>

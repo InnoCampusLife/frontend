@@ -30,13 +30,13 @@
 
 <script>
 	module.exports =  {
-		data : function () {
+		data: function () {
 			return {
-				user : {}
+				user: {}
 			}
 		},
 		route: {
-			data  : function (transition) {
+			data : function (transition) {
 				console.log("Called get in user");
 
 				var username = this.$route.params.username;
@@ -48,7 +48,7 @@
 						(result) => {
 							console.log(result);
 							transition.next({
-								user : result
+								user: result
 							});
 						}
 					);
