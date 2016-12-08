@@ -3,7 +3,7 @@
 if (!String.prototype.includes) {
 	String.prototype.includes = () => {
 		return String.prototype.indexOf.apply(this, arguments) !== -1;
-	};
+	}
 }
 
 if (!Array.prototype.includes) {
