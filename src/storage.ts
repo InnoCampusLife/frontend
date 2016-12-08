@@ -1,4 +1,4 @@
-export default {
+export const storage = {
 	get(key) {
 		return localStorage.getItem(key);
 	},
@@ -12,3 +12,5 @@ export default {
 		localStorage.clear(); 
 	},
 }
+
+export default storage;
