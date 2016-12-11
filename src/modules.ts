@@ -203,14 +203,17 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 	},
+	
 	innopoints: {
 		roles: [
 			'student',
 			'admin'
 		],
+	
 		have (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
+	
 		data: {
 			id		: null,
 			amount	: null,
@@ -264,7 +267,7 @@ const modules = {
 				ajax(type, url, data, args.successCallback, args.errorCallback);
 			},
 
-			shop: {
+			store: {
 				get url() { return modules.innopoints.api.url + "shop/" },
 
 				getItems(args) {
@@ -313,7 +316,7 @@ const modules = {
 
 						ajax(type, url, data, args.successCallback, args.errorCallback);
 					}
-				}
+				},
 			},
 
 			user: {
@@ -361,6 +364,14 @@ const modules = {
 					data = { points_amount: args.points };
 
 					ajax(type, url, data, args.successCallback, args.errorCallback);
+				},
+
+				getListOfOrders(successCallback, errorCallback) {
+					const type = "GET",
+					url = this.url + modules.accounts.token + '/orders',
+					data = ''
+
+					ajax(type, url, data, successCallback, errorCallback)
 				},
 
 				application: {

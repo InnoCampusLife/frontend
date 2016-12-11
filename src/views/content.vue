@@ -9,8 +9,8 @@
 </template>
 
 <script>
-	import mainHeader from './header.vue';
-	import mainFooter from './footer.vue';
+	import headerMain from './header.vue';
+	import footerMain from './footer.vue';
 
 	module.exports = {
 		data() {
@@ -19,8 +19,8 @@
 			}
 		},
 		components: {
-			mainHeader,
-			mainFooter,
+			headerMain,
+			footerMain,
 		}
 	}
 </script>

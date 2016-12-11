@@ -65,8 +65,8 @@ const innopoints = {
 			ajax(type, url, data, args.successCallback, args.errorCallback);
 		},
 
-		shop: {
-			get url() { return innopoints.api.url + "shop/" },
+		store: {
+			get url() { return innopoints.api.url + "store/" },
 
 			getItems: function (args) {
 				var

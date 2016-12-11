@@ -7,12 +7,19 @@ import newRouter from './router-config'
 
 const  app = require('./views/app.vue')
 
-// const filter = require('vue-bulma-emoji').filter
 const VueValidator = require('vue-validator')
+const VueAnimatedList = require('vue-animated-list')
 
 const styles = require('./styles/main.less')
 const polyfills = require('./polyfills')
 
+// FIXME: Move this to some other file
+const emojione = require('emojione')
+Vue.filter('emojify', (value) => {
+  return emojione.toImage(value)
+})
+
+Vue.use(VueAnimatedList)
 Vue.use(VueValidator)
 Vue.use(VueRouter)
 

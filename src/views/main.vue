@@ -4,11 +4,12 @@
 </template>
 
 <script>
-	var sidebar = require('./sidebar.vue');
+	
+	import sidebar from './sidebar.vue'
 
 	module.exports = {
 		components: {
-			sidebar:sidebar
+			sidebar
 		},
 		route: {
 			data(transition) {

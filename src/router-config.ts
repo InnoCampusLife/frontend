@@ -79,6 +79,10 @@ export default router => {
 							component: require('./views/store/item.vue'),
 							name: 'item'
 						},
+						'/:username/orders': {
+							component: require('./views/store/orders.vue'),
+							name: 'orders'
+						},
 					},
 				},
 			},
