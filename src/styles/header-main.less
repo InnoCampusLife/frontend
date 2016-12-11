@@ -1,0 +1,75 @@
+.header-main {
+	background: hsla(0, 0%, 100%, 1);
+	border-bottom: 1px solid hsla(0, 0, 0, .15);
+	min-height: @header-height;
+	width: 100%;
+	z-index: 100;
+}
+
+.header-main .header-title {
+	line-height: 4rem;
+	margin: 0 1rem;
+	float: left;
+}
+
+// .header-main .sidebar-show button {
+// 	border: 0;
+// 	border-radius: 0;
+// 	float: left;
+// 	height: @header-height;
+// 	padding: 0.75rem;
+// }
+
+// .header-main .sidebar-show .emojione {
+// 	height: 2.5rem;
+// }
+
+.header-main .search-group {
+	float: right;
+	padding: 13/16rem;
+	width: @sidebar-width;
+}
+
+.header-main .search-group button {
+	padding: 6/16rem 1rem !important;
+}
+
+.header-main .search-group .emojione {
+	height: 1.5rem;
+}
+
+.header-main button {
+	outline: 0 !important;
+}
+
+ul.header-nav {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.header-nav li {
+	float: left;
+}
+
+.header-nav button {
+	background: hsla(0, 0%, 0%, 0);
+	height: @header-height;
+	padding: 0 1rem;
+	border-radius: 0;
+	border: 0;
+}
+
+.header-nav .emojione {
+	height: 1.5em;
+	margin-right: 0.5em;
+}
+
+.header-nav .btn-outline-warning {
+	color: rgb(213, 133, 18);
+}
+
+.header-nav .btn-outline-warning:hover,
+.header-nav .btn-outline-warning:focus {
+	color: rgb(255, 255, 255);
+}

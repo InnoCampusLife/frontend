@@ -3,6 +3,9 @@
 		header
 			button.btn.btn-block(v-link="'/'", type='button')
 				h1 UIS
+			.hidden-md-up.sidebar-hide
+				button.btn.btn-outline-secondary
+					span {{{':hamburger:' | emojify}}}
 		ul.menu
 			li
 				button.btn.btn-block.clearfix(v-link="{ name: 'profile', params: { username: user.account.username } }")

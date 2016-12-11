@@ -86,7 +86,7 @@
 											@input="username_changed",
 											value="{{ $index || user.innopoints.data.isAdmin ? '': user.account.username }}",
 											v-model="u.username"
-											v-validate:username="{ minlength: 1, maxlength: 30 }",
+											v-validate:username="{ minlength: 3, maxlength: 16 }",
 										)
 								.form-group.row.flex-items-sm-middle
 									label.form-control-label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
@@ -108,8 +108,8 @@
 					.card-block
 						label(for='upload')
 							h4 Files
-						.table-responsive
-							table.table.table-striped.table-bordered(v-show='current.files.length')
+						.table-responsive(v-show='current.files.length')
+							table.table.table-striped.table-bordered
 								thead
 									tr
 										th.text-xs-center #
@@ -136,7 +136,7 @@
 								h4 Comment
 							textarea#comment.form-control(placeholder='Write a comment', v-model='current.comment', rows='6')
 					.card-block
-						button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!activitySelected', type='submit', @click='send') Send
+						button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!activitySelected', type='button', @click='send') Send
 						p.mt-1.mb-0.text-xs-center(v-show='!categorySelected') Select Category
 						p.mt-1.mb-0.text-xs-center(v-show='categorySelected && !activitySelected') Select Activities
 
@@ -210,21 +210,6 @@
 				)
 			},
 
-			validateUsername(e) {
-				const users = this.current.users;
-				this.user.account.getBio({ 
-						username: e.target.value 
-					},
-					(result) => {
-						users[e.target.dataset.index].user_id = result.id;
-					},
-					(error) => {
-						console.log("Incorrect Username");
-						// TODO
-					}
-				)
-			},
-			
 			category_changed(e) {
 				this.categorySelected = this.activitySelected = false;
 				let self = this
@@ -248,7 +233,7 @@
 			},
 			
 			uploaded(e) {
-				this.current.files = Object.keys(e.target.files).map(key => e.target.files[key])
+				this.current.files = e.target.files
 			},
 
 			removeFile(index) {
@@ -256,6 +241,9 @@
 			},
 			
 			send(e) {
+
+				console.log(this.current)
+
 				send.textContent = "Sending...";
 				this.current.application.type = this.current.isPersonal ? "personal": "group";
 				// TODO - catch bugs and exceptions

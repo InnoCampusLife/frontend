@@ -6,7 +6,8 @@
 	top: 0;
 	left: 0;
 	z-index: 100;
-	background: linear-gradient(to bottom, rgba(46, 204, 113,1.0) 0%, rgba(26, 188, 156,1.0));
+	background: linear-gradient(to bottom, rgba(46, 204, 113, 1.0) 0%, rgba(26, 188, 156, 1.0));
+	border-right: 1px solid hsla(0, 0, 0, .15);
 
 	> header {
 		// border-bottom: 1px solid hsla(0, 0%, 80%, 0.5);
@@ -91,6 +92,14 @@
 	button {
 		color: hsla(0, 0%, 100%, 0.8);
 	}
+}
+
+.sidebar-main {
+	width: @sidebar-width;
+}
+
+.sidebar-main > header {
+	height: @header-height;
 }
 
 /*

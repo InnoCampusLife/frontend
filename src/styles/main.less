@@ -1,37 +1,3 @@
-
-/* ==========================================================================
-	 Base
-	 ========================================================================== */
-
-html {
-	box-sizing: border-box;
-}
-
-body {
-	height: 100vh;
-}
-
-*, *::before, *::after {
-	box-sizing: inherit;
-	outline: 0;
-}
-
-/*
-* + * {
-	margin-top: 1em;
-}
-
-.row > * + * {
-	margin-top: 0;
-}
-*/
-
-/*
-.column > * + * {
-	margin-left: 1em;
-}
-*/
-
 /* ==========================================================================
 	 Typography
 	 ========================================================================== */
@@ -61,13 +27,47 @@ code, kbd, pre, samp {
 	 Layout
 	 ========================================================================== */
 
-@sidebar-width: 18.75rem;
+@sidebar-width: 16.875rem;
 @header-height: 4rem;
+@footer-height: @header-height;
+
+html {
+	box-sizing: border-box;
+}
+
+body {
+	height: 100vh;
+}
+
+*, *::before, *::after {
+	box-sizing: inherit;
+}
+
+/*
+* + * {
+	margin-top: 1em;
+}
+
+.row > * + * {
+	margin-top: 0;
+}
+*/
+
+/*
+.column > * + * {
+	margin-left: 1em;
+}
+*/
 
 main {
 	height: 100vh;
 	margin-left: @sidebar-width;
 	overflow: hidden;
+}
+
+.emojione {
+	height: 1em;
+	width: auto;
 }
 
 /*
@@ -76,12 +76,23 @@ main {
 }
 */
 
-.sidebar-main {
-	width: @sidebar-width;
-}
-
 .card-columns {
 	column-count: 1;
+		
+	// Small devices (landscape phones, 544px and up)
+	@media (min-width: 576px) {
+		column-count: 2;
+	}
+
+	// Large devices (desktops, 992px and up)
+	@media (min-width: 992px) {
+		column-count: 3;
+	}
+
+	// Extra large devices (large desktops, 1200px and up)
+	@media (min-width: 1200px) {
+		column-count: 4;
+	}
 }
 
 select.form-control-lg {
@@ -92,69 +103,26 @@ select.form-control {
 	padding: .25rem .5rem;
 }
 
-main > header {
-	min-height: @header-height;
-}
-
-header .search-group {
-	float: right;
-	padding: 13/16rem 1rem;
-	width: 18.75rem;
-}
-
-header button {
-	outline: 0 !important;
-}
-ul.header-nav {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.header-nav li {
-	float: left;
-}
-
-.header-nav button {
-	background: hsla(0, 0%, 0%, 0);
-	height: 4rem;
-	padding-left: 1rem;
-	padding-right: 1rem;
-	border-radius: 0;
-	border: 0;
-}
-
-.sidebar-main > header {
-	height: @header-height;
-}
-
 .content-main {
 	height: ~'calc(100% - ' @header-height ~')';
 	margin-bottom: -@header-height;
 	overflow: auto;
-}
 
-.content-main > .wrap {
-	margin-bottom: -@header-height;	
-	min-height: 100%;
-	padding-top: 1rem;
-	text-align: center;
-}
+	> .wrap {
+		margin-bottom: -@header-height;	
+		min-height: 100%;
+		padding-top: 1rem;
+	}
 
-.card {
-	text-align: left;
-}
-
-.content-main > .wrap:after {
-	content: '';
-	display: block;
-}
-
-.content-main > .wrap:after, footer {
-	height: @header-height;
+	> .wrap:after {
+		content: '';
+		height: @footer-height;
+		display: block;
+	}
 }
 
 footer {
+	height: @footer-height;
 	text-align: center;
 	width: 100%;
 
@@ -164,31 +132,21 @@ footer {
 	}
 }
 
-main > header {
-	width: 100%;
-	background: hsla(0, 0%, 100%, 1);
-	border-bottom: 1px solid rgba(0,0,0,.125);
-	z-index: 100;
+.alert {
+	margin: 0;
+	max-height: @sidebar-width/2;
+	position: fixed;
+	bottom: @header-height + 1.25rem;
+	right: 1.25rem;
+	text-overflow: ellipsis;
+	width: @sidebar-width;
+	z-index: 1050;
 }
 
-main > header > .content .item:focus,
-main > header > .content .item:hover {
-	color: #fff;
-	background: hsl(270, 75%, 68%);
+// Store fixes
+select {
+	min-width: 9.375rem;
 }
-
-main > header > .content .item.v-link-active,
-main > header > .content .item:active {
-	color: #fff;
-	background: hsl(270, 75%, 61%);
-}
-
-main > header .header-title {
-	line-height: 4rem;
-	margin: 0 1rem;
-	float: left;
-}
-
 
 /* ==========================================================================
 	 Media Queries
@@ -199,9 +157,7 @@ main > header .header-title {
 
 // Small devices (landscape phones, 544px and up)
 @media (min-width: 576px) {
-	.card-columns {
-		column-count: 2;
-	}
+
 }
 
 // Medium devices (tablets, 768px and up)
@@ -211,16 +167,12 @@ main > header .header-title {
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
-	.card-columns {
-		column-count: 3;
-	}
+
 }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {
-	.card-columns {
-		column-count: 4;
-	}
+
 }
 
 
@@ -229,9 +181,12 @@ main > header .header-title {
 
 // Small devices (landscape phones, less than 768px)
 @media (max-width: 767px) { 
+	
+	// FIXME
 	main {
 		margin-left: 0;
 	}
+	
 	.sidebar-main {
 		margin-left: -@sidebar-width;
 	}
@@ -254,4 +209,6 @@ main > header .header-title {
 // @import url('./icons.css'); Moved to index.html
 @import url('./transitions.less');
 @import url('./helpers.less');
-@import url('./sidebar.less');
+@import url('./sidebar-main.less');
+@import url('./header-main.less');
+@import url('./login-page.less');

@@ -3,43 +3,60 @@
 		div(slot='header')
 			.search-group.input-group(v-show="$route.path.includes('applications')")
 				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
-				// span.input-group-btn
-				// 	button.btn.btn-secondary(type='button') 🔍
+				span.input-group-btn
+					button.btn.btn-secondary(type='button') {{{':mag:' | emojify}}}
 			ul.header-nav
 				template(v-if="$route.path.includes('applications')")
 					li
-						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }" v-if="!user.innopoints.data.isAdmin") 📑 All
+						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }" v-if="!user.innopoints.data.isAdmin") 
+							span {{{'📑' | emojify}}}
+							span All
 					li
-						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }") 📥 In&nbsp;process
+						button.btn.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }") 
+							span {{{'📥' | emojify}}}
+							span In&nbsp;Process
 					li
-						button.btn.btn-outline-danger(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }") 👎 Rejected
+						button.btn.btn-outline-danger(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }")
+							span {{{':thumbsdown:' | emojify}}}
+							span Rejected
 					li
-						button.btn.btn-outline-warning(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }") 🔃 In&nbsp;rework
+						button.btn.btn-outline-warning(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }") 
+							span {{{':arrows_clockwise:' | emojify}}}
+							span In&nbsp;Rework
 					li
-						button.btn.btn-outline-success(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }") 👍 Approved
+						button.btn.btn-outline-success(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }") 
+							span {{{':thumbsup:' | emojify}}}
+							span Approved
 				template(v-else)
 					li
-						button.btn.btn-outline-secondary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }") 📄 Applications
+						button.btn.btn-outline-secondary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }") 
+							span {{{'📄' | emojify}}}
+							span Applications
 				li.float-xs-right
-					button.btn.btn-outline-info(v-link="{ name: 'apply', params: { username: user.account.username } }") 📝 Apply
+					button.btn.btn-outline-info(v-link="{ name: 'apply', params: { username: user.account.username } }") 
+						span {{{'📝' | emojify}}}
+						span Apply
 </template>
 
 <script>
-	var content = require('./../content.vue');
+	
+	import content from './../content.vue'
 
-	module.exports = {
-		data: function () {
-			// var route = this.$route;
+	export default {
+		
+		data() {
 			return {
 				route: this.$route,
 				user: this.$root.user,
 			}
 		},
+		
 		components: {
-			content:content
+			content: content
 		},
+		
 		methods: {
-			filter_changed: function(e) {
+			filter_changed(e) {
 				this.$router.go(
 					{
 						name: 'applications',

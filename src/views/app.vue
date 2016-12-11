@@ -3,6 +3,7 @@
 </template>
 
 <script>
+
 	export default {
 		ready() {
 			console.log('App is awaiting your command!');
@@ -16,6 +17,6 @@
 				},
 				query: null
 			}
-		}
+		},
 	}
 </script>
