@@ -1,11 +1,11 @@
 <template lang="jade">
 	main
-		main-header
+		header-main
 			slot(name='header')
 		.content-main
 			.wrap
 				router-view
-			main-footer
+			footer-main
 </template>
 
 <script>

@@ -4,10 +4,6 @@
 		width: 100%
 	}
 
-	label {
-		min-width: 7.5rem;
-	}
-
 </style>
 
 <template lang="jade">
@@ -27,14 +23,14 @@
 				// 		input.form-control(placeholder="Username")
 				
 				.form-group.row(v-for='option in item.options')
-					label.col-xs-4.col-form-label(for='item-option-select-{{ $index }}') {{ option.title }}
-					.col-xs-8
+					label.col-xs-3.col-form-label(for='item-option-select-{{ $index }}') {{ option.title }}
+					.col-xs-9
 						select.form-control(:name='option.title', :data-index='$index', @change='onSelect(item, $event)', id='item-option-select-{{ $index }}')
 							option(value='') Choose {{ option.title }}
 							option(v-for='value in option.values', :value='value') {{ value }}
 				
 				p.card-text.text-xs-center
-					span.text-success(v-if="getQuantity(item) > 0") {{ getQuantity(item) }} in Stock
+					span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
 					span.text-danger(v-else) Out of Stock
 				
 				// FIXME: add quantity check here
@@ -67,7 +63,7 @@
 									.col-sm.font-weight-bold
 										p {{ value }}
 						p.card-text.text-xs-center
-							span.text-success(v-if="getQuantity(item) > 0") {{ getQuantity(item) }} in Stock
+							span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
 							span.text-danger(v-else) Out of Stock
 					
 					.modal-footer(slot='footer')
@@ -115,6 +111,43 @@
 			modal,
 		},
 
+		computed: {
+
+			// TODO: Fix this function
+			quantity() {
+
+				console.log(this.item.selectedItem)
+				
+				if (!(this.item.selectedItem && Object.keys(this.item.selectedItem.options) > 0)) {
+					return this.item.combinations.reduce((sum, curr) => {
+						return sum + curr.quantity
+					}, 0)
+				} else {
+					let sum = 0
+
+					console.log('Checking quantities')
+					
+					for (let c of this.item.combinations) {
+						let counter = 0;						
+						
+						for(let o in this.item.selectedItem.options) {							
+							if (c.options[o] === this.item.selectedItem.options[o])
+								counter++;
+						}
+
+						console.log(counter, Object.keys(this.item.selectedItem.options).length)
+						
+						if (counter === Object.keys(this.item.selectedItem.options).length) {
+							sum += c.quantity
+							break;
+						}
+					}
+
+					return sum;
+				}
+			},
+		},
+
 		methods: {
 
 			onSelect(item, e) {
@@ -144,36 +177,6 @@
 					this.itemSelected = false;
 
 			},
-			
-			// TODO: test this function
-			// if no item is selected return overall quantity of all combinations
-			// if some/all options are selected returns sum of quanitites of combinations
-			// with such options
-			getQuantity(item) {
-				if (!(item.selectedItem && item.selectedItem.options)) {
-					return item.combinations.reduce((sum, curr) => {
-						return sum + curr.quantity
-					}, 0)
-				} else {
-					let sum = 0
-					
-					for (let c of item.combinations) {
-						let counter = 0;						
-						
-						for(let o in c.options) {							
-							if (c.options[o] === this.item.selectedItem.options[o])
-								counter++;
-						}
-						
-						if (counter === item.selectedItem.options.length) {
-							sum += c.quantity
-							break;
-						}
-					}
-
-					return sum;
-				}
-			},
 
 			buy(item) {
 
@@ -201,19 +204,16 @@
 				}
 
 				let self = this
+
+				console.log(user)
+
 				this.$router.app.user.innopoints.api.store.order.create({
 					order: {
 						order: {
-							is_joint_purchase: item.possible_joint_purchase,
+							is_joint_purchase: false,
 							items: [
 								curr
 							],
-							contributors: [
-								{
-									id: user.innopoints.data.id,
-									points_amount: user.innopoints.data.amount
-								}
-							]
 						}
 					},
 					

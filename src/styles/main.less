@@ -77,22 +77,23 @@ main {
 */
 
 .card-columns {
-	column-count: 1;
+	column-count: auto;
+	column-width: @sidebar-width;
 		
-	// Small devices (landscape phones, 544px and up)
-	@media (min-width: 576px) {
-		column-count: 2;
-	}
+	// // Small devices (landscape phones, 544px and up)
+	// @media (min-width: 576px) {
+	// 	column-count: 2;
+	// }
 
-	// Large devices (desktops, 992px and up)
-	@media (min-width: 992px) {
-		column-count: 3;
-	}
+	// // Large devices (desktops, 992px and up)
+	// @media (min-width: 992px) {
+	// 	column-count: 3;
+	// }
 
-	// Extra large devices (large desktops, 1200px and up)
-	@media (min-width: 1200px) {
-		column-count: 4;
-	}
+	// // Extra large devices (large desktops, 1200px and up)
+	// @media (min-width: 1200px) {
+	// 	column-count: 4;
+	// }
 }
 
 select.form-control-lg {
@@ -141,11 +142,6 @@ footer {
 	text-overflow: ellipsis;
 	width: @sidebar-width;
 	z-index: 1050;
-}
-
-// Store fixes
-select {
-	min-width: 9.375rem;
 }
 
 /* ==========================================================================
