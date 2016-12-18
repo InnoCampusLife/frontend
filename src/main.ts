@@ -10,7 +10,7 @@ const  app = require('./views/app.vue')
 const VueValidator = require('vue-validator')
 const VueAnimatedList = require('vue-animated-list')
 
-const styles = require('./styles/main.less')
+const styles = require('./styles/main.scss')
 const polyfills = require('./polyfills')
 
 // FIXME: Move this to some other file

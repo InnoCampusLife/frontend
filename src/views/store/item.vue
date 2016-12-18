@@ -7,15 +7,23 @@
 </style>
 
 <template lang="jade">
-	div
+	div.wrap-card
 		div.card
+			
 			img.card-img-top(:src='item.image_link', alt='')
+			
 			.card-block
-				
+	
 				h4.card-title {{ item.title }}
-					span.float-xs-right.tag.tag-default {{ item.price }} IP
-				
-				h6.card-subtitle.text-muted.mb-1 {{ item.category.title }}
+
+				h6.card-subtitle.text-muted.mt-0 {{ item.category.title | capitalize }}
+
+				// .row
+				// 	.col-xs
+				// 		h6.card-subtitle.text-muted.mt-0 {{ item.category.title | capitalize }}
+				// 	.col-xs.text-xs-right
+				// 		h6.card-subtitle.text-info.mt-0 {{ item.price }} IP
+					
 				
 				// div(v-show='item.possible_joint_purchase')
 				// 	p.card-text You can buy it with {{item.max_buyers}} people:
@@ -29,50 +37,56 @@
 							option(value='') Choose {{ option.title }}
 							option(v-for='value in option.values', :value='value') {{ value }}
 				
-				p.card-text.text-xs-center
-					span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
-					span.text-danger(v-else) Out of Stock
-				
-				// FIXME: add quantity check here
-				button.btn.btn-outline-primary.btn-block(
-					:disabled="!(itemSelected || !item.options)",
-					type='button', 
-					data-toggle="modal",
-					data-target="#buying-modal-{{ item.id }}",
-				) Buy
+				.row.flex-items-xs-middle.mt-1
+					
+					.col-xs
+						p.card-text
+							span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
+							span.text-danger(v-else) Out of Stock
+					
+					.col-xs.text-xs-right
+						// FIXME: add quantity check here
+						button.btn.btn-outline-primary(
+							:disabled="!(itemSelected || !item.options)",
+							type='button', 
+							data-toggle="modal",
+							data-target="#buying-modal-{{ item.id }}",
+						) IUP {{ item.price - 0.01 }}
 
 		.modal.fade.buying-modal(id="buying-modal-{{ item.id }}")
 			.modal-dialog.modal-md
 				.modal-content
-					
-					.modal-header(slot='header')
+
+					.modal-header
 						h4.modal-title Confirm Purchase
 					
 					img.modal-img-middle(:src='item.image_link', alt='')
 					
-					.modal-body(slot='body')
+					.modal-body
 						h4.card-title {{ item.title }}
-							span.float-xs-right.tag.tag-default {{ item.price }} IP
-						h6.card-subtitle.text-muted.mb-1 {{ item.category.title }}
+						
+						.row
+							.col-xs
+								h6.card-subtitle.text-muted.mt-0 {{ item.category.title | capitalize }}
+							.col-xs.text-xs-right
+								h6.card-subtitle.text-info.mt-0 {{ item.price - 0.01 }} IP
+						
 						template(v-if="item.selectedItem && item.selectedItem.options")
 							template(v-for="(key, value) in item.selectedItem.options")
 								.row
 									.col-sm
-										p.text-sm-right
-											{{ key }}
+										p.text-sm-right {{ key }}
 									.col-sm.font-weight-bold
 										p {{ value }}
-						p.card-text.text-xs-center
+						
+						p.card-text.mt-1
 							span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
 							span.text-danger(v-else) Out of Stock
 					
-					.modal-footer(slot='footer')
-						.row
-							.col-xs
-								// FIXME: add quantity check here
-								button.btn.btn-block.btn-primary(type='button', data-dismiss="modal", @click="buy(item)") Buy
-							.col-xs
-								button.btn.btn-block.btn-secondary(type='button', data-dismiss="modal") Cancel
+					.modal-footer.text-xs-right
+						// FIXME: add quantity check here
+						button.btn.btn-secondary(type='button', data-dismiss="modal") Cancel
+						button.btn.btn-primary(type='button', data-dismiss="modal", @click="buy(item)") Purchase
 		
 		
 		// TODO: add link to orders page here
@@ -94,8 +108,6 @@
 
 <script>
 
-	import { modal } from 'vueboot'
-
 	export default {
 		
 		props: ['item', 'buy'],
@@ -108,7 +120,6 @@
 		},
 
 		components: {
-			modal,
 		},
 
 		computed: {

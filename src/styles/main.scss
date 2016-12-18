@@ -1,35 +1,40 @@
 /* ==========================================================================
+	 Helper Imports
+	 ========================================================================== */
+
+@import './transitions';
+@import './helpers';
+
+/* ==========================================================================
 	 Typography
 	 ========================================================================== */
 
-@main-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-@monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&subset=cyrillic');
-
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
+
+$main-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
 
 body {
 	background-color: hsl(0, 0%, 94.5%);	
 	color: hsla(0, 0%, 0%, 0.8);
-	font-family: @main-font-family;
+	font-family: $main-font-family;
 	font-size: 1em;
 	height: 100%;
 	overflow: hidden;
 }
 
 code, kbd, pre, samp {
-	font-family: @monospace-font-family;
+	font-family: $monospace-font-family;
 }
 
 /* ==========================================================================
 	 Layout
 	 ========================================================================== */
 
-@sidebar-width: 16.875rem;
-@header-height: 4rem;
-@footer-height: @header-height;
+$sidebar-width: 18rem;
+$header-height: 4rem;
+$footer-height: $header-height;
 
 html {
 	box-sizing: border-box;
@@ -47,21 +52,11 @@ body {
 * + * {
 	margin-top: 1em;
 }
-
-.row > * + * {
-	margin-top: 0;
-}
-*/
-
-/*
-.column > * + * {
-	margin-left: 1em;
-}
 */
 
 main {
 	height: 100vh;
-	margin-left: @sidebar-width;
+	margin-left: $sidebar-width;
 	overflow: hidden;
 }
 
@@ -70,30 +65,9 @@ main {
 	width: auto;
 }
 
-/*
-.content-main {
-	margin-right: @sidebar-width;
-}
-*/
-
 .card-columns {
 	column-count: auto;
-	column-width: @sidebar-width;
-		
-	// // Small devices (landscape phones, 544px and up)
-	// @media (min-width: 576px) {
-	// 	column-count: 2;
-	// }
-
-	// // Large devices (desktops, 992px and up)
-	// @media (min-width: 992px) {
-	// 	column-count: 3;
-	// }
-
-	// // Extra large devices (large desktops, 1200px and up)
-	// @media (min-width: 1200px) {
-	// 	column-count: 4;
-	// }
+	column-width: $sidebar-width;
 }
 
 select.form-control-lg {
@@ -105,42 +79,42 @@ select.form-control {
 }
 
 .content-main {
-	height: ~'calc(100% - ' @header-height ~')';
-	margin-bottom: -@header-height;
+	height: calc(100% - #{$header-height});
+	margin-bottom: $header-height;
 	overflow: auto;
 
 	> .wrap {
-		margin-bottom: -@header-height;	
+		margin-bottom: $header-height;	
 		min-height: 100%;
 		padding-top: 1rem;
 	}
 
 	> .wrap:after {
 		content: '';
-		height: @footer-height;
+		height: $footer-height;
 		display: block;
 	}
 }
 
 footer {
-	height: @footer-height;
+	height: $footer-height;
 	text-align: center;
 	width: 100%;
 
 	> p {
 		margin: 0;
-		line-height: @header-height;
+		line-height: $header-height;
 	}
 }
 
 .alert {
 	margin: 0;
-	max-height: @sidebar-width/2;
+	max-height: $sidebar-width/2;
 	position: fixed;
-	bottom: @header-height + 1.25rem;
+	bottom: $header-height + 1.25rem;
 	right: 1.25rem;
 	text-overflow: ellipsis;
-	width: @sidebar-width;
+	width: $sidebar-width;
 	z-index: 1050;
 }
 
@@ -184,7 +158,7 @@ footer {
 	}
 	
 	.sidebar-main {
-		margin-left: -@sidebar-width;
+		margin-left: -$sidebar-width;
 	}
 }
 
@@ -198,13 +172,9 @@ footer {
 // No media query since the extra-large breakpoint has no upper bound on its width
 
 /* ==========================================================================
-	 Imports
+	 Component Imports
 	 ========================================================================== */
 
-// @import url('./fonts.css');
-// @import url('./icons.css'); Moved to index.html
-@import url('./transitions.less');
-@import url('./helpers.less');
-@import url('./sidebar-main.less');
-@import url('./header-main.less');
-@import url('./login-page.less');
+@import './sidebar-main';
+@import './header-main';
+@import './login-page';

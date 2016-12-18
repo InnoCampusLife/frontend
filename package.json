@@ -2,7 +2,8 @@
   "name": "uis",
   "version": "2.0.1",
   "description": "Unified Information System of Innopolis University.",
-  "main": "frontend/app.js",
+  "main": "src/main.ts",
+  "repository": "InnoDevelopment/frontend",
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --inline --content-base build/ --historyApiFallback"
@@ -14,6 +15,7 @@
     "@types/vue": "^1.0.31",
     "@types/vue-router": "^0.7.27",
     "@types/webpack": "^2.0.0",
+    "autoprefixer": "^6.5.4",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-runtime": "^6.9.0",
@@ -31,9 +33,12 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "node-sass": "^3.13.0",
+    "postcss-flexbugs-fixes": "^2.1.0",
+    "postcss-loader": "^1.2.1",
     "pug": "^2.0.0-beta6",
     "resolve-url-loader": "^1.6.1",
     "sass-loader": "^4.0.2",
+    "sass-material-colors": "0.0.5",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
     "ts-loader": "^1.2.2",
@@ -49,14 +54,17 @@
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.5",
     "emojione": "^2.2.7",
+    "material-components-web": "^0.1.1",
+    "material-design-icons": "^3.0.1",
+    "mdbootstrap": "^4.2.0",
     "normalize.css": "^5.0.0",
+    "postcss-loader": "^1.2.1",
     "tether": "file:node_modules\\tether",
     "vue": "^1.0.26",
     "vue-animated-list": "^1.0.2",
     "vue-router": "^0.7.13",
     "vue-typeahead": "^2.3.0",
     "vue-validator": "^2.1.7",
-    "vue-waterfall": "^0.2.3",
-    "vueboot": "^0.4.5"
+    "vue-waterfall": "^0.2.3"
   }
 }

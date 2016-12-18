@@ -250,14 +250,14 @@
 		width: 100vw;
 
 		> .header {
-			height: @header-height;
+			height: $header-height;
 			text-align: center;
 			width: 100%;
 
 			> h1 {
 				color: hsl(0, 0, 100%);
 				font-weight: 800;
-				line-height: @header-height;
+				line-height: $header-height;
 				margin: 0
 			}
 		}
@@ -267,11 +267,11 @@
 			align-items: center;				
 			display: flex;
 			justify-content: center;
-			margin: -@header-height 0 -@footer-height;
+			margin: -$header-height 0 -$footer-height;
 			width: 100%;
 
 			> .form-group {
-				width: @sidebar-width;
+				width: $sidebar-width;
 
 				input, button {
 					opacity: 0.9;
