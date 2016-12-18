@@ -1,5 +1,5 @@
 <template lang="jade">
-	main
+	main.main-main
 		header-main
 			slot(name='header')
 		.content-main
@@ -12,12 +12,14 @@
 	import headerMain from './header.vue';
 	import footerMain from './footer.vue';
 
-	module.exports = {
+	export default {
+		
 		data() {
 			return {
 				user: this.$root.user
 			}
 		},
+		
 		components: {
 			headerMain,
 			footerMain,

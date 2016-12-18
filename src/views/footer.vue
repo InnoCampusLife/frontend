@@ -1,4 +1,4 @@
 <template lang="jade">
-	footer
+	footer.footer-main
 		p.text-muted 2016 © InnoDev
 </template>

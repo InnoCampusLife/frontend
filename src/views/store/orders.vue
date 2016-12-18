@@ -1,6 +1,6 @@
 <template lang="jade">
 	.container
-			.card.card-block(v-for="o in orders" status="{{ o.status }}", id="card-{{ o.id }}")
+			.card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'" status="{{ o.status }}", id="card-{{ o.id }}")
 				span.float-xs-right {{ o.creation_date }}
 				h2.card-title.clearfix
 					span.tag.tag-default.tag-success.float-xs-left(status="{{ o.status }}") {{ o.status.split('_').join(' ') | capitalize }}
@@ -24,8 +24,8 @@
 								th(scope='row') {{ $index + 1 }}
 								// TODO: add a link to item page
 								td {{ i.title }}
-								td {{  i.amount }}
-								td {{  i.category.title }}
+								td {{ i.amount }}
+								td {{ i.category.title }}
 								td 
 									template(v-if="i.properties")
 										template(v-for="(key, value) in i.properties")

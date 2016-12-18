@@ -11,7 +11,7 @@
 
 	> header {
 		// border-bottom: 1px solid hsla(0, 0%, 80%, 0.5);
-		height: @header-height;
+		height: $header-height;
 	}
 
 	button {
@@ -28,7 +28,7 @@
 	> header h1 {
 		font-size: 2rem;
 		font-weight: 800;
-		line-height: @header-height;
+		line-height: $header-height;
 		margin-bottom: 0;
 	}
 
@@ -95,11 +95,11 @@
 }
 
 .sidebar-main {
-	width: @sidebar-width;
+	width: $sidebar-width;
 }
 
 .sidebar-main > header {
-	height: @header-height;
+	height: $header-height;
 }
 
 /*

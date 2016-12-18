@@ -4,17 +4,21 @@
 
 <script>
 
+	import { accounts as account, innopoints } from './../modules'
+
 	export default {
+		
 		ready() {
 			console.log('App is awaiting your command!');
 		},
+		
 		data() {
-			const modules = require('./../modules');
 			return {
 				user: {
-					account: modules.accounts,
-					innopoints: modules.innopoints
+					account,
+					innopoints,
 				},
+				
 				query: null
 			}
 		},
