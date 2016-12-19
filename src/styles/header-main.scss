@@ -1,12 +1,13 @@
 .header-main {
 	background: hsla(0, 0%, 100%, 1);
-	border-bottom: 1px solid hsla(0, 0, 0, .15);
+	box-shadow: inset 0 -1px 0 0 hsla(0, 0%, 0%, .12);
 	min-height: $header-height;
 	width: 100%;
 	z-index: 100;
 }
 
 .header-main .header-title {
+	font-size: 1.5rem;
 	line-height: 4rem;
 	margin: 0 1rem;
 	float: left;
@@ -25,17 +26,23 @@
 // }
 
 .header-main .search-group {
+	align-items: center;
+	display: flex;
 	float: right;
-	padding: 13/16rem;
+	height: $header-height;
+	padding: 0 1rem;
 	width: $sidebar-width;
-}
 
-.header-main .search-group button {
-	padding: 6/16rem 1rem !important;
-}
+	> input {
+		height: 2rem;
+	}
 
-.header-main .search-group .emojione {
-	height: 1.5rem;
+	button {
+		align-items: center;
+		display: flex;
+		height: 2rem;
+		padding: 0 1rem;
+	}
 }
 
 .header-main button {
