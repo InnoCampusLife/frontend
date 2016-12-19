@@ -62,6 +62,7 @@
     "tether": "file:node_modules\\tether",
     "vue": "^1.0.26",
     "vue-animated-list": "^1.0.2",
+    "vue-material": "^0.5.1",
     "vue-router": "^0.7.13",
     "vue-typeahead": "^2.3.0",
     "vue-validator": "^2.1.7",

@@ -12,7 +12,7 @@
 					input#search.form-control(type='search', placeholder='Search Store', v-model='$router.app.query',)
 					span.input-group-btn
 						button.btn.btn-secondary(type='button') 
-							span {{{ ':mag:' | emojify }}}
+							i.material-icons search
 				ul.header-nav
 					li
 						button.btn.btn-outline-primary(v-link="{ name: 'orders', params: { username: user.account.username, filter: 'all' } }") 
@@ -24,7 +24,7 @@
 					input#search.form-control(type='search', placeholder='Search Orders', v-model='$router.app.query',)
 					span.input-group-btn
 						button.btn.btn-secondary(type='button') 
-							span {{{ ':mag:' | emojify }}}
+							i.material-icons search
 				ul.header-nav
 					li
 						button.btn.btn-outline-primary(v-link="{ name: 'store' }") 

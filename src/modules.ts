@@ -185,11 +185,8 @@ const modules = {
 		},
 
 		exists(args, successCallback, errorCallback) {
-			if (args.id && args.username) {
-				errorCallback('Username and ID parameters are mutually exclusive!')
-			}
 			const type = "GET",
-			url  = this.url + this.token + "/exists?" + (args.id ? "id=" + args.id : "username=" + args.username),
+			url  = this.url + this.token + "/exists?" + 'token=' + this.token + '&' + (args.id ? "id=" + args.id : "username=" + args.username),
 			data = '';
 
 			ajax(type, url, data, successCallback, errorCallback);

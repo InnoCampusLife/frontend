@@ -8,7 +8,7 @@ import newRouter from './router-config'
 const  app = require('./views/app.vue')
 
 const VueValidator = require('vue-validator')
-const VueAnimatedList = require('vue-animated-list')
+Vue.use(VueValidator)
 
 const styles = require('./styles/main.scss')
 const polyfills = require('./polyfills')
@@ -19,8 +19,6 @@ Vue.filter('emojify', (value) => {
   return emojione.toImage(value)
 })
 
-Vue.use(VueAnimatedList)
-Vue.use(VueValidator)
 Vue.use(VueRouter)
 
 const router = newRouter(new VueRouter({

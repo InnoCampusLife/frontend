@@ -65,13 +65,14 @@
 							template(v-else='') Participant
 						ul.list-group
 							li.list-group-item.py-1(v-for='u of current.users')
+								
 								.clearfix.mb-1(v-show='current.users.length > 1')
 									button.close(type='button', aria-label='Close', @click='current_users_remove($index)', v-if='current.users.length > 1')
 										span(aria-hidden='true') &times;
 									span.text-muted(v-show='current.users.length > 1') {{ $index + 1 }}
+								
 								.form-group.row.flex-items-sm-middle(
-									v-bind:class="{ 'has-danger': $IPsAppValid.username.errors !== undefined }"
-								)
+									v-bind:class="{ 'has-danger': $IPsAppValid.username.errors !== undefined }")
 									label.form-control-label.col-sm.col-form-label(for='username_{{ $index }}') Username
 										span(v-show='$IPsAppValid.username.dirty')
 											span(v-if="$IPsAppValid.username.minlength")  is too short
@@ -88,23 +89,35 @@
 											v-model="u.username"
 											v-validate:username="{ minlength: 3, maxlength: 16 }",
 										)
+								
 								.form-group.row.flex-items-sm-middle
 									label.form-control-label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
 									.col-sm
-										select(class="form-control", :disabled="!categorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
+										select(class="form-control", :disabled="!isCategorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
 											option(value='', selected='') Choose Activity
 											option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
+								
 								.form-group.row.flex-items-sm-middle
 									label.form-control-label.col-sm.col-form-label(for='amount_{{ $index }}') Hours
 									.col-sm
-										input.form-control(:disabled='!(!showAmount(u.activity_id) && activitySelected)', id='amount_{{ $index }}', type='number', value='1', min='1', max='1000', v-model='u.amount')
+										input.form-control(
+											:disabled='!isTemporaryActivity(u.activity_id)', 
+											id='amount_{{ $index }}', 
+											type='number', 
+											value="1", 
+											min='1', 
+											max='10000', 
+											v-model='u.amount')
+								
 								.form-group.row.flex-items-sm-middle.mb-0
 									label.form-control-label.col-sm.col-form-label Innopoints
 									.col-sm
 										input.form-control(type='number', value='0123456789', readonly='')
+						
 						.clearfix.mt-1
 							button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
 							button.btn.btn-danger.float-xs-right(type='button', @click='current_users_count_clear', v-if='current.users.length > 1') &times; Clear
+					
 					.card-block
 						label(for='upload')
 							h4 Files
@@ -136,9 +149,9 @@
 								h4 Comment
 							textarea#comment.form-control(placeholder='Write a comment', v-model='current.comment', rows='6')
 					.card-block
-						button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!activitySelected', type='button', @click='send') Send
-						p.mt-1.mb-0.text-xs-center(v-show='!categorySelected') Select Category
-						p.mt-1.mb-0.text-xs-center(v-show='categorySelected && !activitySelected') Select Activities
+						button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!isActivitySelected', type='button', @click='send') Send
+						p.mt-1.mb-0.text-xs-center(v-show='!isCategorySelected') Select Category
+						p.mt-1.mb-0.text-xs-center(v-show='isCategorySelected && !isActivitySelected') Select Activities
 
 </template>
 
@@ -147,13 +160,14 @@
 	export default {
 
 		data() {
-			var user = this.$root.user
+			const user = this.$root.user
+			
 			return {
 				user,
 				categories: [],
 				activities: [],
-				activitySelected: false,
-				categorySelected: false,
+				isActivitySelected: false,
+				isCategorySelected: false,
 				current: {
 					application: {},
 					get isPersonal() { 
@@ -173,7 +187,19 @@
 			}
 		},
 
+		computed: {
+			innopoints() {
+
+			}
+		},
+
 		methods: {
+
+			isTemporaryActivity(id) {
+				const activity = this.activities.find(a => a.id == id);
+				console.log(activity)
+				return activity && activity.type != 'permanent';
+			},
 			
 			current_users_count_inc() {
 				this.current.users.push({
@@ -197,9 +223,9 @@
 			
 			username_changed(e) {
 				const users = this.current.users;
-				this.user.account.getBio({ 
-						username: e.target.value 
-					},
+
+				this.user.account.getBio(
+					{ username: e.target.value },
 					(result) => {
 						users[e.target.dataset.index].user_id = result.id;
 					},
@@ -208,10 +234,30 @@
 						// TODO
 					}
 				)
+
+				// this.user.account.exists(
+				// 	{ username: e.target.value },
+				// 	(result) => {
+				// 		if (result) {
+				// 			this.user.account.getBio(
+				// 				{ username: e.target.value },
+				// 				(result) => {
+				// 					users[e.target.dataset.index].user_id = result.id;
+				// 				},
+				// 				(error) => {
+				// 					console.log("Something went wrong while getting user ID.");
+				// 				})
+				// 		} else {
+				// 			console.log("Incorrect username.")
+				// 		}
+				// 	},
+				// 	(error) => {
+				// 		console.log("Something went wrong while checking username.")
+				// 	})
 			},
 
 			category_changed(e) {
-				this.categorySelected = this.activitySelected = false;
+				this.isCategorySelected = this.isActivitySelected = false;
 				let self = this
 				this.user.innopoints.api.getActivities({
 					cat_id: self.current.category_id,
@@ -224,16 +270,16 @@
 				this.current.users.forEach((_user) => {
 					if (_user.activity_id !== '') counter++;
 				});
-				this.activitySelected = (counter == this.current.users.length);
+				this.isActivitySelected = (counter == this.current.users.length);
 			},
 			
 			setActivities(result) {
 				this.activities = result;
-				this.categorySelected = true;
+				this.isCategorySelected = true;
 			},
 			
 			uploaded(e) {
-				this.current.files = e.target.files
+				this.current.files = Object.keys(e.target.files).map(key => e.target.files[key])
 			},
 
 			removeFile(index) {
@@ -245,7 +291,7 @@
 				console.log(this.current)
 
 				send.textContent = "Sending...";
-				this.current.application.type = this.current.isPersonal ? "personal": "group";
+				this.current.application.type = this.current.isPersonal ? "personal" : "group";
 				// TODO - catch bugs and exceptions
 				this.current.application.work = [];
 
@@ -257,7 +303,7 @@
 
 					that.current.application.work.push({
 						activity_id: activity_id,
-						amount: amount,
+						amount: this.isTemporaryActivity(activity_id) ? amount : null,
 						actor: cur_user.user_id
 					});
 
@@ -270,22 +316,17 @@
 				this.user.innopoints.api.user.application.create(
 					this.current.application,
 					this.sendSuccess,
-					this.error
-				);
+					this.error)
 			},
 
 			sendSuccess(result) {
 				send.textContent = "Sent";
+				this.$router.go('/innopoints/' + this.$root.user.account.username + '/applications/in_process')
 			},
 
 			error(error) {
 				alert('Unsuccessful: ' + error);
 				send.textContent = "Failed to Send";
-			},
-
-			showAmount(id) {
-				var temp = this.activities.find(x => x.id == id);
-				return temp && temp.type != 'permanent';
 			},
 
 			// getAllUsers() {
