@@ -3,10 +3,7 @@
 	aside.sidebar-main
 		header
 			h1 
-				a(href="", v-link="'/'")
-					span U
-					span I
-					span S
+				a(href="", v-link="'/'") UIS
 		ul.menu
 			li
 				a(href="", v-link="{ name: 'profile', params: { username: user.account.username } }")
