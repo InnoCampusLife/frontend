@@ -13,11 +13,6 @@
 	}
 	*/
 
-	/* Gotta fix this */
-	.card {
-		text-align: left;
-	}
-
 	#upload {
 		display: none;
 	}
@@ -31,7 +26,7 @@
 	}
 
 	input[readonly] {
-		color: hsla(0, 0%, 0%, 0.8);
+		color: hsla(0, 0%, 0%, 0.87);
 		background: hsl(0, 0%, 100%);
 		border-color: hsl(0, 0%, 100%);
 	}
@@ -55,7 +50,9 @@
 							label.form-control-label.col-sm.col-form-label.col-form-label-lg(for='activity_category')
 								h4 Category
 							.col-sm
-								select#activity_category.form-control.form-control-lg(v-model='current.category_id', @change='category_changed')
+								select#activity_category.form-control.form-control-lg(
+									v-model='current.category_id', 
+									@change='category_changed')
 									option(value='blank', selected='') Choose Category
 									option(value='') All
 									option(v-for='c in categories', value='{{ c.id }}') {{ c.title }}
@@ -97,22 +94,26 @@
 											option(value='', selected='') Choose Activity
 											option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
 								
-								.form-group.row.flex-items-sm-middle
-									label.form-control-label.col-sm.col-form-label(for='amount_{{ $index }}') Hours
+								.form-group.row.flex-items-sm-middle(v-show="isTemporaryActivity(u.activity_id)")
+									label.form-control-label.col-sm.col-form-label(for='hours_{{ $index }}') Hours
 									.col-sm
 										input.form-control(
 											:disabled='!isTemporaryActivity(u.activity_id)', 
-											id='amount_{{ $index }}', 
+											id='hours_{{ $index }}', 
 											type='number', 
 											value="1", 
 											min='1', 
-											max='10000', 
+											max='10000',
+											step="0.25",
 											v-model='u.amount')
 								
 								.form-group.row.flex-items-sm-middle.mb-0
 									label.form-control-label.col-sm.col-form-label Innopoints
 									.col-sm
-										input.form-control(type='number', value='0123456789', readonly='')
+										input.form-control(
+											type='number', 
+											:value='innopoints(u.activity_id, u.amount) || 0', 
+											readonly='')
 						
 						.clearfix.mt-1
 							button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
@@ -187,17 +188,21 @@
 			}
 		},
 
-		computed: {
-			innopoints() {
-
-			}
-		},
-
 		methods: {
+
+			innopoints(id, hours) {
+				const activity = this.activities.find(a => a.id == id);
+				if (activity) {
+					if (this.isTemporaryActivity(id) && hours > 0) {
+						return activity.price * hours
+					}
+					return activity.price
+				}
+				return 0
+			},
 
 			isTemporaryActivity(id) {
 				const activity = this.activities.find(a => a.id == id);
-				console.log(activity)
 				return activity && activity.type != 'permanent';
 			},
 			

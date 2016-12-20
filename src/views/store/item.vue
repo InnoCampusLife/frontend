@@ -47,7 +47,7 @@
 					.col-xs.text-xs-right
 						// FIXME: add quantity check here
 						button.btn.btn-outline-primary(
-							:disabled="!(itemSelected || !item.options)",
+							:disabled="!(itemSelected || !item.options) || quantity < 1",
 							type='button', 
 							data-toggle="modal",
 							data-target="#buying-modal-{{ item.id }}",

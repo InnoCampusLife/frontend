@@ -6,12 +6,15 @@ const adminZone = true,
 
 const router_view = { template: '<router-view></router-view>' }
 
-export default router => {
+export default (router) => {
+	
 	router.map({
+		
 		'/login': {
 			component: require('./views/login.vue'),
 			loginPage
 		},
+		
 		'/': {
 			component: require('./views/main.vue'),
 			subRoutes: {
@@ -104,8 +107,9 @@ export default router => {
 				transition.next();
 		}
 	}).redirect({
-		'*':'/',
-		'/innopoints/:username/':'/innopoints/:username/applications/'
+		'*': '/',
+		'/innopoints/:username/': '/innopoints/:username/applications/',
+		'/': '/store',
 	});
 
 	return router;
