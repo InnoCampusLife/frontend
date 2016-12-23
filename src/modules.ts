@@ -14,7 +14,7 @@ const modules = {
 			'student',
 			'moderator'
 		],
-		
+
 		have(role) {
 			return !!(this.roles.indexOf(role.toLowerCase()) > -1);
 		},
@@ -44,7 +44,7 @@ const modules = {
 			const pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
 			return fn + ln + pn;
 		},
-		
+
 		get loggedIn () {
 			return this.storage.get(config.token_name) ? true: false;
 		},
@@ -105,7 +105,7 @@ const modules = {
 				const that = this;
 				const type = "PUT",
 				url  = this.url + modules.accounts.token + '/updatePreferences',
-				data = { 
+				data = {
 					preferences: that
 				};
 
@@ -122,7 +122,7 @@ const modules = {
 		},
 
 		//
-		
+
 		//api
 
 		version: 1,
@@ -130,7 +130,7 @@ const modules = {
 		get url() {	return api_url + "v" + this.version + "/" + this.name + "/"; },
 
 		create(password, email, successCallback, errorCallback) {
-			const 
+			const
 			type = "POST",
 			url  = this.url,
 			data = {
@@ -146,7 +146,7 @@ const modules = {
 		},
 
 		authorize(password, successCallback, errorCallback) {
-			const 
+			const
 			type = "POST",
 			url  = this.url + "auth",
 			data = {
@@ -158,7 +158,7 @@ const modules = {
 		},
 
 		get(successCallback, errorCallback) {
-			const 
+			const
 			type = "GET",
 			url  = this.url + this.token,
 			data = '';
@@ -172,7 +172,7 @@ const modules = {
 			const type = "GET",
 			url  = this.url + this.token + "/listAccounts",
 			data = '';
-			
+
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
@@ -200,17 +200,17 @@ const modules = {
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 	},
-	
+
 	innopoints: {
 		roles: [
 			'student',
 			'admin'
 		],
-	
+
 		have (role) {
 			return !!(this.roles.indexOf(role) > -1);
 		},
-	
+
 		data: {
 			id		: null,
 			amount	: null,
@@ -338,7 +338,7 @@ const modules = {
 
 					ajax(type, url, data, successCallback, errorCallback);
 				},
-				
+
 				getFile(appl_id, file_id, successCallback, errorCallback) {
 					const type = "GET",
 					url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/files/" + file_id,
@@ -381,7 +381,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					update(appl_id, new_params, successCallback, errorCallback) {
 						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -389,7 +389,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					send(appl_id, successCallback, errorCallback) {
 						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + '/approve',
@@ -397,7 +397,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					get(appl_id, successCallback, errorCallback) {
 						const type = "GET",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -405,7 +405,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					delete(appl_id, successCallback, errorCallback) {
 						const type = "DELETE",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id,
@@ -413,7 +413,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					approve(appl_id, successCallback, errorCallback) {
 						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/approve",
@@ -421,7 +421,7 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
 					reject(appl_id, successCallback, errorCallback) {
 						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/reject",
@@ -429,7 +429,15 @@ const modules = {
 
 						ajax(type, url, data, successCallback, errorCallback);
 					},
-					
+
+					to_rework({ appl_id, comment }, successCallback, errorCallback) {
+						const type = "PUT",
+						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
+						data = { comment };
+
+						ajax(type, url, data, successCallback, errorCallback);
+					},
+
 					dismiss(appl_id, successCallback, errorCallback) {
 						const type = "PUT",
 						url  = this.url + modules.accounts.token + "/applications/" + appl_id + "/to_rework",
@@ -438,7 +446,7 @@ const modules = {
 						ajax(type, url, data, successCallback, errorCallback);
 					}
 				},
-				
+
 				applications: {
 					get url() { return modules.innopoints.api.user.url },
 

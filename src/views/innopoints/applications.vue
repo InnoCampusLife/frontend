@@ -4,18 +4,19 @@
 
 <template lang="jade">
 	.container
+
 		p.text-xs-center(v-show="$loadingRouteData") Loading...
 
 		p.text-xs-center(v-show="!applications.length && !$loadingRouteData") Empty
 
 		template(v-if="applications.length")
-			application(v-for="appl in applications | filterBy $root.query in 'type' '_id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1", :application="appl", :user="user", :success="action_success")
+			application(v-for="appl in applications | filterBy $root.query in 'type' 'id' 'comment' 'creation_date' 'author.username' | orderBy 'creation_time' -1", :application="appl", :user="user", :success="action_success")
 </template>
 
 <script>
-	
+
 	export default {
-		
+
 		data() {
 			return {
 				user: this.$root.user,
@@ -26,21 +27,22 @@
 		components: {
 			application: require('./application.vue')
 		},
-		
+
 		methods: {
 			action_success(id, new_status) {
-				let apps = this.applications
-				let app = this.applications.find(a => a.id == id)
+				const apps = this.applications
+				const app = this.applications.find(a => a.id == id)
 				console.log(app)
-				if (this.$route.params.filter === 'all' || this.$route.params.filter == null)
+				if (this.$route.params.filter === 'all' || this.$route.params.filter == null) {
 					app.status = new_status;
-				else
+				} else {
 					apps.splice(apps.indexOf(app), 1)
+				}
 			},
 		},
-		
+
 		route: {
-			data (transition) {
+			data(transition) {
 				this.applications = [];
 				const params = this.$route.params;
 				const user = this.user;
@@ -54,8 +56,9 @@
 						console.log("called appl get");
 						const _length = result.applications.length;
 						result.applications.forEach((res) => {
-							res.creation_time = res.creation_date;
-							res.creation_date = new Date(res.creation_time * 1000).toLocaleString('ru');
+							const timestamp = res.creation_date * 1000;
+							res.creation_time = new Date(timestamp).toLocaleTimeString('ru');
+							res.creation_date = new Date(timestamp).toLocaleDateString('ru');
 						});
 					}
 					transition.next({
@@ -63,7 +66,7 @@
 					});
 				};
 
-				user.innopoints.data.update(result => {
+				user.innopoints.data.update((result) => {
 					console.log(user.innopoints.data);
 					console.log(result);
 					user.innopoints.api.user.applications.get({
