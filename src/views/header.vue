@@ -1,5 +1,5 @@
 <template lang="jade">
-	header.header-main.clearfix
+	header.header-main
 		// .hidden-md-up.sidebar-show
 		// 	button.btn.btn-outline-secondary()
 		// 		span {{{':hamburger:' | emojify}}}
@@ -8,10 +8,10 @@
 
 <script>
 	export default {
-		
+
 		data() {
 			return {
-				
+
 			}
 		},
 	}

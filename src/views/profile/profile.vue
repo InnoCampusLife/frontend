@@ -11,7 +11,7 @@
 				.col-sm.text-sm-right
 					p Role
 				.col-sm
-					p.font-weight-bold {{ user.role }}
+					p.font-weight-bold {{ user.role | capitalize }}
 			.row
 				.col-sm.text-sm-right
 					p First Name
@@ -37,38 +37,41 @@
 
 <script>
 
-	module.exports =  {
-		data: function () {
+	export default  {
+
+		data() {
 			return {
 				user: {}
 			}
 		},
-		route: {
-			data : function (transition) {
-				console.log("Called get in user");
 
-				var username = this.$route.params.username;
-				var user = this.$root.user.account;
+		route: {
+
+			data(transition) {
+				console.log("Called get in user")
+
+				const username = this.$route.params.username
+				const user = this.$root.user.account
 
 				if (user.username != username) {
-					console.log("called getBio: " + username);
-					user.getBio({username: username},
+					console.log("Called getBio for " + username)
+					user.getBio({ username },
 						(result) => {
-							console.log(result);
+							console.log(result)
 							transition.next({
 								user: result
-							});
+							})
 						}
-					);
+					)
+				} else {
+					if (user.id) {
+						transition.next({ user })
+					} else {
+						user.exists((result) => {
+							transition.next({ user })
+						})
+					}
 				}
-				else {
-					if (user.id)
-						transition.next({user: user});
-					else
-						user.exists(result => {
-							transition.next({user: user});
-						});
-				}		
 			}
 		}
 	}

@@ -17,7 +17,7 @@ $main-font-family: Rubik, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
 
 body {
-	background-color: hsl(0, 0%, 94.5%);	
+	background-color: hsl(0, 0%, 94.5%);
 	color: hsla(0, 0%, 0%, 0.87);
 	font-family: $main-font-family;
 	font-size: 1em;
@@ -84,7 +84,7 @@ select.form-control {
 	overflow: auto;
 
 	> .wrap {
-		margin-bottom: -$footer-height;	
+		margin-bottom: -$footer-height;
 		min-height: 100%;
 		padding-top: 1rem;
 	}
@@ -135,7 +135,7 @@ footer {
 }
 
 // Medium devices (tablets, 768px and up)
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
 
 }
 
@@ -154,20 +154,20 @@ footer {
 @media (max-width: 575px) {  }
 
 // Small devices (landscape phones, less than 768px)
-@media (max-width: 767px) { 
-	
+@media (max-width: 767px) {
+}
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 991px) {
 	// FIXME
 	main {
 		margin-left: 0;
 	}
-	
+
 	.sidebar-main {
 		margin-left: -$sidebar-width;
 	}
 }
-
-// Medium devices (tablets, less than 992px)
-@media (max-width: 991px) {  }
 
 // Large devices (desktops, less than 1200px)
 @media (max-width: 1199px) {  }
