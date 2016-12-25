@@ -17,7 +17,7 @@ var router = new VueRouter({
 		},
 		{
 			path: '/',
-			component: require('./views/main.vue'),
+			component: require('./views/app.vue'),
 			meta: { authorizedZone },
 			children: [
 				{

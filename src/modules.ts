@@ -211,13 +211,11 @@ const modules = {
 			amount	: null,
 			role 	: null,
 
-			// cart: [],
-
-			get isStudent () {
+			get isStudent() {
 				return !!this.is('student');
 			},
 
-			get isAdmin () {
+			get isAdmin() {
 				return !!this.is('admin');
 			},
 
