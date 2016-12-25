@@ -111,19 +111,15 @@
 							@keyup.enter="login",
 						) Log In?
 
-			footer-main
+			footer.footer-main
+				p.text-muted 2016 © InnoDev
 
 </template>
 
 <script>
-
-	import footerMain from './footer.vue';
-
 	export default {
 
-		components: {
-			footerMain,
-		},
+		name: 'login',
 
 		data() {
 			return {

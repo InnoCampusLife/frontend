@@ -10,33 +10,39 @@
 
 			ul.header-nav
 				template(v-if="$route.path.includes('applications')")
-					li(v-if="!user.innopoints.data.isAdmin")
-						router-link.btn-outline-primary(to="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }")
-							i.material-icons description
-							span All
+					// li(v-if="!user.innopoints.data.isAdmin")
+					// 	router-link.btn-outline-primary(
+					//		:to="{ name: 'applications',	params: { username: user.account.username, filter: 'all' } }")
+					// 		i.material-icons description
+					// 		span All
 					li
-						router-link.btn-outline-primary(to="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }")
+						router-link.btn-outline-primary(
+							:to="{ name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }")
 							i.material-icons inbox
 							span In&nbsp;Process
 					li
-						router-link.btn-outline-danger(to="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }")
+						router-link.btn-outline-danger(
+							:to="{ name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }")
 							i.material-icons thumb_down
 							span Rejected
 					li
-						router-link.btn-outline-warning(to="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }")
+						router-link.btn-outline-warning(
+							:to="{ name: 'applications',	params: { username: user.account.username, filter: 'rework' } }")
 							i.material-icons refresh
 							span In&nbsp;Rework
 					li
-						router-link.btn-outline-success(to="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }")
+						router-link.btn-outline-success(
+							:to="{ name: 'applications',	params: { username: user.account.username, filter: 'approved' } }")
 							i.material-icons thumb_up
 							span Approved
 				template(v-else)
-				li
-					router-link.btn-outline-primary(to="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
-						i.material-icons library_books
-						span Applications
+					li
+						router-link.btn-outline-primary(
+							:to="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
+							i.material-icons library_books
+							span Applications
 				li.float-xs-right
-					router-link.btn-outline-info(to="{ name: 'apply', params: { username: user.account.username } }")
+					router-link.btn-outline-info(:to="{ name: 'apply', params: { username: user.account.username } }")
 						i.material-icons add
 						span Apply
 </template>
