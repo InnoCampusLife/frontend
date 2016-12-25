@@ -38,7 +38,7 @@
 	import { capitalize } from 'lodash'
 
 	export default  {
-		name: 'profile-profile',
+		name: 'accounts-account',
 
 		data() {
 			return {
