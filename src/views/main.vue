@@ -8,6 +8,8 @@
 	import sidebar from './sidebar.vue'
 
 	export default {
+		name: 'main',
+
 		components: {
 			sidebar,
 		},

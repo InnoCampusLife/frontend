@@ -37,6 +37,7 @@
 						console.log('Items: ', result)
 					}
 				})
+				this.$root.user.account.update()
 			}
 		},
 	}
