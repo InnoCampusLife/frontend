@@ -11,7 +11,7 @@ import * as VueRouter from 'vue-router'
 
 import router from './router'
 
-const app = require('./views/app.vue')
+const main = require('./views/main.vue')
 
 const styles = require('./styles/main.scss')
 const polyfills = require('./polyfills')
@@ -26,6 +26,6 @@ Vue.use(VueRouter)
 
 const vm = new Vue({
 	router,
-	...app,
-	el: 'app',
+	...main,
+	el: 'main',
 })

@@ -1,54 +1,25 @@
-<template lang="jade">
-	div
-		sidebar
-		router-view
+<template>
+	<router-view></router-view>
 </template>
 
 <script>
-	import sidebar from './sidebar.vue'
+	import { accounts as account, innopoints } from './../modules'
 
 	export default {
 		name: 'main',
 
-		components: {
-			sidebar,
+		mounted() {
+			console.log('App is mounted.');
 		},
 
-		created() {
-			this.fetchData()
-		},
-
-		watch: {
-			'$route': 'fetchData'
-		},
-
-		methods: {
-			fetchData() {
-				console.log("Fetching data in main.");
-
-				const router = this.$router;
-				const user = this.$root.user;
-				user.account.update(
-					(result) => {
-						user.innopoints.data.update(
-							(result) => {},
-							(error) => {
-								user.innopoints.api.user.create(
-									(result) => {
-										user.innopoints.data.update(
-											(result) => {}
-										)
-									}
-								)
-							}
-						)
-					},
-					(error) => {
-						console.log("Fetching error.");
-						router.push('/login');
-					}
-				)
-			},
+		data() {
+			return {
+				user: {
+					account,
+					innopoints,
+				},
+				query: null
+			}
 		},
 	}
 </script>

@@ -1,5 +1,4 @@
 <template lang="jade">
-
 	aside.sidebar-main
 		header
 			h1
@@ -27,7 +26,6 @@
 			a(href="", @click='logout')
 				i.material-icons arrow_back
 				span Log Out
-
 </template>
 
 <script>

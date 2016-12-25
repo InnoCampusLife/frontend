@@ -1,5 +1,5 @@
 <template lang="jade">
-	main.main-main
+	section.main-main
 		header.header-main
 			slot(name='header')
 		.content-main
