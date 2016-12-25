@@ -19,7 +19,7 @@ $monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospac
 body {
 	background-color: hsl(0, 0%, 94.5%);
 	color: hsla(0, 0%, 0%, 0.87);
-	font-family: $main-font-family;
+	font-family: $main-font-family !important;
 	font-size: 1em;
 }
 

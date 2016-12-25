@@ -16,6 +16,9 @@ const main = require('./views/main.vue')
 const styles = require('./styles/main.scss')
 const polyfills = require('./polyfills')
 
+import VueMaterial = require('vue-material')
+Vue.use(VueMaterial)
+
 // FIXME: Move this to some other file
 const emojione = require('emojione')
 Vue.filter('emojify', (value) => {

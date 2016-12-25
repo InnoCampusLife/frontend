@@ -1,5 +1,5 @@
 <template lang="jade">
-	content-view
+	app-view
 		div(slot='header')
 
 			.search-group.input-group(v-show="$route.path.includes('applications')")
@@ -9,7 +9,7 @@
 						i.material-icons search
 
 			ul.header-nav
-				template(v-if="$route.path.includes('applications')")
+				template(v-if="$route.path.includes('applications') && user.account.username")
 					// li(v-if="!user.innopoints.data.isAdmin")
 					// 	router-link.btn-outline-primary(
 					//		:to="{ name: 'applications',	params: { username: user.account.username, filter: 'all' } }")
@@ -35,13 +35,13 @@
 							:to="{ name: 'applications',	params: { username: user.account.username, filter: 'approved' } }")
 							i.material-icons thumb_up
 							span Approved
-				template(v-else)
+				template(v-else-if="user.account.username")
 					li
 						router-link.btn-outline-primary(
 							:to="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
 							i.material-icons library_books
 							span Applications
-				li.float-xs-right
+				li.float-xs-right(v-if="user.account.username")
 					router-link.btn-outline-info(:to="{ name: 'apply', params: { username: user.account.username } }")
 						i.material-icons add
 						span Apply
@@ -49,7 +49,7 @@
 
 <script>
 
-	import contentView from './../content.vue'
+	import appView from './../app.vue'
 
 	export default {
 		name: 'innopoints-main',
@@ -62,7 +62,7 @@
 		},
 
 		components: {
-			contentView
+			appView
 		},
 
 		methods: {

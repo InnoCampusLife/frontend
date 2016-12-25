@@ -1,17 +1,17 @@
 <template lang="jade">
-	content-view
+	app-view
 		div(slot='header')
 				h1.header-title Accounts
 </template>
 
 <script>
-	import contentView from './../content.vue';
+	import appView from './../app.vue';
 
 	export default {
 		name: 'accounts-main',
 
 		components: {
-			contentView
+			appView
 		}
 	}
 </script>

@@ -49,8 +49,8 @@
 							select#activity_category.form-control.form-control-lg(
 								v-model='current.category_id',
 								@change='category_changed')
-								option(value='blank') Choose Category
-								option(v-for='c in categories', :value="c.id") {{ c.title }}
+								option(value='blank') Select Category
+								option(v-for='c in categories', :value="c.id") {{ c.title | startCase }}
 				.card-block
 					h4.mb-1
 						template(v-if='current.users.length > 1') Participants
@@ -86,7 +86,7 @@
 										class="activity",
 										v-model="u.activity_id",
 										@change="activity_changed")
-										option(value='') Choose Activity
+										option(value='') Select Activity
 										option(v-for='a in activities', :value="a.id") {{ a.title }}
 
 							.form-group.row.flex-items-sm-middle(v-show="isTemporaryActivity(u.activity_id)")
@@ -151,6 +151,8 @@
 </template>
 
 <script>
+	import { startCase } from 'lodash'
+
 	export default {
 		name: 'innopoints-apply',
 
@@ -182,6 +184,10 @@
 					comment: '',
 				},
 			}
+		},
+
+		filters: {
+			startCase,
 		},
 
 		created() {

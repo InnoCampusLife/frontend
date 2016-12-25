@@ -8,9 +8,9 @@
 
 			h2.card-title
 				span.tag.tag-default.float-xs-left.mr-1(:class="'tag-' + styleBasedOnStatus")
-					span {{ application.status.split('_').join(' ')[0].toUpperCase() + application.status.split('_').join(' ').slice(1) }}
+					span {{ application.status | startCase }}
 				span.text-muted  {{ '#' + application.id }} in
-				span  {{ application.work[0].activity.category.title }}
+				span  {{ application.work[0].activity.category.title | startCase }}
 				small.text-muted  by <a :href="'/profile/' + application.author.username" :title="application.author.username">{{ application.author.username }}</a>
 					small.text-muted  on {{ application.creation_date }} at {{ application.creation_time }}
 
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+	import { startCase } from 'lodash'
 
 	export default {
 		name: 'innopoints-application',
@@ -93,6 +94,10 @@
 					default: return 'secondary'
 				}
 			}
+		},
+
+		filters: {
+			startCase,
 		},
 
 		methods: {
