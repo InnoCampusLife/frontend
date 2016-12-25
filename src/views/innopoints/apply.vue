@@ -36,10 +36,8 @@
 <template lang="jade">
 
 	.container
-		// While loading
-		p(v-show='$loadingRouteData') Loading&mldr;
-		// When loaded
-		.card(v-show='!$loadingRouteData')
+		p(v-show='isLoading') Loading&mldr;
+		.card(v-show="!isLoading")
 			validator(name='IPsAppValid')
 				form(novalidate)#ip_request
 					.card-block
@@ -51,7 +49,7 @@
 								h4 Category
 							.col-sm
 								select#activity_category.form-control.form-control-lg(
-									v-model='current.category_id', 
+									v-model='current.category_id',
 									@change='category_changed')
 									option(value='blank', selected='') Choose Category
 									option(value='') All
@@ -61,64 +59,69 @@
 							template(v-if='current.users.length > 1') Participants
 							template(v-else='') Participant
 						ul.list-group
-							li.list-group-item.py-1(v-for='u of current.users')
-								
+							li.list-group-item.py-1(v-for='(u, index) of current.users')
+
 								.clearfix.mb-1(v-show='current.users.length > 1')
-									button.close(type='button', aria-label='Close', @click='current_users_remove($index)', v-if='current.users.length > 1')
+									button.close(type='button', aria-label='Close', @click='current_users_remove(index)', v-if='current.users.length > 1')
 										span(aria-hidden='true') &times;
-									span.text-muted(v-show='current.users.length > 1') {{ $index + 1 }}
-								
+									span.text-muted(v-show='current.users.length > 1') {{ index + 1 }}
+
 								.form-group.row.flex-items-sm-middle(
 									v-bind:class="{ 'has-danger': $IPsAppValid.username.errors !== undefined }")
-									label.form-control-label.col-sm.col-form-label(for='username_{{ $index }}') Username
+									label.form-control-label.col-sm.col-form-label(for='username_{{ index }}') Username
 										span(v-show='$IPsAppValid.username.dirty')
 											span(v-if="$IPsAppValid.username.minlength")  is too short
 											span(v-if="$IPsAppValid.username.maxlength")  is too long
 									.col-sm
 										input(
 											class="form-control",
-											id="username_{{ $index }}",
-											data-index="{{ $index }}",
+											:id="'username_' + index",
+											:data-index="index",
 											type="text",
 											placeholder="username",
 											@input="username_changed",
-											value="{{ $index || user.innopoints.data.isAdmin ? '': user.account.username }}",
-											v-model="u.username"
-											v-validate:username="{ minlength: 3, maxlength: 16 }",
+											:value="index || user.innopoints.data.isAdmin ? '': user.account.username",
+											v-model="u.username",
 										)
-								
+
 								.form-group.row.flex-items-sm-middle
-									label.form-control-label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
+									label.form-control-label.col-sm.col-form-label(for='activity_{{ index }}') Activity
 									.col-sm
-										select(class="form-control", :disabled="!isCategorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
+										select(
+											class="form-control",
+											:disabled="!isCategorySelected || !u.username",
+											:id="'activity_' + index",
+											class="activity",
+											v-model="u.activity_id",
+											@change="activity_changed")
 											option(value='', selected='') Choose Activity
 											option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
-								
+
 								.form-group.row.flex-items-sm-middle(v-show="isTemporaryActivity(u.activity_id)")
-									label.form-control-label.col-sm.col-form-label(for='hours_{{ $index }}') Hours
+									label.form-control-label.col-sm.col-form-label(for='hours_{{ index }}') Hours
 									.col-sm
 										input.form-control(
-											:disabled='!isTemporaryActivity(u.activity_id)', 
-											id='hours_{{ $index }}', 
-											type='number', 
-											value="1", 
-											min='1', 
+											:disabled='!isTemporaryActivity(u.activity_id)',
+											id='hours_{{ index }}',
+											type='number',
+											value="1",
+											min='1',
 											max='10000',
 											step="0.25",
 											v-model='u.amount')
-								
+
 								.form-group.row.flex-items-sm-middle.mb-0
 									label.form-control-label.col-sm.col-form-label Innopoints
 									.col-sm
 										input.form-control(
-											type='number', 
-											:value='innopoints(u.activity_id, u.amount) || 0', 
+											type='number',
+											:value='innopoints(u.activity_id, u.amount) || 0',
 											readonly='')
-						
+
 						.clearfix.mt-1
 							button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
 							button.btn.btn-danger.float-xs-right(type='button', @click='current_users_count_clear', v-if='current.users.length > 1') &times; Clear
-					
+
 					.card-block
 						label(for='upload')
 							h4 Files
@@ -132,13 +135,13 @@
 										th.text-xs-center Size
 										th.text-xs-center Remove
 								tbody
-									tr(v-for='f in current.files')
-										th(scope='row') {{ $index + 1 }}
+									tr(v-for='(f, index) in current.files')
+										th(scope='row') {{ index + 1 }}
 										td {{ f.name }}
 										td {{ f.type }}
 										td.text-xs-right {{ f.size }} KB
 										td.text-xs-center.py-0
-											button.close.float-xs-none(type='button', aria-label='Remove File', @click='removeFile($index)')
+											button.close.float-xs-none(type='button', aria-label='Remove File', @click='removeFile(index)')
 												span(aria-hidden='true') &times;
 						.clearfix
 							button.btn.btn-success.float-xs-left(type='button', onclick='upload.click()') &plus; Add Files
@@ -157,13 +160,14 @@
 </template>
 
 <script>
-
 	export default {
+		name: 'innopoints-apply',
 
 		data() {
 			const user = this.$root.user
-			
 			return {
+				isLoading: false,
+				error: null,
 				user,
 				categories: [],
 				activities: [],
@@ -171,8 +175,8 @@
 				isCategorySelected: false,
 				current: {
 					application: {},
-					get isPersonal() { 
-						return this.users.length == 1 && this.users[0].user_id == user.account.id && !user.account.isModerator 
+					get isPersonal() {
+						return this.users.length == 1 && this.users[0].user_id == user.account.id && !user.account.isModerator
 					},
 					category_id: 0,
 					users: [
@@ -188,7 +192,30 @@
 			}
 		},
 
+		created() {
+			this.fetchData()
+		},
+
+		watch: {
+			'$route': 'fetchData'
+		},
+
 		methods: {
+			fetchData() {
+				console.log('Fetching data.');
+				this.isLoading = true
+
+				const self = this
+		    const user = this.$router.app.user;
+		    user.account.update((result) => {
+					user.innopoints.api.getCategories({
+						successCallback: (result) => {
+							self.isLoading = false
+							self.categories = result
+						}
+					})
+				})
+			},
 
 			innopoints(id, hours) {
 				const activity = this.activities.find(a => a.id == id);
@@ -205,7 +232,7 @@
 				const activity = this.activities.find(a => a.id == id);
 				return activity && activity.type != 'permanent';
 			},
-			
+
 			current_users_count_inc() {
 				this.current.users.push({
 					user_id: null,
@@ -214,7 +241,7 @@
 				});
 				this.activity_changed();
 			},
-			
+
 			current_users_count_clear() {
 				this.current.users.splice(1, this.current.users.length - 1);
 				this.activity_changed();
@@ -225,7 +252,7 @@
 				this.activity_changed()
 				console.log(this.current.users)
 			},
-			
+
 			username_changed(e) {
 				const users = this.current.users;
 
@@ -266,10 +293,10 @@
 				let self = this
 				this.user.innopoints.api.getActivities({
 					cat_id: self.current.category_id,
-					successCallback: self.setActivities
+					successCallback: self.setActivities,
 				})
 			},
-			
+
 			activity_changed(e) {
 				let counter = 0;
 				this.current.users.forEach((_user) => {
@@ -277,12 +304,12 @@
 				});
 				this.isActivitySelected = (counter == this.current.users.length);
 			},
-			
+
 			setActivities(result) {
 				this.activities = result;
 				this.isCategorySelected = true;
 			},
-			
+
 			uploaded(e) {
 				this.current.files = Object.keys(e.target.files).map(key => e.target.files[key])
 			},
@@ -290,7 +317,7 @@
 			removeFile(index) {
 				this.current.files.splice(index, 1)
 			},
-			
+
 			send(e) {
 
 				console.log(this.current)
@@ -317,7 +344,7 @@
 
 				this.current.application.comment = this.current.comment;
 				this.current.application.files = this.current.files;
-				
+
 				this.user.innopoints.api.user.application.create(
 					this.current.application,
 					this.sendSuccess,
@@ -326,7 +353,7 @@
 
 			sendSuccess(result) {
 				send.textContent = "Sent";
-				this.$router.go('/innopoints/' + this.$root.user.account.username + '/applications/in_process')
+				this.$router.push('/innopoints/' + this.$root.user.account.username + '/applications/in_process')
 			},
 
 			error(error) {
@@ -345,21 +372,5 @@
 			// 	console.log(usernames)
 			// }
 		},
-
-		route: {
-			data(transition) {
-		    console.log('Сalling GET for Innopoints');
-		    let user = this.$router.app.user;
-		    this.$router.app.user.account.update(result => {
-					user.innopoints.api.getCategories({
-						successCallback: result => {
-							transition.next({
-								categories: result,
-							})
-						}
-					})
-				})
-			}
-		}
 	}
 </script>

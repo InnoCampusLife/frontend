@@ -4,8 +4,8 @@ import storage from './storage'
 
 const api_url = config.server.api_url;
 
-const testAccounts = require('entry-dir!!./modules/modules.config.js');
-console.log(testAccounts);
+// const testAccounts = require('entry-dir!!./modules/modules.config.js');
+// console.log(testAccounts);
 
 const modules = {
 	accounts: {
@@ -38,26 +38,26 @@ const modules = {
 			this.storage.set(config.token_name, value);
 		},
 
-		get fullName () {
+		get fullName() {
 			const ln = (!!this.lastName 	? 		this.lastName + ' ': '');
 			const fn = (!!this.firstName 	? 		this.firstName 	 	: '');
 			const pn = (!!this.patronymic	? ' ' + this.patronymic 	: '');
 			return fn + ln + pn;
 		},
 
-		get loggedIn () {
+		get loggedIn() {
 			return this.storage.get(config.token_name) ? true: false;
 		},
 
-		get isGhost () {
+		get isGhost() {
 			return !!this.is('ghost');
 		},
 
-		get isStudent () {
+		get isStudent() {
 			return !!this.is('student');
 		},
 
-		get isModerator () {
+		get isModerator() {
 			return !!this.is('moderator');
 		},
 
@@ -88,13 +88,13 @@ const modules = {
 		},
 
 		update(successCallback, errorCallback) {
-			const that = this;
-			this.get(result => {
-					that.set(result);
+			const self = this;
+			this.get((result) => {
+					console.log('Called update with result: ', result)
+					self.set(result);
 					if (successCallback) successCallback(result);
 				},
-				errorCallback
-			);
+				errorCallback)
 		},
 
 		storage,
@@ -120,10 +120,6 @@ const modules = {
 				ajax(type, url, data, successCallback, errorCallback);
 			}
 		},
-
-		//
-
-		//api
 
 		version: 1,
 		name: "accounts",
@@ -158,15 +154,14 @@ const modules = {
 		},
 
 		get(successCallback, errorCallback) {
-			const
-			type = "GET",
-			url  = this.url + this.token,
-			data = '';
+			const type = "GET"
+			const url  = this.url + this.token
+			const data = ''
 
 			ajax(type, url, data, successCallback, errorCallback);
 		},
 
-		///MODER METHODS
+		// Moderator methods
 
 		list(successCallback, errorCallback) {
 			const type = "GET",

@@ -1,7 +1,7 @@
 <template lang="jade">
 	.container
-		p.text-xs-center(v-show='$loadingRouteData') Loading&mldr;
-		.card.card-block(v-show='!$loadingRouteData')
+		p.text-xs-center(v-if="isLoading") Loading&mldr;
+		.card.card-block(v-else-if="user")
 			.row
 				.col-sm.text-sm-right
 					p Username
@@ -32,47 +32,65 @@
 					p Study Group
 				.col-sm
 					p.font-weight-bold {{ user.studyGroup }}
-	router-view
 </template>
 
 <script>
+	import { capitalize } from 'lodash'
 
 	export default  {
+		name: 'profile-profile',
 
 		data() {
 			return {
-				user: {}
+				isLoading: false,
+				user: null,
 			}
 		},
 
-		route: {
+		filters: {
+			capitalize
+		},
 
-			data(transition) {
-				console.log("Called get in user")
+		created() {
+			this.fetchData()
+		},
 
+		watch: {
+			'$route': 'fetchData'
+		},
+
+		methods: {
+			fetchData() {
+				console.log("Fetching data in profile-profile")
+
+				this.isLoading = true
+				this.user = null
+
+				const self = this
 				const username = this.$route.params.username
 				const user = this.$root.user.account
 
 				if (user.username != username) {
-					console.log("Called getBio for " + username)
+					console.log("Fetching data for " + username)
 					user.getBio({ username },
 						(result) => {
-							console.log(result)
-							transition.next({
-								user: result
-							})
+							console.log('Bio: ', result)
+							self.isLoading = false
+							self.user = result
 						}
 					)
 				} else {
 					if (user.id) {
-						transition.next({ user })
+						self.isLoading = false
+						self.user = user
 					} else {
 						user.exists((result) => {
-							transition.next({ user })
+							self.isLoading = false
+							self.user = user
 						})
 					}
 				}
-			}
-		}
+			},
+		},
 	}
 </script>

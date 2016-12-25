@@ -7,18 +7,18 @@
 	import { accounts as account, innopoints } from './../modules'
 
 	export default {
-		
-		ready() {
-			console.log('App is awaiting your command!');
+
+		mounted() {
+			console.log('App is mounted.');
 		},
-		
+
 		data() {
 			return {
 				user: {
 					account,
 					innopoints,
 				},
-				
+
 				query: null
 			}
 		},

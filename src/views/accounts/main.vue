@@ -1,16 +1,18 @@
 <template lang="jade">
-	content
+	content-view
 		div(slot='header')
 			div
 				h1.header-title Accounts
 </template>
 
 <script>
-	var content = require('./../content.vue');
+	import contentView from './../content.vue';
 
-	module.exports = {
+	export default {
+		name: 'accounts-main',
+
 		components: {
-			content:content
+			contentView
 		}
 	}
 </script>
