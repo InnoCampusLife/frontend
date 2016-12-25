@@ -4,8 +4,8 @@
 		.card.card-block(v-for="o in orders", :status="o.status", :id="'card-' + o.id")
 			span.float-xs-right {{ o.creation_date }}
 			h2.card-title.clearfix
-				span.tag.tag-default.tag-success.float-xs-left(:status="o.status") {{ o.status.split('_').join(' ')[0].toUpperCase() + o.status.split('_').join(' ').slice(1) }}
-				span.float-xs-left.mx-1 {{(o._id = '#' + o.id)}} {{ o.type[0].toUpperCase() + o.type.slice(1) }}
+				span.tag.tag-default.tag-success.float-xs-left(:status="o.status") {{ o.status | startCase }}
+				span.float-xs-left.mx-1 {{(o._id = '#' + o.id)}} {{ o.type | startCase }}
 					small.text-muted  by {{o.author.username}}
 			h4
 				template(v-if="o.items > 0") Items
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+	import { startCase } from 'lodash'
+
 	export default {
 		name: 'store-orders',
 
@@ -49,6 +51,10 @@
 
 		created() {
 			this.fetchData()
+		},
+
+		filters: {
+			startCase,
 		},
 
 		watch: {

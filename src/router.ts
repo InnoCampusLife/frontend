@@ -17,22 +17,16 @@ var router = new VueRouter({
 		},
 		{
 			path: '/',
-			component: require('./views/app.vue'),
+			component: require('./views/main.vue'),
 			meta: { authorizedZone },
 			children: [
 				{
 					path: '',
-					component: require('./views/content.vue'),
-					children: [
-						{
-							path: '',
-							redirect: '/store',
-						},
-						{
-							path: 'test',
-							component: require('./views/test.vue'),
-						},
-					]
+					redirect: '/store',
+				},
+				{
+					path: 'test',
+					component: require('./views/test.vue'),
 				},
 				{
 					path: 'account',

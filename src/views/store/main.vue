@@ -1,12 +1,6 @@
-<style lang="less" scoped>
-
-
-</style>
-
 <template lang="jade">
-	content-view
+	app-view
 		div(slot="header")
-
 			.input-group.search-group
 				input#search.form-control(
 					type='search',
@@ -16,24 +10,20 @@
 					button.btn.btn-secondary(type='button')
 						i.material-icons search
 
-			template(v-if="$route.path.endsWith('store')")
-				ul.header-nav
-					li
-						router-link.btn-outline-primary(:to="{ name: 'orders', params: { username: user.account.username, filter: 'all' } }")
-							i.material-icons receipt
-							span Orders
-
-			template(v-if="$route.path.endsWith('orders')")
-				ul.header-nav
-					li
-						router-link.btn-outline-primary(:to="{ name: 'store' }")
-							i.material-icons store
-							span Store
-
+			ul.header-nav
+				li
+					router-link.btn-outline-primary(
+						:to="{ name: 'orders', params: { username: user.account.username, filter: 'all' } }")
+						i.material-icons receipt
+						span Orders
+				li
+					router-link.btn-outline-primary(:to="{ name: 'store' }")
+						i.material-icons store
+						span Store
 </template>
 
 <script>
-	import contentView from './../content.vue'
+	import appView from './../app.vue'
 
 	export default {
 		name: 'store-main',
@@ -46,7 +36,7 @@
 		},
 
 		components: {
-			contentView,
+			appView,
 		},
 	}
 </script>
