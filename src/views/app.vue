@@ -7,6 +7,7 @@
 	import { accounts as account, innopoints } from './../modules'
 
 	export default {
+		name: 'app',
 
 		mounted() {
 			console.log('App is mounted.');

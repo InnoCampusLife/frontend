@@ -14,9 +14,9 @@
 
 			.card-block
 
-				h4.card-title {{ item.title }}
+				h4.card-title {{ item.title | startCase }}
 
-				h6.card-subtitle.text-muted.mt-0 {{ item.category.title[0].toUpperCase() + item.category.title.slice(1) }}
+				h6.card-subtitle.text-muted.mt-0 {{ item.category.title | startCase }}
 
 
 				// div(v-show='item.possible_joint_purchase')
@@ -103,10 +103,16 @@
 
 <script>
 
+	import { startCase } from 'lodash'
+
 	export default {
 		name: 'store-item',
 
 		props: ['item'],
+
+		filters: {
+			startCase
+		},
 
 		data () {
 			return {
@@ -221,6 +227,7 @@
 					},
 					successCallback(result) {
 						self.buySuccessful = true
+						self.$parent.fetchData()
 						setTimeout(() => { self.buySuccessful = null }, 5000)
 						//  console.log(result)
 					},
