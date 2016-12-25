@@ -35,13 +35,13 @@ var router = new VueRouter({
 					]
 				},
 				{
-					path: 'profile',
-					component: require('./views/profile/main.vue'),
+					path: 'account',
+					component: require('./views/accounts/main.vue'),
 					children: [
 						{
 							path: ':username',
-							component: require('./views/profile/profile.vue'),
-							name: 'profile',
+							component: require('./views/accounts/account.vue'),
+							name: 'account',
 						}
 					]
 				},
@@ -51,7 +51,7 @@ var router = new VueRouter({
 					children: [
 						{
 							path: '',
-							component: require('./views/accounts/admin.vue'),
+							component: require('./views/accounts/accounts.vue'),
 							name: 'accounts',
 						}
 					]

@@ -1,7 +1,6 @@
 <template lang="jade">
 	content-view
 		div(slot='header')
-			div
 				h1.header-title Accounts
 </template>
 

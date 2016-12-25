@@ -46,7 +46,7 @@
 
 <script>
 	export default {
-		name: 'accounts-admin',
+		name: 'accounts-accounts',
 
 		data() {
 			return {

@@ -6,9 +6,9 @@
 				router-link(to="/") UIS
 		ul.menu
 			li(v-if="user.account.username")
-				router-link(:to="{ name: 'profile', params: { username: user.account.username } }")
+				router-link(:to="{ name: 'account', params: { username: user.account.username } }")
 					i.material-icons account_circle
-					span Profile
+					span Account
 			li(v-if="user.account.username")
 				router-link(:to="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
 					i.material-icons stars
@@ -18,6 +18,7 @@
 				router-link(:to="{ name: 'store' }")
 					i.material-icons store
 					span Store
+		ul.menu
 			li(v-if='user.account.isModerator')
 				router-link(:to="{ name: 'accounts' }")
 					i.material-icons supervisor_account
