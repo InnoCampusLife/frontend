@@ -1,28 +1,27 @@
 <template lang="jade">
 	main.main-main
-		header-main
-			slot(name='header')
+		header-view
 		.content-main
 			.wrap
 				router-view
-			footer-main
+			footer-view
 </template>
 
 <script>
-	import headerMain from './header.vue';
-	import footerMain from './footer.vue';
+	import headerView from './header.vue';
+	import footerView from './footer.vue';
 
 	export default {
-		
+
 		data() {
 			return {
 				user: this.$root.user
 			}
 		},
-		
+
 		components: {
-			headerMain,
-			footerMain,
+			headerView,
+			footerView,
 		}
 	}
 </script>

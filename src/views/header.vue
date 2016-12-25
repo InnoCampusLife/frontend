@@ -1,9 +1,6 @@
 <template lang="jade">
 	header.header-main
-		// .hidden-md-up.sidebar-show
-		// 	button.btn.btn-outline-secondary()
-		// 		span {{{':hamburger:' | emojify}}}
-		slot
+		slot(name='header')
 </template>
 
 <script>

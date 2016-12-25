@@ -4,13 +4,13 @@
 </style>
 
 <template lang="jade">
-	content
+	content-view
 		div(slot='header')
 
 			.input-group.search-group
 				input#search.form-control(
 					type='search',
-					placeholder='Search {{ title | capitalize }}',
+					placeholder="'Search ' + capitalizedTitle",
 					v-model='$router.app.query')
 				span.input-group-btn
 					button.btn.btn-secondary(type='button')
@@ -19,21 +19,24 @@
 			template(v-if="$route.path.endsWith('store')")
 				ul.header-nav
 					li
-						a.btn-outline-primary(href="", v-link="{ name: 'orders', params: { username: user.account.username, filter: 'all' } }")
+						router-link.btn-outline-primary(:to="{ name: 'orders', params: { username: user.account.username, filter: 'all' } }")
 							i.material-icons receipt
 							span Orders
 
 			template(v-if="$route.path.endsWith('orders')")
 				ul.header-nav
 					li
-						a.btn-outline-primary(href="", v-link="{ name: 'store' }")
+						router-link.btn-outline-primary(:to="{ name: 'store' }")
 							i.material-icons store
 							span Store
 
 </template>
 
 <script>
+	import contentView from './../content.vue'
+
 	export default {
+		name: 'store-main',
 
 		data() {
 			return {
@@ -43,13 +46,14 @@
 		},
 
 		computed: {
-			title() {
-				return this.$route.path.split('/').pop()
+			capitalizedTitle() {
+				const title = this.$route.path.split('/').pop()
+				return title[0].toUpperCase() + title.slice(1)
 			}
 		},
 
 		components: {
-			content: require('./../content.vue')
+			contentView,
 		}
 	}
 </script>

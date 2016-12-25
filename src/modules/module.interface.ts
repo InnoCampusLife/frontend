@@ -27,7 +27,6 @@ interface ModuleRoutes {
 interface Route {
 	component: Object
 	name?: string
-	subRoutes?: { route: Route }
 }
 
 // // Vue 2.0 only:

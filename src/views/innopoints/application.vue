@@ -4,14 +4,14 @@
 
 <template lang="jade">
 
-	.card.card-block(status="{{ application.status }}", id="card-{{ application.id }}")
+	.card.card-block(:status="application.status", :id="'card-' + application.id")
 
 			h2.card-title
-				span.tag.tag-default.float-xs-left.mr-1(class="tag-{{ styleBasedOnStatus }}")
-					span {{ application.status.split('_').join(' ') | capitalize }}
+				span.tag.tag-default.float-xs-left.mr-1(:class="'tag-' + styleBasedOnStatus")
+					span {{ application.status.split('_').join(' ')[0].toUpperCase() + application.status.split('_').join(' ').slice(1) }}
 				span.text-muted  {{ '#' + application.id }} in
 				span  {{ application.work[0].activity.category.title }}
-				small.text-muted  by <a href="/profile/{{ application.author.username }}" title="{{ application.author.username }}">{{ application.author.username }}</a>
+				small.text-muted  by <a :href="'/profile/' + application.author.username" :title="application.author.username">{{ application.author.username }}</a>
 					small.text-muted  on {{ application.creation_date }} at {{ application.creation_time }}
 
 			h5
@@ -26,10 +26,10 @@
 							th.text-xs-center Activity
 							th.text-xs-center Amount
 					tbody
-						tr(v-for="work in application.work")
-							th(scope='row') {{ $index + 1 }}
+						tr(v-for="(work, index) in application.work")
+							th(scope='row') {{ index + 1 }}
 							td
-								a(href="/profile/{{ work.actor.username }}") {{ work.actor.username }}
+								a(:href="'/profile/' + work.actor.username") {{ work.actor.username }}
 							td {{  work.activity.title }}
 							td {{  work.activity.price }}
 
@@ -45,8 +45,8 @@
 								th.text-xs-center Name
 								th.text-xs-center Type
 						tbody
-							tr(v-for='f in application.files')
-								th(scope='row') {{ $index + 1 }}
+							tr(v-for='(f, index) in application.files')
+								th(scope='row') {{ index + 1 }}
 								td {{ f.filename }}
 								td {{ f.type }}
 
@@ -58,27 +58,28 @@
 				.row
 					.col-sm
 						p
-							button.btn.btn-block.btn-outline-success(data-id="{{ application.id }}" @click="approve") Approve
+							button.btn.btn-block.btn-outline-success(:data-id="application.id", @click="approve") Approve
 					.col-sm
 						p
-							button.btn.btn-block.btn-outline-warning(data-id="{{ application.id }}" @click="toRework") To rework
+							button.btn.btn-block.btn-outline-warning(:data-id="application.id", @click="toRework") To rework
 					.col-sm
 						p
-							button.btn.btn-block.btn-outline-danger(data-id="{{ application.id }}" @click="reject") Reject
+							button.btn.btn-block.btn-outline-danger(:data-id="application.id", @click="reject") Reject
 
 			template(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
 				.row
 					.col-sm
 						p
-							button.btn.btn-block.btn-outline-danger(data-id="{{application.id}}" @click="_delete" v-show="(application.status=='in_process' || application.status=='rework')") Delete
+							button.btn.btn-block.btn-outline-danger(:data-id="application.id", @click="_delete", v-show="(application.status=='in_process' || application.status=='rework')") Delete
 					.col-sm
 						p
-							button.btn.btn-block.btn-primary(data-id="{{application.id}}" @click="resend" v-show="(application.status=='rework')") Resend
+							button.btn.btn-block.btn-primary(:data-id="application.id", @click="resend", v-show="(application.status=='rework')") Resend
 </template>
 
 <script>
 
 	export default {
+		name: 'innopoints-application',
 
 		props: ['application', 'user', 'success'],
 

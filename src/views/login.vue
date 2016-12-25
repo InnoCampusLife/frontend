@@ -4,7 +4,7 @@
 		.wrap
 			header.header
 				h1 Unified Information System
-			
+
 			.form
 				form.form-group
 					// TODO: rework oninput events
@@ -20,7 +20,7 @@
 							v-model="user.account.username"
 							@keyup.enter="isLogin ? login($event): register($event)"
 						)
-					
+
 					.form-group
 						input.form-control(
 							type="password"
@@ -32,7 +32,7 @@
 							v-on:input="passwordInputEvent"
 							@keyup.enter="isLogin ? login($event): register($event)"
 						)
-					
+
 					div(v-show="!isLogin" transition="height" transition-mode="out-in")
 						.form-group
 							input.form-control(
@@ -44,7 +44,7 @@
 								v-on:input="emailInputEvent"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
-						
+
 						.form-group
 							input.form-control(
 								type="text"
@@ -52,11 +52,11 @@
 								id="firstname"
 								placeholder="First Name"
 								autocompvare="off"
-								v-on:input="/*usernameInputEvent*/"
+								v-on:input="/:usernameInputEvent*+/"
 								v-model="user.account.firstName"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
-						
+
 						.form-group
 							input.form-control(
 								type="text"
@@ -64,11 +64,11 @@
 								id="lastname"
 								placeholder="Last Name"
 								autocompvare="off"
-								v-on:input="/*usernameInputEvent*/"
+								v-on:input="/:usernameInputEvent*+/"
 								v-model="user.account.lastName"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
-						
+
 						.form-group
 							input.form-control(
 								type="text"
@@ -76,7 +76,7 @@
 								id="group"
 								placeholder="Study Group (BS1-2, BS4-1)"
 								autocompvare="off"
-								v-on:input="/*usernameInputEvent*/"
+								v-on:input="/:usernameInputEvent*+/"
 								v-model="user.account.studyGroup"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
@@ -88,14 +88,14 @@
 							@click="login",
 							@keyup.enter="login",
 						) Log In
-						
+
 						button.btn.btn-block.btn-info(
 							:place="isLogin ? 'bottom': 'form'",
 							type="button",
 							@click="register",
 							@keyup.enter="register",
 						) Sign Up?
-					
+
 					template(v-else="isLogin")
 						button.btn.btn-block.btn-primary(
 							:place="isLogin ? 'bottom': 'form'",
@@ -110,7 +110,7 @@
 							@click="login",
 							@keyup.enter="login",
 						) Log In?
-					
+
 			footer-main
 
 </template>
@@ -124,14 +124,14 @@
 		components: {
 			footerMain,
 		},
-		
+
 		data() {
 			return {
 				user: this.$router.app.user,
 				isLogin: true
 			}
 		},
-		
+
 		methods: {
 			login(e) {
 				e.preventDefault();
@@ -146,7 +146,7 @@
 					e.target.blur();
 				}
 			},
-			
+
 			register(e) {
 				e.preventDefault();
 				if (!this.isLogin) {
@@ -169,15 +169,15 @@
 
 			formSuccessCallback : function (result) {
 				this.user.account.set(result);
-				this.$router.go("/");
+				this.$router.push("/");
 			},
 			formErrorCallback : function (result) {
 				//this.setError(result, 'username');
 			},
 
 			///Reusable LoginData checkers
-			usernameInputEvent(e) { 
-				this.checkUsernameInput(); 
+			usernameInputEvent(e) {
+				this.checkUsernameInput();
 			},
 
 			checkUsernameInput(strict) {
@@ -192,8 +192,8 @@
 				return !ufe;
 			},
 
-			passwordInputEvent(e) { 
-				this.checkPasswordInput(); 
+			passwordInputEvent(e) {
+				this.checkPasswordInput();
 			},
 
 			checkPasswordInput(strict) {
@@ -208,8 +208,8 @@
 				return !pfe;
 			},
 
-			emailInputEvent(e) { 
-				this.checkEmailInput(); 
+			emailInputEvent(e) {
+				this.checkEmailInput();
 			},
 
 			checkEmailInput() {
@@ -224,7 +224,7 @@
 				return !pfe;
 			},
 
-			nameInputEvent(e) { 
+			nameInputEvent(e) {
 				this.checkNameInput();
 			},
 
@@ -256,7 +256,7 @@
 				var elem = document.getElementById(fromWhat);
 				elem.removeAttribute('error');
 			},
-			
+
 			// usernameHasError() { return document.getElementById('username').hasAttribure('error'); },
 			// passwordHasError() { return  document.getElementById('password').hasAttribure('error'); },
 			// emailHasError() { return document.getElementById('email').hasAttribure('error'); },

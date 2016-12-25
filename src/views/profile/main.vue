@@ -1,17 +1,18 @@
 <template lang="jade">
-	content
+	content-view
 		div(slot='header')
 			h1.header-title Profile
 </template>
 
 <script>
 
-	import content from './../content.vue';
+	import contentView from './../content.vue';
 
 	export default {
+		name: 'profile-main',
 
 		components: {
-			content:content
+			contentView
 		},
 
 		data() {

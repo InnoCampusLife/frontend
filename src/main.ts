@@ -1,14 +1,17 @@
 'use strict'
 
+// import 'es6-promise/auto'
+// import 'whatwg-fetch'
+
+// import * as _ from 'lodash'
+// import * as fp from 'lodash/fp'
+
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 
-import newRouter from './router-config'
+import router from './router'
 
-const  app = require('./views/app.vue')
-
-const VueValidator = require('vue-validator')
-Vue.use(VueValidator)
+const app = require('./views/app.vue')
 
 const styles = require('./styles/main.scss')
 const polyfills = require('./polyfills')
@@ -21,9 +24,8 @@ Vue.filter('emojify', (value) => {
 
 Vue.use(VueRouter)
 
-const router = newRouter(new VueRouter({
-	hashbang: false,
-	history:  true
-}));
-
-router.start(app, 'app')
+const vm = new Vue({
+	router,
+	...app,
+	el: 'app',
+})
