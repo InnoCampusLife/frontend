@@ -124,10 +124,8 @@
 
 		computed: {
 
-			// TODO: Fix this function
+			// FIXME
 			quantity() {
-
-				// console.log(this.selectedItem)
 
 				if (!(this.selectedItem && Object.keys(this.selectedItem.options) > 0)) {
 					return this.item.combinations.reduce((sum, curr) => {

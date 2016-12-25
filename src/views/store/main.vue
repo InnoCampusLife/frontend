@@ -5,12 +5,12 @@
 
 <template lang="jade">
 	content-view
-		div(slot='header')
+		div(slot="header")
 
 			.input-group.search-group
 				input#search.form-control(
 					type='search',
-					placeholder="'Search ' + capitalizedTitle",
+					placeholder="Search",
 					v-model='$router.app.query')
 				span.input-group-btn
 					button.btn.btn-secondary(type='button')
@@ -45,15 +45,8 @@
 			}
 		},
 
-		computed: {
-			capitalizedTitle() {
-				const title = this.$route.path.split('/').pop()
-				return title[0].toUpperCase() + title.slice(1)
-			}
-		},
-
 		components: {
 			contentView,
-		}
+		},
 	}
 </script>
