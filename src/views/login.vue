@@ -52,7 +52,7 @@
 								id="firstname"
 								placeholder="First Name"
 								autocompvare="off"
-								v-on:input="/:usernameInputEvent*+/"
+								v-on:input="usernameInputEvent"
 								v-model="user.account.firstName"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
@@ -64,7 +64,7 @@
 								id="lastname"
 								placeholder="Last Name"
 								autocompvare="off"
-								v-on:input="/:usernameInputEvent*+/"
+								v-on:input="usernameInputEvent"
 								v-model="user.account.lastName"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
@@ -76,7 +76,7 @@
 								id="group"
 								placeholder="Study Group (BS1-2, BS4-1)"
 								autocompvare="off"
-								v-on:input="/:usernameInputEvent*+/"
+								v-on:input="usernameInputEvent"
 								v-model="user.account.studyGroup"
 								@keyup.enter="isLogin ? login($event): register($event)"
 							)
