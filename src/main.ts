@@ -1,34 +1,33 @@
 'use strict'
 
-// import 'es6-promise/auto'
-// import 'whatwg-fetch'
-
-// import * as _ from 'lodash'
-// import * as fp from 'lodash/fp'
+import 'babel-polyfill'
+import 'whatwg-fetch'
 
 import * as Vue from 'vue'
-import * as VueRouter from 'vue-router'
+import Vuelidate from 'vuelidate'
 
 import router from './router'
+import store from './store'
+
+import './filters'
+import './material'
 
 const main = require('./views/main.vue')
 
-const styles = require('./styles/main.scss')
-const polyfills = require('./polyfills')
+Vue.use(Vuelidate)
 
-import VueMaterial = require('vue-material')
-Vue.use(VueMaterial)
-
-// FIXME: Move this to some other file
-const emojione = require('emojione')
-Vue.filter('emojify', (value) => {
-  return emojione.toImage(value)
-})
-
-Vue.use(VueRouter)
-
-const vm = new Vue({
+new Vue({
 	router,
+	store,
 	...main,
 	el: 'main',
 })
+
+// Styles
+import './styles/main.scss'
+
+// Scripts
+import 'expose-loader?$!expose-loader?jQuery!jquery'
+import "expose-loader?Tether!tether"
+import 'bootstrap'
+import 'expose-loader?mdc!../node_modules/material-components-web/dist/material-components-web.js'
