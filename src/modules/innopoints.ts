@@ -44,6 +44,16 @@ export const store: Vuex.StoreOptions<any> = {
 		},
 	},
 
+	getters: {
+		isStudent({ role }) {
+			return role === 'student'
+		},
+
+		isAdmin({ role }) {
+			return role === 'admin'
+		},
+	},
+
 	mutations: {
 		set(state, {
 			id,

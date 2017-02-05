@@ -1,8 +1,4 @@
-<style lang="scss" scoped>
-	.container {
-		padding-top: 16px;
-		padding-bottom: 16px;
-	}
+<style lang="scss">
 </style>
 
 <template lang="pug">
@@ -14,7 +10,7 @@
 				.row
 					.col
 						.text-center
-							.md-display-4 :(
+							.md-display-4 404
 </template>
 
 <script>

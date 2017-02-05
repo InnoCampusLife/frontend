@@ -46,82 +46,83 @@
 								.md-title(v-if='participants.length > 1') Participants
 								.md-title(v-else) Participant
 
-								md-card.my-3(v-for='(part, index) of participants')
-									md-card-content
+								transition-group.participant-list(name="participant-list" tag="div")
+									md-card.participant.my-2(v-for='(part, index) of participants', :key="index")
+										md-card-content
 
-										md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].username.$error }")
-											md-icon account_circle
-											label(:for="'username_' + index") Username
-											md-input(
-												required,
-												type='text',
-												:id="'username_' + index",
-												:name="'username_' + index",
-												v-model.trim="part.username",
-												@input="$v.participants.$each[index].username.$touch()"
-											)
-											span(v-if="!$v.participants.$each[index].username.required", class="md-error")
-												span Required
-											span(v-else-if="!$v.participants.$each[index].username.minLength", class="md-error")
-												span Too short
-											span(v-else-if="!$v.participants.$each[index].username.maxLength", class="md-error")
-												span Too long
-											span(v-else-if="!$v.participants.$each[index].username.isValid", class="md-error")
-												span Invalid
-											span(v-else-if="!$v.participants.$each[index].username.exists", class="md-error")
-												span Incorrect
-											span(v-else-if="!$v.participants.$each[index].username.doesNotRepeat", class="md-error")
-												span Cannot repeat
+											md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].username.$error }")
+												md-icon account_circle
+												label(:for="'username_' + index") Username
+												md-input(
+													required,
+													type='text',
+													:id="'username_' + index",
+													:name="'username_' + index",
+													:value="part.username",
+													@input="debouncedUpdateUsername(index, $event)",
+												)
+												span(v-if="!$v.participants.$each[index].username.required", class="md-error")
+													span Required
+												span(v-else-if="!$v.participants.$each[index].username.minLength", class="md-error")
+													span Too short
+												span(v-else-if="!$v.participants.$each[index].username.maxLength", class="md-error")
+													span Too long
+												span(v-else-if="!$v.participants.$each[index].username.isValid", class="md-error")
+													span Invalid
+												span(v-else-if="!$v.participants.$each[index].username.exists", class="md-error")
+													span Incorrect
+												span(v-else-if="!$v.participants.$each[index].username.doesNotRepeat", class="md-error")
+													span Cannot repeat
 
-										md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
-											md-icon work
-											label(:for="'activity_' + index") Activity
-											md-select(
-												required,
-												placeholder="Select Activity",
-												:id="'activity_' + index",
-												:name="'activity_' + index",
-												v-model="part.activity_id",
-												@change="$v.participants.$each[index].activity_id.$touch()"
-											)
-												md-option(v-for='a in activities', :value="a.id") {{ a.title }}
-											span(v-if="!$v.participants.$each[index].activity_id.required", class="md-error")
-												span Required
+											md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
+												md-icon work
+												label(:for="'activity_' + index") Activity
+												md-select(
+													required,
+													placeholder="Select Activity",
+													:id="'activity_' + index",
+													:name="'activity_' + index",
+													v-model="part.activity_id",
+													@change="$v.participants.$each[index].activity_id.$touch()"
+												)
+													md-option(v-for='a in activities', :value="a.id") {{ a.title }}
+												span(v-if="!$v.participants.$each[index].activity_id.required", class="md-error")
+													span Required
 
-										md-input-container(
-											v-show="isHourlyActivity(part.activity_id)",
-											:class="{ 'md-input-invalid': $v.participants.$each[index].hours.$error }",
-										)
-											md-icon timer
-											label(:for="'hours_' + index") Hours
-											md-input(
-												required,
-												:disabled='!isHourlyActivity(part.activity_id)',
-												:id="'hours_' + index",
-												:name="'hours_' + index",
-												type='number',
-												min='1',
-												max='10000',
-												step="1",
-												v-model='part.hours',
-												@input="$v.participants.$each[index].hours.$touch()"
+											md-input-container(
+												v-show="isHourlyActivity(part.activity_id)",
+												:class="{ 'md-input-invalid': $v.participants.$each[index].hours.$error }",
 											)
-											span(v-if="!$v.participants.$each[index].hours.required", class="md-error")
-												span Required
-											span(v-if="!$v.participants.$each[index].hours.between", class="md-error")
-												span Too little or too much
+												md-icon timer
+												label(:for="'hours_' + index") Hours
+												md-input(
+													required,
+													:disabled='!isHourlyActivity(part.activity_id)',
+													:id="'hours_' + index",
+													:name="'hours_' + index",
+													type='number',
+													min='1',
+													max='10000',
+													step="1",
+													v-model='part.hours',
+													@input="$v.participants.$each[index].hours.$touch()"
+												)
+												span(v-if="!$v.participants.$each[index].hours.required", class="md-error")
+													span Required
+												span(v-if="!$v.participants.$each[index].hours.between", class="md-error")
+													span Too little or too much
 
-										md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
-											md-icon info
-											label(:for="'innopoints_' + index") Innopoints
-											md-input(
-												readonly,
-												placeholder="IUP 0.00",
-												:id="'innopoints_' + index",
-												:name="'innopoints_' + index",
-												type='text',
-												:value="innopoints(part.activity_id, part.hours) | currency('IUP ')"
-											)
+											md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
+												md-icon info
+												label(:for="'innopoints_' + index") Innopoints
+												md-input(
+													readonly,
+													placeholder="IUP 0.00",
+													:id="'innopoints_' + index",
+													:name="'innopoints_' + index",
+													type='text',
+													:value="innopoints(part.activity_id, part.hours) | currency('IUP ')"
+												)
 
 								md-button.md-raised.ml-0.mr-3(type='button', @click='addParticipant')
 									span Add
@@ -193,6 +194,10 @@
 							return !(this.participants.filter((p) => p.username === username).length > 1)
 						},
 
+						// doesNotRepeat(username) {
+						// 	return !(this.participants.filter((p) => p.username === username).length > 1)
+						// },
+
 						async exists(username) {
 							if (/^\w{3,16}$/.test(username)) {
 								try {
@@ -257,6 +262,13 @@
 					})
 			},
 
+			updateUsername(index, value) {
+				this.participants[index].username = value
+				this.$v.participants.$each[index].username.$touch()
+			},
+
+			debouncedUpdateUsername: _.debounce(function (index, value) { return this.updateUsername(index, value) }, 250),
+
 			innopoints(id, hours) {
 				const activity = this.activities.find(a => a.id === id);
 				if (activity) {
@@ -318,9 +330,7 @@
 					return { actor, amount, activity_id }
 				}))
 
-				const throttledCreate = _.throttle(this.$root.api.innopoints.applications.create, 5000)
-
-				throttledCreate({
+				this.$root.api.innopoints.applications.create({
 					body: {
 						application: {
 							comment: this.comment,
@@ -340,7 +350,7 @@
 				})
 			},
 
-			throttledSubmit: _.throttle(function () { this.submit() }, 250),
+			throttledSubmit: _.throttle(function () { return this.submit() }, 500),
 		},
 	}
 </script>

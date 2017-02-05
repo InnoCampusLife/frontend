@@ -282,6 +282,21 @@ body {
 	position: absolute;
 }
 
+.participant {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.participant-list-enter, .participant-list-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
+}
+
+.participant-list-enter-active, .participant-list-leave-active {
+	position: absolute;
+}
+
 /* ==========================================================================
 	 Login Page
 	 ========================================================================== */

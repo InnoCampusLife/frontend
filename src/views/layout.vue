@@ -56,19 +56,7 @@
 						md-list-item(@click='logOut')
 							md-icon arrow_back
 							span Log Out
-
-			// footer
-			// 	md-list
-			// 		router-link(
-			// 			tag="md-list-item",
-			// 			v-if="user.account.username",
-			// 			:to="{ name: 'account', params: { username: user.account.username } }",
-			// 		)
-			// 			md-icon account_circle
-			// 			span Account
-
 		main
-
 			header.app-bar
 				md-theme(md-name="dark")
 					md-whiteframe(md-tag="md-toolbar", md-elevation="4")
@@ -77,22 +65,14 @@
 								md-icon menu
 							.app-bar-container
 								slot(name="app-bar")
-
 			section
 				.content
 					slot(name="content")
-
 				footer
 					p.text-muted 2016 &copy; InnoDev
-
-				// md-snackbar(md-position="bottom center", ref='snackbar', md-duration='4000')
-				// 	span Connection timeout. Showing limited messages.
-				// 	md-button.md-accent(md-theme='blue', @click='$refs.snackbar.close()') Retry
-
 </template>
 
 <script>
-
 	import { mapState } from 'vuex'
 
 	export default {
@@ -115,7 +95,6 @@
 		},
 
 		methods: {
-
 			toggleLeftSidenav() {
 				this.$refs.leftSidenav.toggle();
 			},
