@@ -1,49 +1,72 @@
-<template lang="jade">
-	.container
-		p.text-xs-center(v-if="isLoading") Loading&mldr;
-		.card.card-block(v-else-if="user")
+<template lang="pug">
+	layout
+		template(slot="app-bar")
 			.row
-				.col-sm.text-sm-right
-					p Username
-				.col-sm
-					p.font-weight-bold {{ user.username }}
-			.row
-				.col-sm.text-sm-right
-					p Role
-				.col-sm
-					p.font-weight-bold {{ user.role | capitalize }}
-			.row
-				.col-sm.text-sm-right
-					p First Name
-				.col-sm
-					p.font-weight-bold {{ user.firstName }}
-			.row
-				.col-sm.text-sm-right
-					p Last Name
-				.col-sm
-					p.font-weight-bold {{ user.lastName }}
-			.row
-				.col-sm.text-sm-right
-					p Alias
-				.col-sm
-					p.font-weight-bold {{ user.tgId }}
-			.row
-				.col-sm.text-sm-right
-					p Study Group
-				.col-sm
-					p.font-weight-bold {{ user.studyGroup }}
+				.col
+					h1.md-title Account
+		template(slot="content")
+			.container
+				template(v-if="isLoading")
+					.text-center
+						md-spinner(md-indeterminate, :md-size="100")
+				template(v-else)
+					md-card
+						md-card-content
+							.row
+								.col-sm.text-sm-right
+									p Username
+								.col-sm
+									p.font-weight-bold {{ username }}
+							.row
+								.col-sm.text-sm-right
+									p Role
+								.col-sm
+									p.font-weight-bold {{ role | capitalize }}
+							.row
+								.col-sm.text-sm-right
+									p First Name
+								.col-sm
+									p.font-weight-bold {{ firstName | placeholder('—') }}
+							.row
+								.col-sm.text-sm-right
+									p Last Name
+								.col-sm
+									p.font-weight-bold {{ lastName | placeholder('—') }}
+							.row
+								.col-sm.text-sm-right
+									p Email
+								.col-sm
+									p.font-weight-bold {{ email | placeholder('—') }}
+							.row
+								.col-sm.text-sm-right
+									p Innopoints
+								.col-sm
+									p.font-weight-bold {{ points_amount | currency('IUP ') }}
+
+					// md-card
+					// 	md-card-header
+					// 		.row
+					// 			.col-12.col-sm-auto
+					// 				p
+					// 					img.rounded-circle(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+					// 			.col
+					// 				md-card-header-text
+					// 					.md-title Title goes
+					// 					.md-subhead Subtitle here
+
 </template>
 
 <script>
 	import { capitalize } from 'lodash'
 
-	export default  {
+	import { mapState, mapGetters } from 'vuex'
+
+	export default {
 		name: 'accounts-account',
 
 		data() {
 			return {
 				isLoading: false,
-				user: null,
 			}
 		},
 
@@ -51,46 +74,26 @@
 			capitalize
 		},
 
-		created() {
-			this.fetchData()
+		components: {
+			layout: require('./../layout.vue')
 		},
 
-		watch: {
-			'$route': 'fetchData'
-		},
+		computed: {
+			...mapState('innopoints', [
+				'points_amount',
+			]),
 
-		methods: {
-			fetchData() {
-				console.log("Fetching data in profile-profile")
+			...mapState('accounts', [
+				'username',
+				'role',
+				'firstName',
+				'lastName',
+				'email'
+			]),
 
-				this.isLoading = true
-				this.user = null
-
-				const self = this
-				const username = this.$route.params.username
-				const user = this.$root.user.account
-
-				if (user.username != username) {
-					console.log("Fetching data for " + username)
-					user.getBio({ username },
-						(result) => {
-							console.log('Bio: ', result)
-							self.isLoading = false
-							self.user = result
-						}
-					)
-				} else {
-					if (user.id) {
-						self.isLoading = false
-						self.user = user
-					} else {
-						user.exists((result) => {
-							self.isLoading = false
-							self.user = user
-						})
-					}
-				}
-			},
+			...mapGetters('accounts', [
+				'fullName',
+			]),
 		},
 	}
 </script>

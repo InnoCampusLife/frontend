@@ -10,7 +10,7 @@
 
 </style>
 
-<template lang="jade">
+<template lang="pug">
 	div
 		md-card(md-theme="blue")
 			md-card-media
@@ -220,7 +220,7 @@
 					},
 					successCallback(result) {
 						self.buySuccessful = true
-						self.$parent.fetchData()
+						// self.$parent.fetchData()
 						setTimeout(() => { self.buySuccessful = null }, 5000)
 						//  console.log(result)
 					},

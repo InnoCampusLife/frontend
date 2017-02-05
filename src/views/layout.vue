@@ -3,65 +3,59 @@
 
 		md-sidenav.md-left(md-theme="sidenav", ref="leftSidenav")
 			header
-				// md-toolbar
-				// 	.md-toolbar-container
-				// 		h1.md-title.text-center
-				// 			span UIS
-				md-toolbar.md-account-header(md-theme="blue")
-					md-list.md-transparent
-						md-list-item.md-avatar-list(disabled)
-							md-avatar.md-large
-								img(src='https://placeimg.com/64/64/people/8', alt='People')
-							span(style='flex: 1')
-							// md-avatar
-							// 	img(src='https://placeimg.com/40/40/people/3', alt='People')
-							// md-avatar
-							// 	img(src='https://placeimg.com/40/40/people/4', alt='People')
-						md-list-item
-							.md-list-text-container
-								span {{ username }}
-								span {{ points_amount }}
-							// md-button.md-icon-button.md-list-action
-							// 	md-icon arrow_drop_down
+				md-theme(md-name="teal")
+					md-whiteframe.md-account-header(md-tag="md-toolbar", md-elevation="1")
+						md-list.md-transparent
+							md-list-item.md-avatar-list(disabled)
+								md-avatar.md-large
+									img(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+								span(style='flex: 1')
+							md-list-item
+								.md-list-text-container
+									span {{ username }}
+									span {{ points_amount | currency('IUP ') }}
+								// md-button.md-icon-button.md-list-action
+								// 	md-icon arrow_drop_down
 			main
-				md-list
-					router-link(
-						tag="md-list-item",
-						v-if="username",
-						:to="{ name: 'account', params: { username } }",
-					)
-						md-icon account_circle
-						span Account
+				section
+					md-list
+						router-link(
+							tag="md-list-item",
+							:to="{ name: 'account' }",
+						)
+							md-icon account_circle
+							span Account
 
-					router-link(
-						tag="md-list-item",
-						:to="{ name: 'applications' }",
-					)
-						md-icon stars
-						span Innopoints
+						router-link(
+							tag="md-list-item",
+							:to="{ name: 'applications' }",
+						)
+							md-icon stars
+							span Innopoints
 
-					router-link(
-						tag="md-list-item",
-						:to="{ name: 'store' }",
-					)
-						md-icon store
-						span Store
+						router-link(
+							tag="md-list-item",
+							:to="{ name: 'store' }",
+						)
+							md-icon store
+							span Store
 
+					template(v-if="user.account.isModerator")
 						md-divider
+						md-list
+							router-link(
+								tag="md-list-item",
+								:to="{ name: 'accounts' }",
+							)
+								md-icon supervisor_account
+								span Accounts
 
-					router-link(
-						tag="md-list-item",
-						v-if="user.account.isModerator",
-						:to="{ name: 'accounts' }",
-					)
-						md-icon supervisor_account
-						span Accounts
-
-						md-divider
-
-					md-list-item(@click='logOut')
-						md-icon arrow_back
-						span Log Out
+				footer
+					md-divider
+					md-list
+						md-list-item(@click='logOut')
+							md-icon arrow_back
+							span Log Out
 
 			// footer
 			// 	md-list
@@ -81,7 +75,8 @@
 						.md-toolbar-container
 							md-button.md-icon-button(@click='toggleLeftSidenav')
 								md-icon menu
-							slot(name="app-bar")
+							.app-bar-container
+								slot(name="app-bar")
 
 			section
 				.content
@@ -89,6 +84,11 @@
 
 				footer
 					p.text-muted 2016 &copy; InnoDev
+
+				// md-snackbar(md-position="bottom center", ref='snackbar', md-duration='4000')
+				// 	span Connection timeout. Showing limited messages.
+				// 	md-button.md-accent(md-theme='blue', @click='$refs.snackbar.close()') Retry
+
 </template>
 
 <script>

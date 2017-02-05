@@ -5,6 +5,7 @@ import 'whatwg-fetch'
 
 import * as Vue from 'vue'
 import Vuelidate from 'vuelidate'
+const Vue2Filters = require('vue2-filters')
 
 import router from './router'
 import store from './store'
@@ -15,6 +16,7 @@ import './material'
 const main = require('./views/main.vue')
 
 Vue.use(Vuelidate)
+Vue.use(Vue2Filters)
 
 new Vue({
 	router,

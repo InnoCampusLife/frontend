@@ -24,73 +24,55 @@ const router = new VueRouter({
 			path: '/test',
 			component: require('./views/test.vue'),
 		},
+
+		// Accounts
 		{
 			path: '/account',
-			component: require('./views/accounts/main.vue'),
+			component: require('./views/accounts/account.vue'),
 			meta: { authorizedZone: true },
-			children: [
-				{
-					path: ':username',
-					component: require('./views/accounts/account.vue'),
-					name: 'account',
-				},
-			],
+			name: 'account',
 		},
 		{
 			path: '/accounts',
-			component: require('./views/accounts/main.vue'),
+			component: require('./views/accounts/accounts.vue'),
 			meta: { authorizedZone: true },
-			children: [
-				{
-					path: '',
-					component: require('./views/accounts/accounts.vue'),
-					name: 'accounts',
-				},
-			],
+			name: 'accounts',
 		},
+
+		// Innopoints - Applications
 		{
 			path: '/innopoints',
-			component: require('./views/innopoints/main.vue'),
+			redirect: '/innopoints/applications',
 			meta: { authorizedZone: true },
-			children: [
-				{
-					path: '',
-					redirect: 'applications',
-				},
-				{
-					path: 'applications',
-					component: require('./views/innopoints/applications.vue'),
-					name: 'applications',
-				},
-				{
-					path: 'apply',
-					component: require('./views/innopoints/apply.vue'),
-					name: 'apply',
-				},
-			],
 		},
 		{
-			path: '/store',
-			component: require('./views/store/main.vue'),
+			path: '/innopoints/applications',
+			component: require('./views/innopoints/applications.vue'),
 			meta: { authorizedZone: true },
-			children: [
-				{
-					path: '',
-					component: require('./views/store/store.vue'),
-					name: 'store',
-				},
-				{
-					path: 'orders',
-					component: require('./views/store/orders.vue'),
-					name: 'orders',
-				},
-				// {
-				// 	path: 'items/:item',
-				// 	component: require('./views/store/item.vue'),
-				// 	name: 'item',
-				// },
-			],
+			name: 'applications',
 		},
+		{
+			path: '/innopoints/apply',
+			component: require('./views/innopoints/apply.vue'),
+			meta: { authorizedZone: true },
+			name: 'apply',
+		},
+
+		// Innopoints - Store
+		{
+			path: '/store',
+			component: require('./views/store/store.vue'),
+			meta: { authorizedZone: true },
+			name: 'store',
+		},
+		{
+			path: '/store/orders',
+			component: require('./views/store/orders.vue'),
+			meta: { authorizedZone: true },
+			name: 'orders',
+		},
+
+		// 404
 		{
 			path: '*',
 			component: require('./views/not-found.vue'),

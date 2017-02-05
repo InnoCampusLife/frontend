@@ -5,7 +5,7 @@
 	}
 </style>
 
-<template lang="jade">
+<template lang="pug">
 	layout
 		template(slot="app-bar")
 			.md-title Not Found

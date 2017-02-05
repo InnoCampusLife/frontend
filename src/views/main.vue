@@ -51,7 +51,7 @@
 			updateState() {
 				this.updateAccounts()
 					.then((json) => {
-						console.log('Accounts update result:', json)
+						// console.log('Accounts update result:', json)
 					})
 					.catch((err) => {
 						console.error('Couldn\'t update accounts:', err.message)
@@ -59,7 +59,7 @@
 
 				this.updateInnopoints()
 					.then((json) => {
-						console.log('Innopoints update result:', json)
+						// console.log('Innopoints update result:', json)
 					})
 					.catch((err) => {
 						console.error('Couldn\'t update innopoints:', err.message)

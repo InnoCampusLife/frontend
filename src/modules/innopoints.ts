@@ -140,7 +140,7 @@ export const api = {
 			return receiveJson(input)
 		},
 
-		create(body) {
+		create({ body }) {
 			if (!body) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token}/applications`
 			const init: RequestInit = new POSTRequestInit({ body })
@@ -199,7 +199,7 @@ export const api = {
 			return receiveJson(input)
 		},
 
-		create(body) {
+		create({ body }) {
 			if (!body) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token}/orders/`
 			const init: RequestInit = new POSTRequestInit({ body })
@@ -276,7 +276,7 @@ export const api = {
 				return receiveJson(input)
 			},
 
-			create(body) {
+			create({ body }) {
 				if (!body) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token}/applications`
 				const init: RequestInit = new POSTRequestInit({ body })

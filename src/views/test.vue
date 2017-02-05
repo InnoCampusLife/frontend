@@ -7,7 +7,7 @@
 
 </style>
 
-<template lang="jade">
+<template lang="pug">
 
 	layout
 		template(slot="content")

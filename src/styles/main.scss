@@ -9,7 +9,7 @@
 	 Vendor Imports
 	 ========================================================================== */
 
-// @import '~material-components-web/material-components-web.scss';
+@import '~@material/animation/mdc-animation.scss';
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~vue-material/dist/vue-material.css';
 
@@ -18,8 +18,8 @@
 	 ========================================================================== */
 
 // @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&subset=cyrillic');
-@import url('https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
-@import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
+// @import url('https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
+// @import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
 
 $main-font-family: Rubik, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
@@ -111,12 +111,6 @@ footer {
 	padding-bottom: 16px;
 }
 
-#search-container {
-	min-height: 32px;
-	margin: 0;
-	padding: 0;
-}
-
 html, body {
 	height: 100%;
 	overflow: hidden;
@@ -134,10 +128,6 @@ body {
 
 		> .md-sidenav {
 			z-index: 1600;
-
-			.md-title {
-				font-family: $monospace-font-family;
-			}
 		}
 
 		> main {
@@ -147,7 +137,7 @@ body {
 			min-height: 100%;
 			max-height: 100%;
 
-			> .app-bar {
+			> header {
 				z-index: 400;
 			}
 
@@ -155,7 +145,8 @@ body {
 				display: flex;
 				flex: 1;
 				flex-flow: column;
-				overflow: auto;
+				overflow-x: auto;
+				overflow-y: scroll;
 
 				> .content {
 					flex: 1;
@@ -222,7 +213,73 @@ body {
 }
 
 .md-sidenav > .md-sidenav-content {
+	display: flex;
+	flex-flow: column nowrap;
 	width: 264px;
+	overflow: hidden;
+
+	> main {
+		flex: 1;
+		overflow: auto;
+		display: flex;
+		flex-flow: column nowrap;
+		overflow: hidden;
+
+		> section {
+			flex: 1;
+		}
+	}
+}
+
+.app-bar-container {
+	flex: 1;
+
+	> .row {
+		align-items: center;
+	}
+}
+
+/* ==========================================================================
+	 VueMaterial Global Fixes
+	 ========================================================================== */
+
+.md-input-container .md-icon ~ .md-select {
+	margin-left: 12px;
+}
+
+.md-input-container .md-icon ~ .md-error {
+	margin-left: 36px;
+}
+
+.md-card-area > .md-card-header {
+	padding-top: 24px;
+}
+
+.md-card-content > p:last-child {
+	margin-bottom: 0;
+}
+
+.md-dialog-container {
+	z-index: 2400;
+}
+
+/* ==========================================================================
+	 Transitions/Animations
+	 ========================================================================== */
+
+.application {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.application-list-enter, .application-list-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
+}
+
+.application-list-enter-active, .application-list-leave-active {
+	position: absolute;
 }
 
 /* ==========================================================================

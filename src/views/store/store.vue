@@ -5,8 +5,17 @@
 	}
 </style>
 
-<template lang="jade">
+<template lang="pug">
 	layout
+		template(slot="app-bar")
+			.row
+				.col
+					h1.md-title Store
+				.col.col-auto
+					router-link(
+						tag="md-button",
+						:to="{ name: 'orders' }")
+						span Orders
 		template(slot="content")
 			.container-fluid
 				template(v-if="isLoading")
