@@ -11,7 +11,7 @@
 							span(:class="'text-' + styleBasedOnStatus") {{ application.status | startCase }}
 					.col-12.col-sm-auto
 						.md-subhead
-							span {{ application.creation_date }}
+							span {{ creationDateStr }}
 			span
 		md-card-area
 			md-card-header
@@ -81,12 +81,10 @@
 </template>
 
 <script>
-	import { startCase } from 'lodash'
-
 	export default {
-		name: 'innopoints-application',
+		name: 'innopoints-application-component',
 
-		props: ['application', 'user', 'success'],
+		props: ['application', 'user'],
 
 		computed: {
 			styleBasedOnStatus() {
@@ -102,10 +100,10 @@
 			paras() {
 				return this.application.comment.split('\n')
 			},
-		},
 
-		filters: {
-			startCase,
+			creationDateStr() {
+				return new Date(this.application.creation_date * 1000).toDateString()
+			}
 		},
 
 		methods: {
@@ -113,30 +111,30 @@
 				this.$emit('deleteApp', this.application);
 			},
 
-			approve(e) {
-				this.user.innopoints.api.user.application.approve(e.target.dataset.id, (result) => {
-					this.success(e.target.dataset.id, 'approved');
-				}, console.log);
-			},
+			// approve(e) {
+			// 	this.user.innopoints.api.user.application.approve(e.target.dataset.id, (result) => {
+			// 		this.success(e.target.dataset.id, 'approved');
+			// 	}, console.log);
+			// },
 
-			reject(e) {
-				this.user.innopoints.api.user.application.reject(e.target.dataset.id, (result) => {
-					this.success(e.target.dataset.id, 'rejected');
-				}, console.log);
-			},
+			// reject(e) {
+			// 	this.user.innopoints.api.user.application.reject(e.target.dataset.id, (result) => {
+			// 		this.success(e.target.dataset.id, 'rejected');
+			// 	}, console.log);
+			// },
 
-			// FIXME: api method doesn't work
-			toRework(e) {
-				this.user.innopoints.api.user.application.to_rework({ appl_id: e.target.dataset.id }, (result) => {
-					this.success(e.target.dataset.id, 'rework');
-				}, console.log);
-			},
+			// // FIXME: api method doesn't work
+			// toRework(e) {
+			// 	this.user.innopoints.api.user.application.to_rework({ appl_id: e.target.dataset.id }, (result) => {
+			// 		this.success(e.target.dataset.id, 'rework');
+			// 	}, console.log);
+			// },
 
-			resend(e) {
-				this.user.innopoints.api.user.application.send(e.target.dataset.id, (result) => {
-					this.success(e.target.dataset.id, 'resend');
-				}, console.log);
-			},
+			// resend(e) {
+			// 	this.user.innopoints.api.user.application.send(e.target.dataset.id, (result) => {
+			// 		this.success(e.target.dataset.id, 'resend');
+			// 	}, console.log);
+			// },
 		}
 	}
 </script>

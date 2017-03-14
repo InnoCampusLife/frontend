@@ -2,67 +2,63 @@
 </style>
 
 <template lang="pug">
-	layout
-		template(slot="app-bar")
-			.row
-				.col
-					h1.md-title
-						span.hidden-xs-down Innopoints
-						span.hidden-xs-down &ensp;&ndash;&ensp;
-						span Applications
+	div
+		.container.pt-0
+			.row.align-items-end
 				.col.col-auto
-					.search.hidden-sm-down
-						md-button.md-icon-button
-							md-icon search
-						md-input-container(md-inline)
-							label(for="search") Search
-							md-input#search(name="search", type="search", v-model="search")
-		template(slot="content")
-			.container.pt-0
-				.row.align-items-end
-					.col-12.col-sm-auto
-							md-input-container
-								md-icon filter_list
-								md-select#filter(name="filter", v-model="status")
-									md-option(value="") All
-									md-option(value="in_process") In&nbsp;process
-									md-option(value="rejected") Rejected
-									md-option(value="rework") In&nbsp;rework
-									md-option(value="approved") Approved
-					.col(v-show="filteredApps.length >= 50 && search === ''")
-						.text-center.text-sm-left.mb-4
-							span Showing only the first 50 applications.
-				.row
-					.col-12
-						template(v-if="isLoading")
-							.text-center
-								md-spinner(md-indeterminate, :md-size="100")
-						template(v-else-if="filteredApps.length <= 0")
-							.text-center
-								p.md-display-1 Empty
-						template(v-else)
-							transition-group.application-list(name="application-list" tag="div")
-								application.application.my-2(
-									v-for="app in filterBy(filteredApps, search, 'comment', 'status', 'id', 'type', 'author.username', 'creation_date', 'work')",
-									@deleteApp="openDeleteConfirm",
-									:application="app",
-									:user="user",
-									:success="action_success",
-									:key="app.id",
-								)
-							md-dialog-confirm(
-								:md-title="`Delete application #${currentApp.id}?`",
-								md-content="This cannot be undone."
-								md-ok-text="Delete",
-								md-cancel-text="Cancel",
-								@close="confirmDelete"
-								ref='deleteConfirm',
+						md-input-container
+							md-icon filter_list
+							md-select#filter(name="filter", @change="updateStatus", :value="normStatus")
+								md-option(value="") All
+								md-option(value="in_process") In&nbsp;process
+								md-option(value="rejected") Rejected
+								md-option(value="rework") In&nbsp;rework
+								md-option(value="approved") Approved
+				.col
+				.col.col-auto
+					.mb-3
+						md-button.md-icon-button.md-raised(
+							@click="prevPage",
+							:disabled="currPage <= 1",
+						)
+							md-icon keyboard_arrow_left
+						md-button.md-icon-button.md-raised(
+							@click="nextPage",
+							:disabled="currPage >= totalPages",
+						)
+							md-icon keyboard_arrow_right
+			.row
+				.col-12
+					template(v-if="!filteredApps")
+						.text-center
+							md-spinner(md-indeterminate, :md-size="100")
+					template(v-else-if="filteredApps.length <= 0")
+						.text-center
+							p.md-display-1 Empty
+					template(v-else)
+						transition-group.application-list(name="application-list" tag="div")
+							application.application.my-2(
+								v-for="app in filterBy(filteredApps, search, 'comment', 'status', 'id', 'type', 'author.username', 'work')",
+								:application="app",
+								:key="app.id",
+								@deleteApp="openDeleteConfirm",
+								@approveApp="openApproveConfirm",
+								@rejectApp="openRejectConfirm",
 							)
-			router-link.md-fab.md-fab-bottom-right(
-				tag="md-button",
-				:to="{ name: 'apply' }",
-			)
-				md-icon add
+						md-dialog-confirm(
+							v-if="currentApp",
+							:md-title="`Delete application #${currentApp.id}?`",
+							md-content="This cannot be undone."
+							md-ok-text="Delete",
+							md-cancel-text="Cancel",
+							@close="confirmDelete"
+							ref='deleteConfirm',
+						)
+		router-link.md-fab.md-fab-bottom-right(
+			tag="md-button",
+			:to="{ name: 'apply' }",
+		)
+			md-icon add
 </template>
 
 <script>
@@ -71,23 +67,37 @@
 	export default {
 		name: 'innopoints-applications',
 
+		props: {
+			status: {
+				type: String,
+				default: '',
+			},
+		},
+
 		data() {
 			return {
-				isLoading: false,
-				user: this.$root.user,
 				applications: [],
-				status: '',
+				paginate: ['applications'],
 				search: '',
-				currentApp: {},
+				currentApp: null,
+
+				statuses: ['in_process', 'rework', 'rejected', 'approved'],
+
+				currPage: 1,
+				totalPages: 1,
+				perPage: 50,
 			}
 		},
 
 		components: {
 			application: require('./components/application.vue'),
-			layout: require('./../layout.vue'),
 		},
 
 		computed: {
+			normStatus() {
+				return this.statuses.includes(this.status) ? this.status : ''
+			},
+
 			filteredApps() {
 				return this.applications
 					.filter((app) => {
@@ -95,7 +105,7 @@
 						if (this.status === app.status) return true
 						return false
 					})
-					.sort((a, b) => b.timestamp - a.timestamp)
+					.sort((a, b) => b.creation_date - a.creation_date)
 			},
 		},
 
@@ -103,25 +113,35 @@
 			this.fetchData()
 		},
 
-		filters: {
-			startCase: require('lodash').startCase,
-		},
-
 		watch: {
 			'$route': 'fetchData',
 		},
 
 		methods: {
+			prevPage() {
+				console.log(this.currPage)
+				this.currPage -= 1
+				this.updateApplications()
+			},
+
+			nextPage() {
+				console.log(this.currPage)
+				this.currPage += 1
+				this.updateApplications()
+			},
+
+			updateStatus(value) {
+				// this.$route.push({})
+			},
+
 			fetchData() {
-				this.isLoading = true
-				this.$root.api.innopoints.applications.many({ limit: 50 })
+				this.$root.api.innopoints.applications.many({
+					skip: this.perPage * (this.currPage - 1),
+					limit: this.perPage * this.currPage,
+				})
 					.then((json) => {
-						this.isLoading = false
 						console.log('Fetched applications:', json.result)
-						json.result.applications.forEach((app) => {
-							app.timestamp = app.creation_date
-							app.creation_date = new Date(app.creation_date * 1000).toDateString()
-						})
+						this.totalPages = Math.ceil(json.result.applications_counter / this.perPage)
 						this.applications = json.result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
@@ -132,14 +152,23 @@
 				this.$refs['deleteConfirm'].open()
 			},
 
+			openApproveConfirm(app) {
+				this.currentApp = app
+				this.$refs['deleteConfirm'].open()
+			},
+
+			openRejectConfirm(app) {
+				this.currentApp = app
+				this.$refs['deleteConfirm'].open()
+			},
+
 			updateApplications() {
-				this.$root.api.innopoints.applications.many({ limit: 50 })
+				this.$root.api.innopoints.applications.many({
+					skip: this.perPage * (this.currPage - 1),
+					limit: this.perPage * this.currPage,
+				})
 					.then((json) => {
 						console.log('Fetched applications:', json.result)
-						json.result.applications.forEach((app) => {
-							app.timestamp = app.creation_date
-							app.creation_date = new Date(app.creation_date * 1000).toDateString()
-						})
 						this.applications = json.result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
@@ -151,24 +180,13 @@
 						.then((json) => {
 							this.applications.splice(this.applications.indexOf(this.currentApp), 1)
 							console.log('Deleted application:', json)
-							this.currentApp = {}
+							this.currentApp = null
 							this.updateApplications()
 						})
 						.catch((err) => {
 							console.error('Failed to delete application:', err)
-							this.currentApp = {}
+							this.currentApp = null
 						})
-				}
-			},
-
-			action_success(id, new_status) {
-				const apps = this.applications
-				const app = this.applications.find(a => a.id == id)
-				console.log(app)
-				if (this.$route.params.filter === 'all' || this.$route.params.filter == null) {
-					app.status = new_status;
-				} else {
-					apps.splice(apps.indexOf(app), 1)
 				}
 			},
 		},

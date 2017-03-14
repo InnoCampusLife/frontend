@@ -1,28 +1,16 @@
 <template lang="pug">
-	layout
-		template(slot="app-bar")
-			.row
-				.col
-					h1.md-title
-						span.hidden-xs-down Store
-						span.hidden-xs-down &ensp;&ndash;&ensp;
-						span Orders
-				.col.col-auto
-					router-link(
-						tag="md-button",
-						:to="{ name: 'store' }")
-						span Store
-		template(slot="content")
-			.container
-				order.my-3(v-for="order in orders", :order="order")
-				// .card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'", :status="o.status", :id="'card-' + o.id")
+	.container
+		order.my-3(v-for="order in orders", :order="order")
+		//- .card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'", :status="o.status", :id="'card-' + o.id")
 </template>
 
 <script>
-	import { startCase } from 'lodash'
+	import _ from 'lodash'
 
 	export default {
 		name: 'store-orders',
+
+		props: ['search'],
 
 		data() {
 			return {
@@ -31,20 +19,15 @@
 		},
 
 		components: {
-			layout: require('./../layout.vue'),
 			order: require('./components/order.vue'),
 		},
 
 		created() {
-			this.fetchData()
-		},
-
-		filters: {
-			startCase,
+			this.fetchDataOnce()
 		},
 
 		watch: {
-			'$route': 'fetchData'
+			'$route': 'fetchDataOnce'
 		},
 
 		methods: {
@@ -61,7 +44,9 @@
 					.catch((err) => {
 						console.log('Failed to get orders:', err)
 					})
-			}
+			},
+
+			fetchDataOnce: _.once(function () { return this.fetchData() }),
 		},
 	}
 </script>

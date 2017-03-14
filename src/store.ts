@@ -1,5 +1,5 @@
 import * as Vue from 'vue'
-import * as Vuex from 'vuex'
+import Vuex from 'vuex'
 
 import { store as accounts } from './modules/accounts'
 import { store as innopoints } from './modules/innopoints'

@@ -1,6 +1,3 @@
-<style lang="scss">
-</style>
-
 <template lang="pug">
 	main
 		header.app-bar
@@ -15,41 +12,25 @@
 									h1.md-title Account
 		section
 			.content
-				.container
-					.row
-						.col
-							md-card
-								md-card-header
-									.md-title Current path: {{ $route.path }}
-								md-card-content
-									pre {{ user }}
+				router-view
 			footer
 				p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
 	export default {
-		name: 'test',
+		name: 'accounts-main',
 
 		data() {
 			return {
-				isLoading: false,
-				user: this.$router.app.user
+				search: ''
 			}
-		},
-
-		created() {
-			this.fetchData()
-		},
-
-		watch: {
-			'$route': 'fetchData'
 		},
 
 		methods: {
-			fetchData() {
-				console.log("Fetching test data.");
-			}
-		},
+			toggleLeftSidenav() {
+				this.$emit('toggleLeftSidenav')
+			},
+		}
 	}
 </script>

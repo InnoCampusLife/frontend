@@ -2,26 +2,27 @@
 	 Helper Imports
 	 ========================================================================== */
 
-@import './transitions';
-@import './helpers';
+// @import './helpers';
 
 /* ==========================================================================
 	 Vendor Imports
 	 ========================================================================== */
 
-@import '~@material/animation/mdc-animation.scss';
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~vue-material/dist/vue-material.css';
+@import
+	'~@material/animation/mdc-animation.scss',
+	'~bootstrap/scss/bootstrap.scss',
+	'~vue-material/dist/vue-material.css';
 
 /* ==========================================================================
 	 Typography
 	 ========================================================================== */
 
-// @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&subset=cyrillic');
 // @import url('https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
-// @import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
+@import
+	url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic'),
+	url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
 
-$main-font-family: Rubik, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$main-font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
 
 body {
@@ -121,7 +122,7 @@ body {
 	flex-flow: column;
 	position: relative;
 
-	> .layout {
+	> main {
 		display: flex;
 		flex-flow: column;
 		min-height: 100%;
@@ -160,7 +161,7 @@ body {
 	height: 4rem;
 	align-items: center;
 	display: flex;
-	margin: 0 8px;
+	margin: 0 8px 0 0;
 	width: $sidebar-width;
 
 	> .md-input-container {
@@ -215,12 +216,12 @@ body {
 .md-sidenav > .md-sidenav-content {
 	display: flex;
 	flex-flow: column nowrap;
-	width: 264px;
+	width: 240px;
 	overflow: hidden;
+	border-right: 1px solid hsla(0, 0%, 0%, 0.12);
 
 	> main {
 		flex: 1;
-		overflow: auto;
 		display: flex;
 		flex-flow: column nowrap;
 		overflow: hidden;
@@ -231,6 +232,7 @@ body {
 	}
 }
 
+
 .app-bar-container {
 	flex: 1;
 
@@ -239,9 +241,27 @@ body {
 	}
 }
 
+.md-toolbar {
+	.md-title {
+		margin: 0 !important;
+	}
+
+	.md-button {
+		margin: 0;
+	}
+
+	.md-button + .md-button {
+		margin-left: 8px;
+	}
+}
+
 /* ==========================================================================
 	 VueMaterial Global Fixes
 	 ========================================================================== */
+
+.md-button.md-icon-button .md-icon, .md-button.md-fab .md-icon {
+	margin-top: 0;
+}
 
 .md-input-container .md-icon ~ .md-select {
 	margin-left: 12px;
@@ -257,6 +277,10 @@ body {
 
 .md-card-content > p:last-child {
 	margin-bottom: 0;
+}
+
+.md-toolbar {
+	z-index: 400;
 }
 
 .md-dialog-container {
@@ -275,7 +299,7 @@ body {
 
 .application-list-enter, .application-list-leave-to {
 	opacity: 0;
-	transform: translateY(100%);
+	// transform: translateY(100%);
 }
 
 .application-list-enter-active, .application-list-leave-active {
@@ -290,10 +314,25 @@ body {
 
 .participant-list-enter, .participant-list-leave-to {
 	opacity: 0;
-	transform: translateY(100%);
+	// transform: translateY(100%);
 }
 
 .participant-list-enter-active, .participant-list-leave-active {
+	position: absolute;
+}
+
+.store-item {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.store-item-list-enter, .store-item-list-leave-to {
+	opacity: 0;
+	// transform: translateY(100%);
+}
+
+.store-item-list-enter-active, .store-item-list-leave-active {
 	position: absolute;
 }
 

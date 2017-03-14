@@ -48,17 +48,10 @@
 </template>
 
 <script>
-
-	import { startCase } from 'lodash'
-
 	export default {
-		name: 'store-order',
+		name: 'store-order-component',
 
 		props: ['order'],
-
-		filters: {
-			startCase,
-		},
 
 		computed: {
 			styleBasedOnStatus() {

@@ -36,78 +36,19 @@
 					span.text-danger(v-else) Out of Stock
 
 			md-card-actions
-				md-button.md-primary.md-raised(
-					:disabled="!(isItemSelected || !item.options) || quantity < 1",
-					type='button',
-					data-toggle="modal",
-					:data-target="'#buying-modal-' + item.id",
-				) IUP {{ item.price - 0.01 }}
-
-		.modal.fade.buying-modal(:id="'buying-modal-' + item.id")
-			.modal-dialog.modal-md
-				md-theme(md-name="blue")
-					md-whiteframe(md-tag="md-card", md-elevation="24")
-						md-card-header
-							.md-title Confirm Purchase
-						md-card-media(md-ratio="4:3")
-							md-image(:md-src='item.image_link', alt='')
-						md-card-header
-							.md-title {{ item.title }}
-							.md-subhead {{ item.category.title | startCase }}
-
-						md-card-content
-							.row
-								.col
-									p.card-text
-										span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
-										span.text-danger(v-else) Out of Stock
-								.col-12.col-sm-auto
-									p.card-text.text-info {{ item.price - 0.01 }} IP
-
-							// template(v-if="item.selectedItem && item.selectedItem.options")
-							// 	template(v-for="(value, key) in item.selectedItem.options")
-							// 		.row
-							// 			.col-sm
-							// 				p.text-sm-right {{ key }}
-							// 			.col-sm.font-weight-bold
-							// 				p {{ value }}
-
-
-						.md-card-actions
-							// FIXME: add quantity check here
-							md-button(type='button', data-dismiss="modal") Cancel
-							md-button.md-primary.md-raised(type='button', data-dismiss="modal", @click="buy(item)") Purchase
-
-
-		// TODO: add link to orders page here
-		.alert.alert-success.alert-dismissible.fade.in(role='alert', v-show="buySuccessful === true")
-			button.close(type='button', aria-label='Close', @click='buySuccessful = null')
-				span(aria-hidden='true') &times;
-			p.mb-0
-				strong Purchase complete!
-				|  You can check you purchase on the orders page.
-
-		.alert.alert-danger.alert-dismissible.fade.in(role='alert', v-show="buySuccessful === false")
-			button.close(type='button', aria-label='Close', @click='buySuccessful = null')
-				span(aria-hidden='true') &times;
-			p.mb-0
-				strong Purchase failed!
-				|  Something went wrong! You can tell us about it.
+				router-link.md-primary.md-raised(
+					v-if="item",
+					tag="md-button",
+					:to="{ name: 'item', params: { id: item.id } }"
+				) View
 
 </template>
 
 <script>
-
-	import { startCase } from 'lodash'
-
 	export default {
-		name: 'store-item',
+		name: 'store-item-component',
 
 		props: ['item'],
-
-		filters: {
-			startCase
-		},
 
 		data () {
 			return {
@@ -118,7 +59,6 @@
 		},
 
 		computed: {
-
 			// FIXME
 			quantity() {
 

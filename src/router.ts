@@ -1,5 +1,5 @@
 import * as Vue from 'vue'
-import * as VueRouter from 'vue-router'
+import VueRouter from 'vue-router'
 
 import { modules } from './modules'
 
@@ -15,11 +15,13 @@ const router = new VueRouter({
 			component: require('./views/login.vue'),
 			meta: { loginPage: true },
 		},
+
 		{
 			path: '/',
 			redirect: 'store',
 			meta: { authorizedZone: true },
 		},
+
 		{
 			path: '/test',
 			component: require('./views/test.vue'),
@@ -27,49 +29,68 @@ const router = new VueRouter({
 
 		// Accounts
 		{
-			path: '/account',
-			component: require('./views/accounts/account.vue'),
-			meta: { authorizedZone: true },
-			name: 'account',
-		},
-		{
 			path: '/accounts',
-			component: require('./views/accounts/accounts.vue'),
+			component: require('./views/accounts/main.vue'),
 			meta: { authorizedZone: true },
-			name: 'accounts',
+			children: [
+				{
+					path: '/account',
+					component: require('./views/accounts/account.vue'),
+					name: 'account',
+				},
+				{
+					path: '',
+					component: require('./views/accounts/accounts.vue'),
+					name: 'accounts',
+				},
+			],
 		},
 
 		// Innopoints - Applications
 		{
 			path: '/innopoints',
-			redirect: '/innopoints/applications',
+			component: require('./views/innopoints/main.vue'),
 			meta: { authorizedZone: true },
-		},
-		{
-			path: '/innopoints/applications',
-			component: require('./views/innopoints/applications.vue'),
-			meta: { authorizedZone: true },
-			name: 'applications',
-		},
-		{
-			path: '/innopoints/apply',
-			component: require('./views/innopoints/apply.vue'),
-			meta: { authorizedZone: true },
-			name: 'apply',
+			children: [
+				{
+					path: '',
+					redirect: 'applications',
+				},
+				{
+					path: 'applications',
+					component: require('./views/innopoints/applications.vue'),
+					name: 'applications',
+				},
+				{
+					path: 'apply',
+					component: require('./views/innopoints/apply.vue'),
+					name: 'apply',
+				},
+			],
 		},
 
 		// Innopoints - Store
 		{
 			path: '/store',
-			component: require('./views/store/store.vue'),
+			component: require('./views/store/main.vue'),
 			meta: { authorizedZone: true },
-			name: 'store',
-		},
-		{
-			path: '/store/orders',
-			component: require('./views/store/orders.vue'),
-			meta: { authorizedZone: true },
-			name: 'orders',
+			children: [
+				{
+					path: '',
+					component: require('./views/store/store.vue'),
+					name: 'store',
+				},
+				{
+					path: 'items/:id',
+					component: require('./views/store/item.vue'),
+					name: 'item',
+				},
+				{
+					path: 'orders',
+					component: require('./views/store/orders.vue'),
+					name: 'orders',
+				},
+			],
 		},
 
 		// 404
@@ -83,28 +104,28 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 	if (to.matched.some((record) => record.meta.authorizedZone)) {
 		if (!user.loggedIn) {
-			console.log('Checkpoint #1')
+			// console.log('Checkpoint #1')
 			next({
 				path: '/login',
 				// query: { redirect: to.fullPath }
 			})
 		} else {
-			console.log('Checkpoint #2')
+			// console.log('Checkpoint #2')
 			next()
 		}
 	} else if (to.matched.some((record) => record.meta.loginPage)) {
 		if (user.loggedIn) {
-			console.log('Checkpoint #3')
+			// console.log('Checkpoint #3')
 			next({
 				path: '/',
 				// query: { redirect: to.fullPath }
 			})
 		} else {
-			console.log('Checkpoint #4')
+			// console.log('Checkpoint #4')
 			next()
 		}
 	} else {
-		console.log('Checkpoint #5')
+		// console.log('Checkpoint #5')
 		next() // make sure to always call next()!
 	}
 })

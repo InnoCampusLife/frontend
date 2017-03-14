@@ -2,6 +2,9 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var path = require('path')
 // var webpack = require('webpack')
 
+
+// process.traceDeprecation = true
+
 module.exports = {
 
   // entry: {
@@ -55,15 +58,20 @@ module.exports = {
         //  'postcss-loader',
         // ],
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader!postcss-loader',
+          fallback: 'style-loader',
+          // loader: 'css-loader!postcss-loader',
+          use: [
+            'style-loader',
+            'css-loader',
+            'postcss-loader',
+          ],
         }),
       },
       // {
       //  test: /\.less$/,
       //  loader: ExtractTextPlugin.extract({
-      //      fallbackLoader: "style-loader",
-      //    loader: "css-loader!postcss-loader!less-loader",
+      //      fallback: "style-loader",
+      //      loader: "css-loader!postcss-loader!less-loader",
       //  }),
       // },
       {
@@ -79,11 +87,16 @@ module.exports = {
         //  'sass-loader',
         // ],
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader!postcss-loader!sass-loader',
-          sassLoader: {
-            includePaths: [path.resolve(__dirname, './node_modules')],
-          },
+          fallback: 'style-loader',
+          // loader: 'css-loader!postcss-loader!sass-loader',
+          use: [
+            'css-loader',
+            'postcss-loader',
+            'sass-loader',
+          ],
+          // sassLoader: {
+          //   includePaths: [path.resolve(__dirname, './node_modules')],
+          // },
         }),
       },
     ],
