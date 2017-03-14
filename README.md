@@ -4,17 +4,17 @@
 Install:
 
 ```
-npm Install
+yarn install
 ```
 
 Build:
 
 ```
-npm run build
+yarn run build
 ```
 
 Run:
 
 ```
-npm run dev
+yarn run dev
 ```
