@@ -1,50 +1,154 @@
-<template>
-	<sidebar></sidebar>
-	<router-view></router-view>
+<template lang="pug">
+	main
+		md-sidenav.md-left(ref="leftSidenav")
+			header
+				md-theme(md-name="teal")
+					md-toolbar.md-account-header
+						md-list.md-transparent
+							md-list-item.md-avatar-list(disabled)
+								md-avatar.md-large
+									img(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+								span(style='flex: 1')
+							router-link(
+								tag="md-list-item",
+								:to="{ name: 'account' }",
+							)
+								.md-list-text-container
+									span {{ username }}
+									span {{ points_amount | currency('IUP ', 0) }}
+								// md-button.md-icon-button.md-list-action
+								// 	md-icon arrow_drop_down
+				md-divider
+			main
+				section
+					md-list
+						//- router-link(
+						//- 	tag="md-list-item",
+						//- 	:to="{ name: 'account' }",
+						//- )
+						//- 	md-icon account_circle
+						//- 	span Account
+
+						router-link(
+							tag="md-list-item",
+							:to="{ name: 'applications' }",
+						)
+							md-icon stars
+							span Innopoints
+
+						router-link(
+							tag="md-list-item",
+							:to="{ name: 'store' }",
+						)
+							md-icon store
+							span Store
+
+					template(v-if="user.account.isModerator")
+						md-divider
+						md-list
+							router-link(
+								tag="md-list-item",
+								:to="{ name: 'accounts' }",
+							)
+								md-icon supervisor_account
+								span Accounts
+
+				footer
+					md-divider
+					md-list
+						md-list-item(@click='logOut')
+							md-icon arrow_back
+							span Log Out
+
+		router-view(@toggleLeftSidenav="toggleLeftSidenav")
+			//- header.app-bar
+			//- 	md-theme(md-name="dark")
+			//- 		md-whiteframe(md-tag="md-toolbar", md-elevation="4")
+			//- 			.md-toolbar-container
+			//- 				md-button.md-icon-button(@click='toggleLeftSidenav')
+			//- 					md-icon menu
+			//- 				.app-bar-container
+			//- 					slot(name="app-bar")
+			//- section
+			//- 	.content
+			//- 		slot(name="content")
+			//- 	footer
+			//- 		p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
-	
-	import sidebar from './sidebar.vue'
+
+	import { mapActions, mapState } from 'vuex'
+
+	import accounts from './../modules/accounts'
+	import innopoints from './../modules/innopoints'
+
+	import modules from './../modules'
 
 	export default {
-		
-		components: {
-			sidebar
-		},
-		
-		route: {
-			data(transition) {
-				console.log("Called GET in Main");
-				const router = this.$router;
-				const user = this.$root.user;
-				user.account.update(
-					(result) => {
-						user.innopoints.data.update(
-							(result) => {
-								transition.next();
-							},
-							
-							(error) => {
-								user.innopoints.api.user.create(
-									(result) => {
-										user.innopoints.data.update(
-											(result) => {
-												transition.next();
-											}
-										)
-									}
-								)
-							}
-						)
-					},
+		name: 'main',
 
-					(error) => {
-						console.log("Updating Error");
-						router.go('/login');
-					}
-				)
+		data() {
+			return {
+				user: {
+					account: modules.accounts,
+					innopoints: modules.innopoints,
+				},
+
+				api: {
+					accounts,
+					innopoints,
+				}
 			}
+		},
+
+		computed: {
+			...mapState('innopoints', [
+				'points_amount',
+			]),
+
+			...mapState('accounts', [
+				'username',
+			]),
+		},
+
+		created() {
+			this.updateState()
+		},
+
+		watch: {
+			$route: ['updateState', 'closeLeftSidenav'],
+		},
+
+		// For testing
+		methods: {
+			...mapActions({
+				updateAccounts: 'accounts/update',
+				updateInnopoints: 'innopoints/update',
+			}),
+
+			toggleLeftSidenav() {
+				this.$refs.leftSidenav.toggle()
+			},
+
+			closeLeftSidenav() {
+				this.$refs.leftSidenav.close()
+			},
+
+			logOut(e) {
+				this.user.account.clear()
+				this.$router.push('/login')
+			},
+
+			updateState() {
+				this.updateAccounts()
+					// .then((json) => console.log('Accounts update result:', json))
+					.catch((err) => console.error('Couldn\'t update accounts:', err.message))
+
+				this.updateInnopoints()
+					// .then((json) => console.log('Innopoints update result:', json))
+					.catch((err) => console.error('Couldn\'t update innopoints:', err.message))
+			},
 		}
 	}
 </script>

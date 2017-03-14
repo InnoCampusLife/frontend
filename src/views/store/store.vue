@@ -1,35 +1,65 @@
-<template lang="jade">
+<style lang="scss" scoped>
+	.store-item {
+		display: inline-block;
+		margin: 12px;
+	}
+</style>
+
+<template lang="pug">
 	.container-fluid
-		.card-columns
-			item(v-for="item in items | filterBy $router.app.query in 'title' 'price' 'category.title'", :item="item", :buy="buy")
+		template(v-if="isLoading")
+			.text-center
+				md-spinner(md-indeterminate, :md-size="100")
+		template(v-else-if="items.length <= 0")
+			.text-center
+				.md-title Empty
+		template(v-else)
+				transition-group.card-columns.store-item-list(name="store-item-list" tag="div")
+					item.store-item(
+						v-for="item in filterBy(items, search, 'title', 'price', 'category.title')",
+						:item="item",
+						:key="item.id",
+					)
 </template>
 
 <script>
-
 	export default {
-		
+		name: 'store-store',
+
+		props: ['search'],
+
 		data() {
 			return {
+				isLoading: false,
 				items: [],
-				storage: require('./../../storage')
 			}
 		},
-		
+
 		components: {
-			item: require('./item.vue'),
+			item: require('./components/item.vue'),
 		},
-		
-		route: {
-			data(transition) {
-				this.$router.app.user.innopoints.api.store.getItems({
-					successCallback: items => {
-						transition.next({
-							items,
-						});
-						console.log(items)
-					}
-				});
-			} 
+
+		created() {
+			this.getItems()
+		},
+
+		watch: {
+			'$route': 'getItems'
+		},
+
+		methods: {
+			getItems() {
+				// this.isLoading = true
+				this.$root.api.innopoints.items.many()
+					.then((json) => {
+						console.log('Got items:', json.result)
+						this.items = json.result
+						// this.isLoading = false
+					})
+					.catch((err) => {
+						console.error('Failed to get items:', err)
+					})
+			},
 		},
 	}
 </script>

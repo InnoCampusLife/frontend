@@ -1,11 +1,7 @@
-.idea/
+.idea
+.vscode
+build
+node_modules
+public
 
-node_modules/
 
-.vscode/*
-
-build/css/*
-
-build/js/*
-
-public/

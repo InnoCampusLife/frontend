@@ -1,365 +1,328 @@
-<style lang="less" scoped>
-
-	/*
-	.card {
-		background: hsla(0, 0, 100, 1);
-		border-radius: 4px;
-		padding: 1rem 2rem;
-		text-align: left;
-	}
-
-	.card + .card {
-		margin-top: 1rem;
-	}
-	*/
-
-	#upload {
-		display: none;
-	}
-
-	td {
-		vertical-align: middle;
-	}
-
-	td button {
-		min-width: 1em;
-	}
-
-	input[readonly] {
-		color: hsla(0, 0%, 0%, 0.87);
-		background: hsl(0, 0%, 100%);
-		border-color: hsl(0, 0%, 100%);
-	}
-
+<style lang="scss" scoped>
 </style>
 
-<template lang="jade">
-
+<template lang="pug">
 	.container
-		// While loading
-		p(v-show='$loadingRouteData') Loading&mldr;
-		// When loaded
-		.card(v-show='!$loadingRouteData')
-			validator(name='IPsAppValid')
+		template(v-if="isLoading")
+			.text-center
+				md-spinner(md-indeterminate, :md-size="100")
+		template(v-else)
+			md-card
 				form(novalidate)#ip_request
-					.card-block
-						h1.card-title New Application
-						// <h6 class="card-subtitle text-muted">by {{ user.account.username }}</h6>
-					.card-block
-						.form-group.row.flex-items-sm-middle.mb-0
-							label.form-control-label.col-sm.col-form-label.col-form-label-lg(for='activity_category')
-								h4 Category
-							.col-sm
-								select#activity_category.form-control.form-control-lg(
-									v-model='current.category_id', 
-									@change='category_changed')
-									option(value='blank', selected='') Choose Category
-									option(value='') All
-									option(v-for='c in categories', value='{{ c.id }}') {{ c.title }}
-					.card-block
-						h4.mb-1
-							template(v-if='current.users.length > 1') Participants
-							template(v-else='') Participant
-						ul.list-group
-							li.list-group-item.py-1(v-for='u of current.users')
-								
-								.clearfix.mb-1(v-show='current.users.length > 1')
-									button.close(type='button', aria-label='Close', @click='current_users_remove($index)', v-if='current.users.length > 1')
-										span(aria-hidden='true') &times;
-									span.text-muted(v-show='current.users.length > 1') {{ $index + 1 }}
-								
-								.form-group.row.flex-items-sm-middle(
-									v-bind:class="{ 'has-danger': $IPsAppValid.username.errors !== undefined }")
-									label.form-control-label.col-sm.col-form-label(for='username_{{ $index }}') Username
-										span(v-show='$IPsAppValid.username.dirty')
-											span(v-if="$IPsAppValid.username.minlength")  is too short
-											span(v-if="$IPsAppValid.username.maxlength")  is too long
-									.col-sm
-										input(
-											class="form-control",
-											id="username_{{ $index }}",
-											data-index="{{ $index }}",
-											type="text",
-											placeholder="username",
-											@input="username_changed",
-											value="{{ $index || user.innopoints.data.isAdmin ? '': user.account.username }}",
-											v-model="u.username"
-											v-validate:username="{ minlength: 3, maxlength: 16 }",
-										)
-								
-								.form-group.row.flex-items-sm-middle
-									label.form-control-label.col-sm.col-form-label(for='activity_{{ $index }}') Activity
-									.col-sm
-										select(class="form-control", :disabled="!isCategorySelected || !u.username", id="activity_{{ $index }}", class="activity", v-model="u.activity_id", @change="activity_changed")
-											option(value='', selected='') Choose Activity
-											option(v-for='a in activities', value='{{ a.id }}') {{ a.title }}
-								
-								.form-group.row.flex-items-sm-middle(v-show="isTemporaryActivity(u.activity_id)")
-									label.form-control-label.col-sm.col-form-label(for='hours_{{ $index }}') Hours
-									.col-sm
-										input.form-control(
-											:disabled='!isTemporaryActivity(u.activity_id)', 
-											id='hours_{{ $index }}', 
-											type='number', 
-											value="1", 
-											min='1', 
-											max='10000',
-											step="0.25",
-											v-model='u.amount')
-								
-								.form-group.row.flex-items-sm-middle.mb-0
-									label.form-control-label.col-sm.col-form-label Innopoints
-									.col-sm
-										input.form-control(
-											type='number', 
-											:value='innopoints(u.activity_id, u.amount) || 0', 
-											readonly='')
-						
-						.clearfix.mt-1
-							button.btn.btn-success.float-xs-left(type='button', @click='current_users_count_inc') &plus; Add a Participant
-							button.btn.btn-danger.float-xs-right(type='button', @click='current_users_count_clear', v-if='current.users.length > 1') &times; Clear
-					
-					.card-block
-						label(for='upload')
-							h4 Files
-						.table-responsive(v-show='current.files.length')
-							table.table.table-striped.table-bordered
-								thead
-									tr
-										th.text-xs-center #
-										th.text-xs-center Name
-										th.text-xs-center Type
-										th.text-xs-center Size
-										th.text-xs-center Remove
-								tbody
-									tr(v-for='f in current.files')
-										th(scope='row') {{ $index + 1 }}
-										td {{ f.name }}
-										td {{ f.type }}
-										td.text-xs-right {{ f.size }} KB
-										td.text-xs-center.py-0
-											button.close.float-xs-none(type='button', aria-label='Remove File', @click='removeFile($index)')
-												span(aria-hidden='true') &times;
-						.clearfix
-							button.btn.btn-success.float-xs-left(type='button', onclick='upload.click()') &plus; Add Files
-							button.btn.btn-danger.float-xs-right(type='button', @click='current.files = []', v-show='current.files.length') &times; Clear
-						input#upload(type='file', @change='uploaded', multiple='')
-					.card-block
-						.form-group.mb-0
-							label.form-control-label(for='comment')
-								h4 Comment
-							textarea#comment.form-control(placeholder='Write a comment', v-model='current.comment', rows='6')
-					.card-block
-						button#send.btn.btn-primary.btn-lg.btn-block(:disabled='!isActivitySelected', type='button', @click='send') Send
-						p.mt-1.mb-0.text-xs-center(v-show='!isCategorySelected') Select Category
-						p.mt-1.mb-0.text-xs-center(v-show='isCategorySelected && !isActivitySelected') Select Activities
+					md-card-content
+						.md-title New Application
+					md-card-content
+						.row
+							.col-12.col-sm-auto
+								md-input-container
+									md-icon filter_list
+									label(for='category') Category
+									md-select#category(
+										placeholder="Select Category",
+										name='category',
+										v-model='category_id',
+										@change='updateAcivities',
+									)
+										md-option(value="") All
+										md-option(v-for='c in categories', :value="c.id") {{ c.title | startCase }}
 
+					md-card-content
+						.md-title(v-if='participants.length > 1') Participants
+						.md-title(v-else) Participant
+
+						transition-group.participant-list(name="participant-list" tag="div")
+							md-card.participant.my-2(v-for='(part, index) of participants', :key="index")
+								md-card-content
+
+									md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].username.$error }")
+										md-icon account_circle
+										label(:for="'username_' + index") Username
+										md-input(
+											required,
+											type='text',
+											:id="'username_' + index",
+											:name="'username_' + index",
+											:value="part.username",
+											@input="debouncedUpdateUsername(index, $event)",
+										)
+										span(v-if="!$v.participants.$each[index].username.required", class="md-error")
+											span Required
+										span(v-else-if="!$v.participants.$each[index].username.minLength", class="md-error")
+											span Too short
+										span(v-else-if="!$v.participants.$each[index].username.maxLength", class="md-error")
+											span Too long
+										span(v-else-if="!$v.participants.$each[index].username.exists", class="md-error")
+											span Ivalid or does not exist
+										span(v-else-if="!$v.participants.$each[index].username.doesNotRepeat", class="md-error")
+											span Cannot repeat
+
+									md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
+										md-icon work
+										label(:for="'activity_' + index") Activity
+										md-select(
+											required,
+											placeholder="Select Activity",
+											:id="'activity_' + index",
+											:name="'activity_' + index",
+											v-model="part.activity_id",
+											@change="$v.participants.$each[index].activity_id.$touch()"
+										)
+											md-option(v-for='a in activities', :value="a.id") {{ a.title }}
+										span(v-if="!$v.participants.$each[index].activity_id.required", class="md-error")
+											span Required
+
+									md-input-container(
+										v-show="isHourlyActivity(part.activity_id)",
+										:class="{ 'md-input-invalid': $v.participants.$each[index].hours.$error }",
+									)
+										md-icon timer
+										label(:for="'hours_' + index") Hours
+										md-input(
+											required,
+											:disabled='!isHourlyActivity(part.activity_id)',
+											:id="'hours_' + index",
+											:name="'hours_' + index",
+											type='number',
+											min='1',
+											max='10000',
+											step="1",
+											v-model='part.hours',
+											@input="$v.participants.$each[index].hours.$touch()"
+										)
+										span(v-if="!$v.participants.$each[index].hours.required", class="md-error")
+											span Required
+										span(v-if="!$v.participants.$each[index].hours.between", class="md-error")
+											span Too little or too much
+
+									md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
+										md-icon info
+										label(:for="'innopoints_' + index") Innopoints
+										md-input(
+											readonly,
+											placeholder="IUP 0.00",
+											:id="'innopoints_' + index",
+											:name="'innopoints_' + index",
+											type='text',
+											:value="innopoints(part.activity_id, part.hours) | currency('IUP ')"
+										)
+
+						md-button.md-raised.ml-0.mr-3(type='button', @click='addParticipant')
+							span Add
+						md-button.md-warn.ml-0(
+							type='button',
+							@click='removeParticipant',
+							v-if='participants.length > 1'
+						)
+							span Remove
+
+					span
+					md-card-content
+						md-input-container
+							md-icon insert_drive_file
+							label(for="upload") Files
+							md-file#upload(v-model='filesStr', name="upload", multiple)
+
+					md-card-content
+						md-input-container
+							md-icon comment
+							label Comment
+							md-textarea(v-model='comment')
+
+					md-card-content
+						md-button.md-raised.md-primary.mx-0.mb-0(type='button', @click="throttledSubmit")
+							span Submit
 </template>
 
 <script>
+	import _ from 'lodash'
+	import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 
 	export default {
+		name: 'innopoints-apply',
 
 		data() {
-			const user = this.$root.user
-			
 			return {
-				user,
+				isLoading: false,
+
 				categories: [],
 				activities: [],
-				isActivitySelected: false,
-				isCategorySelected: false,
-				current: {
-					application: {},
-					get isPersonal() { 
-						return this.users.length == 1 && this.users[0].user_id == user.account.id && !user.account.isModerator 
+
+				category_id: null,
+				filesStr: '',
+				files: new FormData(),
+				comment: '',
+				participants: [
+					{
+						username: '',
+						activity_id: null,
+						hours: 1,
 					},
-					category_id: 0,
-					users: [
-						{
-							user_id: user.account.id,
-							activity_id: '',
-							amount: 1
-						}
-					],
-					files: [],
-					comment: '',
-				},
+				],
 			}
 		},
 
+		validations: {
+			participants: {
+				$each: {
+					username: {
+						required,
+						minLength: minLength(3),
+						maxLength: maxLength(16),
+
+						doesNotRepeat(username) {
+							return !(this.participants.filter((p) => p.username === username).length > 1)
+						},
+
+						async exists(username) {
+							if (/^\w{3,16}$/.test(username)) {
+								try {
+									return (await this.$root.api.accounts.exists({ username })).result
+								} catch (err) {
+									console.error('Failed to check username:', err)
+								}
+							}
+							return false
+						},
+					},
+
+					activity_id: {
+						required,
+					},
+
+					hours: {
+						between(hours, parentVm) {
+							if (this.isHourlyActivity(parentVm.activity_id)) return between(1, 10000)(hours)
+							else return true
+						},
+
+						required(hours, parentVm) {
+							if (this.isHourlyActivity(parentVm.activity_id)) return required(hours)
+							else return true
+						},
+					},
+				},
+			},
+		},
+
+		created() {
+			this.fetchData()
+		},
+
+		watch: {
+			$route: 'fetchData',
+
+			filesStr() {
+				const files = document.querySelector('input[type="file"]').files
+				for (let file of files) this.files.append(file.name, file)
+			},
+		},
+
 		methods: {
+			fetchData() {
+				this.isLoading = true
+
+				this.updateAcivities()
+
+				this.$root.api.innopoints.categories.get()
+					.then(({ result: categories = [] } = {}) => {
+						console.log('Got categories:', { categories })
+						this.categories = categories
+						this.isLoading = false
+					})
+					.catch((err) => {
+						console.error('Failed to get categories:', err)
+					})
+			},
+
+			updateUsername(index, value) {
+				this.participants[index].username = value
+				this.$v.participants.$each[index].username.$touch()
+			},
+
+			debouncedUpdateUsername: _.debounce(function (index, value) { return this.updateUsername(index, value) }, 250),
 
 			innopoints(id, hours) {
-				const activity = this.activities.find(a => a.id == id);
+				const activity = this.activities.find(a => a.id === id);
 				if (activity) {
-					if (this.isTemporaryActivity(id) && hours > 0) {
+					if (this.isHourlyActivity(id) && hours > 0) {
 						return activity.price * hours
 					}
 					return activity.price
 				}
-				return 0
+				return null
 			},
 
-			isTemporaryActivity(id) {
-				const activity = this.activities.find(a => a.id == id);
-				return activity && activity.type != 'permanent';
-			},
-			
-			current_users_count_inc() {
-				this.current.users.push({
-					user_id: null,
-					activity_id: '',
-					amount: 1
-				});
-				this.activity_changed();
-			},
-			
-			current_users_count_clear() {
-				this.current.users.splice(1, this.current.users.length - 1);
-				this.activity_changed();
+			isHourlyActivity(id) {
+				return !!this.activities
+					.filter((a) => a.type === 'hourly')
+					.find((a) => a.id === id);
 			},
 
-			current_users_remove(index) {
-				this.current.users.splice(index, 1)
-				this.activity_changed()
-				console.log(this.current.users)
-			},
-			
-			username_changed(e) {
-				const users = this.current.users;
-
-				this.user.account.getBio(
-					{ username: e.target.value },
-					(result) => {
-						users[e.target.dataset.index].user_id = result.id;
-					},
-					(error) => {
-						console.log("Incorrect Username");
-						// TODO
-					}
-				)
-
-				// this.user.account.exists(
-				// 	{ username: e.target.value },
-				// 	(result) => {
-				// 		if (result) {
-				// 			this.user.account.getBio(
-				// 				{ username: e.target.value },
-				// 				(result) => {
-				// 					users[e.target.dataset.index].user_id = result.id;
-				// 				},
-				// 				(error) => {
-				// 					console.log("Something went wrong while getting user ID.");
-				// 				})
-				// 		} else {
-				// 			console.log("Incorrect username.")
-				// 		}
-				// 	},
-				// 	(error) => {
-				// 		console.log("Something went wrong while checking username.")
-				// 	})
-			},
-
-			category_changed(e) {
-				this.isCategorySelected = this.isActivitySelected = false;
-				let self = this
-				this.user.innopoints.api.getActivities({
-					cat_id: self.current.category_id,
-					successCallback: self.setActivities
+			addParticipant() {
+				this.participants.push({
+					username: '',
+					activity_id: null,
+					hours: 1,
 				})
 			},
-			
-			activity_changed(e) {
-				let counter = 0;
-				this.current.users.forEach((_user) => {
-					if (_user.activity_id !== '') counter++;
-				});
-				this.isActivitySelected = (counter == this.current.users.length);
-			},
-			
-			setActivities(result) {
-				this.activities = result;
-				this.isCategorySelected = true;
-			},
-			
-			uploaded(e) {
-				this.current.files = Object.keys(e.target.files).map(key => e.target.files[key])
+
+			removeParticipant() {
+				this.participants.pop()
 			},
 
-			removeFile(index) {
-				this.current.files.splice(index, 1)
-			},
-			
-			send(e) {
+			updateAcivities(value) {
+				this.$root.api.innopoints.activities.get({ category_id: value })
+					.then(({ result: activities = [] } = {}) => {
+						console.log('Updated activities:', { activities })
 
-				console.log(this.current)
+						// Reset selected actvities if they are not in select category
+						this.participants
+							.filter((p) => !activities.find((a) => a.id == p.activity_id))
+							.forEach((p) => p.activity_id = null)
 
-				send.textContent = "Sending...";
-				this.current.application.type = this.current.isPersonal ? "personal" : "group";
-				// TODO - catch bugs and exceptions
-				this.current.application.work = [];
-
-				var that = this;
-
-				this.current.users.some(cur_user => {
-					var activity_id = that.activities.find(x => x.id == cur_user.activity_id).id,
-						amount = parseInt(cur_user.amount) || null;
-
-					that.current.application.work.push({
-						activity_id: activity_id,
-						amount: this.isTemporaryActivity(activity_id) ? amount : null,
-						actor: cur_user.user_id
-					});
-
-					if (that.current.isPersonal) return true;
-				});
-
-				this.current.application.comment = this.current.comment;
-				this.current.application.files = this.current.files;
-				
-				this.user.innopoints.api.user.application.create(
-					this.current.application,
-					this.sendSuccess,
-					this.error)
-			},
-
-			sendSuccess(result) {
-				send.textContent = "Sent";
-				this.$router.go('/innopoints/' + this.$root.user.account.username + '/applications/in_process')
-			},
-
-			error(error) {
-				alert('Unsuccessful: ' + error);
-				send.textContent = "Failed to Send";
-			},
-
-			// getAllUsers() {
-			// 	if (this.usernames.length > 0) return
-			// 	let api = this.$root.user
-			// 	api.account.list(result => {
-			// 		transition.next({
-			// 			usernames: result.map(user => user.username)
-			// 		})
-			// 	})
-			// 	console.log(usernames)
-			// }
-		},
-
-		route: {
-			data(transition) {
-		    console.log('Сalling GET for Innopoints');
-		    let user = this.$router.app.user;
-		    this.$router.app.user.account.update(result => {
-					user.innopoints.api.getCategories({
-						successCallback: result => {
-							transition.next({
-								categories: result,
-							})
-						}
+						this.activities = activities
 					})
+					.catch((err) => {
+						console.log('Couldn\'t get activities:', err)
+					})
+			},
+
+			async submit() {
+				console.log('Valid:', !this.$v.$invalid)
+
+				if (this.$v.$invalid) {
+					this.$v.$touch()
+					return
+				}
+
+				const work = await Promise.all(this.participants.map(async (p) => {
+					const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id
+					const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
+					const activity_id = p.activity_id
+					return { actor, amount, activity_id }
+				}))
+
+				this.$root.api.innopoints.applications.create({
+					body: {
+						application: {
+							comment: this.comment,
+							type: work.length > 1 ? 'group' : 'personal',
+							work: await Promise.all(this.participants.map(async (p) => {
+								const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id
+								const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
+								const activity_id = p.activity_id
+								return { actor, amount, activity_id }
+							})),
+						}
+					}
+				}).then((json) => {
+					console.log(json.result)
+				}).catch((err) => {
+					console.log('Failed to submit application:', err)
 				})
-			}
-		}
+			},
+
+			throttledSubmit: _.throttle(function () { return this.submit() }, 500),
+		},
 	}
 </script>

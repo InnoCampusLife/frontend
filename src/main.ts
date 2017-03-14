@@ -1,29 +1,40 @@
 'use strict'
 
+import 'babel-polyfill'
+import 'whatwg-fetch'
+
 import * as Vue from 'vue'
-import * as VueRouter from 'vue-router'
+import * as VuePaginate from 'vue-paginate'
+import * as Vue2Filters from 'vue2-filters'
 
-import newRouter from './router-config'
+import Vuelidate from 'vuelidate'
 
-const  app = require('./views/app.vue')
+import { sync } from 'vuex-router-sync'
+import router from './router'
+import store from './store'
+sync(store, router)
 
-const VueValidator = require('vue-validator')
-Vue.use(VueValidator)
+import './filters'
+import './material'
 
-const styles = require('./styles/main.scss')
-const polyfills = require('./polyfills')
+const main = require('./views/main.vue')
 
-// FIXME: Move this to some other file
-const emojione = require('emojione')
-Vue.filter('emojify', (value) => {
-  return emojione.toImage(value)
+Vue.use(VuePaginate)
+Vue.use(Vuelidate)
+Vue.use(Vue2Filters)
+
+new Vue({
+	router,
+	store,
+	...main,
+	el: 'main',
 })
 
-Vue.use(VueRouter)
+// Styles
+import './styles/main.scss'
 
-const router = newRouter(new VueRouter({
-	hashbang: false,
-	history:  true
-}));
-
-router.start(app, 'app')
+// Scripts
+// import 'expose-loader?$!expose-loader?jQuery!jquery'
+// import "expose-loader?Tether!tether"
+// import 'bootstrap'
+import 'expose-loader?mdc!../node_modules/material-components-web/dist/material-components-web.js'

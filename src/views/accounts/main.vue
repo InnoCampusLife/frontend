@@ -1,16 +1,36 @@
-<template lang="jade">
-	content
-		div(slot='header')
-			div
-				h1.header-title Accounts
+<template lang="pug">
+	main
+		header.app-bar
+			md-theme(md-name="dark")
+				md-whiteframe(md-tag="md-toolbar", md-elevation="4")
+					.md-toolbar-container
+						md-button.md-icon-button(@click='toggleLeftSidenav')
+							md-icon menu
+						.app-bar-container
+							.row
+								.col
+									h1.md-title Account
+		section
+			.content
+				router-view
+			footer
+				p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
-	var content = require('./../content.vue');
+	export default {
+		name: 'accounts-main',
 
-	module.exports = {
-		components: {
-			content:content
+		data() {
+			return {
+				search: ''
+			}
+		},
+
+		methods: {
+			toggleLeftSidenav() {
+				this.$emit('toggleLeftSidenav')
+			},
 		}
 	}
 </script>

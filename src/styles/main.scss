@@ -2,24 +2,33 @@
 	 Helper Imports
 	 ========================================================================== */
 
-@import './transitions';
-@import './helpers';
+// @import './helpers';
+
+/* ==========================================================================
+	 Vendor Imports
+	 ========================================================================== */
+
+@import
+	'~@material/animation/mdc-animation.scss',
+	'~bootstrap/scss/bootstrap.scss',
+	'~vue-material/dist/vue-material.css';
 
 /* ==========================================================================
 	 Typography
 	 ========================================================================== */
 
-// @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&subset=cyrillic');
-@import url('https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
-@import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
+// @import url('https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
+@import
+	url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic'),
+	url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700,700i&subset=cyrillic');
 
-$main-font-family: Rubik, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$main-font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $monospace-font-family: Cousine, Menlo, Monaco, "Courier New", Courier, monospace;
 
 body {
 	background-color: hsl(0, 0%, 94.5%);
 	color: hsla(0, 0%, 0%, 0.87);
-	font-family: $main-font-family;
+	font-family: $main-font-family !important;
 	font-size: 1em;
 }
 
@@ -39,10 +48,6 @@ html {
 	box-sizing: border-box;
 }
 
-body {
-	height: 100vh;
-}
-
 *, *::before, *::after {
 	box-sizing: inherit;
 }
@@ -53,21 +58,15 @@ body {
 }
 */
 
-main {
-	height: 100vh;
-	margin-left: $sidebar-width;
-	overflow: hidden;
+.card-columns {
+	column-count: auto;
+	column-gap: 0;
+	column-width: $sidebar-width;
 }
 
 .emojione {
 	height: 1em;
 	width: auto;
-}
-
-.card-columns {
-	column-count: auto;
-	column-gap: 1rem;
-	column-width: $sidebar-width;
 }
 
 select.form-control-lg {
@@ -76,24 +75,6 @@ select.form-control-lg {
 
 select.form-control {
 	padding: .25rem .5rem;
-}
-
-.content-main {
-	height: calc(100% - #{$header-height});
-	margin-bottom: -$footer-height;
-	overflow: auto;
-
-	> .wrap {
-		margin-bottom: -$footer-height;
-		min-height: 100%;
-		padding-top: 1rem;
-	}
-
-	> .wrap:after {
-		content: '';
-		height: $footer-height;
-		display: block;
-	}
 }
 
 footer {
@@ -120,6 +101,289 @@ footer {
 
 .modal button + button {
 	margin-left: .5rem;
+}
+
+/* ==========================================================================
+	 Material Design
+	 ========================================================================== */
+
+.container, .container-fluid {
+	padding-top: 16px;
+	padding-bottom: 16px;
+}
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	display: flex;
+	flex-flow: column;
+	position: relative;
+
+	> main {
+		display: flex;
+		flex-flow: column;
+		min-height: 100%;
+
+		> .md-sidenav {
+			z-index: 1600;
+		}
+
+		> main {
+			display: flex;
+			flex: 1;
+			flex-flow: column;
+			min-height: 100%;
+			max-height: 100%;
+
+			> header {
+				z-index: 400;
+			}
+
+			> section {
+				display: flex;
+				flex: 1;
+				flex-flow: column;
+				overflow-x: auto;
+				overflow-y: scroll;
+
+				> .content {
+					flex: 1;
+				}
+			}
+		}
+	}
+}
+
+.search {
+	height: 4rem;
+	align-items: center;
+	display: flex;
+	margin: 0 8px 0 0;
+	width: $sidebar-width;
+
+	> .md-input-container {
+
+		&:after {
+			background: hsla(0, 0%, 100%, .7) !important;
+		}
+
+		&.md-input-focused {
+
+			&:after {
+				background: hsla(0, 0%, 100%, 1) !important;
+			}
+
+			> label {
+				color: hsla(0, 0%, 100%, .5) !important;
+			}
+
+			> input {
+				color: hsla(0, 0%, 100%, 1) !important;
+				text-shadow: 0 0 0 hsla(0, 0%, 100%, 1) !important;
+			}
+
+		}
+
+		> label {
+			color: hsla(0, 0%, 100%, .5);
+		}
+
+		> input {
+			color: hsla(0, 0%, 100%, 1);
+		}
+
+	}
+}
+
+.md-theme-dark {
+	color: hsla(0, 0%, 100%, 1) !important;
+}
+
+.md-icon {
+	overflow: hidden;
+	text-transform: uppercase;
+}
+
+.md-card {
+	.md-card-content + .md-card-content {
+		padding-top: 0;
+	}
+}
+
+.md-sidenav > .md-sidenav-content {
+	display: flex;
+	flex-flow: column nowrap;
+	width: 240px;
+	overflow: hidden;
+	border-right: 1px solid hsla(0, 0%, 0%, 0.12);
+
+	> main {
+		flex: 1;
+		display: flex;
+		flex-flow: column nowrap;
+		overflow: hidden;
+
+		> section {
+			flex: 1;
+		}
+	}
+}
+
+
+.app-bar-container {
+	flex: 1;
+
+	> .row {
+		align-items: center;
+	}
+}
+
+.md-toolbar {
+	.md-title {
+		margin: 0 !important;
+	}
+
+	.md-button {
+		margin: 0;
+	}
+
+	.md-button + .md-button {
+		margin-left: 8px;
+	}
+}
+
+/* ==========================================================================
+	 VueMaterial Global Fixes
+	 ========================================================================== */
+
+.md-button.md-icon-button .md-icon, .md-button.md-fab .md-icon {
+	margin-top: 0;
+}
+
+.md-input-container .md-icon ~ .md-select {
+	margin-left: 12px;
+}
+
+.md-input-container .md-icon ~ .md-error {
+	margin-left: 36px;
+}
+
+.md-card-area > .md-card-header {
+	padding-top: 24px;
+}
+
+.md-card-content > p:last-child {
+	margin-bottom: 0;
+}
+
+.md-toolbar {
+	z-index: 400;
+}
+
+.md-dialog-container {
+	z-index: 2400;
+}
+
+/* ==========================================================================
+	 Transitions/Animations
+	 ========================================================================== */
+
+.application {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.application-list-enter, .application-list-leave-to {
+	opacity: 0;
+	// transform: translateY(100%);
+}
+
+.application-list-enter-active, .application-list-leave-active {
+	position: absolute;
+}
+
+.participant {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.participant-list-enter, .participant-list-leave-to {
+	opacity: 0;
+	// transform: translateY(100%);
+}
+
+.participant-list-enter-active, .participant-list-leave-active {
+	position: absolute;
+}
+
+.store-item {
+	transition: all 500ms;
+	display: inline-block;
+	width: 100%;
+}
+
+.store-item-list-enter, .store-item-list-leave-to {
+	opacity: 0;
+	// transform: translateY(100%);
+}
+
+.store-item-list-enter-active, .store-item-list-leave-active {
+	position: absolute;
+}
+
+/* ==========================================================================
+	 Login Page
+	 ========================================================================== */
+
+.login-page {
+	background-position: center;
+	background-size: cover;
+	background-image: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg');
+
+	> .wrap {
+		background: linear-gradient(to bottom, rgba(46, 204, 113, 0.5) 0%, rgba(26, 188, 156, 0.5));
+		height: 100vh;
+		width: 100vw;
+
+		> .header {
+			height: $header-height;
+			text-align: center;
+			width: 100%;
+
+			> h1 {
+				color: hsl(0, 0, 100%);
+				font-weight: 800;
+				line-height: $header-height;
+				margin: 0
+			}
+		}
+
+		> .form {
+			height: 100%;
+			align-items: center;
+			display: flex;
+			justify-content: center;
+			margin: -$header-height 0 -$footer-height;
+			width: 100%;
+
+			> .form-group {
+				width: $sidebar-width;
+
+				input, button {
+					opacity: 0.9;
+
+					&:hover, &:focus, &:active {
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
 }
 
 /* ==========================================================================
@@ -160,7 +424,7 @@ footer {
 // Medium devices (tablets, less than 992px)
 @media (max-width: 991px) {
 	// FIXME
-	main {
+	.main-main {
 		margin-left: 0;
 	}
 
@@ -174,11 +438,3 @@ footer {
 
 // Extra large devices (large desktops)
 // No media query since the extra-large breakpoint has no upper bound on its width
-
-/* ==========================================================================
-	 Component Imports
-	 ========================================================================== */
-
-@import './sidebar-main';
-@import './header-main';
-@import './login-page';

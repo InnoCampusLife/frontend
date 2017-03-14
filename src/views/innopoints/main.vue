@@ -1,75 +1,60 @@
-<template lang="jade">
-	content
-		div(slot='header')
-
-			.search-group.input-group(v-show="$route.path.includes('applications')")
-				input#search.form-control(type="search", placeholder="Search {{ $route.name | capitalize }}", v-model="$router.app.query")
-				span.input-group-btn
-					button.btn.btn-secondary(type='button')
-						i.material-icons search
-
-			ul.header-nav
-				template(v-if="$route.path.includes('applications')")
-					li(v-if="!user.innopoints.data.isAdmin")
-						a.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'all' } }")
-							i.material-icons description
-							span All
-					li
-						a.btn-outline-primary(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'in_process' } }")
-							i.material-icons inbox
-							span In&nbsp;Process
-					li
-						a.btn-outline-danger(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rejected' } }")
-							i.material-icons thumb_down
-							span Rejected
-					li
-						a.btn-outline-warning(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'rework' } }")
-							i.material-icons refresh
-							span In&nbsp;Rework
-					li
-						a.btn-outline-success(v-link="{name: 'applications',	params: { username: user.account.username, filter: 'approved' } }")
-							i.material-icons thumb_up
-							span Approved
-				template(v-else)
-				li
-					a.btn-outline-primary(v-link="{ name: 'applications', params: { username: user.account.username, filter: 'in_process' } }")
-						i.material-icons library_books
-						span Applications
-				li.float-xs-right
-					a.btn-outline-info(v-link="{ name: 'apply', params: { username: user.account.username } }")
-						i.material-icons add
-						span Apply
+<template lang="pug">
+	main
+		header.app-bar
+			md-theme(md-name="dark")
+				md-whiteframe(md-tag="md-toolbar", md-elevation="4")
+					.md-toolbar-container
+						md-button.md-icon-button(@click='toggleLeftSidenav')
+							md-icon menu
+						.app-bar-container
+							.row
+								.col
+									h1.md-title
+										span Innopoints
+										span(v-if="name === 'applications'") &ensp;&ndash;&ensp;Applications
+										span(v-if="name === 'apply'") &ensp;&ndash;&ensp;Apply
+								.col.col-auto(v-if="name === 'apply'")
+									router-link(
+										tag="md-button",
+										:to="{ name: 'applications' }")
+										span Applications
+								.col.col-auto.hidden-sm-down(v-if="name === 'applications'")
+									.search
+										md-button.md-icon-button
+											md-icon search
+										md-input-container(md-inline)
+											label(for="search") Search
+											md-input#search(name="search", type="search", v-model="search")
+		section
+			.content
+				keep-alive
+					router-view
+			footer
+				p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
-
-	import content from './../content.vue'
+	import { mapState } from 'vuex'
 
 	export default {
+		name: 'innopoints-main',
 
 		data() {
 			return {
-				route: this.$route,
-				user: this.$root.user,
+				search: ''
 			}
 		},
 
-		components: {
-			content: content
+		computed: {
+			...mapState({
+				name: (state) => state.route.name,
+			}),
 		},
 
 		methods: {
-			filter_changed(e) {
-				this.$router.go(
-					{
-						name: 'applications',
-						params: {
-							username: this.user.account.username,
-							filter: e.target.dataset.value
-						}
-					}
-				);
-			}
+			toggleLeftSidenav() {
+				this.$emit('toggleLeftSidenav')
+			},
 		}
 	}
 </script>
