@@ -1,3 +1,4 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var path = require('path')
 // var webpack = require('webpack')
@@ -15,7 +16,7 @@ module.exports = {
   entry: './src/main.ts',
 
   output: {
-    path: path.resolve(__dirname, './build'),
+    path: path.join(__dirname, 'build'),
     // publicPath: '/build/',
     filename: 'js/bundle.js',
     // filename: 'js/[name].bundle.js',
@@ -114,6 +115,10 @@ module.exports = {
 
   plugins: [
     new ExtractTextPlugin('css/bundle.css'),
+    new CopyWebpackPlugin([
+      { from: 'src/index.html' },
+      { from: 'public', to: 'public' },
+    ]),
   ],
 
   // plugins: [

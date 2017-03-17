@@ -30,9 +30,6 @@ new Vue({
 	el: 'main',
 })
 
-// Pages
-import 'file-loader?name=[name].[ext]!./index.html'
-
 // Styles
 import './styles/main.scss'
 
