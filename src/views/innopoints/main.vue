@@ -4,7 +4,7 @@
 			md-theme(md-name="dark")
 				md-whiteframe(md-tag="md-toolbar", md-elevation="4")
 					.md-toolbar-container
-						md-button.md-icon-button(@click='toggleLeftSidenav')
+						md-button.md-icon-button(@click.native='toggleLeftSidenav')
 							md-icon menu
 						.app-bar-container
 							.row

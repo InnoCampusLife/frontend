@@ -1,6 +1,6 @@
 <template lang="pug">
 	.container
-		order.my-3(v-for="order in orders", :order="order")
+		order.my-3(v-for="order in orders", :key="order.id", :order="order")
 		//- .card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'", :status="o.status", :id="'card-' + o.id")
 </template>
 

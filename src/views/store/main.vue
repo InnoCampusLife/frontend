@@ -4,7 +4,7 @@
 			md-theme(md-name="dark")
 				md-whiteframe(md-tag="md-toolbar", md-elevation="4")
 					.md-toolbar-container
-						md-button.md-icon-button(@click='toggleLeftSidenav')
+						md-button.md-icon-button(@click.native='toggleLeftSidenav')
 							md-icon menu
 						.app-bar-container
 							.row
@@ -15,14 +15,16 @@
 										span(v-if="name === 'item'")  &ensp;&ndash;&ensp;Item
 								.col.col-auto
 									router-link(
-										v-show="name === 'store'"
+										v-show="name === 'store'",
 										tag="md-button",
-										:to="{ name: 'orders' }")
+										:to="{ name: 'orders' }",
+									)
 										span Orders
 									router-link(
-										v-show="name === 'item' || name === 'orders'"
+										v-show="name === 'item' || name === 'orders'",
 										tag="md-button",
-										:to="{ name: 'store' }")
+										:to="{ name: 'store' }",
+									)
 										span Store
 								.col.col-auto.hidden-sm-down(v-show="name === 'store' || name === 'orders'")
 									.search

@@ -5913,11 +5913,11 @@ vue-loader@^11.1.4:
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
 
-vue-material@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/vue-material/-/vue-material-0.7.1.tgz#2ed25eb1e2054c21fe323361604c92f40ef5ada1"
+vue-material@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/vue-material/-/vue-material-0.6.3.tgz#28b7131cdba441d484ac5a2b3bc0a6291319fd0b"
   dependencies:
-    vue "^2.1.10"
+    vue "^2.1.8"
 
 vue-paginate@^3.4.0:
   version "3.4.0"
@@ -5951,7 +5951,7 @@ vue2-filters@^0.1.5:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/vue2-filters/-/vue2-filters-0.1.7.tgz#af966d30391603e837c15edc077ee0271e7a2265"
 
-vue@^2.0.5, vue@^2.1.10, vue@^2.2.4:
+vue@^2.0.5, vue@^2.1.8, vue@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.4.tgz#d0a3a050a80a12356d7950ae5a7b3131048209cc"
 

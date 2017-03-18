@@ -24,7 +24,7 @@
 										@change='updateAcivities',
 									)
 										md-option(value="") All
-										md-option(v-for='c in categories', :value="c.id") {{ c.title | startCase }}
+										md-option(v-for='c in categories', :key="c.id", :value="c.id") {{ c.title | startCase }}
 
 					md-card-content
 						.md-title(v-if='participants.length > 1') Participants
@@ -67,7 +67,7 @@
 											v-model="part.activity_id",
 											@change="$v.participants.$each[index].activity_id.$touch()"
 										)
-											md-option(v-for='a in activities', :value="a.id") {{ a.title }}
+											md-option(v-for='a in activities', :key="a.id", :value="a.id") {{ a.title }}
 										span(v-if="!$v.participants.$each[index].activity_id.required", class="md-error")
 											span Required
 
