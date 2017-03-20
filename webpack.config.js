@@ -1,8 +1,8 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var path = require('path')
-// var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 // process.traceDeprecation = true
 
@@ -21,6 +21,7 @@ module.exports = {
     filename: 'js/bundle.js',
     // filename: 'js/[name].bundle.js',
     // chunkFilename: 'js/[id].chunk.js',
+    pathinfo: true,
   },
 
   resolve: {
@@ -119,13 +120,12 @@ module.exports = {
       { from: 'src/index.html' },
       { from: 'public', to: 'public' },
     ]),
+    new webpack.ProvidePlugin({
+      _: "lodash",
+    }),
   ],
 
-  // plugins: [
-  //  new ExtractTextPlugin("css/[name].bundle.css")
-  // ],
-
-  // devtool: '#eval-source-map'
+  devtool: "eval",
 }
 
 // if (process.env.NODE_ENV === 'production') {

@@ -134,7 +134,6 @@
 </template>
 
 <script>
-	import _ from 'lodash'
 	import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 
 	export default {
@@ -302,6 +301,23 @@
 					return { actor, amount, activity_id }
 				}))
 
+
+				// File upload
+				const input = document.querySelector('input[type="file"]')
+				const data = new FormData()
+
+				for (let f of input.files) { data.append(f.name, f) }
+
+				fetch('http://uis.university.innopolis.ru/api/points/files', {
+					method: 'POST',
+					body: data,
+				}).then((json) => {
+					console.log(json.result)
+				}).catch((err) => {
+					console.error('Failed to upload files:', err)
+				})
+
+
 				this.$root.api.innopoints.applications.create({
 					body: {
 						application: {
@@ -318,7 +334,7 @@
 				}).then((json) => {
 					console.log(json.result)
 				}).catch((err) => {
-					console.log('Failed to submit application:', err)
+					console.error('Failed to submit application:', err)
 				})
 			},
 

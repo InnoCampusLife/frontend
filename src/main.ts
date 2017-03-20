@@ -6,10 +6,25 @@ import 'whatwg-fetch'
 import * as Vue from 'vue'
 import * as VuePaginate from 'vue-paginate'
 import * as Vue2Filters from 'vue2-filters'
-
 import Vuelidate from 'vuelidate'
-
 import { sync } from 'vuex-router-sync'
+import debug from 'debug'
+
+// localStorage.debug = ['uis:log', 'uis:error', 'uis:info']
+
+// const log = debug('uis:log')
+// const err = debug('uis:error')
+// const info = debug('uis:info')
+
+// log.log = console.log.bind(console)
+// err.log = console.error.bind(console)
+// info.log = console.info.bind(console)
+
+// debug('Debug is required!')
+// log('Debug is required!')
+// err('Debug is required!')
+// info('Debug is required!')
+
 import router from './router'
 import store from './store'
 sync(store, router)

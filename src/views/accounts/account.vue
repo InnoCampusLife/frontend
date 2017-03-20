@@ -51,8 +51,6 @@
 </template>
 
 <script>
-	import { capitalize } from 'lodash'
-
 	import { mapState, mapGetters } from 'vuex'
 
 	export default {
@@ -65,7 +63,7 @@
 		},
 
 		filters: {
-			capitalize
+			capitalize: _.capitalize,
 		},
 
 		computed: {
