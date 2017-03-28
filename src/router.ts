@@ -106,7 +106,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	if (to.matched.some((record) => record.meta.authorizedZone)) {
-		if (!storage.get(config.tokenName)) {
+		if (!storage.getItem(config.tokenName)) {
 			// console.log('Checkpoint #1')
 			next({
 				path: '/login',
@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
 			next()
 		}
 	} else if (to.matched.some((record) => record.meta.loginPage)) {
-		if (storage.get(config.tokenName)) {
+		if (storage.getItem(config.tokenName)) {
 			// console.log('Checkpoint #3')
 			next({
 				path: '/',

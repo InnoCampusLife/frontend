@@ -1,14 +1,19 @@
-export default {
-	get(key) {
-		return localStorage.getItem(key);
+const storage = {
+	getItem (key: string) {
+		return localStorage.getItem(key)
 	},
 
-	set(key, value) {
-		if (value) localStorage.setItem(key, value);
-		return localStorage.getItem(key);
+	setItem (key: string, data: string) {
+		localStorage.setItem(key, data)
 	},
 
 	clear() {
-		localStorage.clear();
+		localStorage.clear()
+	},
+
+	removeItem(key: string) {
+		localStorage.removeItem(key)
 	},
 }
+
+export default storage

@@ -10,17 +10,6 @@
 				.md-title {{ item.title | startCase }}
 				.md-subhead {{ item.category.title | startCase }}
 
-				// div(v-show='item.possible_joint_purchase')
-				// 	p.card-text You can buy it with {{item.max_buyers}} people:
-				// 	.form-group(v-for="i in (item.max_buyers - 1)")
-				// 		input.form-control(placeholder="Username")
-				// .form-group.row(v-for='(option, index) in item.options')
-				// 	label.col-xs-3.col-form-label(for="'item-option-select-' + index") {{ option.title }}
-				// 	.col-xs-9
-				// 		select.form-control(:name='option.title', :data-index='index', @change='onSelect(item, $event)', :id="'item-option-select-' + index")
-				// 			option(value='') Choose {{ option.title }}
-				// 			option(v-for='value in option.values', :value='value') {{ value }}
-
 			md-card-content
 				p.card-text
 					span.text-success(v-if="quantity > 0") {{ quantity }} in Stock

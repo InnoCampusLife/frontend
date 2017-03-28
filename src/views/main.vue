@@ -22,13 +22,6 @@
 			main
 				section
 					md-list
-						//- router-link(
-						//- 	tag="md-list-item",
-						//- 	:to="{ name: 'account' }",
-						//- )
-						//- 	md-icon account_circle
-						//- 	span Account
-
 						router-link(
 							tag="md-list-item",
 							:to="{ name: 'applications' }",
@@ -78,7 +71,7 @@
 
 <script>
 
-	import { mapActions, mapState } from 'vuex'
+	import { mapActions, mapMutations, mapState } from 'vuex'
 
 	import accounts from './../modules/accounts'
 	import innopoints from './../modules/innopoints'
@@ -119,7 +112,7 @@
 		},
 
 		watch: {
-			$route: ['updateState', 'closeLeftSidenav'],
+			$route: ['closeLeftSidenav', 'updateState'],
 		},
 
 		// For testing
@@ -127,6 +120,11 @@
 			...mapActions({
 				updateAccounts: 'accounts/update',
 				updateInnopoints: 'innopoints/update',
+			}),
+
+			...mapMutations({
+				clearAccounts: 'accounts/clear',
+				clearInnopoints: 'innopoints/clear',
 			}),
 
 			toggleLeftSidenav() {
@@ -143,14 +141,18 @@
 			},
 
 			updateState() {
-				if (storage.get(config.tokenName)) {
-					this.updateAccounts()
-						// .then((json) => console.log('Accounts update result:', json))
-						.catch((err) => console.error('Couldn\'t update accounts:', err.message))
-
-					this.updateInnopoints()
-						// .then((json) => console.log('Innopoints update result:', json))
-						.catch((err) => console.error('Couldn\'t update innopoints:', err.message))
+				if (storage.getItem(config.tokenName)) {
+					Promise.all([
+						this.updateAccounts(),
+						this.updateInnopoints(),
+					]).then((jsons) => {
+						console.log('State updated with result:', jsons)
+					}).catch((err) => {
+						console.error('Failed to update state:', err)
+					})
+				} else {
+					this.clearAccounts()
+					this.clearInnopoints()
 				}
 			},
 		}

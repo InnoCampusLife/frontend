@@ -136,7 +136,6 @@
 
 		data() {
 			return {
-				user: this.$router.app.user,
 				isLogin: true,
 				credentials: {
 					username: '',
@@ -150,16 +149,14 @@
 		},
 
 		methods: {
-			...mapMutations('accounts', [
-				'setAccount',
-			]),
-
 			submit() {
 				if (this.isLogin) {
+
+					// Log in
 					this.$root.api.accounts.auth(this.credentials)
 						.then((json) => {
 							console.log('Logged in:', json.result)
-							storage.set(config.tokenName, json.result.token)
+							storage.setItem(config.tokenName, json.result.token)
 						})
 						.then(() => {
 							this.$router.push('/')
@@ -168,12 +165,15 @@
 							console.error('Logging in error:', err)
 						})
 				} else {
+
+					// Sign up
 					this.$root.api.accounts.create(this.credentials)
 						.then((json) => {
 							console.log('Signed up:', json.result)
-							storage.set(config.tokenName, json.result.token)
+							storage.setItem(config.tokenName, json.result.token)
 						})
 						.then(() => {
+							// Sing up for Innopoints account using just the token
 							return this.$root.api.innopoints.accounts.create()
 						})
 						.then(() => {

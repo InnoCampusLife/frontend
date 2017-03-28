@@ -28,11 +28,11 @@ const apiURL = config.server.apiURL
 export const modules = {
 
 	get token() {
-		return storage.get(config.tokenName)
+		return storage.getItem(config.tokenName)
 	},
 
 	set token(value) {
-		storage.set(config.tokenName, value)
+		storage.setItem(config.tokenName, value)
 	},
 
 	accounts: {
@@ -59,11 +59,11 @@ export const modules = {
 		tgId: null,
 
 		get token() {
-			return storage.get(config.tokenName)
+			return storage.getItem(config.tokenName)
 		},
 
 		set token(value) {
-			storage.set(config.tokenName, value)
+			storage.setItem(config.tokenName, value)
 		},
 
 		get fullName() {
@@ -74,7 +74,7 @@ export const modules = {
 		},
 
 		get loggedIn() {
-			return storage.get(config.tokenName) ? true: false
+			return storage.getItem(config.tokenName) ? true: false
 		},
 
 		get isGhost() {

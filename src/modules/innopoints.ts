@@ -18,7 +18,7 @@ import {
 } from './../utils'
 
 const url = config.server.apiURL + 'v1/points'
-const token = () => storage.get(config.tokenName)
+const token = () => storage.getItem(config.tokenName)
 
 function receiveJson(input: RequestInfo, init?: RequestInit): Promise<any> {
 	if (!init) init = new GETRequestInit()
@@ -54,7 +54,7 @@ export const store: Vuex.StoreOptions<any> = {
 	},
 
 	mutations: {
-		setPoints (state, {
+		setState (state, {
 			id,
 			type,
 			points_amount,
@@ -70,7 +70,7 @@ export const store: Vuex.StoreOptions<any> = {
 			if (ownerId) state.owner.id = ownerId
 		},
 
-		clearPoints (state) {
+		clear (state) {
 			state.id = null
 			state.type = ''
 			state.points_amount = 0
@@ -78,24 +78,26 @@ export const store: Vuex.StoreOptions<any> = {
 			state.owner.id = ''
 		},
 
-		increase (state, { amount = 0 }) {
+		increaseAmount (state, { amount = 0 }) {
 			state.points_amount += amount
 		},
 
-		decrease (state, { amount = 0 }) {
+		decreaseAmount (state, { amount = 0 }) {
 			state.points_amount -= amount
 		},
 	},
 
 	actions: {
 		update ({ commit }) {
-			return api.accounts.self().then((json) => {
-				const { id, type, points_amount, owner: { username, id: ownerId } } = json.result
-				commit('setPoints', { id, type, points_amount, owner: { username, id: ownerId } })
-				return Promise.resolve(json.result)
-			}).catch((err) => {
-				return Promise.reject(new StateUpdateError(err))
-			})
+			return api.accounts.self()
+				.then((json) => {
+					const { id, type, points_amount, owner: { username, id: ownerId } } = json.result
+					commit('setState', { id, type, points_amount, owner: { username, id: ownerId } })
+					return Promise.resolve(json.result)
+				})
+				.catch((err) => {
+					return Promise.reject(new StateUpdateError(err))
+				})
 		},
 	},
 }
@@ -173,6 +175,28 @@ export const api = {
 			const input = `${url}/accounts/${token()}/applications/${application_id}`
 			const init: RequestInit = new DELETERequestInit()
 			return receiveJson(input, init)
+		},
+
+		files: {
+			create ({ body }) {
+				if (!body) return Promise.reject(new InvalidParamsError())
+				const input = `${url}/accounts/${token()}/files`
+				const init: RequestInit = new POSTRequestInit({ body })
+				return receiveJson(input, init)
+			},
+
+			one ({ file_id }) {
+				if (!file_id) return Promise.reject(new InvalidParamsError())
+				const input = `${url}/accounts/${token()}/files/${file_id}`
+				return receiveJson(input)
+			},
+
+			delete ({ file_id }) {
+				if (!file_id) return Promise.reject(new InvalidParamsError())
+				const input = `${url}/accounts/${token()}/files/${file_id}`
+				const init: RequestInit = new DELETERequestInit()
+				return receiveJson(input, init)
+			},
 		},
 	},
 

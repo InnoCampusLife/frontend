@@ -18,7 +18,7 @@ import {
 } from './../utils'
 
 const url = config.server.apiURL + 'v1/accounts'
-const token = () => storage.get(config.tokenName)
+const token = () => storage.getItem(config.tokenName)
 
 function receiveJson (input: RequestInfo, init?: RequestInit): Promise<any> {
 	if (!init) init = new GETRequestInit()
@@ -57,7 +57,7 @@ export const store: Vuex.StoreOptions<any> = {
 	},
 
 	mutations: {
-		setAccount (state, { id, firstName, lastName, username, email, role }) {
+		setState (state, { id, firstName, lastName, username, email, role }) {
 			if (id) state.id = id
 			if (firstName) state.firstName = firstName
 			if (lastName) state.lastName = lastName
@@ -66,7 +66,7 @@ export const store: Vuex.StoreOptions<any> = {
 			if (role) state.role = role
 		},
 
-		clearAccount (state) {
+		clear (state) {
 			state.id = ''
 			state.firstName = ''
 			state.lastName = ''
@@ -78,13 +78,15 @@ export const store: Vuex.StoreOptions<any> = {
 
 	actions: {
 		update ({ commit }) {
-			return api.self().then((json) => {
-				const { id, firstName, lastName, username, email, role } = json.result
-				commit('setAccount', { id, firstName, lastName, username, email, role })
-				return Promise.resolve(json.result)
-			}).catch((err) => {
-				return Promise.reject(new StateUpdateError(err))
-			})
+			return api.self()
+				.then((json) => {
+					const { id, firstName, lastName, username, email, role } = json.result
+					commit('setState', { id, firstName, lastName, username, email, role })
+					return Promise.resolve(json.result)
+				})
+				.catch((err) => {
+					return Promise.reject(new StateUpdateError(err))
+				})
 		},
 	},
 }
