@@ -54,7 +54,7 @@ export const store: Vuex.StoreOptions<any> = {
 	},
 
 	mutations: {
-		set(state, {
+		setPoints (state, {
 			id,
 			type,
 			points_amount,
@@ -70,7 +70,7 @@ export const store: Vuex.StoreOptions<any> = {
 			if (ownerId) state.owner.id = ownerId
 		},
 
-		clear(state) {
+		clearPoints (state) {
 			state.id = null
 			state.type = ''
 			state.points_amount = 0
@@ -78,20 +78,20 @@ export const store: Vuex.StoreOptions<any> = {
 			state.owner.id = ''
 		},
 
-		increase(state, { amount = 0 }) {
+		increase (state, { amount = 0 }) {
 			state.points_amount += amount
 		},
 
-		decrease(state, { amount = 0 }) {
+		decrease (state, { amount = 0 }) {
 			state.points_amount -= amount
 		},
 	},
 
 	actions: {
-		update({ commit }) {
+		update ({ commit }) {
 			return api.accounts.self().then((json) => {
 				const { id, type, points_amount, owner: { username, id: ownerId } } = json.result
-				commit('set', { id, type, points_amount, owner: { username, id: ownerId } })
+				commit('setPoints', { id, type, points_amount, owner: { username, id: ownerId } })
 				return Promise.resolve(json.result)
 			}).catch((err) => {
 				return Promise.reject(new StateUpdateError(err))
@@ -102,7 +102,7 @@ export const store: Vuex.StoreOptions<any> = {
 
 export const api = {
 	activities: {
-		get({ category_id = null, skip = 0, limit = 0 } = {}) {
+		many ({ category_id = null, skip = 0, limit = 0 } = {}) {
 			// TODO: add check for limit and skip params
 			const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 			const input = `${url}/activities` +
@@ -112,7 +112,7 @@ export const api = {
 	},
 
 	categories: {
-		get({ skip = 0, limit = 0 } = {}) {
+		many ({ skip = 0, limit = 0 } = {}) {
 			// TODO: add check for limit and skip params
 			const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 			const input = `${url}/categories` + (paramsStr ? '?' + paramsStr : '')
@@ -121,54 +121,54 @@ export const api = {
 	},
 
 	accounts: {
-		self() {
+		self () {
 			const input = `${url}/accounts/${token()}`
 			return receiveJson(input)
 		},
 
-		create() {
+		create () {
 			const input = `${url}/accounts/${token()}`
-			const init: RequestInit = new POSTRequestInit()
+			const init: RequestInit = new POSTRequestInit({})
 			return receiveJson(input, init)
 		},
 	},
 
 	applications: {
-		one({ application_id }) {
+		one ({ application_id }) {
 			if (!application_id) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/applications/${application_id}`
 			return receiveJson(input)
 		},
 
-		many({ status = '', skip = 0, limit = 0 } = {}) {
+		many ({ status = '', skip = 0, limit = 0 } = {}) {
 			const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 			const input = `${url}/accounts/${token()}/applications` +
 					(status ? '/' + status : '') + (paramsStr ? '?' + paramsStr : '')
 			return receiveJson(input)
 		},
 
-		create({ body }) {
+		create ({ body }) {
 			if (!body) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/applications`
 			const init: RequestInit = new POSTRequestInit({ body })
 			return receiveJson(input, init)
 		},
 
-		update({ application_id, body }) {
+		update ({ application_id, body }) {
 			if (!application_id || !body) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/applications/${application_id}`
 			const init: RequestInit = new PUTRequestInit({ body })
 			return receiveJson(input, init)
 		},
 
-		submit({ application_id }) {
+		submit ({ application_id }) {
 			if (!application_id) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/applications/${application_id}/approve`
 			const init: RequestInit = new PUTRequestInit()
 			return receiveJson(input, init)
 		},
 
-		delete({ application_id }) {
+		delete ({ application_id }) {
 			if (!application_id) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/applications/${application_id}`
 			const init: RequestInit = new DELETERequestInit()
@@ -177,7 +177,7 @@ export const api = {
 	},
 
 	items: {
-		many({ category_id = null, fields = '', order = '', skip = 0, limit = 0 } = {}) {
+		many ({ category_id = null, fields = '', order = '', skip = 0, limit = 0 } = {}) {
 			const paramsStr =
 				(skip ? 'skip=' + skip : '') +
 				(limit ? 'limit=' + limit : '') +
@@ -187,7 +187,7 @@ export const api = {
 			return receiveJson(input)
 		},
 
-		one({ item_id }) {
+		one ({ item_id }) {
 			if (!item_id) Promise.reject(new InvalidParamsError())
 			const input = `${url}/shop/items/${item_id}`
 			return receiveJson(input)
@@ -195,32 +195,32 @@ export const api = {
 	},
 
 	orders: {
-		one({ order_id }) {
+		one ({ order_id }) {
 			if (!order_id) Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/orders/${order_id}`
 			return receiveJson(input)
 		},
 
-		many({ status = '' } = {}) {
+		many ({ status = '' } = {}) {
 			const input = `${url}/accounts/${token()}/orders` + (status ? '/' + status : '')
 			return receiveJson(input)
 		},
 
-		create({ body }) {
+		create ({ body }) {
 			if (!body) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/orders/`
 			const init: RequestInit = new POSTRequestInit({ body })
 			return receiveJson(input, init)
 		},
 
-		update({ order_id, action }) {
+		update ({ order_id, action }) {
 			if (!order_id || !action) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/orders/${order_id}/contributors/${action}`
 			const init: RequestInit = new POSTRequestInit()
 			return receiveJson(input, init)
 		},
 
-		delete({ order_id }) {
+		delete ({ order_id }) {
 			if (!order_id) return Promise.reject(new InvalidParamsError())
 			const input = `${url}/accounts/${token()}/orders/${order_id}`
 			const init = new DELETERequestInit()
@@ -230,19 +230,19 @@ export const api = {
 
 	admin: {
 		accounts: {
-			one({ account_id }) {
+			one ({ account_id }) {
 				if (!account_id) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/accounts/${account_id}`
 				return receiveJson(input)
 			},
 
-			many({ skip = 0, limit = 0} = {}) {
+			many ({ skip = 0, limit = 0} = {}) {
 				const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 				const input = `${url}/admin/${token()}/accounts` + (paramsStr ? '?' + paramsStr : '')
 				return receiveJson(input)
 			},
 
-			update({ account_id, body }) {
+			update ({ account_id, body }) {
 				if (!account_id || !body) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/accounts/${account_id}`
 				const init: RequestInit = new PUTRequestInit({ body })
@@ -250,7 +250,7 @@ export const api = {
 			},
 
 			applications: {
-				get({ account_id, skip = 0, limit = 0 }) {
+				many ({ account_id, skip = 0, limit = 0 }) {
 					if (!account_id) return Promise.reject(new InvalidParamsError())
 					const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 					const input = `${url}/admin/${token()}/accounts/${account_id}/applications` +
@@ -260,7 +260,7 @@ export const api = {
 			},
 
 			orders: {
-				get({ account_id, skip = 0, limit = 0 }) {
+				many ({ account_id, skip = 0, limit = 0 }) {
 					if (!account_id) return Promise.reject(new InvalidParamsError())
 					const paramsStr = (skip ? 'skip=' + skip : '') + (limit ? 'limit=' + limit : '')
 					const input = `${url}/admin/${token()}/accounts/${account_id}/orders` +
@@ -271,33 +271,33 @@ export const api = {
 		},
 
 		applications: {
-			many({ status }) {
+			many ({ status }) {
 				if (!status) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/applications/${status}`
 				return receiveJson(input)
 			},
 
-			one({ account_id, application_id }) {
+			one ({ account_id, application_id }) {
 				if (!account_id || !application_id) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}`
 				return receiveJson(input)
 			},
 
-			create({ body }) {
+			create ({ body }) {
 				if (!body) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/applications`
 				const init: RequestInit = new POSTRequestInit({ body })
 				return receiveJson(input, init)
 			},
 
-			update({ account_id, application_id, body }) {
+			update ({ account_id, application_id, body }) {
 				if (!account_id || !application_id || !body) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}`
 				const init: RequestInit = new PUTRequestInit({ body })
 				return receiveJson(input, init)
 			},
 
-			review({ account_id, application_id, action }) {
+			review ({ account_id, application_id, action }) {
 				if (!account_id || !application_id || !action) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}/${action}`
 				const init: RequestInit = new PUTRequestInit()
@@ -306,19 +306,19 @@ export const api = {
 		},
 
 		orders: {
-			many({ status }) {
+			many ({ status }) {
 				if (!status) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/orders/${status}`
 				return receiveJson(input)
 			},
 
-			one({ order_id }) {
+			one ({ order_id }) {
 				if (!order_id) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/orders/${order_id}`
 				return receiveJson(input)
 			},
 
-			update({ order_id, action }) {
+			update ({ order_id, action }) {
 				if (!order_id || !action) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/admin/${token()}/orders/${order_id}/${action}`
 				const init = new PUTRequestInit()

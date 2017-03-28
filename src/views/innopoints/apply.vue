@@ -222,7 +222,7 @@
 
 				this.updateAcivities()
 
-				this.$root.api.innopoints.categories.get()
+				this.$root.api.innopoints.categories.many()
 					.then(({ result: categories = [] } = {}) => {
 						console.log('Got categories:', { categories })
 						this.categories = categories
@@ -270,7 +270,7 @@
 			},
 
 			updateAcivities(value) {
-				this.$root.api.innopoints.activities.get({ category_id: value })
+				this.$root.api.innopoints.activities.many({ category_id: value })
 					.then(({ result: activities = [] } = {}) => {
 						console.log('Updated activities:', { activities })
 

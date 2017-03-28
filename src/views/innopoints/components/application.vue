@@ -66,17 +66,17 @@
 			md-card-content(v-if="application.comment && application.comment.length")
 				// h5.md-title Comment
 				p(v-for="para in paras") {{ para }}
+		md-card-area
+			md-card-actions(v-if="application.status === ('in_process' || 'rework')")
+				md-button.md-warn(@click="deleteApp") Delete
 
-		md-card-actions(v-if="application.status === ('in_process' || 'rework')")
-			md-button.md-warn(@click="deleteApp") Delete
+			// md-card-actions(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
+			// 	button.btn.btn-block.btn-outline-success(:data-id="application.id", @click="approve") Approve
+			// 	button.btn.btn-block.btn-outline-warning(:data-id="application.id", @click="toRework") To rework
+			// 	button.btn.btn-block.btn-outline-danger(:data-id="application.id", @click="reject") Reject
 
-		// md-card-actions(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
-		// 	button.btn.btn-block.btn-outline-success(:data-id="application.id", @click="approve") Approve
-		// 	button.btn.btn-block.btn-outline-warning(:data-id="application.id", @click="toRework") To rework
-		// 	button.btn.btn-block.btn-outline-danger(:data-id="application.id", @click="reject") Reject
-
-		// md-card-actions(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
-		// 	button.btn.btn-block.btn-primary(:data-id="application.id", @click="resend", v-show="(application.status=='rework')") Resend
+			// md-card-actions(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
+			// 	button.btn.btn-block.btn-primary(:data-id="application.id", @click="resend", v-show="(application.status=='rework')") Resend
 
 </template>
 

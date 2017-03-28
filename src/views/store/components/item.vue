@@ -1,13 +1,4 @@
 <style lang="scss" scoped>
-
-	.md-card-actions {
-		padding: 16px;
-
-		.md-button + .md-button {
-			margin-left: 8px;
-		}
-	}
-
 </style>
 
 <template lang="pug">

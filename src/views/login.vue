@@ -18,16 +18,6 @@
 			}
 		}
 	}
-
-	.md-card {
-		.md-card-actions {
-			padding: 16px;
-
-			> .md-button + .md-button {
-				margin-left: 16px;
-			}
-		}
-	}
 </style>
 
 <template lang="pug">
@@ -97,15 +87,16 @@
 													v-model="credentials.lastName",
 													@keyup.enter="submit"
 												)
-											md-input-container
-												label Study Group
-												md-input(
-													type="text"
-													name="study-group"
-													id="study-group"
-													v-model="credentials.studyGroup",
-													@keyup.enter="submit"
-												)
+											//- // TODO: Replace with select
+											//- md-input-container
+											//- 	label Study Group
+											//- 	md-input(
+											//- 		type="text"
+											//- 		name="study-group"
+											//- 		id="study-group"
+											//- 		v-model="credentials.studyGroup",
+											//- 		@keyup.enter="submit"
+											//- 	)
 									md-card-actions
 										template(v-if="isLogin")
 											md-button(
@@ -113,7 +104,7 @@
 												@click="isLogin = false",
 											)
 												span Sign Up
-											md-button.md-raised(
+											md-button.md-raised.md-primary(
 												type="button",
 												@click="submit",
 												@keyup.enter="submit",
@@ -125,7 +116,7 @@
 												@click="isLogin = true",
 											)
 												span Log In
-											md-button.md-raised(
+											md-button.md-raised.md-primary(
 												type="button",
 												@click="submit",
 												@keyup.enter="submit",
@@ -165,34 +156,32 @@
 
 			submit() {
 				if (this.isLogin) {
-					this.$root.api.accounts.auth({
-						username: this.credentials.username,
-						password: this.credentials.password,
-					}).then((json) => {
-						console.log('Logged in:', json.result)
-						this.setAccount(json.result)
-						storage.set(config.tokenName, json.result.token)
-					}).then(() => {
-						this.$router.push('/')
-					}).catch((err) => {
-						console.error('Logging in error:', err)
-					})
+					this.$root.api.accounts.auth(this.credentials)
+						.then((json) => {
+							console.log('Logged in:', json.result)
+							storage.set(config.tokenName, json.result.token)
+						})
+						.then(() => {
+							this.$router.push('/')
+						})
+						.catch((err) => {
+							console.error('Logging in error:', err)
+						})
 				} else {
-					this.$root.api.accounts.create({
-						username: this.credentials.username,
-						password: this.credentials.password,
-						firstName: this.credentials.firstName,
-						lastName: this.credentials.lastName,
-						email: this.credentials.email,
-					}).then((json) => {
-						console.log('Signed up:', json.result)
-						this.setAccount(json.result)
-						storage.set(config.tokenName, json.result.token)
-					}).then(() => {
-						this.$router.push('/')
-					}).catch((err) => {
-						console.error('Signing up error:', err)
-					})
+					this.$root.api.accounts.create(this.credentials)
+						.then((json) => {
+							console.log('Signed up:', json.result)
+							storage.set(config.tokenName, json.result.token)
+						})
+						.then(() => {
+							return this.$root.api.innopoints.accounts.create()
+						})
+						.then(() => {
+							this.$router.push('/')
+						})
+						.catch((err) => {
+							console.error('Signing up error:', err)
+						})
 				}
 			},
 		},

@@ -157,6 +157,18 @@ body {
 	}
 }
 
+.app-bar-container {
+	flex: 1;
+
+	> .row {
+		align-items: center;
+	}
+}
+
+/* ==========================================================================
+	 VueMaterial Global Fixes
+	 ========================================================================== */
+
 .search {
 	height: 4rem;
 	align-items: center;
@@ -237,15 +249,6 @@ body {
 	}
 }
 
-
-.app-bar-container {
-	flex: 1;
-
-	> .row {
-		align-items: center;
-	}
-}
-
 .md-toolbar {
 	.md-title {
 		margin: 0 !important;
@@ -260,13 +263,21 @@ body {
 	}
 }
 
-/* ==========================================================================
-	 VueMaterial Global Fixes
-	 ========================================================================== */
+.md-card {
+	.md-card-actions {
+		padding: 16px;
 
-// .md-button.md-icon-button .md-icon, .md-button.md-fab .md-icon {
-// 	margin-top: 0;
-// }
+		> .md-button + .md-button {
+			margin-left: 16px;
+		}
+	}
+
+	.md-card-area {
+		.md-card-actions {
+			padding: 8px 16px;
+		}
+	}
+}
 
 .md-input-container .md-icon ~ .md-select {
 	margin-left: 12px;
