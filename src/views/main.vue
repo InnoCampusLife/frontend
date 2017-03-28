@@ -7,7 +7,7 @@
 						md-list.md-transparent
 							md-list-item.md-avatar-list(disabled)
 								md-avatar.md-large
-									img(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+									img(:src="`https://api.adorable.io/avatars/285/${username}`", alt='Avatar')
 								span(style='flex: 1')
 							router-link(
 								tag="md-list-item",
@@ -82,6 +82,8 @@
 
 	import accounts from './../modules/accounts'
 	import innopoints from './../modules/innopoints'
+	import storage from './../storage'
+	import config from './../config'
 
 	import modules from './../modules'
 
@@ -136,18 +138,20 @@
 			},
 
 			logOut(e) {
-				this.user.account.clear()
+				storage.clear()
 				this.$router.push('/login')
 			},
 
 			updateState() {
-				this.updateAccounts()
-					// .then((json) => console.log('Accounts update result:', json))
-					.catch((err) => console.error('Couldn\'t update accounts:', err.message))
+				if (storage.get(config.tokenName)) {
+					this.updateAccounts()
+						// .then((json) => console.log('Accounts update result:', json))
+						.catch((err) => console.error('Couldn\'t update accounts:', err.message))
 
-				this.updateInnopoints()
-					// .then((json) => console.log('Innopoints update result:', json))
-					.catch((err) => console.error('Couldn\'t update innopoints:', err.message))
+					this.updateInnopoints()
+						// .then((json) => console.log('Innopoints update result:', json))
+						.catch((err) => console.error('Couldn\'t update innopoints:', err.message))
+				}
 			},
 		}
 	}

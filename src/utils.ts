@@ -3,6 +3,7 @@ class GeneralRequestInit implements RequestInit {
 		Object.assign(this, init)
 	}
 	mode = 'cors'
+	// credentials = 'include'
 }
 
 export class GETRequestInit extends GeneralRequestInit {}

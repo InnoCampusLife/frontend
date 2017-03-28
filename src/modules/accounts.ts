@@ -18,8 +18,7 @@ import {
 } from './../utils'
 
 const url = config.server.apiURL + 'v1/accounts'
-const tokenName = config.tokenName
-const token = storage.get(tokenName)
+const token = () => storage.get(config.tokenName)
 
 function receiveJson(input: RequestInfo, init?: RequestInit): Promise<any> {
 	if (!init) init = new GETRequestInit()
@@ -58,7 +57,7 @@ export const store: Vuex.StoreOptions<any> = {
 	},
 
 	mutations: {
-		set(state, { id, firstName, lastName, username, email, role }) {
+		setAccount(state, { id, firstName, lastName, username, email, role }) {
 			if (id) state.id = id
 			if (firstName) state.firstName = firstName
 			if (lastName) state.lastName = lastName
@@ -67,7 +66,7 @@ export const store: Vuex.StoreOptions<any> = {
 			if (role) state.role = role
 		},
 
-		clear(state) {
+		clearAccount(state) {
 			state.id = ''
 			state.firstName = ''
 			state.lastName = ''
@@ -79,22 +78,20 @@ export const store: Vuex.StoreOptions<any> = {
 
 	actions: {
 		update({ commit }) {
-			return api.self()
-				.then((json) => {
-					const { id, firstName, lastName, username, email, role } = json.result
-					commit('set', { id, firstName, lastName, username, email, role })
-					return Promise.resolve(json.result)
-				})
-				.catch((err) => {
-					return Promise.reject(new StateUpdateError(err))
-				})
+			return api.self().then((json) => {
+				const { id, firstName, lastName, username, email, role } = json.result
+				commit('set', { id, firstName, lastName, username, email, role })
+				return Promise.resolve(json.result)
+			}).catch((err) => {
+				return Promise.reject(new StateUpdateError(err))
+			})
 		},
 	},
 }
 
 export const api = {
 	self() {
-		const input: RequestInfo = `${url}/${token}`
+		const input: RequestInfo = `${url}/${token()}`
 		return receiveJson(input)
 	},
 
@@ -102,7 +99,7 @@ export const api = {
 		// TODO: add params' properties and values check
 		if (!id && !username) return Promise.reject(new InvalidParamsError())
 		const paramsStr = id ? 'id=' + id : 'username=' + username
-		const input: RequestInfo = `${url}/${token}/exists?${paramsStr}`
+		const input: RequestInfo = `${url}/${token()}/exists?${paramsStr}`
 		return receiveJson(input)
 	},
 
@@ -120,7 +117,7 @@ export const api = {
 	update({ accountId, newRole }) {
 		if (!accountId || !newRole) return Promise.reject(new InvalidParamsError())
 		if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
-		const input: RequestInfo = `${url}/${token}/updateRole`
+		const input: RequestInfo = `${url}/${token()}/updateRole`
 		const init: RequestInit = new PUTRequestInit({ body: { accountId, newRole } })
 		return receiveJson(input, init)
 	},
@@ -139,13 +136,13 @@ export const api = {
 				return Promise.reject(new PermissionError())
 			}
 			const paramsStr = id ? 'id=' + id : 'username=' + username
-			const input: RequestInfo = `${url}/${token}/getBio?${paramsStr}`
+			const input: RequestInfo = `${url}/${token()}/getBio?${paramsStr}`
 			return receiveJson(input)
 		},
 
 		many() {
 			if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
-			const input: RequestInfo = `${url}/${token}/listAccounts`
+			const input: RequestInfo = `${url}/${token()}/listAccounts`
 			return receiveJson(input)
 		},
 	},

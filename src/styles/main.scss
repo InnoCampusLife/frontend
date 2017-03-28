@@ -200,6 +200,11 @@ body {
 
 .md-theme-dark {
 	color: hsla(0, 0%, 100%, 1) !important;
+
+	.md-button[disabled],
+	.md-button[disabled] .md-icon {
+		color: hsla(0, 0, 100, .5) !important;
+	}
 }
 
 .md-icon {
@@ -334,56 +339,6 @@ body {
 
 .store-item-list-enter-active, .store-item-list-leave-active {
 	position: absolute;
-}
-
-/* ==========================================================================
-	 Login Page
-	 ========================================================================== */
-
-.login-page {
-	background-position: center;
-	background-size: cover;
-	background-image: url('http://66.media.tumblr.com/c548439697291ff097986d530edee2ed/tumblr_npz4tbnGlA1uv05vvo4_1280.jpg');
-
-	> .wrap {
-		background: linear-gradient(to bottom, rgba(46, 204, 113, 0.5) 0%, rgba(26, 188, 156, 0.5));
-		height: 100vh;
-		width: 100vw;
-
-		> .header {
-			height: $header-height;
-			text-align: center;
-			width: 100%;
-
-			> h1 {
-				color: hsl(0, 0, 100%);
-				font-weight: 800;
-				line-height: $header-height;
-				margin: 0
-			}
-		}
-
-		> .form {
-			height: 100%;
-			align-items: center;
-			display: flex;
-			justify-content: center;
-			margin: -$header-height 0 -$footer-height;
-			width: 100%;
-
-			> .form-group {
-				width: $sidebar-width;
-
-				input, button {
-					opacity: 0.9;
-
-					&:hover, &:focus, &:active {
-						opacity: 1;
-					}
-				}
-			}
-		}
-	}
 }
 
 /* ==========================================================================

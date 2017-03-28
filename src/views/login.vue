@@ -1,263 +1,200 @@
+<style lang="scss" scoped>
+	main {
+		background-position: center;
+		background-size: cover;
+		background-image: url('/public/backgrounds/hall.jpg');
+
+		> section {
+			background: linear-gradient(to bottom, hsla(0, 0, 100, 0.7) 0%, hsla(0, 0, 100, 0.7));
+
+			> .content {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				> .container-wrapper {
+					flex: 1 1 0%;
+				}
+			}
+		}
+	}
+
+	.md-card {
+		.md-card-actions {
+			padding: 16px;
+
+			> .md-button + .md-button {
+				margin-left: 16px;
+			}
+		}
+	}
+</style>
+
 <template lang="pug">
-
-	.login-page
-		.wrap
-			header.header
-				h1 Unified Information System
-
-			.form
-				form.form-group
-					// TODO: rework oninput events
-					.form-group
-						input.form-control(
-							type="text"
-							name="username"
-							id="username"
-							placeholder="Username"
-							autocompvare="off"
-							maxlength="32"
-							v-on:input="usernameInputEvent"
-							v-model="user.account.username"
-							@keyup.enter="isLogin ? login($event): register($event)"
-						)
-
-					.form-group
-						input.form-control(
-							type="password"
-							name="password"
-							id="password"
-							placeholder="Password"
-							autocompvare="off"
-							maxlength="64"
-							v-on:input="passwordInputEvent"
-							@keyup.enter="isLogin ? login($event): register($event)"
-						)
-
-					div(v-show="!isLogin" transition="height" transition-mode="out-in")
-						.form-group
-							input.form-control(
-								type="email"
-								name="email"
-								id="email"
-								placeholder="Email"
-								autocompvare="off"
-								v-on:input="emailInputEvent"
-								@keyup.enter="isLogin ? login($event): register($event)"
-							)
-
-						.form-group
-							input.form-control(
-								type="text"
-								name="firstname"
-								id="firstname"
-								placeholder="First Name"
-								autocompvare="off"
-								v-on:input="usernameInputEvent"
-								v-model="user.account.firstName"
-								@keyup.enter="isLogin ? login($event): register($event)"
-							)
-
-						.form-group
-							input.form-control(
-								type="text"
-								name="lastname"
-								id="lastname"
-								placeholder="Last Name"
-								autocompvare="off"
-								v-on:input="usernameInputEvent"
-								v-model="user.account.lastName"
-								@keyup.enter="isLogin ? login($event): register($event)"
-							)
-
-						.form-group
-							input.form-control(
-								type="text"
-								name="group"
-								id="group"
-								placeholder="Study Group (BS1-2, BS4-1)"
-								autocompvare="off"
-								v-on:input="usernameInputEvent"
-								v-model="user.account.studyGroup"
-								@keyup.enter="isLogin ? login($event): register($event)"
-							)
-
-					template(v-if="isLogin")
-						button.btn.btn-block.btn-primary(
-							:place="isLogin ? 'form': 'bottom'" purp="login",
-							type="button",
-							@click="login",
-							@keyup.enter="login",
-						) Log In
-
-						button.btn.btn-block.btn-info(
-							:place="isLogin ? 'bottom': 'form'",
-							type="button",
-							@click="register",
-							@keyup.enter="register",
-						) Sign Up?
-
-					template(v-else="isLogin")
-						button.btn.btn-block.btn-primary(
-							:place="isLogin ? 'bottom': 'form'",
-							type="button",
-							@click="register",
-							@keyup.enter="register",
-						) Sign Up
-
-						button.btn.btn-block.btn-info(
-							:place="isLogin ? 'form': 'bottom'" purp="login",
-							type="button",
-							@click="login",
-							@keyup.enter="login",
-						) Log In?
-
-			footer.footer-main
-				p.text-muted 2016 © InnoDev
-
+	main
+		header.app-bar
+			md-theme(md-name="dark")
+				md-whiteframe(md-tag="md-toolbar", md-elevation="4")
+					.md-toolbar-container
+						md-button.md-icon-button(@click.native='toggleLeftSidenav' disabled)
+							md-icon menu
+						.app-bar-container
+							.row
+								.col
+									h1.md-title
+										span Unified Information System
+		section
+			.content
+				.container-wrapper
+					.container
+						.row.align-items-center.justify-content-center
+							.col.col-12.col-sm-8.col-lg-4
+								md-card
+									md-card-content
+										md-input-container
+											label Username
+											md-input(
+												type="text",
+												name="username",
+												id="username",
+												v-model="credentials.username",
+												@keyup.enter="submit",
+											)
+										md-input-container
+											label Password
+											md-input(
+												type="password",
+												name="password",
+												id="password",
+												v-model="credentials.password",
+												@keyup.enter="submit",
+											)
+										template(v-if="!isLogin")
+											md-input-container
+												label Email
+												md-input(
+													type="email"
+													name="email"
+													id="email"
+													v-model="credentials.email",
+													@keyup.enter="submit"
+												)
+											md-input-container
+												label First Name
+												md-input(
+													type="text"
+													name="first-name"
+													id="first-name"
+													v-model="credentials.firstName",
+													@keyup.enter="submit"
+												)
+											md-input-container
+												label Last Name
+												md-input(
+													type="text"
+													name="last-name"
+													id="last-name"
+													v-model="credentials.lastName",
+													@keyup.enter="submit"
+												)
+											md-input-container
+												label Study Group
+												md-input(
+													type="text"
+													name="study-group"
+													id="study-group"
+													v-model="credentials.studyGroup",
+													@keyup.enter="submit"
+												)
+									md-card-actions
+										template(v-if="isLogin")
+											md-button(
+												type="button",
+												@click="isLogin = false",
+											)
+												span Sign Up
+											md-button.md-raised(
+												type="button",
+												@click="submit",
+												@keyup.enter="submit",
+											)
+												span Log In
+										template(v-else)
+											md-button(
+												type="button",
+												@click="isLogin = true",
+											)
+												span Log In
+											md-button.md-raised(
+												type="button",
+												@click="submit",
+												@keyup.enter="submit",
+											)
+												span Sing Up
+			footer
+				p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
-	export default {
+	import { mapActions, mapMutations } from 'vuex'
+	import config from './../config'
+	import storage from './../storage'
 
+	export default {
 		name: 'login',
 
 		data() {
 			return {
 				user: this.$router.app.user,
-				isLogin: true
+				isLogin: true,
+				credentials: {
+					username: '',
+					password: '',
+					email: '',
+					firstName: '',
+					lastName: '',
+					studyGroup: '',
+				},
 			}
 		},
 
 		methods: {
-			login(e) {
-				e.preventDefault();
-				if (this.isLogin)
-					this.user.account.authorize(
-						password.value,
-						this.formSuccessCallback,
-						this.formErrorCallback
-					);
-				else {
-					this.isLogin = true;
-					e.target.blur();
+			...mapMutations('accounts', [
+				'setAccount',
+			]),
+
+			submit() {
+				if (this.isLogin) {
+					this.$root.api.accounts.auth({
+						username: this.credentials.username,
+						password: this.credentials.password,
+					}).then((json) => {
+						console.log('Logged in:', json.result)
+						this.setAccount(json.result)
+						storage.set(config.tokenName, json.result.token)
+					}).then(() => {
+						this.$router.push('/')
+					}).catch((err) => {
+						console.error('Logging in error:', err)
+					})
+				} else {
+					this.$root.api.accounts.create({
+						username: this.credentials.username,
+						password: this.credentials.password,
+						firstName: this.credentials.firstName,
+						lastName: this.credentials.lastName,
+						email: this.credentials.email,
+					}).then((json) => {
+						console.log('Signed up:', json.result)
+						this.setAccount(json.result)
+						storage.set(config.tokenName, json.result.token)
+					}).then(() => {
+						this.$router.push('/')
+					}).catch((err) => {
+						console.error('Signing up error:', err)
+					})
 				}
 			},
-
-			register(e) {
-				e.preventDefault();
-				if (!this.isLogin) {
-					if (this.checkUsernameInput('strict')
-					 && this.checkPasswordInput('strict')
-					 && this.checkEmailInput()
-					 && this.checkNameInput())
-						this.user.account.create(
-							password.value,
-							email.value,
-							this.formSuccessCallback,
-							this.formErrorCallback
-						);
-				}
-				else {
-					this.isLogin = false;
-					e.target.blur();
-				}
-			},
-
-			formSuccessCallback : function (result) {
-				this.user.account.set(result);
-				this.$router.push("/");
-			},
-			formErrorCallback : function (result) {
-				//this.setError(result, 'username');
-			},
-
-			///Reusable LoginData checkers
-			usernameInputEvent(e) {
-				this.checkUsernameInput();
-			},
-
-			checkUsernameInput(strict) {
-				var regex = strict ? /^([0-9]|[a-z]|[A-Z]|[_]){3,32}$/: /^([0-9]|[a-z]|[A-Z]|[_])*$/;
-				var ufe = !regex.test(this.user.account.username);
-
-				if (ufe)
-					this.setError('username');
-				else
-					this.removeError('username');
-
-				return !ufe;
-			},
-
-			passwordInputEvent(e) {
-				this.checkPasswordInput();
-			},
-
-			checkPasswordInput(strict) {
-				var regex = strict ? /^.{5,64}$/: /^.*$/;
-				var pfe = !regex.test(password.value);
-
-				if (pfe)
-					this.setError('password');
-				else
-					this.removeError('password');
-
-				return !pfe;
-			},
-
-			emailInputEvent(e) {
-				this.checkEmailInput();
-			},
-
-			checkEmailInput() {
-				var regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-				var pfe = !regex.test(email.value);
-
-				if (pfe)
-					this.setError('email');
-				else
-					this.removeError('email');
-
-				return !pfe;
-			},
-
-			nameInputEvent(e) {
-				this.checkNameInput();
-			},
-
-			checkNameInput() {
-				//([BS]|[MS])[1-4]-[0-9]+
-				var regex = /^.+$/
-				var pfe = !regex.test(firstname.value) && !regex.test(lastname.value);
-
-				if (pfe) {
-					this.setError('firstname');
-					this.setError('lastname');
-				}
-				else {
-					this.removeError('firstname');
-					this.removeError('lastname');
-				}
-
-				return !pfe;
-			},
-
-			//TODO
-			setError(toWhat) {
-				var elem = document.getElementById(toWhat);
-				elem.setAttribute('error', '');
-			},
-
-			//TODO
-			removeError(fromWhat) {
-				var elem = document.getElementById(fromWhat);
-				elem.removeAttribute('error');
-			},
-
-			// usernameHasError() { return document.getElementById('username').hasAttribure('error'); },
-			// passwordHasError() { return  document.getElementById('password').hasAttribure('error'); },
-			// emailHasError() { return document.getElementById('email').hasAttribure('error'); },
-			// firstnameHasError() { return document.getElementById('firstname').hasAttribure('error'); },
-			// lastnameHasError() { return document.getElementById('lastname').hasAttribure('error'); },
-		}
+		},
 	}
 </script>

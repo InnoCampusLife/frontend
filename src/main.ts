@@ -6,8 +6,11 @@ import 'whatwg-fetch'
 import * as Vue from 'vue'
 import * as VuePaginate from 'vue-paginate'
 import * as Vue2Filters from 'vue2-filters'
+
 import Vuelidate from 'vuelidate'
-import { sync } from 'vuex-router-sync'
+
+import { sync as vuexRouterSync } from 'vuex-router-sync'
+
 import debug from 'debug'
 
 // localStorage.debug = ['uis:log', 'uis:error', 'uis:info']
@@ -27,7 +30,7 @@ import debug from 'debug'
 
 import router from './router'
 import store from './store'
-sync(store, router)
+vuexRouterSync(store, router)
 
 import './filters'
 import './material'

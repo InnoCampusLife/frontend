@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 
 import { modules } from './modules'
 
+import config from './config'
+import storage from './storage'
+
 Vue.use(VueRouter)
 
 const user = modules.accounts
@@ -103,7 +106,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	if (to.matched.some((record) => record.meta.authorizedZone)) {
-		if (!user.loggedIn) {
+		if (!storage.get(config.tokenName)) {
 			// console.log('Checkpoint #1')
 			next({
 				path: '/login',
@@ -114,7 +117,7 @@ router.beforeEach((to, from, next) => {
 			next()
 		}
 	} else if (to.matched.some((record) => record.meta.loginPage)) {
-		if (user.loggedIn) {
+		if (storage.get(config.tokenName)) {
 			// console.log('Checkpoint #3')
 			next({
 				path: '/',
