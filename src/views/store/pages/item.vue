@@ -36,6 +36,7 @@
 						md-select(
 							:name="'item-option-' + index",
 							:id="'item-option-' + index",
+							v-model="selectedOptions[index].value",
 						)
 							md-option(v-for='value in option.values', :value='value', :key="value") {{ value }}
 
@@ -47,44 +48,45 @@
 				md-card-actions
 					md-button.md-primary.md-raised(
 						type='button',
+						:disabled="!areAllOptionsSelected || quantity <= 0",
 						data-toggle="modal",
 						:data-target="'#buying-modal-' + item.id",
+						@click="buy",
 					) IUP {{ item.price - 0.01 }}
 
-			.modal.fade.buying-modal(:id="'buying-modal-' + item.id")
-				.modal-dialog.modal-md
-					md-theme(md-name="blue")
-						md-whiteframe(md-tag="md-card", md-elevation="24")
-							md-card-header
-								.md-title Confirm Purchase
-							md-card-media(md-ratio="4:3")
-								md-image(:md-src='item.image_link', alt='')
-							md-card-header
-								.md-title {{ item.title }}
-								.md-subhead {{ item.category.title | startCase }}
+			//- .modal.fade.buying-modal(:id="'buying-modal-' + item.id")
+			//- 	.modal-dialog.modal-md
+			//- 		md-theme(md-name="blue")
+			//- 			md-whiteframe(md-tag="md-card", md-elevation="24")
+			//- 				md-card-header
+			//- 					.md-title Confirm Purchase
+			//- 				md-card-media(md-ratio="4:3")
+			//- 					md-image(:md-src='item.image_link', alt='')
+			//- 				md-card-header
+			//- 					.md-title {{ item.title }}
+			//- 					.md-subhead {{ item.category.title | startCase }}
 
-							md-card-content
-								.row
-									.col
-										p.card-text
-											span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
-											span.text-danger(v-else) Out of Stock
-									.col-12.col-sm-auto
-										p.card-text.text-info {{ item.price - 0.01 }} IP
+			//- 				md-card-content
+			//- 					.row
+			//- 						.col
+			//- 							p.card-text
+			//- 								span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
+			//- 								span.text-danger(v-else) Out of Stock
+			//- 						.col-12.col-sm-auto
+			//- 							p.card-text.text-info {{ item.price - 0.01 }} IP
 
-								template(v-if="item.selectedItem && item.selectedItem.options")
-									template(v-for="(value, key) in item.selectedItem.options")
-										.row
-											.col-sm
-												p.text-sm-right {{ key }}
-											.col-sm.font-weight-bold
-												p {{ value }}
+			//- 					template(v-if="item.selectedItem && item.selectedItem.options")
+			//- 						template(v-for="(value, key) in item.selectedItem.options")
+			//- 							.row
+			//- 								.col-sm
+			//- 									p.text-sm-right {{ key }}
+			//- 								.col-sm.font-weight-bold
+			//- 									p {{ value }}
 
-							.md-card-actions
-								// FIXME: add quantity check here
-								md-button(type='button', data-dismiss="modal") Cancel
-								md-button.md-primary.md-raised(type='button', data-dismiss="modal", @click="buy(item)") Purchase
-
+			//- 				.md-card-actions
+			//- 					// FIXME: add quantity check here
+			//- 					md-button(type='button', data-dismiss="modal") Cancel
+			//- 					md-button.md-primary.md-raised(type='button', data-dismiss="modal", @click="buy(item)") Purchase
 </template>
 
 <script>
@@ -95,44 +97,29 @@
 			return {
 				isLoading: false,
 				item: null,
-
-				buySuccessful: null,
-				isItemSelected: false,
-				selectedItem: null,
+				selectedOptions: [],
 			}
 		},
 
 		computed: {
-			// FIXME
-			quantity() {
-
-				if (!(this.selectedItem && Object.keys(this.selectedItem.options).length > 0)) {
-					return this.item.combinations.reduce((sum, curr) => {
-						return sum + curr.quantity
+			quantity () {
+				return this.item.combinations
+					.filter((c) => {
+						return this.selectedOptions
+							.filter((o) => {
+								return o.value !== null
+							})
+							.every((o) => {
+								return c.options[o.title] === o.value
+							})
+					})
+					.reduce((sum, current) => {
+						return sum + current.quantity
 					}, 0)
-				} else {
-					let sum = 0
+			},
 
-					console.log('Checking quantities')
-
-					for (let c of this.item.combinations) {
-						let counter = 0;
-
-						for(let o in this.selectedItem.options) {
-							if (c.options[o] === this.selectedItem.options[o])
-								counter++;
-						}
-
-						console.log(counter, Object.keys(this.selectedItem.options).length)
-
-						if (counter === Object.keys(this.selectedItem.options).length) {
-							sum += c.quantity
-							break;
-						}
-					}
-
-					return sum;
-				}
+			areAllOptionsSelected () {
+				return this.selectedOptions.every((o) => o.value !== null)
 			},
 		},
 
@@ -150,97 +137,60 @@
 
 		deactivated () {
 			this.item = null
+			this.selectedOptions = []
 		},
 
 		methods: {
-			getItem() {
+			getItem () {
 				this.isLoading = true
+
 				this.$root.api.innopoints.items.one({ item_id: this.$store.state.route.params.id })
 					.then((json) => {
-						console.log('Got item:', json.result)
+						const item = json.result
+
+						console.log('Got item:', item)
+
 						this.isLoading = false
-						this.item = json.result
+						this.item = item
+
+						if (item.options) {
+							item.options.forEach((o) => {
+								this.selectedOptions.push({ title: o.title, value: null })
+							})
+						}
 					})
 					.catch((err) => {
 						console.log('Failed to get item:', err)
 					})
 			},
 
-			onSelect(item, e) {
+			buy () {
+				const item = this.item.combinations.find((c) => {
+					return this.selectedOptions.every((o) => {
+						return c.options[o.title] === o.value
+					})
+				})
 
-				if (!this.selectedItem || !this.selectedItem.options) {
-					this.selectedItem = { options: {} };
+				console.log('Selected item', item)
 
-					// FIXME: Workaround for reactivity
-					this.item = Object.assign({}, this.item)
-				}
-
-				if (e.target.value !== "") {
-					this.selectedItem.options[e.target.name] = e.target.value
-
-					// FIXME: Workaround for reactivity
-					this.selectedItem.options = Object.assign({}, this.selectedItem.options)
-				} else {
-					delete this.selectedItem.options[e.target.name]
-
-					// FIXME: Workaround for reactivity
-					this.selectedItem.options = Object.assign({}, this.selectedItem.options)
-				}
-
-				if (Object.keys(this.selectedItem.options).length == item.options.length)
-					this.isItemSelected = true;
-				else
-					this.isItemSelected = false;
-
-			},
-
-			buy(item) {
-
-				console.log('Item: ', item)
-
-				let curr = { id: 0, amount: 1 };
-				let user = this.$root.user;
-
-				if (!item.options) {
-					curr.id = item.id;
-				} else {
-					for (let c of item.combinations) {
-						let counter = 0;
-
-						for(let o in c.options) {
-							if (c.options[o] === this.selectedItem.options[o])
-								counter++;
-						}
-
-						if (counter === item.options.length) {
-							curr.id = c.id;
-							break;
-						}
-					}
-				}
-
-				const self = this
-
-				console.log(user)
-
-				this.$router.app.user.innopoints.api.store.order.create({
-					order: {
+				this.$root.api.innopoints.orders.create({
+					body: {
 						order: {
 							is_joint_purchase: false,
-							items: [ curr ],
-						}
+							items: [
+								{
+									id: item.id,
+									amount: 1,
+								},
+							],
+						},
 					},
-					successCallback(result) {
-						self.buySuccessful = true
-						// self.$parent.fetchData()
-						setTimeout(() => { self.buySuccessful = null }, 5000)
-						//  console.log(result)
-					},
-					errorCallback(error) {
-						self.buySuccessful = false
-						setTimeout(() => { self.buySuccessful = null }, 5000)
-						// console.log(error)
-					},
+				}).then((json) => {
+					console.log('Order complete:', json.result)
+					this.selectedOptions = []
+					this.getItem()
+				}).catch((err) => {
+					console.error('Failed to complete an order:', err)
 				})
 			},
 		},

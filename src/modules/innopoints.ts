@@ -232,7 +232,7 @@ export const api = {
 
 		create ({ body }) {
 			if (!body) return Promise.reject(new InvalidParamsError())
-			const input = `${url}/accounts/${token()}/orders/`
+			const input = `${url}/accounts/${token()}/orders`
 			const init: RequestInit = new POSTRequestInit({ body })
 			return receiveJson(input, init)
 		},
