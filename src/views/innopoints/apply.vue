@@ -45,15 +45,15 @@
 											:value="part.username",
 											@input="debouncedUpdateUsername(index, $event)",
 										)
-										span(v-if="!$v.participants.$each[index].username.required", class="md-error")
+										span.md-error(v-if="!$v.participants.$each[index].username.required")
 											span Required
-										span(v-else-if="!$v.participants.$each[index].username.minLength", class="md-error")
+										span.md-error(v-else-if="!$v.participants.$each[index].username.minLength")
 											span Too short
-										span(v-else-if="!$v.participants.$each[index].username.maxLength", class="md-error")
+										span.md-error(v-else-if="!$v.participants.$each[index].username.maxLength")
 											span Too long
-										span(v-else-if="!$v.participants.$each[index].username.exists", class="md-error")
+										span.md-error(v-else-if="!$v.participants.$each[index].username.exists")
 											span Ivalid or does not exist
-										span(v-else-if="!$v.participants.$each[index].username.doesNotRepeat", class="md-error")
+										span.md-error(v-else-if="!$v.participants.$each[index].username.doesNotRepeat")
 											span Cannot repeat
 
 									md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
@@ -68,7 +68,7 @@
 											@change="$v.participants.$each[index].activity_id.$touch()"
 										)
 											md-option(v-for='a in activities', :key="a.id", :value="a.id") {{ a.title }}
-										span(v-if="!$v.participants.$each[index].activity_id.required", class="md-error")
+										span.md-error(v-if="!$v.participants.$each[index].activity_id.required")
 											span Required
 
 									md-input-container(
@@ -89,9 +89,9 @@
 											v-model='part.hours',
 											@input="$v.participants.$each[index].hours.$touch()"
 										)
-										span(v-if="!$v.participants.$each[index].hours.required", class="md-error")
+										span.md-error(v-if="!$v.participants.$each[index].hours.required")
 											span Required
-										span(v-if="!$v.participants.$each[index].hours.between", class="md-error")
+										span.md-error(v-if="!$v.participants.$each[index].hours.between")
 											span Too little or too much
 
 									md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
@@ -168,11 +168,11 @@
 						minLength: minLength(3),
 						maxLength: maxLength(16),
 
-						doesNotRepeat(username) {
+						doesNotRepeat (username) {
 							return !(this.participants.filter((p) => p.username === username).length > 1)
 						},
 
-						async exists(username) {
+						async exists (username) {
 							if (/^\w{3,16}$/.test(username)) {
 								try {
 									return (await this.$root.api.accounts.exists({ username })).result
@@ -189,12 +189,12 @@
 					},
 
 					hours: {
-						between(hours, parentVm) {
+						between (hours, parentVm) {
 							if (this.isHourlyActivity(parentVm.activity_id)) return between(1, 10000)(hours)
 							else return true
 						},
 
-						required(hours, parentVm) {
+						required (hours, parentVm) {
 							if (this.isHourlyActivity(parentVm.activity_id)) return required(hours)
 							else return true
 						},
@@ -203,7 +203,7 @@
 			},
 		},
 
-		created() {
+		created () {
 			this.fetchData()
 		},
 
@@ -217,7 +217,7 @@
 		},
 
 		methods: {
-			fetchData() {
+			fetchData () {
 				this.isLoading = true
 
 				this.updateAcivities()
@@ -233,14 +233,14 @@
 					})
 			},
 
-			updateUsername(index, value) {
+			updateUsername (index, value) {
 				this.participants[index].username = value
 				this.$v.participants.$each[index].username.$touch()
 			},
 
 			debouncedUpdateUsername: _.debounce(function (index, value) { return this.updateUsername(index, value) }, 250),
 
-			innopoints(id, hours) {
+			innopoints (id, hours) {
 				const activity = this.activities.find(a => a.id === id);
 				if (activity) {
 					if (this.isHourlyActivity(id) && hours > 0) {
@@ -251,13 +251,13 @@
 				return null
 			},
 
-			isHourlyActivity(id) {
+			isHourlyActivity (id) {
 				return !!this.activities
 					.filter((a) => a.type === 'hourly')
 					.find((a) => a.id === id);
 			},
 
-			addParticipant() {
+			addParticipant () {
 				this.participants.push({
 					username: '',
 					activity_id: null,
@@ -265,11 +265,11 @@
 				})
 			},
 
-			removeParticipant() {
+			removeParticipant () {
 				this.participants.pop()
 			},
 
-			updateAcivities(value) {
+			updateAcivities (value) {
 				this.$root.api.innopoints.activities.many({ category_id: value })
 					.then(({ result: activities = [] } = {}) => {
 						console.log('Updated activities:', { activities })
@@ -286,13 +286,43 @@
 					})
 			},
 
-			async submit() {
+			async submit () {
 				console.log('Valid:', !this.$v.$invalid)
 
 				if (this.$v.$invalid) {
 					this.$v.$touch()
 					return
 				}
+
+				// // File upload
+				// const fileList = document.querySelector('input[type="file"]').files
+				// const data = new FormData()
+
+				// for (let f of fileList) { data.append(f.name, f) }
+
+				// fetch('http://uis.university.innopolis.ru/api/points/files', {
+				// 	method: 'POST',
+				// 	body: data,
+				// }).then((json) => {
+				// 	console.log(json.result)
+				// }).catch((err) => {
+				// 	console.error('Failed to upload files:', err)
+				// })
+
+				const fileList = document.querySelector('input[type="file"]').files
+				const files = new Array()
+
+				for (let f of fileList) { files.push(f) }
+
+				Promise.all(files.map((f) => {
+					const body = new FormData()
+					body.append(f.name, f)
+					return this.$root.api.innopoints.applications.files.create({ body })
+				})).then((jsons) => {
+					console.log('Uploaded files:', jsons)
+				}).catch((err) => {
+					console.error('Failed to upload files:', err)
+				})
 
 				const work = await Promise.all(this.participants.map(async (p) => {
 					const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id
@@ -301,38 +331,16 @@
 					return { actor, amount, activity_id }
 				}))
 
-
-				// File upload
-				const input = document.querySelector('input[type="file"]')
-				const data = new FormData()
-
-				for (let f of input.files) { data.append(f.name, f) }
-
-				fetch('http://uis.university.innopolis.ru/api/points/files', {
-					method: 'POST',
-					body: data,
-				}).then((json) => {
-					console.log(json.result)
-				}).catch((err) => {
-					console.error('Failed to upload files:', err)
-				})
-
-
 				this.$root.api.innopoints.applications.create({
 					body: {
 						application: {
+							work,
 							comment: this.comment,
 							type: work.length > 1 ? 'group' : 'personal',
-							work: await Promise.all(this.participants.map(async (p) => {
-								const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id
-								const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
-								const activity_id = p.activity_id
-								return { actor, amount, activity_id }
-							})),
 						}
 					}
 				}).then((json) => {
-					console.log(json.result)
+					console.log('Application sumitted:', json.result)
 				}).catch((err) => {
 					console.error('Failed to submit application:', err)
 				})

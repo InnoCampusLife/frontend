@@ -41,52 +41,127 @@
 							.col.col-12.col-sm-8.col-lg-4
 								md-card
 									md-card-content
-										md-input-container
-											label Username
-											md-input(
-												type="text",
-												name="username",
-												id="username",
-												v-model="credentials.username",
-												@keyup.enter="submit",
-											)
-										md-input-container
-											label Password
-											md-input(
-												type="password",
-												name="password",
-												id="password",
-												v-model="credentials.password",
-												@keyup.enter="submit",
-											)
+										template(v-if="isLogin")
+											md-input-container(:class="{ 'md-input-invalid': $v.login.username.$error }")
+												label(for="login-username") Username
+												md-input(
+													type="text",
+													name="login-username",
+													id="login-username",
+													v-model="login.username",
+													@keyup.enter="submit",
+													@input="$v.login.username.$touch()",
+												)
+												span.md-error(v-if="!$v.login.username.required")
+													span Required
+
+											md-input-container(:class="{ 'md-input-invalid': $v.login.password.$error }")
+												label(for="login-password") Password
+												md-input(
+													type="password",
+													name="login-password",
+													id="login-password",
+													v-model="login.password",
+													@keyup.enter="submit",
+													@input="$v.login.password.$touch()",
+												)
+												span.md-error(v-if="!$v.login.password.required")
+													span Required
+
 										template(v-if="!isLogin")
-											md-input-container
-												label Email
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.username.$error }")
+												label(for="username") Username
 												md-input(
-													type="email"
-													name="email"
-													id="email"
-													v-model="credentials.email",
-													@keyup.enter="submit"
+													type="text",
+													name="username",
+													id="username",
+													maxlength="16",
+													v-model="signup.username",
+													@keyup.enter="submit",
+													@input="$v.signup.username.$touch()",
 												)
-											md-input-container
-												label First Name
+												span.md-error(v-if="!$v.signup.username.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.username.minLength")
+													span Too short
+												span.md-error(v-else-if="!$v.signup.username.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.username.valid")
+													span Invalid
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.password.$error }")
+												label(for="password") Password
 												md-input(
-													type="text"
-													name="first-name"
-													id="first-name"
-													v-model="credentials.firstName",
-													@keyup.enter="submit"
+													type="password",
+													name="password",
+													id="password",
+													v-model="signup.password",
+													@keyup.enter="submit",
+													@input="$v.signup.password.$touch()",
 												)
-											md-input-container
-												label Last Name
+												span.md-error(v-if="!$v.signup.password.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.password.minLength")
+													span Too short
+												span.md-error(v-else-if="!$v.signup.password.maxLength")
+													span Too long
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.email.$error }")
+												label(for="email") Email
 												md-input(
-													type="text"
-													name="last-name"
-													id="last-name"
-													v-model="credentials.lastName",
-													@keyup.enter="submit"
+													type="email",
+													name="email",
+													id="email",
+													maxlength="255",
+													v-model="signup.email",
+													@keyup.enter="submit",
+													@input="$v.signup.email.$touch()",
 												)
+												span.md-error(v-if="!$v.signup.email.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.email.minLength")
+													span Too short
+												span.md-error(v-else-if="!$v.signup.email.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.email.valid")
+													span Invalid
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.firstName.$error }")
+												label(for="first-name") First Name
+												md-input(
+													type="text",
+													name="first-name",
+													id="first-name",
+													maxlength="35",
+													v-model="signup.firstName",
+													@keyup.enter="submit",
+													@input="$v.signup.firstName.$touch()",
+												)
+												span.md-error(v-if="!$v.signup.firstName.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.firstName.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.firstName.valid")
+													span Invalid
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.lastName.$error }")
+												label(for="last-name") Last Name
+												md-input(
+													type="text",
+													name="last-name",
+													id="last-name",
+													maxlength="35",
+													v-model="signup.lastName",
+													@keyup.enter="submit",
+													@input="$v.signup.lastName.$touch()",
+												)
+												span.md-error(v-if="!$v.signup.lastName.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.lastName.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.lastName.valid")
+													span Invalid
+
 											//- // TODO: Replace with select
 											//- md-input-container
 											//- 	label Study Group
@@ -127,6 +202,7 @@
 </template>
 
 <script>
+	import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 	import { mapActions, mapMutations } from 'vuex'
 	import config from './../config'
 	import storage from './../storage'
@@ -137,7 +213,13 @@
 		data() {
 			return {
 				isLogin: true,
-				credentials: {
+
+				login: {
+					username: '',
+					password: '',
+				},
+
+				signup: {
 					username: '',
 					password: '',
 					email: '',
@@ -148,12 +230,70 @@
 			}
 		},
 
+		validations: {
+			login: {
+				username: {
+					required,
+				},
+
+				password: {
+					required,
+				},
+			},
+
+			signup: {
+				username: {
+					required,
+					minLength: minLength(3),
+					maxLength: maxLength(16),
+
+					valid (username) {
+						return /^\w{3,16}$/.test(username)
+					},
+				},
+
+				password: {
+					required,
+					minLength: minLength(8),
+					maxLength: maxLength(64),
+				},
+
+				email: {
+					required,
+					minLength: minLength(7),
+					maxLength: maxLength(255),
+
+					valid (firstName) {
+						return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(firstName)
+					},
+				},
+
+				firstName: {
+					required,
+					maxLength: maxLength(35),
+
+					valid (firstName) {
+						return /^[\w -]{1,35}$/.test(firstName)
+					},
+				},
+
+				lastName: {
+					required,
+					maxLength: maxLength(35),
+
+					valid (lastName) {
+						return /^[\w -]{1,35}$/.test(lastName)
+					},
+				},
+			},
+		},
+
 		methods: {
 			submit() {
 				if (this.isLogin) {
 
 					// Log in
-					this.$root.api.accounts.auth(this.credentials)
+					this.$root.api.accounts.auth(this.login)
 						.then((json) => {
 							console.log('Logged in:', json.result)
 							storage.setItem(config.tokenName, json.result.token)
@@ -167,7 +307,7 @@
 				} else {
 
 					// Sign up
-					this.$root.api.accounts.create(this.credentials)
+					this.$root.api.accounts.create(this.signup)
 						.then((json) => {
 							console.log('Signed up:', json.result)
 							storage.setItem(config.tokenName, json.result.token)
