@@ -43,6 +43,7 @@
 									md-card-content
 										template(v-if="isLogin")
 											md-input-container(:class="{ 'md-input-invalid': $v.login.username.$error }")
+												md-icon person_outline
 												label(for="login-username") Username
 												md-input(
 													type="text",
@@ -56,6 +57,7 @@
 													span Required
 
 											md-input-container(:class="{ 'md-input-invalid': $v.login.password.$error }")
+												md-icon lock_outline
 												label(for="login-password") Password
 												md-input(
 													type="password",
@@ -69,7 +71,67 @@
 													span Required
 
 										template(v-if="!isLogin")
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.firstName.$error }")
+												md-icon
+												label(for="first-name") First Name
+												md-input(
+													type="text",
+													name="first-name",
+													id="first-name",
+													maxlength="35",
+													v-model="signup.firstName",
+													@keyup.enter="submit",
+													@input="$v.signup.firstName.$touch()",
+												)
+												span.md-error(v-if="!$v.signup.firstName.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.firstName.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.firstName.valid")
+													span Invalid
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.lastName.$error }")
+												md-icon
+												label(for="last-name") Last Name
+												md-input(
+													type="text",
+													name="last-name",
+													id="last-name",
+													maxlength="35",
+													v-model="signup.lastName",
+													@keyup.enter="submit",
+													@input="$v.signup.lastName.$touch()",
+												)
+												span.md-error(v-if="!$v.signup.lastName.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.lastName.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.lastName.valid")
+													span Invalid
+
+											md-input-container(:class="{ 'md-input-invalid': $v.signup.email.$error }")
+												md-icon mail_outline
+												label(for="email") Email
+												md-input(
+													type="email",
+													name="email",
+													id="email",
+													maxlength="255",
+													v-model="signup.email",
+													@keyup.enter="submit",
+													@input="$v.signup.email.$touch()",
+												)
+												span.md-error(v-if="!$v.signup.email.required")
+													span Required
+												span.md-error(v-else-if="!$v.signup.email.minLength")
+													span Too short
+												span.md-error(v-else-if="!$v.signup.email.maxLength")
+													span Too long
+												span.md-error(v-else-if="!$v.signup.email.valid")
+													span Invalid
+
 											md-input-container(:class="{ 'md-input-invalid': $v.signup.username.$error }")
+												md-icon person_outline
 												label(for="username") Username
 												md-input(
 													type="text",
@@ -90,6 +152,7 @@
 													span Invalid
 
 											md-input-container(:class="{ 'md-input-invalid': $v.signup.password.$error }")
+												md-icon lock_outline
 												label(for="password") Password
 												md-input(
 													type="password",
@@ -106,62 +169,6 @@
 												span.md-error(v-else-if="!$v.signup.password.maxLength")
 													span Too long
 
-											md-input-container(:class="{ 'md-input-invalid': $v.signup.email.$error }")
-												label(for="email") Email
-												md-input(
-													type="email",
-													name="email",
-													id="email",
-													maxlength="255",
-													v-model="signup.email",
-													@keyup.enter="submit",
-													@input="$v.signup.email.$touch()",
-												)
-												span.md-error(v-if="!$v.signup.email.required")
-													span Required
-												span.md-error(v-else-if="!$v.signup.email.minLength")
-													span Too short
-												span.md-error(v-else-if="!$v.signup.email.maxLength")
-													span Too long
-												span.md-error(v-else-if="!$v.signup.email.valid")
-													span Invalid
-
-											md-input-container(:class="{ 'md-input-invalid': $v.signup.firstName.$error }")
-												label(for="first-name") First Name
-												md-input(
-													type="text",
-													name="first-name",
-													id="first-name",
-													maxlength="35",
-													v-model="signup.firstName",
-													@keyup.enter="submit",
-													@input="$v.signup.firstName.$touch()",
-												)
-												span.md-error(v-if="!$v.signup.firstName.required")
-													span Required
-												span.md-error(v-else-if="!$v.signup.firstName.maxLength")
-													span Too long
-												span.md-error(v-else-if="!$v.signup.firstName.valid")
-													span Invalid
-
-											md-input-container(:class="{ 'md-input-invalid': $v.signup.lastName.$error }")
-												label(for="last-name") Last Name
-												md-input(
-													type="text",
-													name="last-name",
-													id="last-name",
-													maxlength="35",
-													v-model="signup.lastName",
-													@keyup.enter="submit",
-													@input="$v.signup.lastName.$touch()",
-												)
-												span.md-error(v-if="!$v.signup.lastName.required")
-													span Required
-												span.md-error(v-else-if="!$v.signup.lastName.maxLength")
-													span Too long
-												span.md-error(v-else-if="!$v.signup.lastName.valid")
-													span Invalid
-
 											//- // TODO: Replace with select
 											//- md-input-container
 											//- 	label Study Group
@@ -172,6 +179,7 @@
 											//- 		v-model="credentials.studyGroup",
 											//- 		@keyup.enter="submit"
 											//- 	)
+
 									md-card-actions
 										template(v-if="isLogin")
 											md-button(
