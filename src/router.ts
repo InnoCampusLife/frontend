@@ -33,17 +33,17 @@ const router = new VueRouter({
 		// Accounts
 		{
 			path: '/accounts',
-			component: require('./views/accounts/main.vue'),
+			component: require('./views/accounts/accounts-main.vue'),
 			meta: { authorizedZone: true },
 			children: [
 				{
 					path: '/account',
-					component: require('./views/accounts/account.vue'),
+					component: require('./views/accounts/pages/account.vue'),
 					name: 'account',
 				},
 				{
 					path: '',
-					component: require('./views/accounts/accounts.vue'),
+					component: require('./views/accounts/pages/accounts.vue'),
 					name: 'accounts',
 				},
 			],
@@ -52,7 +52,7 @@ const router = new VueRouter({
 		// Innopoints - Applications
 		{
 			path: '/innopoints',
-			component: require('./views/innopoints/main.vue'),
+			component: require('./views/innopoints/innopoints-main.vue'),
 			meta: { authorizedZone: true },
 			children: [
 				{
@@ -61,12 +61,12 @@ const router = new VueRouter({
 				},
 				{
 					path: 'applications',
-					component: require('./views/innopoints/applications.vue'),
+					component: require('./views/innopoints/pages/applications.vue'),
 					name: 'applications',
 				},
 				{
 					path: 'apply',
-					component: require('./views/innopoints/apply.vue'),
+					component: require('./views/innopoints/pages/apply.vue'),
 					name: 'apply',
 				},
 			],
@@ -75,22 +75,22 @@ const router = new VueRouter({
 		// Innopoints - Store
 		{
 			path: '/store',
-			component: require('./views/store/main.vue'),
+			component: require('./views/store/store-main.vue'),
 			meta: { authorizedZone: true },
 			children: [
 				{
 					path: '',
-					component: require('./views/store/store.vue'),
+					component: require('./views/store/pages/store.vue'),
 					name: 'store',
 				},
 				{
 					path: 'items/:id',
-					component: require('./views/store/item.vue'),
+					component: require('./views/store/pages/item.vue'),
 					name: 'item',
 				},
 				{
 					path: 'orders',
-					component: require('./views/store/orders.vue'),
+					component: require('./views/store/pages/orders.vue'),
 					name: 'orders',
 				},
 			],

@@ -51,6 +51,7 @@
 </template>
 
 <script>
+	import * as _ from 'lodash'
 	import { mapState, mapGetters } from 'vuex'
 
 	export default {

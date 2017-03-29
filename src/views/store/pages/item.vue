@@ -18,16 +18,26 @@
 					.md-title {{ item.title | startCase }}
 					.md-subhead {{ item.category.title | startCase }}
 
-					// div(v-show='item.possible_joint_purchase')
-					// 	p.card-text You can buy it with {{item.max_buyers}} people:
-					// 	.form-group(v-for="i in (item.max_buyers - 1)")
-					// 		input.form-control(placeholder="Username")
-					// .form-group.row(v-for='(option, index) in item.options')
-					// 	label.col-xs-3.col-form-label(for="'item-option-select-' + index") {{ option.title }}
-					// 	.col-xs-9
-					// 		select.form-control(:name='option.title', :data-index='index', @change='onSelect(item, $event)', :id="'item-option-select-' + index")
-					// 			option(value='') Choose {{ option.title }}
-					// 			option(v-for='value in option.values', :value='value') {{ value }}
+				md-card-content(v-show="item.options")
+					//- .form-group.row(v-for='(option, index) in item.options')
+					//- 	label.col-3.col-form-label(for="'item-option-select-' + index") {{ option.title }}
+					//- 	.col-9
+					//- 		select.form-control(
+					//- 			:name='option.title',
+					//- 			:data-index='index',
+					//- 			@change='onSelect(item, $event)',
+					//- 			:id="'item-option-select-' + index"
+					//- 		)
+					//- 			option(value='') Choose {{ option.title }}
+					//- 			option(v-for='value in option.values', :value='value') {{ value }}
+
+					md-input-container(v-for='(option, index) in item.options', :key="option")
+						label(:for="'item-option-' + index") {{ option.title }}
+						md-select(
+							:name="'item-option-' + index",
+							:id="'item-option-' + index",
+						)
+							md-option(v-for='value in option.values', :value='value', :key="value") {{ value }}
 
 				md-card-content
 					p.card-text
@@ -36,7 +46,6 @@
 
 				md-card-actions
 					md-button.md-primary.md-raised(
-						:disabled="!(isItemSelected || !item.options) || quantity < 1",
 						type='button',
 						data-toggle="modal",
 						:data-target="'#buying-modal-' + item.id",
@@ -63,35 +72,18 @@
 									.col-12.col-sm-auto
 										p.card-text.text-info {{ item.price - 0.01 }} IP
 
-								// template(v-if="item.selectedItem && item.selectedItem.options")
-								// 	template(v-for="(value, key) in item.selectedItem.options")
-								// 		.row
-								// 			.col-sm
-								// 				p.text-sm-right {{ key }}
-								// 			.col-sm.font-weight-bold
-								// 				p {{ value }}
-
+								template(v-if="item.selectedItem && item.selectedItem.options")
+									template(v-for="(value, key) in item.selectedItem.options")
+										.row
+											.col-sm
+												p.text-sm-right {{ key }}
+											.col-sm.font-weight-bold
+												p {{ value }}
 
 							.md-card-actions
 								// FIXME: add quantity check here
 								md-button(type='button', data-dismiss="modal") Cancel
 								md-button.md-primary.md-raised(type='button', data-dismiss="modal", @click="buy(item)") Purchase
-
-
-			// TODO: add link to orders page here
-			.alert.alert-success.alert-dismissible.fade.in(role='alert', v-show="buySuccessful === true")
-				button.close(type='button', aria-label='Close', @click='buySuccessful = null')
-					span(aria-hidden='true') &times;
-				p.mb-0
-					strong Purchase complete!
-					|  You can check you purchase on the orders page.
-
-			.alert.alert-danger.alert-dismissible.fade.in(role='alert', v-show="buySuccessful === false")
-				button.close(type='button', aria-label='Close', @click='buySuccessful = null')
-					span(aria-hidden='true') &times;
-				p.mb-0
-					strong Purchase failed!
-					|  Something went wrong! You can tell us about it.
 
 </template>
 
@@ -114,7 +106,7 @@
 			// FIXME
 			quantity() {
 
-				if (!(this.selectedItem && Object.keys(this.selectedItem.options) > 0)) {
+				if (!(this.selectedItem && Object.keys(this.selectedItem.options).length > 0)) {
 					return this.item.combinations.reduce((sum, curr) => {
 						return sum + curr.quantity
 					}, 0)
@@ -144,12 +136,20 @@
 			},
 		},
 
-		created() {
+		// created () {
+		// 	this.getItem()
+		// },
+
+		// watch: {
+		// 	$route: 'getItem',
+		// },
+
+		activated () {
 			this.getItem()
 		},
 
-		watch: {
-			$route: 'getItem',
+		deactivated () {
+			this.item = null
 		},
 
 		methods: {
@@ -157,7 +157,7 @@
 				this.isLoading = true
 				this.$root.api.innopoints.items.one({ item_id: this.$store.state.route.params.id })
 					.then((json) => {
-						console.log('Got item:', json.resutl)
+						console.log('Got item:', json.result)
 						this.isLoading = false
 						this.item = json.result
 					})

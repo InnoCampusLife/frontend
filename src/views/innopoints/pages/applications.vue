@@ -37,7 +37,7 @@
 							p.md-display-1 Empty
 					template(v-else)
 						transition-group.application-list(name="application-list" tag="div")
-							application.application.my-2(
+							applicationCard.application.my-2(
 								v-for="app in filterBy(filteredApps, search, 'comment', 'status', 'id', 'type', 'author.username', 'work')",
 								:application="app",
 								:key="app.id",
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+	import applicationCard from './../components/application-card'
+
 	export default {
 		name: 'innopoints-applications',
 
@@ -88,7 +90,7 @@
 		},
 
 		components: {
-			application: require('./components/application.vue'),
+			applicationCard,
 		},
 
 		computed: {

@@ -134,6 +134,7 @@
 </template>
 
 <script>
+	import * as _ from 'lodash'
 	import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 
 	export default {
@@ -148,7 +149,6 @@
 
 				category_id: null,
 				filesStr: '',
-				files: new FormData(),
 				comment: '',
 				participants: [
 					{
@@ -209,11 +209,6 @@
 
 		watch: {
 			$route: 'fetchData',
-
-			filesStr() {
-				const files = document.querySelector('input[type="file"]').files
-				for (let file of files) this.files.append(file.name, file)
-			},
 		},
 
 		methods: {

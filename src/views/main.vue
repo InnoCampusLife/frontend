@@ -70,7 +70,6 @@
 </template>
 
 <script>
-
 	import { mapActions, mapMutations, mapState } from 'vuex'
 
 	import accounts from './../modules/accounts'
@@ -93,7 +92,7 @@
 				api: {
 					accounts,
 					innopoints,
-				}
+				},
 			}
 		},
 
@@ -146,7 +145,7 @@
 						this.updateAccounts(),
 						this.updateInnopoints(),
 					]).then((jsons) => {
-						console.log('State updated with result:', jsons)
+						console.log('Updated state:', jsons)
 					}).catch((err) => {
 						console.error('Failed to update state:', err)
 					})

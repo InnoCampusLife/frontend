@@ -42,7 +42,7 @@
 			// FIXME
 			quantity() {
 
-				if (!(this.selectedItem && Object.keys(this.selectedItem.options) > 0)) {
+				if (!(this.selectedItem && Object.keys(this.selectedItem.options).length > 0)) {
 					return this.item.combinations.reduce((sum, curr) => {
 						return sum + curr.quantity
 					}, 0)

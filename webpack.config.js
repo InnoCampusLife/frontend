@@ -25,7 +25,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.json', '.ts', '.vue', '*'],
+    extensions: ['.ts', '.vue', '.js'],
     alias: {
       'vue$': 'vue/dist/vue.common.js',
     },
@@ -42,9 +42,12 @@ module.exports = {
         loader: 'vue-loader',
         options: {
           loaders: {
-            'scss': 'vue-style-loader!css-loader!sass-loader',
-            'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
+            scss: 'vue-style-loader!css-loader!sass-loader',
+            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
+            // js: 'vue-ts-loader',
+            ts: 'vue-ts-loader',
           },
+          // esModule: true,
         },
       },
       {
@@ -54,43 +57,22 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        // use: [
-        //  'style-loader',
-        //  'css-loader',
-        //  'postcss-loader',
-        // ],
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          // loader: 'css-loader!postcss-loader',
           use: [
-            'style-loader',
             'css-loader',
             'postcss-loader',
           ],
         }),
       },
-      // {
-      //  test: /\.less$/,
-      //  loader: ExtractTextPlugin.extract({
-      //      fallback: "style-loader",
-      //      loader: "css-loader!postcss-loader!less-loader",
-      //  }),
-      // },
       {
         test: /\.ts$/,
         loader: 'ts-loader',
       },
       {
         test: /\.scss$/,
-        // use: [
-        //  'style-loader',
-        //  'css-loader',
-        //  'postcss-loader',
-        //  'sass-loader',
-        // ],
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          // loader: 'css-loader!postcss-loader!sass-loader',
           use: [
             'css-loader',
             'postcss-loader',
@@ -120,9 +102,6 @@ module.exports = {
       { from: 'src/index.html' },
       { from: 'public', to: 'public' },
     ]),
-    new webpack.ProvidePlugin({
-      _: "lodash",
-    }),
   ],
 
   devtool: "eval",

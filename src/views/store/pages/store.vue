@@ -15,7 +15,7 @@
 				.md-title Empty
 		template(v-else)
 				transition-group.card-columns.store-item-list(name="store-item-list" tag="div")
-					item.store-item(
+					item-card.store-item(
 						v-for="item in filterBy(items, search, 'title', 'price', 'category.title')",
 						:item="item",
 						:key="item.id",
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+	import itemCard from './../components/item-card'
+
 	export default {
 		name: 'store-store',
 
@@ -36,7 +38,7 @@
 		},
 
 		components: {
-			item: require('./components/item.vue'),
+			itemCard,
 		},
 
 		created() {
