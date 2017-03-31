@@ -36,7 +36,7 @@
 							md-icon store
 							span Store
 
-					template(v-if="user.account.isModerator")
+					template(v-if="isModerator")
 						md-divider
 						md-list
 							router-link(
@@ -44,7 +44,7 @@
 								:to="{ name: 'accounts' }",
 							)
 								md-icon supervisor_account
-								span Accounts
+								span Manage Accounts
 
 				footer
 					md-divider
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-	import { mapActions, mapMutations, mapState } from 'vuex'
+	import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 	import accounts from './../modules/accounts'
 	import innopoints from './../modules/innopoints'
@@ -103,6 +103,10 @@
 
 			...mapState('accounts', [
 				'username',
+			]),
+
+			...mapGetters('accounts', [
+				'isModerator',
 			]),
 		},
 

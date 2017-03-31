@@ -52,20 +52,20 @@ html {
 	box-sizing: inherit;
 }
 
-/*
-* + * {
-	margin-top: 1em;
-}
-*/
+
+// * + * {
+// 	margin-top: 1em;
+// }
 
 .card-columns {
-	column-count: 4;
+	column-count: auto;
 	column-gap: 0;
 	column-width: $sidebar-width;
-	column-break-inside: avoid;
+	// column-break-inside: avoid;
 
 	> .card-wrapper {
 		padding: 0 8px;
+		// display: inline-block;
 
 		> .md-card {
 			margin: 8px 0;

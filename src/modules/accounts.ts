@@ -54,6 +54,10 @@ export const store: Vuex.StoreOptions<any> = {
 		isModerator ({ role }) {
 			return role === 'moderator'
 		},
+
+		isGhost ({ role }) {
+			return role === 'ghost'
+		},
 	},
 
 	mutations: {
