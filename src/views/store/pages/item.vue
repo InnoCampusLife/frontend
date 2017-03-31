@@ -1,8 +1,4 @@
 <style lang="scss" scoped>
-	.store-item {
-		display: inline-block;
-		margin: 12px;
-	}
 </style>
 
 <template lang="pug">
@@ -13,24 +9,12 @@
 		template(v-else)
 			md-card(md-theme="blue")
 				md-card-media
-					md-image(:md-src='item.image_link', alt='')
+					img(:src='item.image_link', :alt="item.title", :title="item.title")
 				md-card-header
 					.md-title {{ item.title | startCase }}
 					.md-subhead {{ item.category.title | startCase }}
 
 				md-card-content(v-show="item.options")
-					//- .form-group.row(v-for='(option, index) in item.options')
-					//- 	label.col-3.col-form-label(for="'item-option-select-' + index") {{ option.title }}
-					//- 	.col-9
-					//- 		select.form-control(
-					//- 			:name='option.title',
-					//- 			:data-index='index',
-					//- 			@change='onSelect(item, $event)',
-					//- 			:id="'item-option-select-' + index"
-					//- 		)
-					//- 			option(value='') Choose {{ option.title }}
-					//- 			option(v-for='value in option.values', :value='value') {{ value }}
-
 					md-input-container(v-for='(option, index) in item.options', :key="option")
 						label(:for="'item-option-' + index") {{ option.title }}
 						md-select(

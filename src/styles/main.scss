@@ -59,9 +59,18 @@ html {
 */
 
 .card-columns {
-	column-count: auto;
+	column-count: 4;
 	column-gap: 0;
 	column-width: $sidebar-width;
+	column-break-inside: avoid;
+
+	> .card-wrapper {
+		padding: 0 8px;
+
+		> .md-card {
+			margin: 8px 0;
+		}
+	}
 }
 
 .emojione {

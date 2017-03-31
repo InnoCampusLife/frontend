@@ -1,8 +1,4 @@
 <style lang="scss" scoped>
-	.store-item {
-		display: inline-block;
-		margin: 12px;
-	}
 </style>
 
 <template lang="pug">
@@ -14,11 +10,13 @@
 			.text-center
 				.md-title Empty
 		template(v-else)
-				transition-group.card-columns.store-item-list(name="store-item-list" tag="div")
+			.card-columns
+				.card-wrapper(
+					v-for="item in filterBy(items, search, 'title', 'price', 'category.title')",
+					:key="item.id",
+				)
 					item-card.store-item(
-						v-for="item in filterBy(items, search, 'title', 'price', 'category.title')",
 						:item="item",
-						:key="item.id",
 					)
 </template>
 
