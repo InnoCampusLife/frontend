@@ -7,7 +7,8 @@
 						md-list.md-transparent
 							md-list-item.md-avatar-list(disabled)
 								md-avatar.md-large
-									img(:src="`https://api.adorable.io/avatars/285/${username}`", alt='Avatar')
+									//- img(:src="`https://api.adorable.io/avatars/285/${username}`", alt='Avatar')
+									avatar(:username="fullName | placeholder(username)", :size="64")
 								span(style='flex: 1')
 							router-link(
 								tag="md-list-item",
@@ -22,6 +23,8 @@
 			main
 				section
 					md-list
+						md-subheader(v-if="isModerator") Navigate
+
 						router-link(
 							tag="md-list-item",
 							:to="{ name: 'applications' }",
@@ -39,12 +42,13 @@
 					template(v-if="isModerator")
 						md-divider
 						md-list
+							md-subheader Manage
 							router-link(
 								tag="md-list-item",
 								:to="{ name: 'accounts' }",
 							)
 								md-icon supervisor_account
-								span Manage Accounts
+								span Accounts
 
 				footer
 					md-divider
@@ -70,6 +74,7 @@
 </template>
 
 <script>
+	import { Avatar as avatar } from 'vue-avatar'
 	import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 	import accounts from './../modules/accounts'
@@ -82,7 +87,7 @@
 	export default {
 		name: 'main',
 
-		data() {
+		data () {
 			return {
 				user: {
 					account: modules.accounts,
@@ -96,6 +101,10 @@
 			}
 		},
 
+		components: {
+			avatar,
+		},
+
 		computed: {
 			...mapState('innopoints', [
 				'points_amount',
@@ -106,6 +115,7 @@
 			]),
 
 			...mapGetters('accounts', [
+				'fullName',
 				'isModerator',
 			]),
 		},

@@ -28,7 +28,7 @@
 
 		props: ['search'],
 
-		data() {
+		data () {
 			return {
 				isLoading: false,
 				items: [],

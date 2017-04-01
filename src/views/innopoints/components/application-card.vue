@@ -22,7 +22,11 @@
 							span  {{ application.type | startCase }}
 					.col-12.col-sm-auto
 						.md-subhead
-							span by <a :href="'/account/' + application.author.username" :title="application.author.username">{{ application.author.username }}</a>
+							span by
+							router-link(
+								:to="{ name: 'profile', params: { id: application.author.id } }"
+							)
+								span  {{ application.author.username }}
 			md-card-content
 				md-table
 					md-table-header
@@ -37,8 +41,7 @@
 						md-table-row(v-for="(work, index) in application.work", :key="index")
 							md-table-cell(md-numeric) {{ index + 1 }}
 							md-table-cell
-								// FIXME: Use router-link
-								a(:href="'/account/' + work.actor.username") {{ work.actor.username }}
+								router-link(:to="{ name: 'profile', params: { id: work.actor.id } }") {{ work.actor.username }}
 							md-table-cell {{ work.activity.category.title }}
 							md-table-cell {{ work.activity.title }}
 							md-table-cell(md-numeric)

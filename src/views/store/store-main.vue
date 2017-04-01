@@ -47,7 +47,7 @@
 	export default {
 		name: 'store-main',
 
-		data() {
+		data () {
 			return {
 				search: '',
 			}

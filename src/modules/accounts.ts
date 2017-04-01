@@ -138,16 +138,18 @@ export const api = {
 	bio: {
 		one ({ id, username }) {
 			if (!id && !username) return Promise.reject(new InvalidParamsError())
-			if (store.state.role !== 'student' && store.state.role !== 'moderator') {
-				return Promise.reject(new PermissionError())
-			}
+			// TODO: Add permission check
+			// if (store.state.role !== 'student' && store.state.role !== 'moderator') {
+			// 	return Promise.reject(new PermissionError())
+			// }
 			const paramsStr = id ? 'id=' + id : 'username=' + username
 			const input: RequestInfo = `${url}/${token()}/getBio?${paramsStr}`
 			return receiveJson(input)
 		},
 
 		many () {
-			if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
+			// TODO: Add permission check
+			// if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
 			const input: RequestInfo = `${url}/${token()}/listAccounts`
 			return receiveJson(input)
 		},

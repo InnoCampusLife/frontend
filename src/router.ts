@@ -37,14 +37,19 @@ const router = new VueRouter({
 			meta: { authorizedZone: true },
 			children: [
 				{
-					path: '/account',
-					component: require('./views/accounts/pages/account.vue'),
-					name: 'account',
-				},
-				{
 					path: '',
 					component: require('./views/accounts/pages/accounts.vue'),
 					name: 'accounts',
+				},
+				{
+					path: '/profiles/:id',
+					component: require('./views/accounts/pages/profile.vue'),
+					name: 'profile',
+				},
+				{
+					path: '/account',
+					component: require('./views/accounts/pages/account.vue'),
+					name: 'account',
 				},
 			],
 		},

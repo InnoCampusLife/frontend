@@ -11,14 +11,14 @@
 								.col
 									h1.md-title
 										span Innopoints
-										span(v-if="name === 'applications'") &ensp;&ndash;&ensp;Applications
-										span(v-if="name === 'apply'") &ensp;&ndash;&ensp;Apply
-								.col.col-auto(v-if="name === 'apply'")
+										span(v-if="routeName === 'applications'") &ensp;&ndash;&ensp;Applications
+										span(v-if="routeName === 'apply'") &ensp;&ndash;&ensp;Apply
+								.col.col-auto(v-if="routeName === 'apply'")
 									router-link(
 										tag="md-button",
 										:to="{ name: 'applications' }")
 										span Applications
-								.col.col-auto.hidden-sm-down(v-if="name === 'applications'")
+								.col.col-auto.hidden-sm-down(v-if="routeName === 'applications'")
 									.search
 										md-button.md-icon-button
 											md-icon search
@@ -39,7 +39,7 @@
 	export default {
 		name: 'innopoints-main',
 
-		data() {
+		data () {
 			return {
 				search: ''
 			}
@@ -47,7 +47,7 @@
 
 		computed: {
 			...mapState({
-				name: (state) => state.route.name,
+				routeName: (state) => state.route.name,
 			}),
 		},
 

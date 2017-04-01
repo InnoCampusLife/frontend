@@ -74,7 +74,7 @@
 			},
 		},
 
-		data() {
+		data () {
 			return {
 				applications: [],
 				paginate: ['applications'],

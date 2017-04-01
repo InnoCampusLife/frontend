@@ -7,77 +7,105 @@
 			md-card
 				md-card-content
 					.row
-						.col-sm.text-sm-right
-							p Username
-						.col-sm
-							p.font-weight-bold {{ username }}
-					.row
-						.col-sm.text-sm-right
-							p Role
-						.col-sm
-							p.font-weight-bold {{ role | capitalize }}
-					.row
-						.col-sm.text-sm-right
-							p First Name
-						.col-sm
-							p.font-weight-bold {{ firstName | placeholder('—') }}
-					.row
-						.col-sm.text-sm-right
-							p Last Name
-						.col-sm
-							p.font-weight-bold {{ lastName | placeholder('—') }}
-					.row
-						.col-sm.text-sm-right
-							p Email
-						.col-sm
-							p.font-weight-bold {{ email | placeholder('—') }}
-					.row
-						.col-sm.text-sm-right
-							p Innopoints
-						.col-sm
-							p.font-weight-bold {{ points_amount | currency('IUP ') }}
+						.col-12.col-md-auto
+							p
+								//- img.rounded-circle(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+								avatar(:username="fullName | placeholder(username)", :size="240")
+						.col
+							md-input-container
+								label(for="username") Username
+								md-input(
+									readonly,
+									type="text",
+									id="username",
+									name="username",
+									:value="username",
+								)
 
-			// md-card
-			// 	md-card-header
-			// 		.row
-			// 			.col-12.col-sm-auto
-			// 				p
-			// 					img.rounded-circle(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
-			// 			.col
-			// 				md-card-header-text
-			// 					.md-title Title goes
-			// 					.md-subhead Subtitle here
+							md-input-container
+								label(for="email") Email
+								md-input(
+									readonly,
+									type="text",
+									id="email",
+									name="email",
+									:value="email | placeholder('-')",
+								)
 
+							md-input-container
+								label(for="firstName") First Name
+								md-input(
+									readonly,
+									type="text",
+									id="firstName",
+									name="firstName",
+									:value="firstName | placeholder('-')",
+								)
+
+							md-input-container
+								label(for="lastName") Last Name
+								md-input(
+									readonly,
+									type="text",
+									id="lastName",
+									name="lastName",
+									:value="lastName | placeholder('-')",
+								)
+
+							md-input-container
+								label(for="innopointsNum") Innopoints
+								md-input(
+									readonly,
+									type="text",
+									id="innopointsNum",
+									name="innopointsNum",
+									:value="innopointsNum | currency('IUP ', 0)",
+								)
+
+							md-input-container
+								label(for="role") Role
+								md-input(
+									readonly,
+									type="text",
+									id="role",
+									name="role",
+									:value="role | capitalize | placeholder('-')",
+								)
 </template>
 
 <script>
-	import * as _ from 'lodash'
+	import { Avatar as avatar } from 'vue-avatar'
+	import { capitalize } from 'lodash'
 	import { mapState, mapGetters } from 'vuex'
 
 	export default {
 		name: 'accounts-account',
 
-		data() {
+		data () {
 			return {
 				isLoading: false,
 			}
 		},
 
+		components: {
+			avatar,
+		},
+
 		filters: {
-			capitalize: _.capitalize,
+			capitalize,
 		},
 
 		computed: {
-			...mapState('innopoints', [
-				'points_amount',
-			]),
+			...mapState('innopoints', {
+				innopointsNum: (state) => state.points_amount,
+			}),
 
 			...mapState('accounts', [
 				'username',
 				'role',
 				'firstName',
 				'lastName',
-				'email'
+				'email',
 			]),
 
 			...mapGetters('accounts', [

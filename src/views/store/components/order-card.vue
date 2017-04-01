@@ -1,5 +1,5 @@
 <template lang="pug">
-	.card-container
+	.card-wrapper
 		md-card(:status="order.status", :id="'order-' + order.id")
 			md-card-area
 				md-card-content

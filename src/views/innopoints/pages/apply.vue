@@ -140,7 +140,7 @@
 	export default {
 		name: 'innopoints-apply',
 
-		data() {
+		data () {
 			return {
 				isLoading: false,
 
@@ -332,6 +332,7 @@
 							work,
 							comment: this.comment,
 							type: work.length > 1 ? 'group' : 'personal',
+							files: [],
 						}
 					}
 				}).then((json) => {

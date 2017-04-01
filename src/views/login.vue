@@ -218,7 +218,7 @@
 	export default {
 		name: 'login',
 
-		data() {
+		data () {
 			return {
 				isLogin: true,
 

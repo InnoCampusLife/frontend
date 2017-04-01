@@ -2,14 +2,25 @@
 export class ResponseError extends Error {
 	constructor(res?: Response) {
 		super(`${res.url} ${res.status} (${res.statusText})`)
-		// FIXME
-		res.json()
+
+		// FIXME: add different types of response error handlers
+		let errMsg = "Unknown response error:"
+
+		if (res.url.includes('points')) {
+			errMsg = 'Innopoints response error:'
+		} else if (res.url.includes('accounts')) {
+			errMsg = 'Accounts response error:'
+		}
+
+		if (res.status === 400) {
+			res.json()
 			.then((json) => {
-				console.error(`Response error:`, json.error)
+				console.error(errMsg, json.error)
 			})
 			.catch((err) => {
 				console.error(`JSON parsing error:`, err)
 			})
+		}
 	}
 }
 

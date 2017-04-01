@@ -77,7 +77,7 @@
 	export default {
 		name: 'store-item',
 
-		data() {
+		data () {
 			return {
 				isLoading: false,
 				item: null,

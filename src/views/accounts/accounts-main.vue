@@ -9,7 +9,10 @@
 						.app-bar-container
 							.row
 								.col
-									h1.md-title Account
+									h1.md-title
+										span(v-if="routeName === 'account'") Account
+										span(v-else-if="routeName === 'profile'") Profile
+										span(v-else) Accounts
 		section
 			.content
 				router-view
@@ -18,13 +21,21 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+
 	export default {
 		name: 'accounts-main',
 
-		data() {
+		data () {
 			return {
 				search: ''
 			}
+		},
+
+		computed: {
+			...mapState({
+				routeName: (state) => state.route.name,
+			}),
 		},
 
 		methods: {

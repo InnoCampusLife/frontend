@@ -31,7 +31,7 @@
 	export default {
 		name: 'test',
 
-		data() {
+		data () {
 			return {
 				isLoading: false,
 				user: this.$router.app.user

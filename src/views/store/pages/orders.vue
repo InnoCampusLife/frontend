@@ -14,7 +14,7 @@
 
 		props: ['search'],
 
-		data() {
+		data () {
 			return {
 				orders: [],
 			}
