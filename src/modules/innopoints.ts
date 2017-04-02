@@ -181,7 +181,12 @@ export const api = {
 			create ({ body }) {
 				if (!body) return Promise.reject(new InvalidParamsError())
 				const input = `${url}/accounts/${token()}/files`
-				const init: RequestInit = new POSTRequestInit({ body })
+				const init: RequestInit = new POSTRequestInit({
+					body,
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				})
 				return receiveJson(input, init)
 			},
 

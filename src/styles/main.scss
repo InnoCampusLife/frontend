@@ -1,10 +1,4 @@
 /* ==========================================================================
-	 Helper Imports
-	 ========================================================================== */
-
-// @import './helpers';
-
-/* ==========================================================================
 	 Vendor Imports
 	 ========================================================================== */
 
@@ -65,10 +59,10 @@ html {
 
 	> .card-wrapper {
 		padding: 0 8px;
-		// display: inline-block;
 
 		> .md-card {
 			margin: 8px 0;
+			display: inline-block;
 		}
 	}
 }
@@ -312,54 +306,56 @@ body {
 	z-index: 2400;
 }
 
+.md-table-card > .md-toolbar {
+	padding: 0 16px;
+}
+
 /* ==========================================================================
 	 Transitions/Animations
 	 ========================================================================== */
 
-.application {
-	transition: all 500ms;
-	display: inline-block;
-	width: 100%;
-}
+// .application {
+// 	transition: all 500ms;
+// 	display: inline-block;
+// 	width: 100%;
+// }
 
-.application-list-enter, .application-list-leave-to {
-	opacity: 0;
-	// transform: translateY(100%);
-}
+// .application-list-enter, .application-list-leave-to {
+// 	opacity: 0;
+// 	// transform: translateY(100%);
+// }
 
-.application-list-enter-active, .application-list-leave-active {
-	position: absolute;
-}
+// .application-list-enter-active, .application-list-leave-active {
+// 	position: absolute;
+// }
 
-.participant {
-	transition: all 500ms;
-	display: inline-block;
-	width: 100%;
-}
+// .participant {
+// 	transition: all 500ms;
+// 	display: inline-block;
+// 	width: 100%;
+// }
 
-.participant-list-enter, .participant-list-leave-to {
-	opacity: 0;
-	// transform: translateY(100%);
-}
+// .participant-list-enter, .participant-list-leave-to {
+// 	opacity: 0;
+// 	// transform: translateY(100%);
+// }
 
-.participant-list-enter-active, .participant-list-leave-active {
-	position: absolute;
-}
+// .participant-list-enter-active, .participant-list-leave-active {
+// 	position: absolute;
+// }
 
-.store-item {
-	transition: all 500ms;
-	display: inline-block;
-	width: 100%;
-}
+// .store-item {
+// 	transition: all 500ms;
+// }
 
-.store-item-list-enter, .store-item-list-leave-to {
-	opacity: 0;
-	// transform: translateY(100%);
-}
+// .store-item-list-enter, .store-item-list-leave-to {
+// 	opacity: 0;
+// 	// transform: translateY(100%);
+// }
 
-.store-item-list-enter-active, .store-item-list-leave-active {
-	position: absolute;
-}
+// .store-item-list-enter-active, .store-item-list-leave-active {
+// 	position: absolute;
+// }
 
 /* ==========================================================================
 	 Media Queries

@@ -30,81 +30,80 @@
 						.md-title(v-if='participants.length > 1') Participants
 						.md-title(v-else) Participant
 
-						transition-group.participant-list(name="participant-list" tag="div")
-							md-card.participant.my-2(v-for='(part, index) of participants', :key="index")
-								md-card-content
+						md-card.participant.my-2(v-for='(part, index) of participants', :key="index")
+							md-card-content
 
-									md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].username.$error }")
-										md-icon account_circle
-										label(:for="'username_' + index") Username
-										md-input(
-											required,
-											type='text',
-											:id="'username_' + index",
-											:name="'username_' + index",
-											:value="part.username",
-											@input="debouncedUpdateUsername(index, $event)",
-										)
-										span.md-error(v-if="!$v.participants.$each[index].username.required")
-											span Required
-										span.md-error(v-else-if="!$v.participants.$each[index].username.minLength")
-											span Too short
-										span.md-error(v-else-if="!$v.participants.$each[index].username.maxLength")
-											span Too long
-										span.md-error(v-else-if="!$v.participants.$each[index].username.exists")
-											span Ivalid or does not exist
-										span.md-error(v-else-if="!$v.participants.$each[index].username.doesNotRepeat")
-											span Cannot repeat
-
-									md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
-										md-icon work
-										label(:for="'activity_' + index") Activity
-										md-select(
-											required,
-											placeholder="Select Activity",
-											:id="'activity_' + index",
-											:name="'activity_' + index",
-											v-model="part.activity_id",
-											@change="$v.participants.$each[index].activity_id.$touch()"
-										)
-											md-option(v-for='a in activities', :key="a.id", :value="a.id") {{ a.title }}
-										span.md-error(v-if="!$v.participants.$each[index].activity_id.required")
-											span Required
-
-									md-input-container(
-										v-show="isHourlyActivity(part.activity_id)",
-										:class="{ 'md-input-invalid': $v.participants.$each[index].hours.$error }",
+								md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].username.$error }")
+									md-icon account_circle
+									label(:for="'username_' + index") Username
+									md-input(
+										required,
+										type='text',
+										:id="'username_' + index",
+										:name="'username_' + index",
+										:value="part.username",
+										@input="debouncedUpdateUsername(index, $event)",
 									)
-										md-icon timer
-										label(:for="'hours_' + index") Hours
-										md-input(
-											required,
-											:disabled='!isHourlyActivity(part.activity_id)',
-											:id="'hours_' + index",
-											:name="'hours_' + index",
-											type='number',
-											min='1',
-											max='10000',
-											step="1",
-											v-model='part.hours',
-											@input="$v.participants.$each[index].hours.$touch()"
-										)
-										span.md-error(v-if="!$v.participants.$each[index].hours.required")
-											span Required
-										span.md-error(v-if="!$v.participants.$each[index].hours.between")
-											span Too little or too much
+									span.md-error(v-if="!$v.participants.$each[index].username.required")
+										span Required
+									span.md-error(v-else-if="!$v.participants.$each[index].username.minLength")
+										span Too short
+									span.md-error(v-else-if="!$v.participants.$each[index].username.maxLength")
+										span Too long
+									span.md-error(v-else-if="!$v.participants.$each[index].username.exists")
+										span Ivalid or does not exist
+									span.md-error(v-else-if="!$v.participants.$each[index].username.doesNotRepeat")
+										span Cannot repeat
 
-									md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
-										md-icon info
-										label(:for="'innopoints_' + index") Innopoints
-										md-input(
-											readonly,
-											placeholder="IUP 0.00",
-											:id="'innopoints_' + index",
-											:name="'innopoints_' + index",
-											type='text',
-											:value="innopoints(part.activity_id, part.hours) | currency('IUP ')"
-										)
+								md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
+									md-icon work
+									label(:for="'activity_' + index") Activity
+									md-select(
+										required,
+										placeholder="Select Activity",
+										:id="'activity_' + index",
+										:name="'activity_' + index",
+										v-model="part.activity_id",
+										@change="$v.participants.$each[index].activity_id.$touch()"
+									)
+										md-option(v-for='a in activities', :key="a.id", :value="a.id") {{ a.title }}
+									span.md-error(v-if="!$v.participants.$each[index].activity_id.required")
+										span Required
+
+								md-input-container(
+									v-show="isHourlyActivity(part.activity_id)",
+									:class="{ 'md-input-invalid': $v.participants.$each[index].hours.$error }",
+								)
+									md-icon timer
+									label(:for="'hours_' + index") Hours
+									md-input(
+										required,
+										:disabled='!isHourlyActivity(part.activity_id)',
+										:id="'hours_' + index",
+										:name="'hours_' + index",
+										type='number',
+										min='1',
+										max='10000',
+										step="1",
+										v-model='part.hours',
+										@input="$v.participants.$each[index].hours.$touch()"
+									)
+									span.md-error(v-if="!$v.participants.$each[index].hours.required")
+										span Required
+									span.md-error(v-if="!$v.participants.$each[index].hours.between")
+										span Too little or too much
+
+								md-input-container(v-show="!$v.participants.$each[index].activity_id.$invalid")
+									md-icon info
+									label(:for="'innopoints_' + index") Innopoints
+									md-input(
+										readonly,
+										placeholder="IUP 0.00",
+										:id="'innopoints_' + index",
+										:name="'innopoints_' + index",
+										type='text',
+										:value="innopoints(part.activity_id, part.hours) | currency('IUP ')"
+									)
 
 						md-button.md-raised.ml-0.mr-3(type='button', @click='addParticipant')
 							span Add

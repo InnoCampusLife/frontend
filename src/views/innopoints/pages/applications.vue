@@ -8,25 +8,30 @@
 				.col.col-auto
 						md-input-container
 							md-icon filter_list
-							md-select#filter(name="filter", @change="updateStatus", :value="normStatus")
+							md-select(
+								id="filter",
+								name="filter",
+								@change="updateStatus",
+								:value="normStatus",
+							)
 								md-option(value="") All
 								md-option(value="in_process") In&nbsp;process
 								md-option(value="rejected") Rejected
 								md-option(value="rework") In&nbsp;rework
 								md-option(value="approved") Approved
 				.col
-				.col.col-auto
-					.mb-3
-						md-button.md-icon-button.md-raised(
-							@click="prevPage",
-							:disabled="currPage <= 1",
-						)
-							md-icon keyboard_arrow_left
-						md-button.md-icon-button.md-raised(
-							@click="nextPage",
-							:disabled="currPage >= totalPages",
-						)
-							md-icon keyboard_arrow_right
+				//- .col.col-auto
+				//- 	.mb-3
+				//- 		md-button.md-icon-button.md-raised(
+				//- 			@click="prevPage",
+				//- 			:disabled="currPage <= 1",
+				//- 		)
+				//- 			md-icon keyboard_arrow_left
+				//- 		md-button.md-icon-button.md-raised(
+				//- 			@click="nextPage",
+				//- 			:disabled="currPage >= totalPages",
+				//- 		)
+				//- 			md-icon keyboard_arrow_right
 			.row
 				.col-12
 					template(v-if="!filteredApps")
@@ -38,22 +43,22 @@
 					template(v-else)
 						transition-group.application-list(name="application-list" tag="div")
 							applicationCard.application.my-2(
-								v-for="app in filterBy(filteredApps, search, 'comment', 'status', 'id', 'type', 'author.username', 'work')",
+								v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
 								:application="app",
 								:key="app.id",
 								@deleteApp="openDeleteConfirm",
 								@approveApp="openApproveConfirm",
 								@rejectApp="openRejectConfirm",
 							)
-						md-dialog-confirm(
-							v-if="currentApp",
-							:md-title="`Delete application #${currentApp.id}?`",
-							md-content="This cannot be undone."
-							md-ok-text="Delete",
-							md-cancel-text="Cancel",
-							@close="confirmDelete"
-							ref='deleteConfirm',
-						)
+		md-dialog-confirm(
+			v-if="currentApp",
+			:md-title="`Delete application #${currentApp.id}?`",
+			md-content="This cannot be undone.",
+			md-ok-text="Delete",
+			md-cancel-text="Cancel",
+			@close="confirmDelete",
+			ref='deleteConfirm',
+		)
 		router-link.md-fab.md-fab-bottom-right(
 			tag="md-button",
 			:to="{ name: 'apply' }",
@@ -136,8 +141,8 @@
 
 			fetchData() {
 				this.$root.api.innopoints.applications.many({
-					skip: this.perPage * (this.currPage - 1),
-					limit: this.perPage * this.currPage,
+					// skip: this.perPage * (this.currPage - 1),
+					// limit: this.perPage * this.currPage,
 				})
 					.then((json) => {
 						console.log('Fetched applications:', json.result)
@@ -154,18 +159,18 @@
 
 			openApproveConfirm(app) {
 				this.currentApp = app
-				this.$refs['deleteConfirm'].open()
+				this.$refs['approveConfirm'].open()
 			},
 
 			openRejectConfirm(app) {
 				this.currentApp = app
-				this.$refs['deleteConfirm'].open()
+				this.$refs['rejectConfirm'].open()
 			},
 
 			updateApplications() {
 				this.$root.api.innopoints.applications.many({
-					skip: this.perPage * (this.currPage - 1),
-					limit: this.perPage * this.currPage,
+					// skip: this.perPage * (this.currPage - 1),
+					// limit: this.perPage * this.currPage,
 				})
 					.then((json) => {
 						console.log('Fetched applications:', json.result)
