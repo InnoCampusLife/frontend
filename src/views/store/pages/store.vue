@@ -44,7 +44,7 @@
 		},
 
 		watch: {
-			'$route': 'getItems'
+			$route: 'getItems'
 		},
 
 		methods: {

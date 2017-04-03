@@ -64,7 +64,7 @@
 		},
 
 		watch: {
-			'$route': 'getAccounts'
+			$route: 'getAccounts'
 		},
 
 		methods: {

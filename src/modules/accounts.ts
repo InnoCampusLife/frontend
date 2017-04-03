@@ -122,7 +122,8 @@ export const api = {
 
 	update ({ accountId, newRole }) {
 		if (!accountId || !newRole) return Promise.reject(new InvalidParamsError())
-		if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
+		// TODO: Add permission check
+		// if (store.state.role !== 'moderator') return Promise.reject(new PermissionError())
 		const input: RequestInfo = `${url}/${token()}/updateRole`
 		const init: RequestInit = new PUTRequestInit ({ body: { accountId, newRole } })
 		return receiveJson(input, init)

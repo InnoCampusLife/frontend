@@ -1,20 +1,25 @@
 # Unified Information System of Innopolis University
 ## Frontend module
 
-Install:
+Install dependecies:
 
 ```
-yarn install
+yarn
 ```
 
 Build:
 
 ```
-yarn run build
+yarn build
 ```
 
-Run:
+Run dev-server:
 
 ```
-yarn run dev
+yarn dev
+```
+
+Or better run dev-server with hot reload:
+```
+yarn hot
 ```

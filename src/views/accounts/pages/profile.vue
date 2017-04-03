@@ -1,51 +1,59 @@
+<style lang="scss">
+</style>
+
 <template lang="pug">
 	.container
-		template(v-if="isLoading")
-			.text-center
-				md-spinner(md-indeterminate, :md-size="100")
-		template(v-else)
-			md-card
-				md-card-content
-					.row
-						.col-12.col-md-auto
+		md-card
+			md-card-content
+				.row.align-items-center
+					.col-12.col-md-auto
+							//- img.rounded-circle(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
+							avatar.mx-auto(
+								:username="fullName | placeholder(username)",
+								:size="240",
+								style="width: 240px;",
+							)
+					.col
+						.my-5
 							p
-								//- img.rounded-circle(:src="'https://api.adorable.io/avatars/285/' + username", alt='Avatar')
-								avatar(:username="fullName | placeholder(username)", :size="240")
-						.col
-							md-list.md-double-line
-								md-list-item
-									.md-list-text-container
-										span {{ username | placeholder('-') }}
-										span Username
-								md-list-item
-									.md-list-text-container
-										span {{ firstName | placeholder('-') }}
-										span First Name
-								md-list-item
-									.md-list-text-container
-										span {{ lastName | placeholder('-') }}
-										span Last Name
-								md-list-item
-									.md-list-text-container
-										span {{ studyGroup | placeholder('-') }}
-										span Study Group
-								md-list-item
-									.md-list-text-container
-										span {{ role | capitalize }}
-										span Role
+								span.text-muted Username:
+								span  {{ username | placeholder('-') }}
+							p
+								span.text-muted First Name:
+								span  {{ firstName | placeholder('-') }}
+							p
+								span.text-muted Last Name:
+								span  {{ lastName | placeholder('-') }}
+							p
+								span.text-muted Study Group:
+								span  {{ studyGroup | placeholder('-') }}
+							p
+								span.text-muted Role:
+								span  {{ role | capitalize }}
+
+							//- 		md-input-container(disabled)
+							//- 			label(for="role") Role
+							//- 			md-select(
+							//- 				id="role",
+							//- 				name="role",
+							//- 				:value="role | placeholder('-')",
+							//- 			)
+							//- 				md-option(value="ghost") Ghost
+							//- 				md-option(value="student") Student
+							//- 				md-option(value="moderator") Moderator
 </template>
 
 <script>
 	import { Avatar as avatar } from 'vue-avatar'
 	import { capitalize } from 'lodash'
-	import { mapState, mapGetters } from 'vuex'
+	import { mapGetters } from 'vuex'
 
 	export default {
 		name: 'accounts-account',
 
 		data () {
 			return {
-				isLoading: false,
+				// isLoading: false,
 
 				username: '',
 				firstName: '',
@@ -69,10 +77,19 @@
 		},
 
 		watch: {
-			'$route': 'getProfile'
+			$route: 'getProfile'
 		},
 
 		computed: {
+			...mapGetters('accounts', [
+				'isModerator',
+				'fullName',
+			]),
+
+			isStudentProfile () {
+				return this.role === 'student'
+			},
+
 			fullName () {
 				if (this.firstName === '' || this.lastName === '') {
 					return this.firstName + this.lastName
@@ -82,13 +99,26 @@
 		},
 
 		methods: {
+			changeRole () {
+				this.$root.api.accounts.update({
+					accountId: this.id,
+					newRole: this.role === 'ghost' ? 'student' : 'ghost',
+				})
+				.then((json) => {
+					console.log('Updated profile:', json.result)
+				})
+				.catch((err) => {
+					console.error('Failed to update profile:', err)
+				})
+			},
+
 			getProfile () {
-				this.isLoading = true
+				// this.isLoading = true
 
 				this.$root.api.accounts.bio.one({ id: this.$store.state.route.params.id })
 					.then((json) => {
 						console.log('Got profile:', json.result)
-						this.isLoading = false
+						// this.isLoading = false
 						this.username = json.result.username
 						this.firstName = json.result.firstName || ''
 						this.lastName = json.result.lastName || ''

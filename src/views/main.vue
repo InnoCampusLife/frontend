@@ -140,7 +140,7 @@
 				clearInnopoints: 'innopoints/clear',
 			}),
 
-			toggleLeftSidenav() {
+			toggleLeftSidenav () {
 				this.$refs.leftSidenav.toggle()
 			},
 

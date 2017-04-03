@@ -43,7 +43,7 @@
 		},
 
 		watch: {
-			'$route': 'fetchData'
+			$route: 'fetchData'
 		},
 
 		methods: {

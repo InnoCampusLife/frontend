@@ -29,7 +29,7 @@
 		},
 
 		watch: {
-			'$route': 'fetchDataOnce'
+			$route: 'fetchDataOnce'
 		},
 
 		methods: {

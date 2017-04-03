@@ -39,7 +39,7 @@
 		},
 
 		methods: {
-			toggleLeftSidenav() {
+			toggleLeftSidenav () {
 				this.$emit('toggleLeftSidenav')
 			},
 		}
