@@ -6,7 +6,7 @@ import 'whatwg-fetch'
 import * as Vue from 'vue'
 import * as VuePaginate from 'vue-paginate'
 import * as Vue2Filters from 'vue2-filters'
-
+import * as VueResource from 'vue-resource'
 import Vuelidate from 'vuelidate'
 
 import { sync as vuexRouterSync } from 'vuex-router-sync'
@@ -30,16 +30,20 @@ import debug from 'debug'
 
 import router from './router'
 import store from './store'
+
 vuexRouterSync(store, router)
 
 import './filters'
 import './material'
+
+// import './modules/accounts/accounts-resources'
 
 const main = require('./views/main.vue')
 
 Vue.use(VuePaginate)
 Vue.use(Vuelidate)
 Vue.use(Vue2Filters)
+Vue.use(VueResource)
 
 new Vue({
 	router,

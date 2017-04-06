@@ -77,7 +77,7 @@
 		},
 
 		watch: {
-			$route: 'getProfile'
+			$route: 'getProfile',
 		},
 
 		computed: {
@@ -95,7 +95,7 @@
 					return this.firstName + this.lastName
 				}
 				return this.firstName + ' ' + this.lastName
- 			},
+			},
 		},
 
 		methods: {
