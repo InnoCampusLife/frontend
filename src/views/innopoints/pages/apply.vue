@@ -303,20 +303,20 @@
 				// 	console.error('Failed to upload files:', err)
 				// })
 
-				const fileList = document.querySelector('input[type="file"]').files
-				const files = new Array()
+				// const fileList = document.querySelector('input[type="file"]').files
+				// const files = new Array()
 
-				for (let f of fileList) { files.push(f) }
+				// for (let f of fileList) { files.push(f) }
 
-				Promise.all(files.map((f) => {
-					const body = new FormData()
-					body.append(f.name, f)
-					return this.$root.api.innopoints.applications.files.create({ body })
-				})).then((jsons) => {
-					console.log('Uploaded files:', jsons)
-				}).catch((err) => {
-					console.error('Failed to upload files:', err)
-				})
+				// Promise.all(files.map((f) => {
+				// 	const body = new FormData()
+				// 	body.append(f.name, f)
+				// 	return this.$root.api.innopoints.applications.files.create({ body })
+				// })).then((jsons) => {
+				// 	console.log('Uploaded files:', jsons)
+				// }).catch((err) => {
+				// 	console.error('Failed to upload files:', err)
+				// })
 
 				const work = await Promise.all(this.participants.map(async (p) => {
 					const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id

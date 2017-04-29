@@ -30,19 +30,19 @@
 						md-table-head(md-sort-by="tgId") Alias
 						md-table-head(md-sort-by="role") Role
 				md-table-body
-					md-table-row(v-for="(u, index) in filterBy(users, filter, ['role'])", :key="u.id")
+					md-table-row(v-for="(a, index) in filterBy(accounts, filter, ['role'])", :key="a.id")
 						md-table-cell(md-numeric) {{ index + 1}}
 						md-table-cell
-							router-link(:to="{ name: 'profile', params: { id: u.id } }") {{ u.username }}
-						md-table-cell {{ u.firstName }}
-						md-table-cell {{ u.lastName }}
-						md-table-cell {{ u.tgId | placeholder('-') }}
-						md-table-cell {{ u.role | capitalize }}
+							router-link(:to="{ name: 'profile', params: { id: a.id } }") {{ a.username }}
+						md-table-cell {{ a.firstName }}
+						md-table-cell {{ a.lastName }}
+						md-table-cell {{ a.tgId | placeholder('-') }}
+						md-table-cell {{ a.role | capitalize }}
 </template>
 
 <script>
-	import * as _ from 'lodash'
-	import { capitalize } from 'lodash'
+	import { capitalize, reverse, sortBy } from 'lodash'
+	import { Account } from './../../../modules/accounts/accounts-api.ts'
 
 	export default {
 		name: 'accounts-accounts',
@@ -51,7 +51,7 @@
 			return {
 				isLoading: false,
 				filter: "",
-				users: [],
+				accounts: [],
 			}
 		},
 
@@ -71,11 +71,11 @@
 			getAccounts() {
 				this.isLoading = true
 
-				this.$root.api.accounts.bio.many()
-					.then((json) => {
-						console.log('Got accounts:', json.result)
+				Account.many()
+					.then((accounts) => {
+						console.log('Got accounts:', accounts)
 						this.isLoading = false
-						this.users = json.result
+						this.accounts = accounts
 					})
 					.catch((err) => {
 						console.error('Failed to get accounts:', err)
@@ -84,8 +84,8 @@
 
 			sort (property) {
 				this.users = property.type === 'asc'
-					? _.sortBy(this.users, property.name)
-					: _.reverse(_.sortBy(this.users, property.name))
+					? sortBy(this.users, property.name)
+					: reverse(sortBy(this.users, property.name))
 			},
 		},
 	}

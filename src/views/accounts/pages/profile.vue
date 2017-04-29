@@ -30,6 +30,9 @@
 							p
 								span.text-muted Role:
 								span  {{ role | capitalize }}
+							p
+								span.text-muted Telegram:
+								span  {{ tgId | placeholder('-') }}
 
 							//- 		md-input-container(disabled)
 							//- 			label(for="role") Role
@@ -47,20 +50,20 @@
 	import { Avatar as avatar } from 'vue-avatar'
 	import { capitalize } from 'lodash'
 	import { mapGetters } from 'vuex'
+	import { Account } from './../../../modules/accounts/accounts-api'
 
 	export default {
 		name: 'accounts-account',
 
 		data () {
 			return {
-				// isLoading: false,
-
 				username: '',
 				firstName: '',
 				lastName: '',
 				studyGroup: '',
 				role: '',
 				id: '',
+				tgId: '',
 			}
 		},
 
@@ -100,12 +103,12 @@
 
 		methods: {
 			changeRole () {
-				this.$root.api.accounts.update({
+				Account.update({
 					accountId: this.id,
 					newRole: this.role === 'ghost' ? 'student' : 'ghost',
 				})
-				.then((json) => {
-					console.log('Updated profile:', json.result)
+				.then((result) => {
+					console.log('Updated profile:', result)
 				})
 				.catch((err) => {
 					console.error('Failed to update profile:', err)
@@ -113,18 +116,17 @@
 			},
 
 			getProfile () {
-				// this.isLoading = true
-
-				this.$root.api.accounts.bio.one({ id: this.$store.state.route.params.id })
-					.then((json) => {
-						console.log('Got profile:', json.result)
-						// this.isLoading = false
-						this.username = json.result.username
-						this.firstName = json.result.firstName || ''
-						this.lastName = json.result.lastName || ''
-						this.studyGroup = json.result.studyGroup || ''
-						this.role = json.result.role
-						this.id = json.result.id
+				Account.one({ id: this.$store.state.route.params.id })
+					.then((account) => {
+						console.log('Got profile:', account)
+						const { username, firstName, lastName, studyGroup, role, id, tgId } = account
+						this.username = username
+						this.role = role
+						this.id = id
+						this.firstName = firstName
+						this.lastName = lastName
+						this.studyGroup = studyGroup
+						this.tgId = tgId
 					})
 					.catch((err) => {
 						console.error('Failed to get profile:', err)

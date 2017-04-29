@@ -17,8 +17,8 @@
 								.md-list-text-container
 									span {{ username }}
 									span {{ points_amount | currency('IUP ', 0) }}
-								// md-button.md-icon-button.md-list-action
-								// 	md-icon arrow_drop_down
+								//- md-button.md-icon-button.md-list-action
+								//- 	md-icon arrow_drop_down
 				md-divider
 			main
 				section
@@ -58,51 +58,35 @@
 							span Log Out
 
 		router-view(@toggleLeftSidenav="toggleLeftSidenav")
-			//- header.app-bar
-			//- 	md-theme(md-name="dark")
-			//- 		md-whiteframe(md-tag="md-toolbar", md-elevation="4")
-			//- 			.md-toolbar-container
-			//- 				md-button.md-icon-button(@click='toggleLeftSidenav')
-			//- 					md-icon menu
-			//- 				.app-bar-container
-			//- 					slot(name="app-bar")
-			//- section
-			//- 	.content
-			//- 		slot(name="content")
-			//- 	footer
-			//- 		p.text-muted 2016 &copy; InnoDev
 </template>
 
 <script>
 	import { Avatar as avatar } from 'vue-avatar'
 	import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
-	import accounts from './../modules/accounts'
-	import innopoints from './../modules/innopoints'
+	import accounts from 'Modules/accounts'
+	import innopoints from 'Modules/innopoints'
+
 	import storage from './../storage'
 	import config from './../config'
 
-	import modules from './../modules'
+	// Testing
+	import { accounts as newAccounts } from 'Modules/accounts/accounts-api'
 
 	export default {
 		name: 'main',
 
+		components: {
+			avatar,
+		},
+
 		data () {
 			return {
-				user: {
-					account: modules.accounts,
-					innopoints: modules.innopoints,
-				},
-
 				api: {
 					accounts,
 					innopoints,
 				},
 			}
-		},
-
-		components: {
-			avatar,
 		},
 
 		computed: {
@@ -144,16 +128,16 @@
 				this.$refs.leftSidenav.toggle()
 			},
 
-			closeLeftSidenav() {
+			closeLeftSidenav () {
 				this.$refs.leftSidenav.close()
 			},
 
-			logOut(e) {
+			logOut (e) {
 				storage.clear()
 				this.$router.push('/login')
 			},
 
-			updateState() {
+			updateState () {
 				if (storage.getItem(config.tokenName)) {
 					Promise.all([
 						this.updateAccounts(),

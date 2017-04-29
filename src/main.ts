@@ -3,15 +3,9 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
 
-import * as Vue from 'vue'
-import * as VuePaginate from 'vue-paginate'
-import * as Vue2Filters from 'vue2-filters'
-import * as VueResource from 'vue-resource'
 import Vuelidate from 'vuelidate'
 
-import { sync as vuexRouterSync } from 'vuex-router-sync'
-
-import debug from 'debug'
+// import debug from 'debug'
 
 // localStorage.debug = ['uis:log', 'uis:error', 'uis:info']
 
@@ -28,29 +22,22 @@ import debug from 'debug'
 // err('Debug is required!')
 // info('Debug is required!')
 
-import router from './router'
-import store from './store'
+import * as Vue from 'vue'
+import * as VuePaginate from 'vue-paginate'
+import * as Vue2Filters from 'vue2-filters'
+import * as VueResource from 'vue-resource'
+import * as VueAsyncComputed from 'vue-async-computed'
 
-vuexRouterSync(store, router)
+import { sync as vuexRouterSync } from 'vuex-router-sync'
+
+
+// Local imports
 
 import './filters'
 import './material'
 
-// import './modules/accounts/accounts-resources'
-
-const main = require('./views/main.vue')
-
-Vue.use(VuePaginate)
-Vue.use(Vuelidate)
-Vue.use(Vue2Filters)
-Vue.use(VueResource)
-
-new Vue({
-	router,
-	store,
-	...main,
-	el: 'main',
-})
+import router from './router'
+import store from './store'
 
 // Styles
 import './styles/main.scss'
@@ -59,4 +46,19 @@ import './styles/main.scss'
 // import 'expose-loader?$!expose-loader?jQuery!jquery'
 // import "expose-loader?Tether!tether"
 // import 'bootstrap'
-import 'expose-loader?mdc!../node_modules/material-components-web/dist/material-components-web.js'
+// import 'expose-loader?mdc!../node_modules/material-components-web/dist/material-components-web.js'
+
+vuexRouterSync(store, router)
+
+Vue.use(VuePaginate)
+Vue.use(Vuelidate)
+Vue.use(Vue2Filters)
+Vue.use(VueResource)
+Vue.use(VueAsyncComputed)
+
+new Vue({
+	...require('./views/main.vue'),
+	router,
+	store,
+	el: 'main',
+})

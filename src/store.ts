@@ -1,8 +1,8 @@
 import * as Vue from 'vue'
 import Vuex from 'vuex'
 
-import { store as accounts } from './modules/accounts'
-import { store as innopoints } from './modules/innopoints'
+import accountsStore from './modules/accounts/accounts-store'
+import innopointsStore from './modules/innopoints/innopoints-store'
 
 Vue.use(Vuex)
 
@@ -11,12 +11,12 @@ export default new Vuex.Store({
 
 	modules: {
 		accounts: {
-			...accounts,
+			...accountsStore,
 			namespaced: true,
 		},
 
 		innopoints: {
-			...innopoints,
+			...innopointsStore,
 			namespaced: true,
 		},
 	},

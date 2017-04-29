@@ -32,69 +32,6 @@ function receiveJson (input: RequestInfo, init?: RequestInit): Promise<any> {
 		})
 }
 
-export const store: Vuex.StoreOptions<any> = {
-	state: {
-		id: '',
-		firstName: '',
-		lastName: '',
-		username: '',
-		email: '',
-		role: '',
-	},
-
-	getters: {
-		fullName ({ firstName, lastName }) {
-			return firstName + (firstName ? ' ' + lastName : lastName)
-		},
-
-		isStudent ({ role }) {
-			return role === 'student'
-		},
-
-		isModerator ({ role }) {
-			return role === 'moderator'
-		},
-
-		isGhost ({ role }) {
-			return role === 'ghost'
-		},
-	},
-
-	mutations: {
-		setState (state, { id, firstName, lastName, username, email, role }) {
-			if (id) state.id = id
-			if (firstName) state.firstName = firstName
-			if (lastName) state.lastName = lastName
-			if (username) state.username = username
-			if (email) state.email = email
-			if (role) state.role = role
-		},
-
-		clear (state) {
-			state.id = ''
-			state.firstName = ''
-			state.lastName = ''
-			state.username = ''
-			state.email = ''
-			state.role = ''
-		},
-	},
-
-	actions: {
-		update ({ commit }) {
-			return api.self()
-				.then((json) => {
-					const { id, firstName, lastName, username, email, role } = json.result
-					commit('setState', { id, firstName, lastName, username, email, role })
-					return Promise.resolve(json.result)
-				})
-				.catch((err) => {
-					return Promise.reject(new StateUpdateError(err))
-				})
-		},
-	},
-}
-
 export const api = {
 	self () {
 		const input: RequestInfo = `${url}/${token()}`
