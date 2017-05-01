@@ -1,7 +1,21 @@
 <template lang="pug">
 	.container
-		order-card.my-3(v-for="order in orders", :key="order.id", :order="order")
+		div
+			order-card.my-3(
+				v-for="order in orders", 
+				:key="order.id", 
+				:order="order",
+				@deleteOrder="openDeleteConfirm",
+			)
 		//- .card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'", :status="o.status", :id="'card-' + o.id")
+		md-dialog-confirm(
+			:md-title="`Delete order #${currentOrder ? currentOrder.id : ''}?`",
+			md-content="This cannot be undone.",
+			md-ok-text="Delete",
+			md-cancel-text="Cancel",
+			@close="confirmDelete",
+			ref='deleteConfirm',
+		)
 </template>
 
 <script>
@@ -18,6 +32,7 @@
 		data () {
 			return {
 				orders: [],
+				currentOrder: null,
 			}
 		},
 
@@ -51,6 +66,27 @@
 					.catch((err) => {
 						console.log('Failed to get orders:', err)
 					})
+			},
+
+			openDeleteConfirm (order) {
+				this.currentOrder = order
+				this.$refs['deleteConfirm'].open()
+			},
+
+			confirmDelete (type) {
+				if (type === 'ok') {
+					Order.delete({ order_id: this.currentOrder.id })
+						.then((result) => {
+							this.orders.splice(this.orders.indexOf(this.currentOrder), 1)
+							console.log('Deleted order:', result)
+							this.currentOrder = null
+							this.fetchData()
+						})
+						.catch((err) => {
+							console.error('Failed to delete order:', err)
+							this.currentOrder = null
+						})
+				}
 			},
 		},
 	}

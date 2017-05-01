@@ -46,7 +46,7 @@
 								v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
 								:application="app",
 								:key="app.id",
-								@deleteApp="openDeleteConfirm",
+								@deleteApplication="openDeleteConfirm",
 								@approveApp="openApproveConfirm",
 								@rejectApp="openRejectConfirm",
 							)

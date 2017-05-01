@@ -45,6 +45,9 @@
 													span.font-weight-bold  {{ value }}
 									template(v-else) —
 								md-table-cell(md-numeric) {{ item.price }}
+			md-card-area
+				md-card-actions(v-if="order.status === ('in_process' || 'rework')")
+					md-button.md-warn(@click="deleteOrder") Delete
 </template>
 
 <script>
@@ -63,6 +66,12 @@
 					default: return 'secondary'
 				}
 			}
+		},
+
+		methods: {
+			deleteOrder () {
+				this.$emit('deleteOrder', this.order)
+			},
 		},
 	}
 

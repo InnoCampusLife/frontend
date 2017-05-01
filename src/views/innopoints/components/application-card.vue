@@ -71,7 +71,7 @@
 				p(v-for="para in paras") {{ para }}
 		md-card-area
 			md-card-actions(v-if="application.status === ('in_process' || 'rework')")
-				md-button.md-warn(@click="deleteApp") Delete
+				md-button.md-warn(@click="deleteApplication") Delete
 
 			// md-card-actions(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
 			// 	button.btn.btn-block.btn-outline-success(:data-id="application.id", @click="approve") Approve
@@ -90,8 +90,8 @@
 		props: ['application', 'user'],
 
 		computed: {
-			styleBasedOnStatus() {
-				switch(this.application.status) {
+			styleBasedOnStatus () {
+				switch (this.application.status) {
 					case 'in_process': return 'primary'
 					case 'rejected':   return 'danger'
 					case 'rework':     return 'warning'
@@ -100,18 +100,18 @@
 				}
 			},
 
-			paras() {
+			paras () {
 				return this.application.comment.split('\n')
 			},
 
-			creationDateStr() {
+			creationDateStr () {
 				return new Date(this.application.creation_date * 1000).toDateString()
 			}
 		},
 
 		methods: {
-			deleteApp() {
-				this.$emit('deleteApp', this.application);
+			deleteApplication () {
+				this.$emit('deleteApplication', this.application);
 			},
 
 			// approve(e) {
