@@ -8,14 +8,14 @@ import {
 	PermissionError,
 	StateUpdateError,
 	InvalidParamsError,
-} from './../errors'
+} from './errors'
 
 import {
 	GETRequestInit,
 	POSTRequestInit,
 	PUTRequestInit,
 	DELETERequestInit,
-} from './../utils'
+} from './utils'
 
 const url = config.server.apiURL + 'v1/points'
 const token = () => storage.getItem(config.tokenName)

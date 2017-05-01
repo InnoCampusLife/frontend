@@ -5,9 +5,8 @@
 </template>
 
 <script>
-	import * as _ from 'lodash'
+	import { reverse } from 'lodash'
 	import { Order } from 'Modules/innopoints/innopoints-api'
-
 
 	import orderCard from './../components/order-card.vue'
 
@@ -26,12 +25,16 @@
 			orderCard,
 		},
 
-		created() {
-			this.fetchDataOnce()
-		},
+		// created() {
+		// 	this.fetchData()
+		// },
 
-		watch: {
-			$route: 'fetchDataOnce'
+		// watch: {
+		// 	$route: 'fetchDataOnce'
+		// },
+
+		activated () {
+			this.fetchData()
 		},
 
 		methods: {
@@ -43,14 +46,12 @@
 							order.timestamp = order.creation_date
 							order.creation_date = new Date(order.creation_date * 1000).toDateString()
 						})
-						this.orders = orders
+						this.orders = reverse(orders)
 					})
 					.catch((err) => {
 						console.log('Failed to get orders:', err)
 					})
 			},
-
-			fetchDataOnce: _.once(function () { return this.fetchData() }),
 		},
 	}
 </script>

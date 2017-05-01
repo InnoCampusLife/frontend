@@ -336,9 +336,14 @@
 							files: [],
 						}
 					}
-				}).then((result) => {
+				})
+				.then((result) => {
 					console.log('Application sumitted:', result)
-				}).catch((err) => {
+				})
+				.then(() => {
+					this.$router.push({ name: 'applications' })
+				})
+				.catch((err) => {
 					console.error('Failed to submit application:', err)
 				})
 			},

@@ -35,45 +35,21 @@
 						:disabled="!areAllOptionsSelected || quantity <= 0",
 						data-toggle="modal",
 						:data-target="'#buying-modal-' + item.id",
-						@click="buy",
+						@click="openBuyConfirm",
 					) IUP {{ item.price - 0.01 }}
 
-			//- .modal.fade.buying-modal(:id="'buying-modal-' + item.id")
-			//- 	.modal-dialog.modal-md
-			//- 		md-theme(md-name="blue")
-			//- 			md-whiteframe(md-tag="md-card", md-elevation="24")
-			//- 				md-card-header
-			//- 					.md-title Confirm Purchase
-			//- 				md-card-media(md-ratio="4:3")
-			//- 					md-image(:md-src='item.image_link', alt='')
-			//- 				md-card-header
-			//- 					.md-title {{ item.title }}
-			//- 					.md-subhead {{ item.category.title | startCase }}
-
-			//- 				md-card-content
-			//- 					.row
-			//- 						.col
-			//- 							p.card-text
-			//- 								span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
-			//- 								span.text-danger(v-else) Out of Stock
-			//- 						.col-12.col-sm-auto
-			//- 							p.card-text.text-info {{ item.price - 0.01 }} IP
-
-			//- 					template(v-if="item.selectedItem && item.selectedItem.options")
-			//- 						template(v-for="(value, key) in item.selectedItem.options")
-			//- 							.row
-			//- 								.col-sm
-			//- 									p.text-sm-right {{ key }}
-			//- 								.col-sm.font-weight-bold
-			//- 									p {{ value }}
-
-			//- 				.md-card-actions
-			//- 					// FIXME: add quantity check here
-			//- 					md-button(type='button', data-dismiss="modal") Cancel
-			//- 					md-button.md-primary.md-raised(type='button', data-dismiss="modal", @click="buy(item)") Purchase
+		md-dialog-confirm(
+			:md-title="`Buy ${startCasedTitle}`",
+			md-content="This cannot be undone.",
+			md-ok-text="Confirm",
+			md-cancel-text="Cancel",
+			@close="confirmBuy",
+			ref='buyConfirm',
+		)
 </template>
 
 <script>
+	import { startCase } from 'lodash'
 	import { Item, Order } from 'Modules/innopoints/innopoints-api'
 
 	export default {
@@ -107,6 +83,10 @@
 			areAllOptionsSelected () {
 				return this.selectedOptions.every((o) => o.value !== null)
 			},
+
+			startCasedTitle () {
+				return startCase(this.item ? this.item.title : '')
+			}
 		},
 
 		// created () {
@@ -148,34 +128,45 @@
 					})
 			},
 
-			buy () {
-				const item = this.item.combinations.find((c) => {
-					return this.selectedOptions.every((o) => {
-						return c.options[o.title] === o.value
+			openBuyConfirm() {
+				this.$refs['buyConfirm'].open()
+			},
+
+			confirmBuy(type) {
+				if (type === 'ok') {
+					const item = this.item.combinations.find((c) => {
+						return this.selectedOptions.every((o) => {
+							return c.options[o.title] === o.value
+						})
 					})
-				})
 
-				console.log('Selected item', item)
+					console.log('Selected item', item)
 
-				Order.create({
-					body: {
-						order: {
-							is_joint_purchase: false,
-							items: [
-								{
-									id: item.id,
-									amount: 1,
-								},
-							],
+					Order.create({
+						body: {
+							order: {
+								is_joint_purchase: false,
+								items: [
+									{
+										id: item.id,
+										amount: 1,
+									},
+								],
+							},
 						},
-					},
-				}).then((result) => {
-					console.log('Order complete:', result)
-					this.selectedOptions = []
-					this.getItem()
-				}).catch((err) => {
-					console.error('Failed to complete an order:', err)
-				})
+					})
+					.then((result) => {
+						console.log('Order complete:', result)
+						this.selectedOptions = []
+						this.getItem()
+					})
+					.then(() => {
+						this.$router.push({ name: 'orders' })
+					})
+					.catch((err) => {
+						console.error('Failed to complete an order:', err)
+					})
+				}
 			},
 		},
 	}

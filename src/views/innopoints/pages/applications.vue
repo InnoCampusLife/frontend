@@ -51,8 +51,7 @@
 								@rejectApp="openRejectConfirm",
 							)
 		md-dialog-confirm(
-			v-if="currentApp",
-			:md-title="`Delete application #${currentApp.id}?`",
+			:md-title="`Delete application #${currentApp ? currentApp.id : ''}?`",
 			md-content="This cannot be undone.",
 			md-ok-text="Delete",
 			md-cancel-text="Cancel",
@@ -124,23 +123,23 @@
 		},
 
 		methods: {
-			prevPage() {
+			prevPage () {
 				console.log(this.currPage)
 				this.currPage -= 1
 				this.updateApplications()
 			},
 
-			nextPage() {
+			nextPage () {
 				console.log(this.currPage)
 				this.currPage += 1
 				this.updateApplications()
 			},
 
-			updateStatus(value) {
+			updateStatus (value) {
 				// this.$route.push({})
 			},
 
-			fetchData() {
+			fetchData () {
 				Application.many({
 					// skip: this.perPage * (this.currPage - 1),
 					// limit: this.perPage * this.currPage,
@@ -153,22 +152,22 @@
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
 
-			openDeleteConfirm(app) {
+			openDeleteConfirm (app) {
 				this.currentApp = app
 				this.$refs['deleteConfirm'].open()
 			},
 
-			openApproveConfirm(app) {
+			openApproveConfirm (app) {
 				this.currentApp = app
 				this.$refs['approveConfirm'].open()
 			},
 
-			openRejectConfirm(app) {
+			openRejectConfirm (app) {
 				this.currentApp = app
 				this.$refs['rejectConfirm'].open()
 			},
 
-			updateApplications() {
+			updateApplications () {
 				Application.many({
 					// skip: this.perPage * (this.currPage - 1),
 					// limit: this.perPage * this.currPage,
@@ -180,12 +179,12 @@
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
 
-			confirmDelete(type) {
+			confirmDelete (type) {
 				if (type === 'ok') {
 					Application.delete({ application_id: this.currentApp.id })
-						.then((json) => {
+						.then((result) => {
 							this.applications.splice(this.applications.indexOf(this.currentApp), 1)
-							console.log('Deleted application:', json)
+							console.log('Deleted application:', result)
 							this.currentApp = null
 							this.updateApplications()
 						})
