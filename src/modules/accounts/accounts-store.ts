@@ -62,9 +62,6 @@ export const store: Vuex.StoreOptions<any> = {
 					commit('setState', { id, firstName, lastName, username, email, role, tgId })
 					return Promise.resolve(account)
 				})
-				.catch((err) => {
-					return Promise.reject(STATE_UPDATE_ERR)
-				})
 		},
 	},
 }

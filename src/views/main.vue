@@ -120,21 +120,30 @@
 				this.$refs.leftSidenav.close()
 			},
 
-			logOut (e) {
+			logOut () {
 				storage.clear()
 				this.$router.push('/login')
 			},
 
 			updateState () {
 				if (storage.getItem(config.tokenName)) {
-					Promise.all([
-						this.updateAccounts(),
-						this.updateInnopoints(),
-					]).then((jsons) => {
-						console.log('Updated state:', jsons)
-					}).catch((err) => {
-						console.error('Failed to update state:', err)
-					})
+					this.updateAccounts()
+						.then((result) => {
+							console.log('Updated accounts state:', result)
+						})
+						.catch((err) => {
+							console.error('Failed to update accounts state:', err)
+							if (err === 'Unknown token') this.logOut()
+						})
+
+					this.updateInnopoints()
+						.then((result) => {
+							console.log('Updated innopoints state:', result)
+						})
+						.catch((err) => {
+							console.error('Failed to update innopoints state:', err)
+							if (err === 'ERROR IN ACCOUNTS MICROSERVICE') this.logOut()
+						})
 				} else {
 					this.clearAccounts()
 					this.clearInnopoints()

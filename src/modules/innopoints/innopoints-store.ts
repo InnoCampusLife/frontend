@@ -66,9 +66,6 @@ export const store: Vuex.StoreOptions<any> = {
 					commit('setState', { id, type, points_amount, owner: { username, id: ownerId } })
 					return Promise.resolve(account)
 				})
-				.catch((err) => {
-					return Promise.reject(STATE_UPDATE_ERR)
-				})
 		},
 	},
 }
