@@ -74,6 +74,8 @@
 </template>
 
 <script>
+	import { Item, Order } from 'Modules/innopoints/innopoints-api'
+
 	export default {
 		name: 'store-item',
 
@@ -128,10 +130,8 @@
 			getItem () {
 				this.isLoading = true
 
-				this.$root.api.innopoints.items.one({ item_id: this.$store.state.route.params.id })
-					.then((json) => {
-						const item = json.result
-
+				Item.one({ item_id: this.$store.state.route.params.id })
+					.then((item) => {
 						console.log('Got item:', item)
 
 						this.isLoading = false
@@ -157,7 +157,7 @@
 
 				console.log('Selected item', item)
 
-				this.$root.api.innopoints.orders.create({
+				Order.create({
 					body: {
 						order: {
 							is_joint_purchase: false,
@@ -169,8 +169,8 @@
 							],
 						},
 					},
-				}).then((json) => {
-					console.log('Order complete:', json.result)
+				}).then((result) => {
+					console.log('Order complete:', result)
 					this.selectedOptions = []
 					this.getItem()
 				}).catch((err) => {

@@ -42,13 +42,21 @@ function makeGetReq (input: string): Promise<any> {
 }
 
 function makePostReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { method = 'POST', headers = { 'Content-Type': 'application/json' } }: RequestInit = init
-	return makeReq(input, { method, headers, ...init })
+	const { 
+		method = 'POST', 
+		headers = { 'Content-Type': 'application/json' }, 
+		body = {},
+	}: RequestInit = init
+	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makePutReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { method = 'PUT', headers = { 'Content-Type': 'application/json' } }: RequestInit = init
-	return makeReq(input, { method, headers, ...init })
+	const { 
+		method = 'PUT', 
+		headers = { 'Content-Type': 'application/json' },
+		body = {},
+	}: RequestInit = init
+	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makeDeletetReq (input: string): Promise<any> {
@@ -56,7 +64,7 @@ function makeDeletetReq (input: string): Promise<any> {
 }
 
 export abstract class Activity {
-	static many ({ category_id = NaN || '', skip = 0, limit = 0 } = {}) {
+	static many ({ category_id = null, skip = null, limit = null } = {}) {
 		// TODO: Add check for limit and skip params
 		const input = URI(`${url}/activities`).query({ category_id, skip, limit }).toString()
 		return makeGetReq(input)
@@ -64,7 +72,7 @@ export abstract class Activity {
 }
 
 export abstract class Category {
-	static many ({ skip = 0, limit = 0 } = {}) {
+	static many ({ skip = null, limit = null } = {}) {
 		// TODO: Add check for limit and skip params
 		const input = URI(`${url}/categories`).query({ skip, limit }).toString()
 		return makeGetReq(input)
@@ -90,7 +98,7 @@ export abstract class Application {
 		return makeGetReq(input)
 	}
 
-	static many ({ status = '', skip = 0, limit = 0 } = {}) {
+	static many ({ status = null, skip = null, limit = null } = {}) {
 		const input = URI(`${url}/accounts/${token()}/applications`).query({ status, skip, limit }).toString()
 		return makeGetReq(input)
 	}
@@ -147,9 +155,9 @@ export abstract class ApplicationFile {
 }
 
 export abstract class Item {
-	static many ({ category_id = null, fields = '', order = '', skip = 0, limit = 0 } = {}) {
+	static many ({ category_id = null, fields = null, order = null, skip = null, limit = null } = {}) {
 		const input = URI(`${url}/shop/items` + (category_id ? '/category/' + category_id : ''))
-			.query({ category_id, fields, order, skip, limit }).toString()
+			.query({ fields, order, skip, limit }).toString()
 		return makeGetReq(input)
 	}
 
@@ -167,7 +175,7 @@ export abstract class Order {
 		return makeGetReq(input)
 	}
 
-	static many ({ status = '' } = {}) {
+	static many ({ status = null } = {}) {
 		const input = `${url}/accounts/${token()}/orders` + (status ? '/' + status : '')
 		return makeGetReq(input)
 	}
@@ -200,7 +208,7 @@ export namespace Admin {
 			return makeGetReq(input)
 		}
 
-		static many ({ skip = 0, limit = 0} = {}) {
+		static many ({ skip = null, limit = null } = {}) {
 			const input = URI(`${url}/admin/${token()}/accounts`).query({ skip, limit }).toString()
 			return makeGetReq(input)
 		}
@@ -215,7 +223,7 @@ export namespace Admin {
 
 	export namespace Account {
 		export abstract class Application {
-			static many ({ account_id, skip = 0, limit = 0 }) {
+			static many ({ account_id, skip = null, limit = null }) {
 				if (!account_id) return Promise.reject(INVALID_PARAMS_ERR)
 				const input = URI(`${url}/admin/${token()}/accounts/${account_id}/applications`)
 					.query({ skip, limit }).toString()
@@ -224,7 +232,7 @@ export namespace Admin {
 		}
 
 		export abstract class Order {
-			static many ({ account_id, skip = 0, limit = 0 }) {
+			static many ({ account_id, skip = null, limit = null }) {
 				if (!account_id) return Promise.reject(INVALID_PARAMS_ERR)
 				const input = URI(`${url}/admin/${token()}/accounts/${account_id}/applications`)
 					.query({ skip, limit }).toString()

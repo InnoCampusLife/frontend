@@ -135,6 +135,8 @@
 <script>
 	import * as _ from 'lodash'
 	import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
+	import { Account } from 'Modules/accounts/accounts-api'
+	import { Category, Activity, Application, ApplicationFile } from 'Modules/innopoints/innopoints-api'
 
 	export default {
 		name: 'innopoints-apply',
@@ -174,7 +176,7 @@
 						async exists (username) {
 							if (/^\w{3,16}$/.test(username)) {
 								try {
-									return (await this.$root.api.accounts.exists({ username })).result
+									return await Account.exists({ username })
 								} catch (err) {
 									console.error('Failed to check username:', err)
 								}
@@ -216,9 +218,9 @@
 
 				this.updateAcivities()
 
-				this.$root.api.innopoints.categories.many()
-					.then(({ result: categories = [] } = {}) => {
-						console.log('Got categories:', { categories })
+				Category.many()
+					.then((categories = []) => {
+						console.log('Got categories:', categories)
 						this.categories = categories
 						this.isLoading = false
 					})
@@ -264,9 +266,9 @@
 			},
 
 			updateAcivities (value) {
-				this.$root.api.innopoints.activities.many({ category_id: value })
-					.then(({ result: activities = [] } = {}) => {
-						console.log('Updated activities:', { activities })
+				Activity.many({ category_id: value })
+					.then((activities = []) => {
+						console.log('Updated activities:', activities)
 
 						// Reset selected actvities if they are not in select category
 						this.participants
@@ -311,21 +313,21 @@
 				// Promise.all(files.map((f) => {
 				// 	const body = new FormData()
 				// 	body.append(f.name, f)
-				// 	return this.$root.api.innopoints.applications.files.create({ body })
-				// })).then((jsons) => {
-				// 	console.log('Uploaded files:', jsons)
+				// 	return ApplicationFile.create({ body })
+				// })).then((results) => {
+				// 	console.log('Uploaded files:', results)
 				// }).catch((err) => {
 				// 	console.error('Failed to upload files:', err)
 				// })
 
 				const work = await Promise.all(this.participants.map(async (p) => {
-					const actor = (await this.$root.api.accounts.bio.one({ username: p.username })).result.id
+					const actor = (await Account.one({ username: p.username })).id
 					const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
 					const activity_id = p.activity_id
 					return { actor, amount, activity_id }
 				}))
 
-				this.$root.api.innopoints.applications.create({
+				Application.create({
 					body: {
 						application: {
 							work,
@@ -334,8 +336,8 @@
 							files: [],
 						}
 					}
-				}).then((json) => {
-					console.log('Application sumitted:', json.result)
+				}).then((result) => {
+					console.log('Application sumitted:', result)
 				}).catch((err) => {
 					console.error('Failed to submit application:', err)
 				})

@@ -70,23 +70,11 @@
 	import storage from './../storage'
 	import config from './../config'
 
-	// Testing
-	import { accounts as newAccounts } from 'Modules/accounts/accounts-api'
-
 	export default {
 		name: 'main',
 
 		components: {
 			avatar,
-		},
-
-		data () {
-			return {
-				api: {
-					accounts,
-					innopoints,
-				},
-			}
 		},
 
 		computed: {

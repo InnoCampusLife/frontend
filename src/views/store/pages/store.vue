@@ -22,6 +22,7 @@
 
 <script>
 	import itemCard from './../components/item-card'
+	import { Item } from 'Modules/innopoints/innopoints-api'
 
 	export default {
 		name: 'store-store',
@@ -50,10 +51,10 @@
 		methods: {
 			getItems() {
 				// this.isLoading = true
-				this.$root.api.innopoints.items.many()
-					.then((json) => {
-						console.log('Got items:', json.result)
-						this.items = json.result
+				Item.many()
+					.then((items) => {
+						console.log('Got items:', items)
+						this.items = items
 						// this.isLoading = false
 					})
 					.catch((err) => {

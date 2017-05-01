@@ -6,6 +6,8 @@
 
 <script>
 	import * as _ from 'lodash'
+	import { Order } from 'Modules/innopoints/innopoints-api'
+
 
 	import orderCard from './../components/order-card.vue'
 
@@ -34,14 +36,14 @@
 
 		methods: {
 			fetchData() {
-				this.$root.api.innopoints.orders.many()
-					.then((json) => {
-						console.log('Got orders:', json.result)
-						json.result.forEach((order) => {
+				Order.many()
+					.then((orders) => {
+						console.log('Got orders:', orders)
+						orders.forEach((order) => {
 							order.timestamp = order.creation_date
 							order.creation_date = new Date(order.creation_date * 1000).toDateString()
 						})
-						this.orders = json.result
+						this.orders = orders
 					})
 					.catch((err) => {
 						console.log('Failed to get orders:', err)

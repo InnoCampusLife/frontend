@@ -14,6 +14,7 @@ const token = () => storage.getItem(config.tokenName)
 
 function makeReq (input: string, init: RequestInit = {}): Promise<any> {
 	const { mode = 'cors', method = 'GET' }: RequestInit = init
+	console.log('Req:', { mode, method, ...init })
 	return fetch(input, { mode, method, ...init })
 		.catch(() => {
 			console.error(NETWORK_ERR)
@@ -42,13 +43,21 @@ function makeGetReq (input: string): Promise<any> {
 }
 
 function makePostReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { method = 'POST', headers = { 'Content-Type': 'application/json' } }: RequestInit = init
-	return makeReq(input, { method, headers, ...init })
+	const { 
+		method = 'POST', 
+		headers = { 'Content-Type': 'application/json' }, 
+		body = {},
+	}: RequestInit = init
+	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makePutReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { method = 'PUT', headers = { 'Content-Type': 'application/json' } }: RequestInit = init
-	return makeReq(input, { method, headers, ...init })
+	const { 
+		method = 'PUT', 
+		headers = { 'Content-Type': 'application/json' },
+		body = {},
+	}: RequestInit = init
+	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makeDeletetReq (input: string): Promise<any> {
@@ -66,10 +75,10 @@ export abstract class Account {
 	studyGroup?: string
 	tgId?: string
 
-	static one ({ id = '', username = '' }): Promise<Account> {
+	static one ({ id = undefined, username = undefined }): Promise<Account> {
 		// TODO: Add permission check
 		if (!id && !username) return Promise.reject(INVALID_PARAMS_ERR)
-		const input = URI(`${url}/${token()}/getBio`).query(id ? { id } : { username }).toString()
+		const input = URI(`${url}/${token()}/getBio`).query({ id, username }).toString()
 		return makeGetReq(input)
 	}
 
@@ -84,10 +93,10 @@ export abstract class Account {
 		return makeGetReq(input)
 	}
 
-	static exists ({ id = '', username = '' }): Promise<boolean> {
+	static exists ({ id = undefined, username = undefined }): Promise<boolean> {
 		// TODO: Add params' values check
 		if (!id && !username) return Promise.reject(INVALID_PARAMS_ERR)
-		const input = URI(`${url}/${token()}/exists`).query(id ? { id } : { username }).toString()
+		const input = URI(`${url}/${token()}/exists`).query({ id, username }).toString()
 		return makeGetReq(input)
 	}
 

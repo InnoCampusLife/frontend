@@ -212,6 +212,8 @@
 <script>
 	import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 	import { mapActions, mapMutations } from 'vuex'
+	import { Account } from 'Modules/accounts/accounts-api'
+	import { Account as InnopointsAccount } from 'Modules/innopoints/innopoints-api'	
 	import config from './../config'
 	import storage from './../storage'
 
@@ -301,10 +303,10 @@
 				if (this.isLogin) {
 
 					// Log in
-					this.$root.api.accounts.auth(this.login)
-						.then((json) => {
-							console.log('Logged in:', json.result)
-							storage.setItem(config.tokenName, json.result.token)
+					Account.auth(this.login)
+						.then((account) => {
+							console.log('Logged in:', account)
+							storage.setItem(config.tokenName, account.token)
 						})
 						.then(() => {
 							this.$router.push('/')
@@ -315,14 +317,14 @@
 				} else {
 
 					// Sign up
-					this.$root.api.accounts.create(this.signup)
-						.then((json) => {
-							console.log('Signed up:', json.result)
-							storage.setItem(config.tokenName, json.result.token)
+					Account.create(this.signup)
+						.then((account) => {
+							console.log('Signed up:', account.result)
+							storage.setItem(config.tokenName, account.result.token)
 						})
 						.then(() => {
 							// Sing up for Innopoints account using just the token
-							return this.$root.api.innopoints.accounts.create()
+							return InnopointsAccount.create()
 						})
 						.then(() => {
 							this.$router.push('/')

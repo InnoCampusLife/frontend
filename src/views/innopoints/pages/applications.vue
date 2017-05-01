@@ -68,6 +68,7 @@
 
 <script>
 	import applicationCard from './../components/application-card'
+	import { Application } from 'Modules/innopoints/innopoints-api'
 
 	export default {
 		name: 'innopoints-applications',
@@ -140,14 +141,14 @@
 			},
 
 			fetchData() {
-				this.$root.api.innopoints.applications.many({
+				Application.many({
 					// skip: this.perPage * (this.currPage - 1),
 					// limit: this.perPage * this.currPage,
 				})
-					.then((json) => {
-						console.log('Fetched applications:', json.result)
-						this.totalPages = Math.ceil(json.result.applications_counter / this.perPage)
-						this.applications = json.result.applications
+					.then((result) => {
+						console.log('Fetched applications:', result)
+						this.totalPages = Math.ceil(result.applications_counter / this.perPage)
+						this.applications = result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
@@ -168,20 +169,20 @@
 			},
 
 			updateApplications() {
-				this.$root.api.innopoints.applications.many({
+				Application.many({
 					// skip: this.perPage * (this.currPage - 1),
 					// limit: this.perPage * this.currPage,
 				})
-					.then((json) => {
-						console.log('Fetched applications:', json.result)
-						this.applications = json.result.applications
+					.then((result) => {
+						console.log('Fetched applications:', result)
+						this.applications = result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
 
 			confirmDelete(type) {
 				if (type === 'ok') {
-					this.$root.api.innopoints.applications.delete({ application_id: this.currentApp.id })
+					Application.delete({ application_id: this.currentApp.id })
 						.then((json) => {
 							this.applications.splice(this.applications.indexOf(this.currentApp), 1)
 							console.log('Deleted application:', json)
