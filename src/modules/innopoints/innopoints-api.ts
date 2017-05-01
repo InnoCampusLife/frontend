@@ -66,7 +66,8 @@ function makeDeletetReq (input: string): Promise<any> {
 export abstract class Activity {
 	static many ({ category_id = null, skip = null, limit = null } = {}) {
 		// TODO: Add check for limit and skip params
-		const input = URI(`${url}/activities`).query({ category_id, skip, limit }).toString()
+		const input = URI(`${url}/activities` + (category_id ? `/${category_id}` : ''))
+			.query({ skip, limit }).toString()
 		return makeGetReq(input)
 	}
 }

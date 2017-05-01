@@ -28,7 +28,7 @@
 		section
 			.content
 				keep-alive
-					router-view
+					router-view(:search="search")
 			footer
 				p.text-muted 2016 &copy; InnoDev
 </template>

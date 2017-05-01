@@ -77,13 +77,17 @@
 				type: String,
 				default: '',
 			},
+
+			search: {
+				type: String,
+				default: '',
+			},
 		},
 
 		data () {
 			return {
 				applications: [],
 				paginate: ['applications'],
-				search: '',
 				currentApp: null,
 
 				statuses: ['in_process', 'rework', 'rejected', 'approved'],
