@@ -7,7 +7,6 @@
 				:order="order",
 				@deleteOrder="openDeleteConfirm",
 			)
-		//- .card.card-block(v-for="o in orders | filterBy $router.app.query in 'title' 'category.title'", :status="o.status", :id="'card-' + o.id")
 		md-dialog-confirm(
 			:md-title="`Delete order #${currentOrder ? currentOrder.id : ''}?`",
 			md-content="This cannot be undone.",

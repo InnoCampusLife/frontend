@@ -11,8 +11,7 @@
 							md-select(
 								id="filter",
 								name="filter",
-								@change="updateStatus",
-								:value="normStatus",
+								v-model="status",
 							)
 								md-option(value="") All
 								md-option(value="in_process") In&nbsp;process
@@ -72,17 +71,7 @@
 	export default {
 		name: 'innopoints-applications',
 
-		props: {
-			status: {
-				type: String,
-				default: '',
-			},
-
-			search: {
-				type: String,
-				default: '',
-			},
-		},
+		props: ['search'],
 
 		data () {
 			return {
@@ -90,11 +79,8 @@
 				paginate: ['applications'],
 				currentApp: null,
 
+				status: '',
 				statuses: ['in_process', 'rework', 'rejected', 'approved'],
-
-				currPage: 1,
-				totalPages: 1,
-				perPage: 50,
 			}
 		},
 
@@ -127,30 +113,10 @@
 		},
 
 		methods: {
-			prevPage () {
-				console.log(this.currPage)
-				this.currPage -= 1
-				this.updateApplications()
-			},
-
-			nextPage () {
-				console.log(this.currPage)
-				this.currPage += 1
-				this.updateApplications()
-			},
-
-			updateStatus (value) {
-				// this.$route.push({})
-			},
-
 			fetchData () {
-				Application.many({
-					// skip: this.perPage * (this.currPage - 1),
-					// limit: this.perPage * this.currPage,
-				})
+				Application.many()
 					.then((result) => {
 						console.log('Fetched applications:', result)
-						this.totalPages = Math.ceil(result.applications_counter / this.perPage)
 						this.applications = result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
@@ -171,18 +137,6 @@
 				this.$refs['rejectConfirm'].open()
 			},
 
-			updateApplications () {
-				Application.many({
-					// skip: this.perPage * (this.currPage - 1),
-					// limit: this.perPage * this.currPage,
-				})
-					.then((result) => {
-						console.log('Fetched applications:', result)
-						this.applications = result.applications
-					})
-					.catch((err) => console.log('Couldn\'t fetch applications:', err))
-			},
-
 			confirmDelete (type) {
 				if (type === 'ok') {
 					Application.delete({ application_id: this.currentApp.id })
@@ -190,7 +144,7 @@
 							this.applications.splice(this.applications.indexOf(this.currentApp), 1)
 							console.log('Deleted application:', result)
 							this.currentApp = null
-							this.updateApplications()
+							this.fetchData()
 						})
 						.catch((err) => {
 							console.error('Failed to delete application:', err)
