@@ -2,7 +2,7 @@
 	.container
 		div
 			order-card.my-3(
-				v-for="order in orders", 
+				v-for="order in filterBy(orders, search, ['id', 'creation_date', 'total_price', 'author', 'title', 'status', 'category', 'items'])", 
 				:key="order.id", 
 				:order="order",
 				@deleteOrder="openDeleteConfirm",

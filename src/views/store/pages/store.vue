@@ -12,7 +12,7 @@
 		template(v-else)
 			.card-columns
 				.card-wrapper(
-					v-for="item in filterBy(items, search, 'title', 'price', 'category.title')",
+					v-for="item in filterBy(items, search, ['title', 'price', 'category.title'])",
 					:key="item.id",
 				)
 					item-card.store-item(
