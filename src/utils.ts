@@ -2,7 +2,7 @@ class GeneralRequestInit implements RequestInit {
 	constructor(init?: RequestInit) {
 		Object.assign(this, init)
 	}
-	mode = 'cors'
+	mode: RequestMode = 'cors'
 	// credentials = 'include'
 }
 
