@@ -32,7 +32,7 @@
 				md-card-actions
 					md-button.md-primary.md-raised(
 						type='button',
-						:disabled="!areAllOptionsSelected || quantity <= 0",
+						:disabled="!areAllOptionsSelected || quantity <= 0 || points_amount < item.price",
 						data-toggle="modal",
 						:data-target="'#buying-modal-' + item.id",
 						@click="openBuyConfirm",
@@ -51,6 +51,7 @@
 <script>
 	import { startCase } from 'lodash'
 	import { Item, Order } from 'Modules/innopoints/innopoints-api'
+	import { mapState } from 'vuex'
 
 	export default {
 		name: 'store-item',
@@ -64,6 +65,10 @@
 		},
 
 		computed: {
+			...mapState('innopoints', [
+				'points_amount',
+			]),
+
 			quantity () {
 				return this.item.combinations
 					.filter((c) => {
