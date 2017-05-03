@@ -14,7 +14,6 @@
 								v-model="status",
 								@change="fetchData",
 							)
-								md-option(value="") All
 								md-option(value="in_process") In&nbsp;process
 								md-option(value="rejected") Rejected
 								//- md-option(value="rework") In&nbsp;rework
@@ -41,32 +40,35 @@
 						.text-center
 							p.md-display-1 Empty
 					template(v-else)
-						transition-group.application-list(name="application-list" tag="div")
-							applicationCard.application.my-2(
-								v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
-								:application="app",
-								:key="app.id",
-								:isReview="false",
-								@deleteApp="openDeleteConfirm",
-							)
+						applicationCard.application.my-2(
+							v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
+							:application="app",
+							:key="app.id",
+							:isReview="true"
+							@approveApp="openApproveConfirm",
+							@rejectApp="openRejectConfirm",
+						)
 		md-dialog-confirm(
-			:md-title="`Delete application #${currApp ? currApp.id : ''}?`",
+			:md-title="`Approve application #${currApp ? currApp.id : ''}?`",
 			md-content="This cannot be undone.",
-			md-ok-text="Delete",
+			md-ok-text="Approve",
 			md-cancel-text="Cancel",
-			@close="confirmDelete",
-			ref='deleteConfirm',
+			@close="confirmApprove",
+			ref='approveConfirm',
 		)
-		router-link.md-fab.md-fab-bottom-right(
-			tag="md-button",
-			:to="{ name: 'apply' }",
+		md-dialog-confirm(
+			:md-title="`Reject application #${currApp ? currApp.id : ''}?`",
+			md-content="This cannot be undone.",
+			md-ok-text="Reject",
+			md-cancel-text="Cancel",
+			@close="confirmReject",
+			ref='rejectConfirm',
 		)
-			md-icon add
 </template>
 
 <script>
 	import applicationCard from './../components/application-card'
-	import { Application } from 'Modules/innopoints/innopoints-api'
+	import { Admin } from 'Modules/innopoints/innopoints-api'
 
 	export default {
 		name: 'innopoints-applications',
@@ -76,10 +78,9 @@
 		data () {
 			return {
 				applications: [],
-				paginate: ['applications'],
 				currApp: null,
 
-				status: '',
+				status: 'in_process',
 				statuses: ['in_process', 'rework', 'rejected', 'approved'],
 			}
 		},
@@ -118,34 +119,63 @@
 
 		methods: {
 			fetchData () {
-				Application.many()
+				Admin.Application.many({ status: this.status })
 					.then((result) => {
 						console.log('Fetched applications:', result)
 						this.applications = result.applications
 					})
-					.catch((err) => console.log('Failed to fetch applications:', err))
+					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
 
-			openDeleteConfirm (app) {
+			openApproveConfirm (app) {
 				this.currApp = app
-				this.$refs['deleteConfirm'].open()
+				this.$refs['approveConfirm'].open()
 			},
 
-			confirmDelete (type) {
+			openRejectConfirm (app) {
+				this.currApp = app
+				this.$refs['rejectConfirm'].open()
+			},
+
+			confirmApprove (type) {
 				if (type === 'ok') {
-					Application.delete({ application_id: this.currApp.id })
+					Admin.Application.review({
+						account_id: this.currApp.author.id,
+						application_id: this.currApp.id,
+						action: 'approve',
+					})
 						.then((result) => {
 							this.applications.splice(this.applications.indexOf(this.currApp), 1)
-							console.log('Deleted application:', result)
+							console.log('Approved application:', result)
 							this.currApp = null
 							this.fetchData()
 						})
 						.catch((err) => {
-							console.error('Failed to delete application:', err)
+							console.error('Failed to approve application:', err)
 							this.currApp = null
 						})
 				}
 			},
+
+			confirmReject (type) {
+				if (type === 'ok') {
+					Admin.Application.review({
+						account_id: this.currApp.author.id,
+						application_id: this.currApp.id,
+						action: 'reject',
+					})
+						.then((result) => {
+							this.applications.splice(this.applications.indexOf(this.currApp), 1)
+							console.log('Rejected application:', result)
+							this.currApp = null
+							this.fetchData()
+						})
+						.catch((err) => {
+							console.error('Failed to reject application:', err)
+							this.currApp = null
+						})
+				}
+			}
 		},
 	}
 </script>

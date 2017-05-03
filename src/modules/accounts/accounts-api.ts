@@ -14,7 +14,6 @@ const token = () => storage.getItem(config.tokenName)
 
 function makeReq (input: string, init: RequestInit = {}): Promise<any> {
 	const { mode = 'cors', method = 'GET' }: RequestInit = init
-	console.log('Req:', { mode, method, ...init })
 	return fetch(input, { mode, method, ...init })
 		.catch(() => {
 			console.error(NETWORK_ERR)
@@ -43,17 +42,17 @@ function makeGetReq (input: string): Promise<any> {
 }
 
 function makePostReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { 
-		method = 'POST', 
-		headers = { 'Content-Type': 'application/json' }, 
+	const {
+		method = 'POST',
+		headers = { 'Content-Type': 'application/json' },
 		body = {},
 	}: RequestInit = init
 	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makePutReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { 
-		method = 'PUT', 
+	const {
+		method = 'PUT',
 		headers = { 'Content-Type': 'application/json' },
 		body = {},
 	}: RequestInit = init

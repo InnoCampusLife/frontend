@@ -37,9 +37,9 @@ const router = new VueRouter({
 			meta: { authorizedZone: true },
 			children: [
 				{
-					path: '',
-					component: require('./views/accounts/pages/accounts.vue'),
-					name: 'accounts',
+					path: 'manage',
+					component: require('./views/accounts/pages/manage-accounts.vue'),
+					name: 'manage-accounts',
 				},
 				{
 					path: '/profiles/:id',
@@ -74,6 +74,11 @@ const router = new VueRouter({
 					component: require('./views/innopoints/pages/apply.vue'),
 					name: 'apply',
 				},
+				{
+					path: 'applications/manage',
+					component: require('./views/innopoints/pages/manage-applications.vue'),
+					name: 'manage-applications',
+				},
 			],
 		},
 
@@ -97,6 +102,11 @@ const router = new VueRouter({
 					path: 'orders',
 					component: require('./views/store/pages/orders.vue'),
 					name: 'orders',
+				},
+				{
+					path: 'orders/manage',
+					component: require('./views/store/pages/manage-orders.vue'),
+					name: 'manage-orders',
 				},
 			],
 		},

@@ -45,10 +45,24 @@
 							md-subheader Manage
 							router-link(
 								tag="md-list-item",
-								:to="{ name: 'accounts' }",
+								:to="{ name: 'manage-accounts' }",
 							)
 								md-icon supervisor_account
 								span Accounts
+
+							router-link(
+								tag="md-list-item",
+								:to="{ name: 'manage-orders' }",
+							)
+								md-icon receipt
+								span Orders
+
+							router-link(
+								tag="md-list-item",
+								:to="{ name: 'manage-applications' }",
+							)
+								md-icon insert_drive_file
+								span Applications
 
 				footer
 					md-divider
@@ -63,9 +77,6 @@
 <script>
 	import { Avatar as avatar } from 'vue-avatar'
 	import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-
-	import accounts from 'Modules/accounts'
-	import innopoints from 'Modules/innopoints'
 
 	import storage from './../storage'
 	import config from './../config'

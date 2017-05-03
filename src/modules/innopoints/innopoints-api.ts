@@ -42,17 +42,17 @@ function makeGetReq (input: string): Promise<any> {
 }
 
 function makePostReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { 
-		method = 'POST', 
-		headers = { 'Content-Type': 'application/json' }, 
+	const {
+		method = 'POST',
+		headers = { 'Content-Type': 'application/json' },
 		body = {},
 	}: RequestInit = init
 	return makeReq(input, { method, headers, ...init, body: JSON.stringify(body) })
 }
 
 function makePutReq (input: string, init: RequestInit = {}): Promise<any> {
-	const { 
-		method = 'PUT', 
+	const {
+		method = 'PUT',
 		headers = { 'Content-Type': 'application/json' },
 		body = {},
 	}: RequestInit = init
@@ -243,53 +243,53 @@ export namespace Admin {
 	}
 
 	export abstract class Application {
-		many ({ status }) {
+		static many ({ status }) {
 			if (!status) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/applications/${status}`
 			return makeGetReq(input)
 		}
 
-		one ({ account_id, application_id }) {
+		static one ({ account_id, application_id }) {
 			if (!account_id || !application_id) return Promise.reject(INVALID_PARAMS_ERR)
-			const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}`
+			const input = `${url}/admin/${token()}/applications/${application_id}`
 			return makeGetReq(input)
 		}
 
-		create ({ body }) {
+		static create ({ body }) {
 			if (!body) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/applications`
 			const init: RequestInit = { body }
 			return makePostReq(input, init)
 		}
 
-		update ({ account_id, application_id, body }) {
+		static update ({ account_id, application_id, body }) {
 			if (!account_id || !application_id || !body) return Promise.reject(INVALID_PARAMS_ERR)
-			const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}`
+			const input = `${url}/admin/${token()}/applications/${application_id}`
 			const init: RequestInit = { body }
 			return makePutReq(input, init)
 		}
 
-		review ({ account_id, application_id, action }) {
+		static review ({ account_id, application_id, action }) {
 			if (!account_id || !application_id || !action) return Promise.reject(INVALID_PARAMS_ERR)
-			const input = `${url}/admin/${token()}/accounts/${account_id}/applications/${application_id}/${action}`
+			const input = `${url}/admin/${token()}/applications/${application_id}/${action}`
 			return makePutReq(input, {})
 		}
 	}
 
 	export abstract class Order {
-		many ({ status }) {
+		static many ({ status }) {
 			if (!status) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/orders/${status}`
 			return makeGetReq(input)
 		}
 
-		one ({ order_id }) {
+		static one ({ order_id }) {
 			if (!order_id) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/orders/${order_id}`
 			return makeGetReq(input)
 		}
 
-		update ({ order_id, action }) {
+		static update ({ order_id, action }) {
 			if (!order_id || !action) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/orders/${order_id}/${action}`
 			return makePutReq(input, {})

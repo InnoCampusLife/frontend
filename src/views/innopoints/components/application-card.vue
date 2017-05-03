@@ -71,23 +71,16 @@
 				p(v-for="para in paras") {{ para }}
 		md-card-area
 			md-card-actions(v-if="application.status === ('in_process' || 'rework')")
-				md-button.md-warn(@click="deleteApplication") Delete
-
-			// md-card-actions(v-if="user.innopoints.data.isAdmin && application.status=='in_process'")
-			// 	button.btn.btn-block.btn-outline-success(:data-id="application.id", @click="approve") Approve
-			// 	button.btn.btn-block.btn-outline-warning(:data-id="application.id", @click="toRework") To rework
-			// 	button.btn.btn-block.btn-outline-danger(:data-id="application.id", @click="reject") Reject
-
-			// md-card-actions(v-if="!user.innopoints.data.isAdmin && application.status!='approved'")
-			// 	button.btn.btn-block.btn-primary(:data-id="application.id", @click="resend", v-show="(application.status=='rework')") Resend
-
+				md-button.md-primary(v-if="isReview", @click="approveApp") Approve
+				md-button.md-warn(v-if="isReview", @click="rejectApp") Reject
+				md-button.md-warn(v-if="!isReview", @click="deleteApp") Delete
 </template>
 
 <script>
 	export default {
 		name: 'innopoints-application-component',
 
-		props: ['application', 'user'],
+		props: ['application', 'isReview'],
 
 		computed: {
 			styleBasedOnStatus () {
@@ -106,38 +99,21 @@
 
 			creationDateStr () {
 				return new Date(this.application.creation_date * 1000).toDateString()
-			}
+			},
 		},
 
 		methods: {
-			deleteApplication () {
-				this.$emit('deleteApplication', this.application);
+			deleteApp () {
+				this.$emit('deleteApp', this.application);
 			},
 
-			// approve(e) {
-			// 	this.user.innopoints.api.user.application.approve(e.target.dataset.id, (result) => {
-			// 		this.success(e.target.dataset.id, 'approved');
-			// 	}, console.log);
-			// },
+			approveApp () {
+				this.$emit('approveApp', this.application);
+			},
 
-			// reject(e) {
-			// 	this.user.innopoints.api.user.application.reject(e.target.dataset.id, (result) => {
-			// 		this.success(e.target.dataset.id, 'rejected');
-			// 	}, console.log);
-			// },
-
-			// // FIXME: api method doesn't work
-			// toRework(e) {
-			// 	this.user.innopoints.api.user.application.to_rework({ appl_id: e.target.dataset.id }, (result) => {
-			// 		this.success(e.target.dataset.id, 'rework');
-			// 	}, console.log);
-			// },
-
-			// resend(e) {
-			// 	this.user.innopoints.api.user.application.send(e.target.dataset.id, (result) => {
-			// 		this.success(e.target.dataset.id, 'resend');
-			// 	}, console.log);
-			// },
+			rejectApp () {
+				this.$emit('rejectApp', this.application);
+			},
 		}
 	}
 </script>

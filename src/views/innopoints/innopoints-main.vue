@@ -10,15 +10,15 @@
 							.row
 								.col
 									h1.md-title
-										span Innopoints
-										span(v-if="routeName === 'applications'") &ensp;&ndash;&ensp;Applications
-										span(v-if="routeName === 'apply'") &ensp;&ndash;&ensp;Apply
+										span(v-if="routeName === 'applications'") Innopoints&ensp;&ndash;&ensp;Applications
+										span(v-if="routeName === 'apply'") Innopoints&ensp;&ndash;&ensp;Apply
+										span(v-if="routeName === 'manage-applications'") Applications&ensp;&ndash;&ensp;Manage
 								.col.col-auto(v-if="routeName === 'apply'")
 									router-link(
 										tag="md-button",
 										:to="{ name: 'applications' }")
 										span Applications
-								.col.col-auto.hidden-sm-down(v-if="routeName === 'applications'")
+								.col.col-auto.hidden-sm-down(v-if="routeName === 'applications' || 'manage-applications'")
 									.search
 										md-button.md-icon-button
 											md-icon search
