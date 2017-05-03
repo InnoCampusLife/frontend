@@ -8,7 +8,7 @@
 				md-spinner(md-indeterminate, :md-size="100")
 		template(v-else-if="items.length <= 0")
 			.text-center
-				.md-title Empty
+				p.md-title.text-muted Empty
 		template(v-else)
 			.card-columns
 				.card-wrapper(

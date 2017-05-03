@@ -10,9 +10,10 @@
 							.row
 								.col
 									h1.md-title
-										span Store
-										span(v-if="name === 'orders'") &ensp;&ndash;&ensp;Orders
-										span(v-if="name === 'item'")  &ensp;&ndash;&ensp;Item
+										span(v-if="name === 'orders'") Store&ensp;&ndash;&ensp;Orders
+										span(v-else-if="name === 'item'") Store&ensp;&ndash;&ensp;Item
+										span(v-else-if="name === 'manage-orders'") Orders&ensp;&ndash;&ensp;Manage
+										span(v-else) Store
 								.col.col-auto
 									router-link(
 										v-show="name === 'store'",
@@ -26,7 +27,7 @@
 										:to="{ name: 'store' }",
 									)
 										span Store
-								.col.col-auto.hidden-sm-down(v-show="name === 'store' || name === 'orders'")
+								.col.col-auto.hidden-sm-down(v-show="name === 'store' || 'orders' || 'manage-orders'")
 									.search
 										md-button.md-icon-button
 											md-icon search

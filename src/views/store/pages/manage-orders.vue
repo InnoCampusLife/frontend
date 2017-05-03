@@ -1,25 +1,59 @@
 <template lang="pug">
-	.container
-		div
-			order-card.my-3(
-				v-for="order in filterBy(orders, search, ['id', 'creation_date', 'total_price', 'author', 'title', 'status', 'category', 'items'])",
-				:key="order.id",
-				:order="order",
-				@deleteOrder="openDeleteConfirm",
-			)
+	div
+		.container.pt-0
+			.row.align-items-end
+				.col.col-auto
+						md-input-container
+							md-icon filter_list
+							md-select(
+								id="filter",
+								name="filter",
+								v-model="status",
+								@change="fetchData",
+							)
+								md-option(value="in_process") In&nbsp;process
+								md-option(value="rejected") Rejected
+								//- md-option(value="rework") In&nbsp;rework
+								md-option(value="approved") Approved
+				.col
+			.row
+				.col-12
+					template(v-if="!orders")
+						.text-center
+							md-spinner(md-indeterminate, :md-size="100")
+					template(v-else-if="orders.length <= 0")
+						.text-center
+							p.md-title.text-muted Empty
+					template(v-else)
+						order-card.my-3(
+							v-for="order in filterBy(orders, search, ['id', 'creation_date', 'total_price', 'author', 'title', 'status', 'category', 'items'])",
+							:key="order.id",
+							:order="order",
+							:isReview="true",
+							@approveOrder="openApproveConfirm",
+							@rejectOrder="openRejectConfirm",
+						)
 		md-dialog-confirm(
-			:md-title="`Delete order #${currentOrder ? currentOrder.id : ''}?`",
+			:md-title="`Approve order #${currOrder ? currOrder.id : ''}?`",
 			md-content="This cannot be undone.",
-			md-ok-text="Delete",
+			md-ok-text="Approve",
 			md-cancel-text="Cancel",
-			@close="confirmDelete",
-			ref='deleteConfirm',
+			@close="confirmApprove",
+			ref='approveConfirm',
+		)
+		md-dialog-confirm(
+			:md-title="`Reject order #${currOrder ? currOrder.id : ''}?`",
+			md-content="This cannot be undone.",
+			md-ok-text="Reject",
+			md-cancel-text="Cancel",
+			@close="confirmReject",
+			ref='rejectConfirm',
 		)
 </template>
 
 <script>
 	import { reverse } from 'lodash'
-	import { Order } from 'Modules/innopoints/innopoints-api'
+	import { Admin } from 'Modules/innopoints/innopoints-api'
 
 	import orderCard from './../components/order-card.vue'
 
@@ -30,8 +64,9 @@
 
 		data () {
 			return {
-				orders: [],
-				currentOrder: null,
+				orders: null,
+				currOrder: null,
+				status: 'in_process',
 			}
 		},
 
@@ -53,7 +88,7 @@
 
 		methods: {
 			fetchData() {
-				Order.many()
+				Admin.Order.many({ status: this.status })
 					.then((orders) => {
 						console.log('Got orders:', orders)
 						orders.forEach((order) => {
@@ -67,23 +102,44 @@
 					})
 			},
 
-			openDeleteConfirm (order) {
-				this.currentOrder = order
-				this.$refs['deleteConfirm'].open()
+			openApproveConfirm (order) {
+				this.currOrder = order
+				this.$refs['approveConfirm'].open()
 			},
 
-			confirmDelete (type) {
+			openRejectConfirm (order) {
+				this.currOrder = order
+				this.$refs['rejectConfirm'].open()
+			},
+
+			confirmApprove (type) {
 				if (type === 'ok') {
-					Order.delete({ order_id: this.currentOrder.id })
+					Admin.Order.review({ order_id: this.currOrder.id, action: 'approve' })
 						.then((result) => {
-							this.orders.splice(this.orders.indexOf(this.currentOrder), 1)
-							console.log('Deleted order:', result)
-							this.currentOrder = null
+							this.orders.splice(this.orders.indexOf(this.currOrder), 1)
+							console.log('Approved order:', result)
+							this.currOrder = null
 							this.fetchData()
 						})
 						.catch((err) => {
-							console.error('Failed to delete order:', err)
-							this.currentOrder = null
+							console.error('Failed to approve order:', err)
+							this.currOrder = null
+						})
+				}
+			},
+
+			confirmReject (type) {
+				if (type === 'ok') {
+					Admin.Order.review({ order_id: this.currOrder.id, action: 'reject' })
+						.then((result) => {
+							this.orders.splice(this.orders.indexOf(this.currOrder), 1)
+							console.log('Rejected order:', result)
+							this.currOrder = null
+							this.fetchData()
+						})
+						.catch((err) => {
+							console.error('Failed to reject order:', err)
+							this.currOrder = null
 						})
 				}
 			},

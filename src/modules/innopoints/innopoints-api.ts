@@ -249,8 +249,8 @@ export namespace Admin {
 			return makeGetReq(input)
 		}
 
-		static one ({ account_id, application_id }) {
-			if (!account_id || !application_id) return Promise.reject(INVALID_PARAMS_ERR)
+		static one ({ application_id }) {
+			if (!application_id) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/applications/${application_id}`
 			return makeGetReq(input)
 		}
@@ -262,15 +262,15 @@ export namespace Admin {
 			return makePostReq(input, init)
 		}
 
-		static update ({ account_id, application_id, body }) {
-			if (!account_id || !application_id || !body) return Promise.reject(INVALID_PARAMS_ERR)
+		static update ({ application_id, body }) {
+			if (!application_id || !body) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/applications/${application_id}`
 			const init: RequestInit = { body }
 			return makePutReq(input, init)
 		}
 
-		static review ({ account_id, application_id, action }) {
-			if (!account_id || !application_id || !action) return Promise.reject(INVALID_PARAMS_ERR)
+		static review ({ application_id, action }) {
+			if (!application_id || !action) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/applications/${application_id}/${action}`
 			return makePutReq(input, {})
 		}
@@ -289,7 +289,7 @@ export namespace Admin {
 			return makeGetReq(input)
 		}
 
-		static update ({ order_id, action }) {
+		static review ({ order_id, action }) {
 			if (!order_id || !action) return Promise.reject(INVALID_PARAMS_ERR)
 			const input = `${url}/admin/${token()}/orders/${order_id}/${action}`
 			return makePutReq(input, {})

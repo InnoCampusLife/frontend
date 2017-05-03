@@ -39,7 +39,7 @@
 							md-spinner(md-indeterminate, :md-size="100")
 					template(v-else-if="filteredApps.length <= 0")
 						.text-center
-							p.md-display-1 Empty
+							p.md-title.text-muted Empty
 					template(v-else)
 						transition-group.application-list(name="application-list" tag="div")
 							applicationCard.application.my-2(

@@ -38,7 +38,7 @@
 							md-spinner(md-indeterminate, :md-size="100")
 					template(v-else-if="filteredApps.length <= 0")
 						.text-center
-							p.md-display-1 Empty
+							p.md-title.text-muted Empty
 					template(v-else)
 						applicationCard.application.my-2(
 							v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
@@ -77,7 +77,7 @@
 
 		data () {
 			return {
-				applications: [],
+				applications: null,
 				currApp: null,
 
 				status: 'in_process',
@@ -95,13 +95,16 @@
 			},
 
 			filteredApps() {
-				return this.applications
-					.filter((app) => {
-						if (this.status === '') return true
-						if (this.status === app.status) return true
-						return false
-					})
-					.sort((a, b) => b.creation_date - a.creation_date)
+				if (this.applications) {
+					return this.applications
+						.filter((app) => {
+							if (this.status === '') return true
+							if (this.status === app.status) return true
+							return false
+						})
+						.sort((a, b) => b.creation_date - a.creation_date)
+				}
+				return null
 			},
 		},
 
@@ -139,11 +142,7 @@
 
 			confirmApprove (type) {
 				if (type === 'ok') {
-					Admin.Application.review({
-						account_id: this.currApp.author.id,
-						application_id: this.currApp.id,
-						action: 'approve',
-					})
+					Admin.Application.review({ application_id: this.currApp.id, action: 'approve' })
 						.then((result) => {
 							this.applications.splice(this.applications.indexOf(this.currApp), 1)
 							console.log('Approved application:', result)
@@ -159,11 +158,7 @@
 
 			confirmReject (type) {
 				if (type === 'ok') {
-					Admin.Application.review({
-						account_id: this.currApp.author.id,
-						application_id: this.currApp.id,
-						action: 'reject',
-					})
+					Admin.Application.review({ application_id: this.currApp.id, action: 'reject' })
 						.then((result) => {
 							this.applications.splice(this.applications.indexOf(this.currApp), 1)
 							console.log('Rejected application:', result)

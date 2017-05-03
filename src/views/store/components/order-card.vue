@@ -47,14 +47,16 @@
 								md-table-cell(md-numeric) {{ item.price }}
 			md-card-area
 				md-card-actions(v-if="order.status === ('in_process' || 'rework')")
-					md-button.md-warn(@click="deleteOrder") Delete
+					md-button.md-primary(v-if="isReview", @click="approveOrder") Approve
+					md-button.md-warn(v-if="isReview", @click="rejectOrder") Reject
+					md-button.md-warn(v-if="!isReview", @click="deleteOrder") Delete
 </template>
 
 <script>
 	export default {
 		name: 'store-order-component',
 
-		props: ['order'],
+		props: ['order', 'isReview'],
 
 		computed: {
 			styleBasedOnStatus() {
@@ -71,6 +73,14 @@
 		methods: {
 			deleteOrder () {
 				this.$emit('deleteOrder', this.order)
+			},
+
+			approveOrder () {
+				this.$emit('approveOrder', this.order)
+			},
+
+			rejectOrder () {
+				this.$emit('rejectOrder', this.order)
 			},
 		},
 	}
