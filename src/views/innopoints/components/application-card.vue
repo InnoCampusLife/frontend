@@ -49,22 +49,17 @@
 								span(v-else) —
 							md-table-cell(md-numeric) {{ work.total_price }}
 
-				// template(v-if="application.files.length > 0")
-				// 	h5
-				// 		span(v-if="application.files.length > 1") Files
-				// 		span(v-else) File
-				// 	.table-responsive
-				// 		table.table.table-striped.table-bordered.table-sm
-				// 			thead
-				// 				tr
-				// 					th.text-xs-center #
-				// 					th.text-xs-center Name
-				// 					th.text-xs-center Type
-				// 			tbody
-				// 				tr(v-for='(f, index) in application.files')
-				// 					th(scope='row') {{ index + 1 }}
-				// 					td {{ f.filename }}
-				// 					td {{ f.type }}
+			md-card-content(v-if="application.files.length > 0")
+				ul.list-unstyled.mb-0
+					li(
+						v-for="file in application.files",
+						:key="file.id",
+					)
+						a(
+							:href="`${apiUrl}v1/points/accounts/${token()}/files/${file.id}`",
+							target="_blank",
+						)
+							span {{ file.filename }}
 
 			md-card-content(v-if="application.comment && application.comment.length")
 				// h5.md-title Comment
@@ -77,10 +72,19 @@
 </template>
 
 <script>
+	import { token } from './../../../utils'
+	import config from './../../../config'
+
 	export default {
 		name: 'innopoints-application-component',
 
 		props: ['application', 'isReview'],
+
+		data () {
+			return {
+				apiUrl: config.server.apiURL
+			}
+		},
 
 		computed: {
 			styleBasedOnStatus () {
@@ -103,6 +107,8 @@
 		},
 
 		methods: {
+			token,
+
 			deleteApp () {
 				this.$emit('deleteApp', this.application);
 			},

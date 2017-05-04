@@ -148,12 +148,6 @@
 	import { Category, Activity, Application, ApplicationFile } from 'Modules/innopoints/innopoints-api'
 	import { mapGetters, mapState } from 'vuex'
 
-	const token = () => storage.getItem(config.tokenName)
-
-	// Hopefully temprorary
-	import storage from './../../../storage'
-	import config from './../../../config'
-
 	export default {
 		name: 'innopoints-apply',
 
