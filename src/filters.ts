@@ -1,5 +1,5 @@
 import * as Vue from 'vue'
-import * as _ from 'lodash'
+import { startCase } from 'lodash'
 import emojione from 'emojione'
 
 
@@ -10,5 +10,5 @@ Vue.filter('emojione', (value) => {
 })
 
 Vue.filter('startCase', (value) => {
-  return _.startCase(value)
+  return startCase(value)
 })

@@ -112,9 +112,9 @@
 		// 	$route: 'fetchData',
 		// },
 
-		// activated () {
-		// 	this.fetchData()
-		// },
+		activated () {
+			this.fetchData()
+		},
 
 		methods: {
 			fetchData () {

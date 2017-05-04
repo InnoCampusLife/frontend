@@ -54,6 +54,8 @@
 										span Ivalid or does not exist
 									span.md-error(v-else-if="!$v.participants.$each[index].username.doesNotRepeat")
 										span Cannot repeat
+									span.md-error(v-else-if="!$v.participants.$each[index].username.isAuthorPresent")
+										span Author must be present
 
 								md-input-container(:class="{ 'md-input-invalid': $v.participants.$each[index].activity_id.$error }")
 									md-icon work
@@ -133,10 +135,11 @@
 </template>
 
 <script>
-	import * as _ from 'lodash'
+	import { throttle, debounce } from 'lodash'
 	import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 	import { Account } from 'Modules/accounts/accounts-api'
 	import { Category, Activity, Application, ApplicationFile } from 'Modules/innopoints/innopoints-api'
+	import { mapGetters, mapState } from 'vuex'
 
 	export default {
 		name: 'innopoints-apply',
@@ -183,6 +186,13 @@
 							}
 							return false
 						},
+
+						isAuthorPresent (username) {
+							if (!this.isModerator) {
+								return this.participants.map((p) => p.username).includes(this.username)
+							}
+							return true
+						},
 					},
 
 					activity_id: {
@@ -212,6 +222,16 @@
 			$route: 'fetchData',
 		},
 
+		computed: {
+			...mapState('accounts', [
+				'username',
+			]),
+
+			...mapGetters('accounts', [
+				'isModerator',
+			]),
+		},
+
 		methods: {
 			fetchData () {
 				this.isLoading = true
@@ -234,7 +254,7 @@
 				this.$v.participants.$each[index].username.$touch()
 			},
 
-			debouncedUpdateUsername: _.debounce(function (index, value) { return this.updateUsername(index, value) }, 250),
+			debouncedUpdateUsername: debounce(function (index, value) { return this.updateUsername(index, value) }, 250),
 
 			innopoints (id, hours) {
 				const activity = this.activities.find(a => a.id === id);
@@ -341,6 +361,18 @@
 					console.log('Application sumitted:', result)
 				})
 				.then(() => {
+					this.category_id = null
+					this.filesStr = ''
+					this.comment = ''
+					this.participants = [
+						{
+							username: '',
+							activity_id: null,
+							hours: 1,
+						},
+					]
+				})
+				.then(() => {
 					this.$router.push({ name: 'applications' })
 				})
 				.catch((err) => {
@@ -348,7 +380,7 @@
 				})
 			},
 
-			throttledSubmit: _.throttle(function () { return this.submit() }, 500),
+			throttledSubmit: throttle(function () { return this.submit() }, 500),
 		},
 	}
 </script>
