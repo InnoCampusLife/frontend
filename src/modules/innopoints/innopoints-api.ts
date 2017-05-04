@@ -100,7 +100,8 @@ export abstract class Application {
 	}
 
 	static many ({ status = null, skip = null, limit = null } = {}) {
-		const input = URI(`${url}/accounts/${token()}/applications`).query({ status, skip, limit }).toString()
+		const input = URI(`${url}/accounts/${token()}/applications` + (status ? '/' + status : ''))
+			.query({ skip, limit }).toString()
 		return makeGetReq(input)
 	}
 

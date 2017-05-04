@@ -14,7 +14,7 @@
 								v-model="status",
 								@change="fetchData",
 							)
-								md-option(value="") All
+								md-option(v-if="!isReview" value="") All
 								md-option(value="in_process") In&nbsp;process
 								md-option(value="rejected") Rejected
 								//- md-option(value="rework") In&nbsp;rework
@@ -79,8 +79,9 @@
 				paginate: ['applications'],
 				currApp: null,
 
-				status: '',
 				statuses: ['in_process', 'rework', 'rejected', 'approved'],
+
+				isReview: false,
 			}
 		},
 
@@ -89,11 +90,7 @@
 		},
 
 		computed: {
-			normStatus() {
-				return this.statuses.includes(this.status) ? this.status : ''
-			},
-
-			filteredApps() {
+			filteredApps () {
 				return this.applications
 					.filter((app) => {
 						if (this.status === '') return true
@@ -101,6 +98,10 @@
 						return false
 					})
 					.sort((a, b) => b.creation_date - a.creation_date)
+			},
+
+			status () {
+				return isReview ? 'in_process' : ''
 			},
 		},
 
@@ -119,6 +120,15 @@
 		methods: {
 			fetchData () {
 				Application.many()
+					.then((result) => {
+						console.log('Fetched applications:', result)
+						this.applications = result.applications
+					})
+					.catch((err) => console.log('Failed to fetch applications:', err))
+			},
+
+			getApplications () {
+				Application.many({ status: this.status })
 					.then((result) => {
 						console.log('Fetched applications:', result)
 						this.applications = result.applications

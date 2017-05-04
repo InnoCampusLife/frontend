@@ -337,21 +337,6 @@
 					console.error('Failed to upload files:', err)
 				})
 
-				// const fileList = document.querySelector('input[type="file"]').files
-				// const files = new Array()
-
-				// for (let f of fileList) { files.push(f) }
-
-				// Promise.all(files.map((f) => {
-				// 	const body = new FormData()
-				// 	body.append(f.name, f)
-				// 	return ApplicationFile.create({ body })
-				// })).then((results) => {
-				// 	console.log('Uploaded files:', results)
-				// }).catch((err) => {
-				// 	console.error('Failed to upload files:', err)
-				// })
-
 				const work = await Promise.all(this.participants.map(async (p) => {
 					const actor = (await Account.one({ username: p.username })).id
 					const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
