@@ -101,7 +101,7 @@
 			},
 
 			status () {
-				return isReview ? 'in_process' : ''
+				return this.isReview ? 'in_process' : ''
 			},
 		},
 
