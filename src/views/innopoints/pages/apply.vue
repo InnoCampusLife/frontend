@@ -333,19 +333,22 @@
 				let fileIds = []
 				let work = []
 
-				try {
-					const fileList = document.querySelector('input[type="file"]').files
-					const files = []
+				const fileList = document.querySelector('input[type="file"]').files
 
-					for(let i = 0; i < fileList.length; i++) { files.push(fileList[i]) }
+				if (fileList.length > 0) {
+					try {
+						const files = []
 
-					fileIds = await Promise.all(files.map((f) => {
-						const formData = new FormData()
-						formData.append(f.name, f)
-						return ApplicationFile.create({ body: formData })
-					}))
-				} catch (err) {
-					console.error('Failed to upliad files:', err)
+						for(let i = 0; i < fileList.length; i++) { files.push(fileList[i]) }
+
+						fileIds = await Promise.all(files.map((f) => {
+							const formData = new FormData()
+							formData.append(f.name, f)
+							return ApplicationFile.create({ body: formData })
+						}))
+					} catch (err) {
+						console.error('Failed to upliad files:', err)
+					}
 				}
 
 				try {
