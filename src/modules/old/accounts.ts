@@ -1,7 +1,7 @@
 import * as Vuex from 'vuex'
 
-import config from './../config'
-import storage from './../storage'
+import config from './../../config'
+import storage from './../../storage'
 
 import {
 	ResponseError,

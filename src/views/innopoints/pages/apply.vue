@@ -141,6 +141,12 @@
 	import { Category, Activity, Application, ApplicationFile } from 'Modules/innopoints/innopoints-api'
 	import { mapGetters, mapState } from 'vuex'
 
+	const token = () => storage.getItem(config.tokenName)
+
+	// Hopefully temprorary
+	import storage from './../../../storage'
+	import config from './../../../config'
+
 	export default {
 		name: 'innopoints-apply',
 
@@ -310,20 +316,26 @@
 					return
 				}
 
-				// // File upload
-				// const fileList = document.querySelector('input[type="file"]').files
-				// const data = new FormData()
+				// File upload
+				const fileList = document.querySelector('input[type="file"]').files
+				const data = new FormData()
 
-				// for (let f of fileList) { data.append(f.name, f) }
+				for (let f of fileList) { data.append(f.name, f) }
 
-				// fetch('http://uis.university.innopolis.ru/api/points/files', {
-				// 	method: 'POST',
-				// 	body: data,
-				// }).then((json) => {
-				// 	console.log(json.result)
-				// }).catch((err) => {
-				// 	console.error('Failed to upload files:', err)
-				// })
+				fetch(`http://uis.university.innopolis.ru:8770/api/v1/points/accounts/${token()}/files`, {
+					method: 'POST',
+					body: data,
+				})
+				.then((res) => {
+					console.log('Type:', res.type)
+					return res.json()
+				})
+				.then((json) => {
+					console.log('Uploaded files:', json)
+				})
+				.catch((err) => {
+					console.error('Failed to upload files:', err)
+				})
 
 				// const fileList = document.querySelector('input[type="file"]').files
 				// const files = new Array()
@@ -352,7 +364,7 @@
 						application: {
 							work,
 							comment: this.comment,
-							type: work.length > 1 ? 'group' : 'personal',
+							type: this.isModerator ? 'group' : work.length > 1 ? 'group' : 'personal',
 							files: [],
 						}
 					}
