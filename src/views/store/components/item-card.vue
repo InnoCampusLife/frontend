@@ -19,9 +19,14 @@
 					.md-subhead {{ item.category.title | startCase }}
 
 				md-card-content
-					p.card-text
-						span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
-						span.text-danger(v-else) Out of Stock
+					.row
+						.col
+							p.card-text
+								span.text-success(v-if="quantity > 0") {{ quantity }} in Stock
+								span.text-danger(v-else) Out of Stock
+						.col.col-auto
+							p.card-text
+								strong.text-info(v-if="quantity > 0") IUP {{ item.price - 0.01 }}
 
 				//- md-card-actions
 				//- 	router-link.md-primary.md-raised(

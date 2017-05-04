@@ -14,7 +14,7 @@
 					.md-title {{ item.title | startCase }}
 					.md-subhead {{ item.category.title | startCase }}
 
-				md-card-content(v-show="item.options")
+				md-card-content(v-if="item.options && selectedOptions.length > 0")
 					md-input-container(v-for='(option, index) in item.options', :key="option")
 						label(:for="'item-option-' + index") {{ option.title }}
 						md-select(
@@ -33,8 +33,6 @@
 					md-button.md-primary.md-raised(
 						type='button',
 						:disabled="!areAllOptionsSelected || quantity <= 0 || points_amount < item.price",
-						data-toggle="modal",
-						:data-target="'#buying-modal-' + item.id",
 						@click="openBuyConfirm",
 					) IUP {{ item.price - 0.01 }}
 
@@ -58,7 +56,6 @@
 
 		data () {
 			return {
-				isLoading: false,
 				item: null,
 				selectedOptions: [],
 			}
@@ -91,7 +88,7 @@
 
 			startCasedTitle () {
 				return startCase(this.item ? this.item.title : '')
-			}
+			},
 		},
 
 		// created () {
@@ -104,6 +101,7 @@
 
 		activated () {
 			this.getItem()
+			this.selectedOptions = []
 		},
 
 		deactivated () {
@@ -113,13 +111,9 @@
 
 		methods: {
 			getItem () {
-				this.isLoading = true
-
 				Item.one({ item_id: this.$store.state.route.params.id })
 					.then((item) => {
 						console.log('Got item:', item)
-
-						this.isLoading = false
 						this.item = item
 
 						if (item.options) {
