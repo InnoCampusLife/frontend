@@ -23,14 +23,14 @@
 			main
 				section
 					md-list
-						md-subheader(v-if="isModerator") Navigate
+						md-subheader(v-if="isModerator") Innopoints
 
 						router-link(
 							tag="md-list-item",
 							:to="{ name: 'applications' }",
 						)
 							md-icon stars
-							span Innopoints
+							span Applications
 
 						router-link(
 							tag="md-list-item",

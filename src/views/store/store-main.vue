@@ -13,7 +13,7 @@
 										span(v-if="name === 'orders'") Store&ensp;&ndash;&ensp;Orders
 										span(v-else-if="name === 'item'") Store&ensp;&ndash;&ensp;Item
 										span(v-else-if="name === 'manage-orders'") Orders&ensp;&ndash;&ensp;Manage
-										span(v-else) Store
+										span(v-else) Innopoints&ensp;&ndash;&ensp;Store
 								.col.col-auto
 									router-link(
 										v-show="name === 'store'",

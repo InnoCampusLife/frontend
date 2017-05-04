@@ -1,6 +1,3 @@
-<style lang="scss">
-</style>
-
 <template lang="pug">
 	div
 		.container.pt-0
@@ -12,26 +9,14 @@
 								id="filter",
 								name="filter",
 								v-model="status",
-								@change="fetchData",
+								@change="fetchApps",
 							)
-								md-option(v-if="!isReview" value="") All
+								md-option(value="") All
 								md-option(value="in_process") In&nbsp;process
 								md-option(value="rejected") Rejected
-								//- md-option(value="rework") In&nbsp;rework
 								md-option(value="approved") Approved
+								//- md-option(value="rework") In&nbsp;rework
 				.col
-				//- .col.col-auto
-				//- 	.mb-3
-				//- 		md-button.md-icon-button.md-raised(
-				//- 			@click="prevPage",
-				//- 			:disabled="currPage <= 1",
-				//- 		)
-				//- 			md-icon keyboard_arrow_left
-				//- 		md-button.md-icon-button.md-raised(
-				//- 			@click="nextPage",
-				//- 			:disabled="currPage >= totalPages",
-				//- 		)
-				//- 			md-icon keyboard_arrow_right
 			.row
 				.col-12
 					template(v-if="!filteredApps")
@@ -75,13 +60,9 @@
 
 		data () {
 			return {
-				applications: [],
-				paginate: ['applications'],
+				apps: null,
 				currApp: null,
-
-				statuses: ['in_process', 'rework', 'rejected', 'approved'],
-
-				isReview: false,
+				status: ''
 			}
 		},
 
@@ -91,47 +72,37 @@
 
 		computed: {
 			filteredApps () {
-				return this.applications
-					.filter((app) => {
-						if (this.status === '') return true
-						if (this.status === app.status) return true
-						return false
-					})
-					.sort((a, b) => b.creation_date - a.creation_date)
-			},
-
-			status () {
-				return this.isReview ? 'in_process' : ''
+				if (this.apps) {
+					return this.apps
+						.filter((app) => {
+							if (this.status === '') return true
+							if (this.status === app.status) return true
+							return false
+						})
+						.sort((a, b) => b.creation_date - a.creation_date)
+				}
+				return null
 			},
 		},
 
 		// created () {
-		// 	this.fetchData()
+		// 	this.fetchApps()
 		// },
 
 		// watch: {
-		// 	$route: 'fetchData',
+		// 	$route: 'fetchApps',
 		// },
 
 		activated () {
-			this.fetchData()
+			this.fetchApps()
 		},
 
 		methods: {
-			fetchData () {
+			fetchApps () {
 				Application.many()
 					.then((result) => {
 						console.log('Fetched applications:', result)
-						this.applications = result.applications
-					})
-					.catch((err) => console.log('Failed to fetch applications:', err))
-			},
-
-			getApplications () {
-				Application.many({ status: this.status })
-					.then((result) => {
-						console.log('Fetched applications:', result)
-						this.applications = result.applications
+						this.apps = result.applications
 					})
 					.catch((err) => console.log('Failed to fetch applications:', err))
 			},
@@ -145,10 +116,10 @@
 				if (type === 'ok') {
 					Application.delete({ application_id: this.currApp.id })
 						.then((result) => {
-							this.applications.splice(this.applications.indexOf(this.currApp), 1)
+							this.apps.splice(this.apps.indexOf(this.currApp), 1)
 							console.log('Deleted application:', result)
 							this.currApp = null
-							this.fetchData()
+							this.fetchApps()
 						})
 						.catch((err) => {
 							console.error('Failed to delete application:', err)

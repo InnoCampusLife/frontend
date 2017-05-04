@@ -1,6 +1,3 @@
-<style lang="scss">
-</style>
-
 <template lang="pug">
 	div
 		.container.pt-0
@@ -12,25 +9,13 @@
 								id="filter",
 								name="filter",
 								v-model="status",
-								@change="fetchData",
+								@change="fetchApps",
 							)
 								md-option(value="in_process") In&nbsp;process
 								md-option(value="rejected") Rejected
-								//- md-option(value="rework") In&nbsp;rework
 								md-option(value="approved") Approved
+								//- md-option(value="rework") In&nbsp;rework
 				.col
-				//- .col.col-auto
-				//- 	.mb-3
-				//- 		md-button.md-icon-button.md-raised(
-				//- 			@click="prevPage",
-				//- 			:disabled="currPage <= 1",
-				//- 		)
-				//- 			md-icon keyboard_arrow_left
-				//- 		md-button.md-icon-button.md-raised(
-				//- 			@click="nextPage",
-				//- 			:disabled="currPage >= totalPages",
-				//- 		)
-				//- 			md-icon keyboard_arrow_right
 			.row
 				.col-12
 					template(v-if="!filteredApps")
@@ -77,11 +62,10 @@
 
 		data () {
 			return {
-				applications: null,
+				apps: null,
 				currApp: null,
 
 				status: 'in_process',
-				statuses: ['in_process', 'rework', 'rejected', 'approved'],
 			}
 		},
 
@@ -90,13 +74,9 @@
 		},
 
 		computed: {
-			normStatus() {
-				return this.statuses.includes(this.status) ? this.status : ''
-			},
-
 			filteredApps() {
-				if (this.applications) {
-					return this.applications
+				if (this.apps) {
+					return this.apps
 						.filter((app) => {
 							if (this.status === '') return true
 							if (this.status === app.status) return true
@@ -109,23 +89,23 @@
 		},
 
 		// created () {
-		// 	this.fetchData()
+		// 	this.fetchApps()
 		// },
 
 		// watch: {
-		// 	$route: 'fetchData',
+		// 	$route: 'fetchApps',
 		// },
 
 		activated () {
-			this.fetchData()
+			this.fetchApps()
 		},
 
 		methods: {
-			fetchData () {
+			fetchApps () {
 				Admin.Application.many({ status: this.status })
 					.then((result) => {
 						console.log('Fetched applications:', result)
-						this.applications = result.applications
+						this.apps = result.applications
 					})
 					.catch((err) => console.log('Couldn\'t fetch applications:', err))
 			},
@@ -144,10 +124,10 @@
 				if (type === 'ok') {
 					Admin.Application.review({ application_id: this.currApp.id, action: 'approve' })
 						.then((result) => {
-							this.applications.splice(this.applications.indexOf(this.currApp), 1)
+							this.apps.splice(this.apps.indexOf(this.currApp), 1)
 							console.log('Approved application:', result)
 							this.currApp = null
-							this.fetchData()
+							this.fetchApps()
 						})
 						.catch((err) => {
 							console.error('Failed to approve application:', err)
@@ -160,17 +140,17 @@
 				if (type === 'ok') {
 					Admin.Application.review({ application_id: this.currApp.id, action: 'reject' })
 						.then((result) => {
-							this.applications.splice(this.applications.indexOf(this.currApp), 1)
+							this.apps.splice(this.apps.indexOf(this.currApp), 1)
 							console.log('Rejected application:', result)
 							this.currApp = null
-							this.fetchData()
+							this.fetchApps()
 						})
 						.catch((err) => {
 							console.error('Failed to reject application:', err)
 							this.currApp = null
 						})
 				}
-			}
+			},
 		},
 	}
 </script>

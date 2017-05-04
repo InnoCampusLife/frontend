@@ -10,8 +10,9 @@
 							.row
 								.col
 									h1.md-title
-										span(v-if="routeName === 'account'") Account
-										span(v-else-if="routeName === 'profile'") Profile
+										span(v-if="routeName === 'account'") My Account
+										span(v-else-if="routeName === 'profile'") Account
+										span(v-else-if="routeName === 'manage-accounts'") Accounts&ensp;&ndash;&ensp;Manage
 										span(v-else) Accounts
 		section
 			.content
