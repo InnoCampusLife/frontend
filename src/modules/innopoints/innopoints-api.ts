@@ -136,11 +136,8 @@ export abstract class ApplicationFile {
 	static create ({ body }) {
 		if (!body) return Promise.reject(INVALID_PARAMS_ERR)
 		const input = `${url}/accounts/${token()}/files`
-		const init: RequestInit = {
-			body,
-			headers: { 'Content-Type': 'multipart/form-data' },
-		}
-		return makePostReq(input, init)
+		const init: RequestInit = { body, method: 'POST' }
+		return makeReq(input, init)
 	}
 
 	static one ({ file_id }) {

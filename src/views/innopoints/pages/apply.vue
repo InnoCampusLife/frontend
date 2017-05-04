@@ -118,10 +118,17 @@
 
 					span
 					md-card-content
-						md-input-container
+						md-input-container(:class="{ 'md-input-invalid': $v.filesStr.$error }")
 							md-icon insert_drive_file
 							label(for="upload") Files
-							md-file#upload(v-model='filesStr', name="upload", multiple)
+							md-file#upload(
+								multiple,
+								v-model='filesStr',
+								name="upload",
+								@input="$v.filesStr.$touch()",
+							)
+							span.md-error(v-if="!$v.filesStr.areNotTooBig")
+								span Files cannot exceed 10MB
 
 					md-card-content
 						md-input-container
@@ -208,14 +215,23 @@
 					hours: {
 						between (hours, parentVm) {
 							if (this.isHourlyActivity(parentVm.activity_id)) return between(1, 10000)(hours)
-							else return true
+							return true
 						},
 
 						required (hours, parentVm) {
 							if (this.isHourlyActivity(parentVm.activity_id)) return required(hours)
-							else return true
+							return true
 						},
 					},
+				},
+			},
+
+			filesStr: {
+				areNotTooBig () {
+					const input = document.querySelector('input[type="file"]')
+					const fileList = input ? input.files : []
+					for (let i = 0; i < fileList.length; i++) { if ((fileList[i].size / 1000000) > 10) return false }
+					return true
 				},
 			},
 		},
@@ -224,8 +240,12 @@
 			this.fetchData()
 		},
 
-		watch: {
-			$route: 'fetchData',
+		// watch: {
+		// 	$route: 'fetchData',
+		// },
+
+		activated () {
+			this.fetchData()
 		},
 
 		computed: {
@@ -316,33 +336,34 @@
 					return
 				}
 
-				// File upload
-				const fileList = document.querySelector('input[type="file"]').files
-				const data = new FormData()
+				let fileIds = []
+				let work = []
 
-				for (let f of fileList) { data.append(f.name, f) }
+				try {
+					const fileList = document.querySelector('input[type="file"]').files
+					const files = []
 
-				fetch(`http://uis.university.innopolis.ru:8770/api/v1/points/accounts/${token()}/files`, {
-					method: 'POST',
-					body: data,
-				})
-				.then((res) => {
-					console.log('Type:', res.type)
-					return res.json()
-				})
-				.then((json) => {
-					console.log('Uploaded files:', json)
-				})
-				.catch((err) => {
-					console.error('Failed to upload files:', err)
-				})
+					for(let i = 0; i < fileList.length; i++) { files.push(fileList[i]) }
 
-				const work = await Promise.all(this.participants.map(async (p) => {
-					const actor = (await Account.one({ username: p.username })).id
-					const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
-					const activity_id = p.activity_id
-					return { actor, amount, activity_id }
-				}))
+					fileIds = await Promise.all(files.map((f) => {
+						const formData = new FormData()
+						formData.append(f.name, f)
+						return ApplicationFile.create({ body: formData })
+					}))
+				} catch (err) {
+					console.error('Failed to upliad files:', err)
+				}
+
+				try {
+					work = await Promise.all(this.participants.map(async (p) => {
+						const actor = (await Account.one({ username: p.username })).id
+						const amount = this.isHourlyActivity(p.activity_id) ? p.hours : null
+						const activity_id = p.activity_id
+						return { actor, amount, activity_id }
+					}))
+				} catch (err) {
+					console.error('Failed to get IDs:', err)
+				}
 
 				Application.create({
 					body: {
@@ -350,7 +371,7 @@
 							work,
 							comment: this.comment,
 							type: this.isModerator ? 'group' : work.length > 1 ? 'group' : 'personal',
-							files: [],
+							files: fileIds.map((ids) => ids[0].id),
 						}
 					}
 				})
@@ -368,6 +389,8 @@
 							hours: 1,
 						},
 					]
+
+					this.$v.$reset()
 				})
 				.then(() => {
 					this.$router.push({ name: 'applications' })
