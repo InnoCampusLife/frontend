@@ -18,15 +18,15 @@
 				.col
 			.row
 				.col-12
-					template(v-if="!filteredApps")
+					template(v-if="!apps")
 						.text-center
 							md-spinner(md-indeterminate, :md-size="100")
-					template(v-else-if="filteredApps.length <= 0")
+					template(v-else-if="apps.length <= 0")
 						.text-center
 							p.md-title.text-muted Empty
 					template(v-else)
-						applicationCard.application.my-2(
-							v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
+						applicationCard.application.my-3(
+							v-for="app in filterBy(apps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
 							:application="app",
 							:key="app.id",
 							:isReview="true"
@@ -71,21 +71,6 @@
 
 		components: {
 			applicationCard,
-		},
-
-		computed: {
-			filteredApps() {
-				if (this.apps) {
-					return this.apps
-						.filter((app) => {
-							if (this.status === '') return true
-							if (this.status === app.status) return true
-							return false
-						})
-						.sort((a, b) => b.creation_date - a.creation_date)
-				}
-				return null
-			},
 		},
 
 		// created () {

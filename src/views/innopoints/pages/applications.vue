@@ -26,14 +26,13 @@
 						.text-center
 							p.md-title.text-muted Empty
 					template(v-else)
-						transition-group.application-list(name="application-list" tag="div")
-							applicationCard.application.my-2(
-								v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
-								:application="app",
-								:key="app.id",
-								:isReview="false",
-								@deleteApp="openDeleteConfirm",
-							)
+						applicationCard.application.my-3(
+							v-for="app in filterBy(filteredApps, search, ['comment', 'status', 'id', 'type', 'author.username', 'work'])",
+							:application="app",
+							:key="app.id",
+							:isReview="false",
+							@deleteApp="openDeleteConfirm",
+						)
 		md-dialog-confirm(
 			:md-title="`Delete application #${currApp ? currApp.id : ''}?`",
 			md-content="This cannot be undone.",
