@@ -328,6 +328,14 @@ body {
 			padding-left: $sidebar-width;
 		}
 	}
+
+	.md-toolbar-container {
+		padding: 0 16px !important;
+	}
+
+	.md-toolbar-container > .md-button.md-icon-button {
+		display: none !important;
+	}
 }
 
 /* ==========================================================================
