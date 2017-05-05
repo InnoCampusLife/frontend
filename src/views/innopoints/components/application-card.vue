@@ -50,6 +50,9 @@
 							md-table-cell(md-numeric) {{ work.total_price }}
 
 			md-card-content(v-if="application.files.length > 0")
+				p.md-subheading.mb-2
+					span(v-if="application.files.length === 1") File
+					span(v-else) Files
 				ul.list-unstyled.mb-0
 					li(
 						v-for="file in application.files",
@@ -62,7 +65,7 @@
 							span {{ file.filename }}
 
 			md-card-content(v-if="application.comment && application.comment.length")
-				// h5.md-title Comment
+				p.md-subheading.mb-2 Comment
 				p(v-for="para in paras") {{ para }}
 		md-card-area
 			md-card-actions(v-if="application.status === ('in_process' || 'rework')")
