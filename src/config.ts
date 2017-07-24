@@ -1,9 +1,8 @@
 export default {
 	server: {
-		ip: 'campuslife.innopolis.ru',
-		port: 7777,
+		ip: 'campuslife.innopolis.ru/innopoints',
 		get apiURL() {
-			return `http://${this.ip}:${this.port || 21}/api/`
+			return `https://${this.ip}/api/`
 		},
 	},
 	tokenName: 'usertoken',
