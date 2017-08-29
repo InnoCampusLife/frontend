@@ -10,7 +10,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot"
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --host 127.0.0.1"
   },
   "standard": {
     "parser": "babel-eslint",
